@@ -1,6 +1,7 @@
 package com.vocasia.authentication.service;
 
 import com.vocasia.authentication.entity.User;
+import com.vocasia.authentication.request.LoginRequest;
 import com.vocasia.authentication.request.RegisterRequest;
 
 import java.security.NoSuchAlgorithmException;
@@ -8,7 +9,11 @@ import java.security.spec.InvalidKeySpecException;
 
 public interface IUserService {
     /**
-     * @param registerRequest New user's data
+     * @param keyCloackUid
+     * @param registerRequest
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
      */
     User registerNewUser(String keyCloackUid, RegisterRequest registerRequest) throws NoSuchAlgorithmException, InvalidKeySpecException;
 
@@ -23,4 +28,12 @@ public interface IUserService {
      * @return True if the username is already registered, false otherwise
      */
     boolean isUsernameAlreadyRegistered(String username);
+
+    /**
+     * @param loginRequest
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
+     */
+    User loginWithEmailAndPassword(LoginRequest loginRequest) throws NoSuchAlgorithmException, InvalidKeySpecException;
 }

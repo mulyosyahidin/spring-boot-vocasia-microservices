@@ -2,6 +2,7 @@ package com.vocasia.authentication.service.impl;
 
 import com.vocasia.authentication.entity.User;
 import com.vocasia.authentication.repository.UserRepository;
+import com.vocasia.authentication.request.LoginRequest;
 import com.vocasia.authentication.request.RegisterRequest;
 import com.vocasia.authentication.service.IUserService;
 import com.vocasia.authentication.util.PasswordHashUtil;
@@ -53,5 +54,25 @@ public class UserServiceImpl implements IUserService {
     @Override
     public boolean isUsernameAlreadyRegistered(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+    /**
+     * @param loginRequest
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeySpecException
+     */
+    @Override
+    public User loginWithEmailAndPassword(LoginRequest loginRequest) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        User user = userRepository.findByEmail(loginRequest.getEmail());
+        if (user == null) {
+            return null;
+        }
+
+        if (passwordHashUtil.validatePassword(loginRequest.getPassword(), user.getPassword())) {
+            return user;
+        }
+
+        return null;
     }
 }

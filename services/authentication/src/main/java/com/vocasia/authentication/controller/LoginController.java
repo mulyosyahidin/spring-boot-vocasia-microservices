@@ -3,7 +3,7 @@ package com.vocasia.authentication.controller;
 import com.vocasia.authentication.dto.ResponseDto;
 import com.vocasia.authentication.entity.User;
 import com.vocasia.authentication.mapper.UserMapper;
-import com.vocasia.authentication.request.RegisterRequest;
+import com.vocasia.authentication.request.LoginRequest;
 import com.vocasia.authentication.service.IKeyCloackService;
 import com.vocasia.authentication.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,8 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,27 +27,25 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @Validated
-@Tag(name = "Register Controller", description = "Controller untuk registrasi user")
-public class RegisterController {
+@Tag(name = "Login Controller", description = "Controller untuk login user")
+public class LoginController {
 
     private final IUserService iUserService;
     private final IKeyCloackService iKeyCloackService;
 
-    private final Logger logger = LoggerFactory.getLogger(RegisterController.class);
-
-    public RegisterController(IUserService iUserService, IKeyCloackService iKeyCloackService) {
+    public LoginController(IUserService iUserService, IKeyCloackService iKeyCloackService) {
         this.iUserService = iUserService;
         this.iKeyCloackService = iKeyCloackService;
     }
 
     @Operation(
-            summary = "Register User",
-            description = "Mendaftarkan user baru dengan data yang diberikan."
+            summary = "Login User",
+            description = "Login user dengan email dan password"
     )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
-                    description = "User berhasil didaftarkan"
+                    description = "Berhasil login dengan email password"
             ),
             @ApiResponse(
                     responseCode = "422",
@@ -60,27 +56,23 @@ public class RegisterController {
                     description = "Terjadi kesalahan tidak terduga"
             )
     })
-    @PostMapping("/register")
-    public ResponseEntity<ResponseDto> register(@Valid @RequestBody RegisterRequest registerRequest)
+    @PostMapping("/login")
+    public ResponseEntity<ResponseDto> login(@Valid @RequestBody LoginRequest loginRequest)
             throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-        // Registrasi pengguna di Keycloak
-        String registeredKeycloackId = iKeyCloackService.registerNewUser(
-                registerRequest.getEmail(),
-                registerRequest.getUsername(),
-                registerRequest.getPassword(),
-                registerRequest.getName(),
-                "student"
-        );
+       // login dari database
+        User loggedUser = iUserService.loginWithEmailAndPassword(loginRequest);
 
-        // Registrasi pengguna di database lokal
-        User registeredUser = iUserService.registerNewUser(registeredKeycloackId, registerRequest);
+        if (loggedUser == null) {
+            return ResponseEntity.badRequest().body(new ResponseDto(false, "Email atau password salah", null, null));
+        }
 
         // Buat data pengguna untuk respons
         Map<String, Object> response = new HashMap<>();
-        response.put("user", UserMapper.mapUserToResponse(registeredUser));
-        response.put("token", iKeyCloackService.getAccessToken(registerRequest.getUsername(), registerRequest.getPassword()));
+        response.put("user", UserMapper.mapUserToResponse(loggedUser));
+        response.put("token", iKeyCloackService.getAccessToken(loggedUser.getUsername(), loginRequest.getPassword()));
 
-        return ResponseEntity.ok(new ResponseDto(true, "Berhasil mendaftarkan user baru", response, null));
+        return ResponseEntity.ok(new ResponseDto(true, "Berhasil login dengan email password", response, null));
     }
+
 
 }

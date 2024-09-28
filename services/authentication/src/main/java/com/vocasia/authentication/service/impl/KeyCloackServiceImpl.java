@@ -32,7 +32,7 @@ public class KeyCloackServiceImpl implements IKeyCloackService  {
      * @return Map<String, String>
      */
     @Override
-    public Map<String, String> getAccessToken(String username, String password) throws IOException {
+    public Map<String, Object> getAccessToken(String username, String password) throws IOException {
         return keyCloackClient.getAccessToken(username, password);
     }
 }

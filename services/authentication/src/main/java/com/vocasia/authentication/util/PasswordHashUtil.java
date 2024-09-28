@@ -1,6 +1,8 @@
 package com.vocasia.authentication.util;
 
 import com.vocasia.authentication.config.SecurityProperties;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,5 +37,13 @@ public class PasswordHashUtil {
     public boolean verifyPassword(String password, String storedHash) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String hashToVerify = hashPassword(password);
         return hashToVerify.equals(storedHash);
+    }
+
+    public boolean validatePassword(String password, String savedUserPassword) {
+        try {
+            return verifyPassword(password, savedUserPassword);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            return false;
+        }
     }
 }

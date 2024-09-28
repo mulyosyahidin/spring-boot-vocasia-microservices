@@ -1,6 +1,8 @@
 package com.vocasia.authentication.repository;
 
 import com.vocasia.authentication.entity.User;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -19,4 +21,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return boolean
      */
     boolean existsByUsername(String username);
+
+    /**
+     * @param email
+     * @return
+     */
+    User findByEmail(String email);
 }

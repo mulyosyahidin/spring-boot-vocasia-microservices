@@ -8,6 +8,7 @@ keycloack:
   client_id: "vocasia-users"
   client_secret: "3sQonBKkutMPLtISDo4K92YTVKoNAv9w"
   realm: "Vocasia"
+  auth_client_id: "vocasia-auth"
 
 security:
   salt: "salt"

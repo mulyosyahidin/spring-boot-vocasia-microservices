@@ -2,20 +2,16 @@ package com.vocasia.authentication.packages.keycloack;
 
 import com.vocasia.authentication.config.KeycloackConfig;
 import com.vocasia.authentication.util.NameParserUtil;
-import jakarta.ws.rs.core.Form;
-import jakarta.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RoleMappingResource;
-import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.keycloak.admin.client.Keycloak;
 import org.apache.http.HttpEntity;
@@ -27,10 +23,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @AllArgsConstructor
@@ -122,7 +115,7 @@ public class KeyCloackClient {
         return userId;
     }
 
-    public Map<String, String> getAccessToken(String username, String password) throws IOException {
+    public Map<String, Object> getAccessToken(String username, String password) throws IOException {
         String tokenEndpoint = keycloackConfig.getServerUrl() + "/realms/" + keycloackConfig.getRealm() + "/protocol/openid-connect/token";
 
         // Prepare the HTTP client
@@ -130,7 +123,7 @@ public class KeyCloackClient {
         HttpPost httpPost = new HttpPost(tokenEndpoint);
 
         // Prepare the form data (encoded as URL)
-        String form = "client_id=admin-cli"
+        String form = "client_id="+ keycloackConfig.getAuthClientId()
                 + "&grant_type=password"
                 + "&username=" + username
                 + "&password=" + password;
@@ -146,17 +139,16 @@ public class KeyCloackClient {
 
         // Parse the response as JSON
         JSONObject jsonResponse = new JSONObject(responseString);
-        System.out.println(jsonResponse);
 
         // Map the required token details
-        Map<String, String> tokenData = new HashMap<>();
+        Map<String, Object> tokenData = new HashMap<>();
         tokenData.put("access_token", jsonResponse.getString("access_token"));
         tokenData.put("refresh_token", jsonResponse.getString("refresh_token"));
-        tokenData.put("expires_in", String.valueOf(jsonResponse.getInt("expires_in")));
-        tokenData.put("refresh_expires_in", String.valueOf(jsonResponse.getInt("refresh_expires_in")));
+        tokenData.put("expires_in", jsonResponse.getInt("expires_in"));
+        tokenData.put("refresh_expires_in", jsonResponse.getInt("refresh_expires_in"));
         tokenData.put("token_type", jsonResponse.getString("token_type"));
         tokenData.put("scope", jsonResponse.optString("scope", ""));
-        tokenData.put("not-before-policy", String.valueOf(jsonResponse.getInt("not-before-policy")));
+        tokenData.put("not-before-policy", jsonResponse.getInt("not-before-policy"));
         tokenData.put("session_state", jsonResponse.getString("session_state"));
 
         return tokenData;

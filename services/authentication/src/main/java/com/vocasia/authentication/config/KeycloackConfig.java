@@ -17,5 +17,6 @@ public class KeycloackConfig {
     private String clientId;
     private String clientSecret;
     private String realm;
+    private String authClientId;
 
 }

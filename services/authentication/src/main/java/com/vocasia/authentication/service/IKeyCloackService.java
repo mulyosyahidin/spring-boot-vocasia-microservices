@@ -19,5 +19,5 @@ public interface IKeyCloackService {
      * @param password
      * @return Map<String, String>
      */
-    Map<String, String> getAccessToken(String username, String password) throws IOException;
+    Map<String, Object> getAccessToken(String username, String password) throws IOException;
 }
