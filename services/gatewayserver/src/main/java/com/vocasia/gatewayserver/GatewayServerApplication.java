@@ -24,6 +24,10 @@ public class GatewayServerApplication {
                         .filters(f -> f.rewritePath("/auth/(?<segment>.*)", "/api/${segment}")
                                 .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
                         .uri("lb://AUTHENTICATION"))
+                .route(p -> p.path("/instructors/**")
+                        .filters(f -> f.rewritePath("/instructors/(?<segment>.*)", "/api/${segment}")
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+                        .uri("lb://INSTRUCTOR"))
                 .build();
     }
 

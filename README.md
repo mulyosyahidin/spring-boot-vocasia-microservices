@@ -24,4 +24,5 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 28/09/2024
 1. Setup Keycloack Authorization Server
 2. Menyelesaikan: Registrasi, Login, Refresh Access Token
-3. Inisaslisasi Vocasia App [React JS]
+3. Inisialisasi Vocasia App [React JS]
+4. Inisialisasi Instructor Service
