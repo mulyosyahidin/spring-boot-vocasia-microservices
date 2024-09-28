@@ -19,9 +19,6 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
     private PasswordHashUtil passwordHashUtil;
 
-    /**
-     * @param request New user's data
-     */
     @Override
     public User registerNewUser(String keyCloackUid, RegisterRequest request) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String encryptedPassword = passwordHashUtil.hashPassword(request.getPassword());
@@ -38,30 +35,16 @@ public class UserServiceImpl implements IUserService {
         return user;
     }
 
-    /**
-     * @param email User's email to check
-     * @return True if the email is already registered, false otherwise
-     */
     @Override
     public boolean isEmailAlreadyRegistered(String email) {
         return userRepository.existsByEmail(email);
     }
 
-    /**
-     * @param username User's username to check
-     * @return True if the username is already registered, false otherwise
-     */
     @Override
     public boolean isUsernameAlreadyRegistered(String username) {
         return userRepository.existsByUsername(username);
     }
 
-    /**
-     * @param loginRequest
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
-     */
     @Override
     public User loginWithEmailAndPassword(LoginRequest loginRequest) throws NoSuchAlgorithmException, InvalidKeySpecException {
         User user = userRepository.findByEmail(loginRequest.getEmail());
@@ -75,4 +58,5 @@ public class UserServiceImpl implements IUserService {
 
         return null;
     }
+
 }
