@@ -29,4 +29,8 @@ public class RegisterRequest {
     private String password;
 
     private String role;
+
+    public RegisterRequest() {
+        this.role = "student";
+    }
 }

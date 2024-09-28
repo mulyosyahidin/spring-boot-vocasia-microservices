@@ -4,6 +4,8 @@ import com.vocasia.instructor.dto.UserDto;
 import com.vocasia.instructor.dto.response.ResponseDto;
 import com.vocasia.instructor.entity.Instructor;
 import com.vocasia.instructor.exception.CustomFeignException;
+import com.vocasia.instructor.mapper.InstructorMapper;
+import com.vocasia.instructor.mapper.UserMapper;
 import com.vocasia.instructor.request.RegisterRequest;
 import com.vocasia.instructor.service.IAuthenticationService;
 import com.vocasia.instructor.service.IInstructorService;
@@ -65,8 +67,8 @@ public class RegisterController {
 
             Map<String, Object> response = new HashMap<>();
 
-            response.put("user", registeredUser);
-            response.put("instructor", registeredInstructor);
+            response.put("user", UserMapper.mapUserToResponse(registeredUser));
+            response.put("instructor", InstructorMapper.mapUserToResponse(registeredInstructor));
 
             return ResponseEntity.ok(new ResponseDto(true, "Berhasil melakukan pendaftaran", response, null));
         } catch (CustomFeignException ex) {

@@ -69,7 +69,7 @@ public class RegisterController {
                 registerRequest.getUsername(),
                 registerRequest.getPassword(),
                 registerRequest.getName(),
-                "student"
+                registerRequest.getRole()
         );
 
         // Registrasi pengguna di database lokal

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.ws.rs.DefaultValue;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,4 +31,11 @@ public class RegisterRequest {
     private String phoneNumber;
 
     private String summary;
+
+    private String role;
+
+    public RegisterRequest() {
+        this.role = "instructor";
+    }
+
 }

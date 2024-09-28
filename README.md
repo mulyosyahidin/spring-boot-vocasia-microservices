@@ -26,3 +26,4 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 2. Menyelesaikan: Registrasi, Login, Refresh Access Token
 3. Inisialisasi Vocasia App [React JS]
 4. Inisialisasi Instructor Service
+5. Menyelesaikan: Endpoint pendaftaran instruktur
