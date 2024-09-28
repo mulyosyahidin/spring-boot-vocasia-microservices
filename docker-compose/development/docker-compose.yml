@@ -1,0 +1,124 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.6
+    container_name: app-keycloak
+    ports:
+      - "7080:8080"
+    environment:
+      KEYCLOAK_ADMIN: "admin"
+      KEYCLOAK_ADMIN_PASSWORD: "admin"
+      KC_LOG_LEVEL: "DEBUG"
+    command: "start-dev"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  db_authentication:
+    image: mysql:8.0
+    container_name: db-authentication
+    ports:
+      - "30618:3306"
+    environment:
+      MYSQL_DATABASE: authentication_db
+      MYSQL_ROOT_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    volumes:
+      - db_data:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  configserver:
+    image: martinms20/configserver:v1.0.0
+    container_name: config-server
+    ports:
+      - "14117:14117"
+    healthcheck:
+      test: "curl --fail --silent localhost:14117/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  eurekaserver:
+    image: "martinms20/eurekaserver:v1.0.0"
+    container_name: eureka-server
+    ports:
+      - "14118:14118"
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+    depends_on:
+      configserver:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:14118/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  gatewayserver:
+    image: "martinms20/gatewayserver:v1.0.0"
+    container_name: gateway-server
+    ports:
+      - "14119:14119"
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
+      authentication_service:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  authentication_service:
+    image: martinms20/authentication:v1.0.0
+    container_name: service-authentication
+    ports:
+      - "14120:14120"
+    environment:
+      SPRING_PROFILES_ACTIVE: "development"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-authentication:3306/authentication_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+    healthcheck:
+      test: "curl --fail --silent localhost:14120/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      db_authentication:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: base-config
+
+networks:
+  vocasia:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local

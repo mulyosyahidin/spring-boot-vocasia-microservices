@@ -1,0 +1,13 @@
+app:
+  version: 1.0.0
+  name: "Authentication Service"
+  environment: "development"
+
+keycloack:
+  server_url: "http://localhost:7080"
+  client_id: "vocasia-users"
+  client_secret: "3sQonBKkutMPLtISDo4K92YTVKoNAv9w"
+  realm: "Vocasia"
+
+security:
+  salt: "salt"
