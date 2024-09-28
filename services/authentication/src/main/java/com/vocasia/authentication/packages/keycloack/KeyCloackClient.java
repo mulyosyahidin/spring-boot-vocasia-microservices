@@ -1,6 +1,7 @@
 package com.vocasia.authentication.packages.keycloack;
 
 import com.vocasia.authentication.config.KeycloackConfig;
+import com.vocasia.authentication.mapper.AccessTokenMapper;
 import com.vocasia.authentication.util.NameParserUtil;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
@@ -29,8 +30,8 @@ import java.util.*;
 @AllArgsConstructor
 public class KeyCloackClient {
 
-    private KeycloackConfig keycloackConfig;
-    private NameParserUtil nameParserUtil;
+    private final KeycloackConfig keycloackConfig;
+    private final NameParserUtil nameParserUtil;
     private final Logger logger = LoggerFactory.getLogger(KeyCloackClient.class);
 
     protected Keycloak keycloak() {
@@ -46,24 +47,15 @@ public class KeyCloackClient {
     public String registerNewUser(String email, String username, String password, String name, String roleName) {
         Keycloak keycloak = keycloak();
 
-        boolean isUserExists = false;
-
-        // get all users
+        // Check if user exists
         List<UserRepresentation> users = keycloak.realm(keycloackConfig.getRealm()).users().list();
+        Optional<UserRepresentation> existingUser = users.stream()
+                .filter(user -> user.getUsername().equals(username))
+                .findFirst();
 
-        for (UserRepresentation user : users) {
-            if (user.getUsername().equals(username)) {
-                isUserExists = true;
-
-                break;
-            }
-        }
-
-        if (isUserExists) {
-            UserRepresentation userByUsername = keycloak.realm(keycloackConfig.getRealm()).users().search(username).get(0);
-
-            logger.debug("User with username {} already exists with id {}", username, userByUsername.getId());
-            return userByUsername.getId();
+        if (existingUser.isPresent()) {
+            logger.debug("User with username {} already exists with id {}", username, existingUser.get().getId());
+            return existingUser.get().getId();
         }
 
         String firstName = nameParserUtil.getFirstName(name);
@@ -71,7 +63,6 @@ public class KeyCloackClient {
 
         // Create user representation
         UserRepresentation user = new UserRepresentation();
-
         user.setEmail(email);
         user.setUsername(username);
         user.setFirstName(firstName);
@@ -87,70 +78,67 @@ public class KeyCloackClient {
 
         if (response.getStatus() != 201) {
             logger.debug("Failed to create user: {}", response.getStatus());
-
             return null;
         }
 
         String userId = keycloak.realm(keycloackConfig.getRealm()).users().search(username).get(0).getId();
         logger.debug("User with username {} successfully created with id {}", username, userId);
 
-        // get all roles
-        List<RoleRepresentation> roles = keycloak.realm(keycloackConfig.getRealm()).roles().list();
-
-        // get role by name
-        RoleRepresentation role = roles.stream().filter(r -> r.getName().equals(roleName)).findFirst().orElse(null);
-
-        if (role == null) {
-            logger.debug("Role with name {} not found", roleName);
-
-            return null;
-        }
-
-        // get role mapping resource
-        RoleMappingResource roleMappingResource = keycloak.realm(keycloackConfig.getRealm()).users().get(userId).roles();
-
-        // add role to user
-        roleMappingResource.realmLevel().add(Collections.singletonList(role));
+        // Assign role to user
+        assignRoleToUser(keycloak, userId, roleName);
 
         return userId;
     }
 
-    public Map<String, Object> getAccessToken(String username, String password) throws IOException {
+    private void assignRoleToUser(Keycloak keycloak, String userId, String roleName) {
+        List<RoleRepresentation> roles = keycloak.realm(keycloackConfig.getRealm()).roles().list();
+        RoleRepresentation role = roles.stream().filter(r -> r.getName().equals(roleName)).findFirst().orElse(null);
+
+        if (role == null) {
+            logger.debug("Role with name {} not found", roleName);
+            return;
+        }
+
+        RoleMappingResource roleMappingResource = keycloak.realm(keycloackConfig.getRealm()).users().get(userId).roles();
+        roleMappingResource.realmLevel().add(Collections.singletonList(role));
+    }
+
+    public AccessTokenMapper getAccessToken(String username, String password) throws IOException {
+        return fetchAccessToken(username, password, "password");
+    }
+
+    public AccessTokenMapper refreshAccessToken(String refreshToken) throws IOException {
+        return fetchAccessToken(null, refreshToken, "refresh_token");
+    }
+
+    private AccessTokenMapper fetchAccessToken(String username, String passwordOrRefreshToken, String grantType) throws IOException {
         String tokenEndpoint = keycloackConfig.getServerUrl() + "/realms/" + keycloackConfig.getRealm() + "/protocol/openid-connect/token";
 
         // Prepare the HTTP client
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(tokenEndpoint);
 
-        // Prepare the form data (encoded as URL)
-        String form = "client_id="+ keycloackConfig.getAuthClientId()
-                + "&grant_type=password"
-                + "&username=" + username
-                + "&password=" + password;
+        // Prepare the form data
+        String form = "client_id=" + keycloackConfig.getAuthClientId()
+                + "&grant_type=" + grantType;
+
+        if ("password".equals(grantType)) {
+            form += "&username=" + username + "&password=" + passwordOrRefreshToken;
+        } else {
+            form += "&refresh_token=" + passwordOrRefreshToken;
+        }
 
         httpPost.setEntity(new StringEntity(form));
         httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
         // Execute the request and get the response
-        CloseableHttpResponse response = httpClient.execute(httpPost);
-        HttpEntity entity = response.getEntity();
-        String responseString = EntityUtils.toString(entity);
-        response.close();
+        try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+            HttpEntity entity = response.getEntity();
+            String responseString = EntityUtils.toString(entity);
 
-        // Parse the response as JSON
-        JSONObject jsonResponse = new JSONObject(responseString);
-
-        // Map the required token details
-        Map<String, Object> tokenData = new HashMap<>();
-        tokenData.put("access_token", jsonResponse.getString("access_token"));
-        tokenData.put("refresh_token", jsonResponse.getString("refresh_token"));
-        tokenData.put("expires_in", jsonResponse.getInt("expires_in"));
-        tokenData.put("refresh_expires_in", jsonResponse.getInt("refresh_expires_in"));
-        tokenData.put("token_type", jsonResponse.getString("token_type"));
-        tokenData.put("scope", jsonResponse.optString("scope", ""));
-        tokenData.put("not-before-policy", jsonResponse.getInt("not-before-policy"));
-        tokenData.put("session_state", jsonResponse.getString("session_state"));
-
-        return tokenData;
+            // Parse the response as JSON and map to AccessToken
+            JSONObject jsonResponse = new JSONObject(responseString);
+            return new AccessTokenMapper(jsonResponse.toMap());
+        }
     }
 }
