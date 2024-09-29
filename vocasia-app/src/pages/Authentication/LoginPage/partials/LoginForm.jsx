@@ -33,10 +33,12 @@ export const LoginForm = () => {
         setErrors({});
         setSuccessMessage('');
 
+
         const result = await submitLoginForm(formData, setLoading, setErrors, setSuccessMessage);
 
         if (result) {
-            let {user, access_token, refresh_token} = result;
+            let {user, token} = result;
+            let {access_token, refresh_token} = token;
 
             localStorage.setItem(AUTH_USER, JSON.stringify(user));
             localStorage.setItem(AUTH_ACCESS_TOKEN, access_token);
@@ -52,7 +54,7 @@ export const LoginForm = () => {
                 if (user.role === INSTRUCTOR) {
                     navigate('/instructor');
                 }
-            }, 2000);
+            }, 5000);
         }
     };
 

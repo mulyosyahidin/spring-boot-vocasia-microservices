@@ -53,6 +53,26 @@ services:
       file: common-config.yml
       service: base-config
 
+  db_course:
+    image: mysql:8.0
+    container_name: db-course
+    ports:
+      - "30620:3306"
+    environment:
+      MYSQL_DATABASE: course_db
+      MYSQL_ROOT_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    volumes:
+      - course_db_data:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: base-config
+
   configserver:
     image: martinms20/configserver:v1.0.0
     container_name: config-server
@@ -86,26 +106,6 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
-    extends:
-      file: common-config.yml
-      service: base-config
-
-  gatewayserver:
-    image: "martinms20/gatewayserver:v1.0.0"
-    container_name: gateway-server
-    ports:
-      - "14119:14119"
-    depends_on:
-      eurekaserver:
-        condition: service_healthy
-      authentication_service:
-        condition: service_healthy
-      instructor_service:
-        condition: service_healthy
-    environment:
-      SPRING_APPLICATION_NAME: "gatewayserver"
-      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
     extends:
       file: common-config.yml
       service: base-config
@@ -150,7 +150,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: password
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
     healthcheck:
-      test: "curl --fail --silent localhost:14120/actuator/health/readiness | grep UP || exit 1"
+      test: "curl --fail --silent localhost:14121/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
       timeout: 5s
       retries: 10
@@ -164,6 +164,55 @@ services:
       file: common-config.yml
       service: base-config
 
+  course_service:
+    image: martinms20/course:v1.0.0
+    container_name: service-course
+    ports:
+      - "14122:14122"
+    environment:
+      SPRING_PROFILES_ACTIVE: "development"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-course:3306/course_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+    healthcheck:
+      test: "curl --fail --silent localhost:14122/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      db_course:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  gatewayserver:
+    image: "martinms20/gatewayserver:v1.0.0"
+    container_name: gateway-server
+    ports:
+      - "14119:14119"
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
+      authentication_service:
+        condition: service_healthy
+      instructor_service:
+        condition: service_healthy
+      course_service:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+    extends:
+      file: common-config.yml
+      service: base-config
+
 networks:
   vocasia:
     driver: bridge
@@ -172,4 +221,6 @@ volumes:
   authentication_db_data:
     driver: local
   instructor_db_data:
+    driver: local
+  course_db_data:
     driver: local

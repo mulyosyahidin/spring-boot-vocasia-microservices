@@ -8,6 +8,7 @@ export const Join = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        username: '',
         phone_number: '',
         password: '',
         summary: ''
@@ -26,6 +27,7 @@ export const Join = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+
         setLoading(true);
         setErrors({});
         setSuccessMessage('');
@@ -34,6 +36,7 @@ export const Join = () => {
             setFormData({
                 name: '',
                 email: '',
+                username: '',
                 phone_number: '',
                 password: '',
                 summary: ''
@@ -81,15 +84,24 @@ export const Join = () => {
                                     error={errors.phone_number}
                                     placeholder="No. HP"
                                 />
+                                <InputField
+                                    label="Email"
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    error={errors.email}
+                                    placeholder="Email..."
+                                />
                                 <div className="col-md-6">
                                     <InputField
-                                        label="Email"
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
+                                        label="Username"
+                                        type="text"
+                                        name="username"
+                                        value={formData.username}
                                         onChange={handleChange}
-                                        error={errors.email}
-                                        placeholder="Email..."
+                                        error={errors.username}
+                                        placeholder="Username..."
                                     />
                                 </div>
                                 <div className="col-md-6">

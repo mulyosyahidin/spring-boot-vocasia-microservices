@@ -28,6 +28,10 @@ public class GatewayServerApplication {
                         .filters(f -> f.rewritePath("/instructors/(?<segment>.*)", "/api/${segment}")
                                 .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
                         .uri("lb://INSTRUCTOR"))
+                .route(p -> p.path("/course/**")
+                        .filters(f -> f.rewritePath("/course/(?<segment>.*)", "/api/${segment}")
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+                        .uri("lb://COURSE"))
                 .build();
     }
 

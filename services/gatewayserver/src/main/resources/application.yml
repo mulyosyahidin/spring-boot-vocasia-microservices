@@ -3,8 +3,24 @@ spring:
     name: "gatewayserver"
   config:
     import: "optional:configserver:http://localhost:14117/"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: "http://localhost:7080/realms/Vocasia/protocol/openid-connect/certs"
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
       discovery:
         locator:
           enabled: false

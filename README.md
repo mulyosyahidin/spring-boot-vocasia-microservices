@@ -27,3 +27,4 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 3. Inisialisasi Vocasia App [React JS]
 4. Inisialisasi Instructor Service
 5. Menyelesaikan: Endpoint pendaftaran instruktur
+6. Inisialisasi Course Service

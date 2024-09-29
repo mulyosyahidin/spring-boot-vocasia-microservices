@@ -1,4 +1,6 @@
 import {registerInstructor} from "../../../services/instructorService.js";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 
 export const submitInstructorForm = async (formData, setLoading, setErrors, setSuccessMessage, resetFormData) => {
     setLoading(true);
@@ -11,6 +13,13 @@ export const submitInstructorForm = async (formData, setLoading, setErrors, setS
         if (response.success) {
             setSuccessMessage(response.message);
             resetFormData();
+
+            await withReactContent(Swal).fire({
+                title: 'Berhasil!',
+                text: 'Berhasil melakukan pendaftaran. Silahkan login ke akun Anda.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            })
         } else {
             setErrors({ general: response.message });
         }
