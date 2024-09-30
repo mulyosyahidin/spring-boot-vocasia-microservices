@@ -6,5 +6,7 @@ import com.vocasia.instructor.request.RegisterRequest;
 public interface IInstructorService {
 
     Instructor registerNewInstructor(Long registeredUserId, RegisterRequest registerRequest);
+    Instructor getInstructorById(Long id);
+    Instructor getInstructorByUserId(Long userId);
 
 }

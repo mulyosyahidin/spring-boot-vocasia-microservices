@@ -1,9 +1,12 @@
 package com.vocasia.authentication.controller;
 
 import com.vocasia.authentication.dto.ResponseDto;
+import com.vocasia.authentication.dto.feign.InstructorDto;
 import com.vocasia.authentication.entity.User;
+import com.vocasia.authentication.exception.CustomFeignException;
 import com.vocasia.authentication.mapper.UserMapper;
 import com.vocasia.authentication.request.LoginRequest;
+import com.vocasia.authentication.service.IInstructorService;
 import com.vocasia.authentication.service.IKeyCloackService;
 import com.vocasia.authentication.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,12 +14,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -30,11 +33,15 @@ import java.util.Map;
 @Tag(name = "Login Controller", description = "Controller untuk login user")
 public class LoginController {
 
+    private final Logger logger = LoggerFactory.getLogger(LoginController.class);
+
     private final IUserService iUserService;
+    private final IInstructorService iInstructorService;
     private final IKeyCloackService iKeyCloackService;
 
-    public LoginController(IUserService iUserService, IKeyCloackService iKeyCloackService) {
+    public LoginController(IUserService iUserService, IInstructorService iInstructorService, IKeyCloackService iKeyCloackService) {
         this.iUserService = iUserService;
+        this.iInstructorService = iInstructorService;
         this.iKeyCloackService = iKeyCloackService;
     }
 
@@ -57,9 +64,10 @@ public class LoginController {
             )
     })
     @PostMapping("/login")
-    public ResponseEntity<ResponseDto> login(@Valid @RequestBody LoginRequest loginRequest)
+    public ResponseEntity<ResponseDto> login(@RequestHeader("vocasia-correlation-id")
+                                             String correlationId, @Valid @RequestBody LoginRequest loginRequest)
             throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-       // login dari database
+        // login dari database
         User loggedUser = iUserService.loginWithEmailAndPassword(loginRequest);
 
         if (loggedUser == null) {
@@ -68,8 +76,22 @@ public class LoginController {
 
         // Buat data pengguna untuk respons
         Map<String, Object> response = new HashMap<>();
-        response.put("user", UserMapper.mapUserToResponse(loggedUser));
+        response.put("user", UserMapper.mapToDto(loggedUser));
         response.put("token", iKeyCloackService.getAccessToken(loggedUser.getUsername(), loginRequest.getPassword()));
+
+        if (loggedUser.getRole().equals("instructor")) {
+            try {
+                InstructorDto getInstructorProfileByUserId = iInstructorService.getInstructorByUserId(loggedUser.getId(), correlationId);
+
+                response.put("instructor", getInstructorProfileByUserId);
+            } catch (Exception e) {
+                logger.error("Failed to get instructor profile by user id", e);
+
+                return ResponseEntity
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new ResponseDto(false, "Internal server error", null, null));
+            }
+        }
 
         return ResponseEntity.ok(new ResponseDto(true, "Berhasil login dengan email password", response, null));
     }

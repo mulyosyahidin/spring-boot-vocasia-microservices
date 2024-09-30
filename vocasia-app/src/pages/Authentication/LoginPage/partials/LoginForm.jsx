@@ -2,7 +2,13 @@ import React, {useState} from 'react';
 import {submitLoginForm} from "../actions/LoginAction.jsx";
 import {InputField} from "../../../../components/commons/Input/InputField.jsx";
 import {Link, useNavigate} from "react-router-dom";
-import {AUTH_ACCESS_TOKEN, AUTH_REFRESH_TOKEN, AUTH_USER, INSTRUCTOR} from "../../../../config/consts.js";
+import {
+    AUTH_ACCESS_TOKEN,
+    AUTH_REFRESH_TOKEN,
+    AUTH_USER,
+    INSTRUCTOR,
+    INSTRUCTOR_AUTH_DATA
+} from "../../../../config/consts.js";
 import {useRecoilState} from "recoil";
 import {authAtom} from "../../../../states/recoil/Atoms/Auth.jsx";
 
@@ -52,6 +58,9 @@ export const LoginForm = () => {
 
             setTimeout(() => {
                 if (user.role === INSTRUCTOR) {
+                    let {instructor} = result;
+                    localStorage.setItem(INSTRUCTOR_AUTH_DATA, JSON.stringify(instructor));
+
                     navigate('/instructor');
                 }
             }, 5000);

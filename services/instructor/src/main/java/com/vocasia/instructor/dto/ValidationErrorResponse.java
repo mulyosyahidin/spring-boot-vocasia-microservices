@@ -1,4 +1,4 @@
-package com.vocasia.instructor.dto.response;
+package com.vocasia.instructor.dto;
 
 import lombok.Data;
 

@@ -6,12 +6,10 @@ import com.vocasia.course.exception.ResourceNotFoundException;
 import com.vocasia.course.mapper.CategoryMapper;
 import com.vocasia.course.repository.CategoryRepository;
 import com.vocasia.course.service.ICategoryService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +17,6 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements ICategoryService {
 
     private CategoryRepository categoryRepository;
-    private CategoryMapper categoryMapper;
 
     @Override
     public List<CategoryDto> findAll() {
@@ -28,7 +25,7 @@ public class CategoryServiceImpl implements ICategoryService {
         // Filter hanya kategori induk (parent == null)
         return categories.stream()
                 .filter(category -> category.getParent() == null)
-                .map(categoryMapper::mapToDto)
+                .map(CategoryMapper::mapToDto)
                 .collect(Collectors.toList());
     }
 
@@ -37,7 +34,8 @@ public class CategoryServiceImpl implements ICategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Kategori tidak ditemukan dengan ID: " + id));
 
-        return categoryMapper.mapToDto(category);
+        return CategoryMapper.mapToDto(category);
     }
+
 
 }

@@ -1,8 +1,10 @@
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../../../states/contexts/AuthContext.jsx";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {findCourseById, updateThumbnail} from "../_actions/CourseAction.jsx";
 import {generateAWSObjectUrl} from "../../../../utils/utils.js";
+import {apiBaseUrl, AUTH_ACCESS_TOKEN} from "../../../../config/consts.js";
+import {COURSES_UPLOAD_THUMBNAIL} from "../../../../config/endpoints.js";
 
 export const UpdateThumbnail = () => {
     const {sweetAlert} = useContext(AuthContext);
@@ -20,9 +22,12 @@ export const UpdateThumbnail = () => {
         const fetchInitialData = async () => {
             try {
                 const getCourse = await findCourseById(id);
+                const course = getCourse.course;
 
-                const coursePictureUrl = getCourse.picture ? generateAWSObjectUrl(getCourse.picture) : null;
-                setPreviewImage(coursePictureUrl);
+                if (course.featured_picture != '') {
+                    const coursePictureUrl = course.featured_picture_url;
+                    setPreviewImage(coursePictureUrl);
+                }
             } catch (error) {
                 console.error('Error fetching initial data:', error);
             }
@@ -79,8 +84,12 @@ export const UpdateThumbnail = () => {
             <div className="row y-gap-60">
                 <div className="col-12">
                     <div className="rounded-16 bg-white -dark-bg-dark-1 shadow-4 h-100">
-                        <div className="d-flex items-center py-20 px-30 border-bottom-light">
+                        <div className="d-flex items-center py-20 px-30 border-bottom-light justify-content-between">
                             <h2 className="text-17 lh-1 fw-500">Thumbnail Kursus</h2>
+
+                            <Link to={`/instructor/courses/${id}/chapters`} className="button -sm -dark-2 text-white">
+                                Bab <i className={'fa fa-arrow-right ml-5'}/>
+                            </Link>
                         </div>
 
                         <div className="py-30 px-30">

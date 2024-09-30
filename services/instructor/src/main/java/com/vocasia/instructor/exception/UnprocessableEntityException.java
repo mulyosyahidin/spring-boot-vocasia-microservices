@@ -1,6 +1,6 @@
 package com.vocasia.instructor.exception;
 
-import com.vocasia.instructor.dto.response.ValidationErrorResponse;
+import com.vocasia.instructor.dto.ValidationErrorResponse;
 import lombok.Getter;
 
 @Getter

@@ -1,6 +1,7 @@
 package com.vocasia.course;
 
 import com.vocasia.course.config.AppConfigProperties;
+import com.vocasia.course.config.AwsConfigProperties;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
@@ -10,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
-@EnableConfigurationProperties(value = {AppConfigProperties.class})
+@EnableConfigurationProperties(value = {AppConfigProperties.class, AwsConfigProperties.class})
 @EnableFeignClients
 @EnableJpaAuditing
 @OpenAPIDefinition(

@@ -77,7 +77,7 @@ public class RegisterController {
 
         // Buat data pengguna untuk respons
         Map<String, Object> response = new HashMap<>();
-        response.put("user", UserMapper.mapUserToResponse(registeredUser));
+        response.put("user", UserMapper.mapToDto(registeredUser));
         response.put("token", iKeyCloackService.getAccessToken(registerRequest.getUsername(), registerRequest.getPassword()));
 
         return ResponseEntity.ok(new ResponseDto(true, "Berhasil mendaftarkan user baru", response, null));

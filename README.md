@@ -28,3 +28,8 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 4. Inisialisasi Instructor Service
 5. Menyelesaikan: Endpoint pendaftaran instruktur
 6. Inisialisasi Course Service
+
+01/10/2024:
+1. Menyelesaikan: Kategori kursus [Index, Show]
+2. Menyelesaikan: Instruktur [Get Data]
+3. Menyelesaikan: Kursus [Tambah, Edit, Edit Thumbnail, Bab]

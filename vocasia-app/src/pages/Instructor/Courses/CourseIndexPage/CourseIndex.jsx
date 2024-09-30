@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../../../states/contexts/AuthContext.jsx";
 import {courseStatuses} from "./data.js";
 import {Pagination} from "./partials/Pagination.jsx";
-import {Card} from "./partials/Card.jsx";
+import {DraftCard} from "./partials/DraftCard.jsx";
 import {Link} from "react-router-dom";
 import {findCourseById, getAllCourses} from "../_actions/CourseAction.jsx";
 import {generateAWSObjectUrl} from "../../../../utils/utils.js";
@@ -18,9 +18,12 @@ export const CourseIndex = () => {
     useEffect( () => {
         const fetchInitialData = async () => {
             try {
-                const getCourses = await getAllCourses();
+                const getCourses = await getAllCourses(activeTab);
 
                 if (getCourses) {
+                    // clear the page items
+                    setPageItems([]);
+
                     setPageItems(getCourses);
                 }
             } catch (error) {
@@ -29,7 +32,7 @@ export const CourseIndex = () => {
         };
 
         fetchInitialData();
-    }, []);
+    }, [activeTab]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -71,6 +74,7 @@ export const CourseIndex = () => {
                                                 } `}
                                                 data-tab-target={`.-tab-item-${status.value}`}
                                                 type="button"
+                                                key={status.value}
                                                 onClick={() => setActiveTab(status.value)}
                                             >
                                                 {status.label}
@@ -103,7 +107,7 @@ export const CourseIndex = () => {
 
                                     <div className="row y-gap-30 pt-30">
                                         {pageItems.map((data, i) => (
-                                            <Card data={data} key={i}/>
+                                            <DraftCard data={data} key={data.id || i} />
                                         ))}
                                     </div>
 

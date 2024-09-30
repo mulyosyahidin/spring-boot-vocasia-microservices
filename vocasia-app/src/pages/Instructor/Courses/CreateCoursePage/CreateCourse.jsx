@@ -7,6 +7,8 @@ import {TinyMCEField} from '../../../../components/commons/Input/TinyMCEField.js
 import {organizeCategories} from '../../../../utils/courses.js';
 import {AuthContext} from "../../../../states/contexts/AuthContext.jsx";
 import {createCourse} from "../_actions/CourseAction.jsx";
+import {apiBaseUrl, AUTH_USER, INSTRUCTOR_AUTH_DATA} from "../../../../config/consts.js";
+import {COURSES_CREATE_NEW_COURSE} from "../../../../config/endpoints.js";
 
 export const CreateCourse = () => {
     const {sweetAlert} = useContext(AuthContext);
@@ -35,6 +37,7 @@ export const CreateCourse = () => {
         const fetchInitialData = async () => {
             try {
                 const categoriesData = await getAllCategories();
+
                 setCategories(organizeCategories(categoriesData));
 
                 const levels = {
@@ -71,33 +74,37 @@ export const CreateCourse = () => {
         setLoading(true);
         setErrors({});
 
+        const instructorData = JSON.parse(localStorage.getItem(INSTRUCTOR_AUTH_DATA));
+
         const shortDescriptionContent = shortDescriptionEditorRef.current ? shortDescriptionEditorRef.current.getContent() : '';
         const descriptionContent = descriptionEditorRef.current ? descriptionEditorRef.current.getContent() : '';
 
         const isFree = formData.price === '0';
+        const instructorId = instructorData.id;
 
         const finalFormData = {
             ...formData,
             short_description: shortDescriptionContent,
             description: descriptionContent,
             is_free: isFree,
+            instructor_id: instructorId,
         };
 
-       const course = await createCourse(finalFormData, setLoading, setErrors);
+        const course = await createCourse(finalFormData, setLoading, setErrors);
 
-       if (course) {
-           let courseId = course.id;
+        if (course) {
+            let courseId = course.course.id;
 
-           sweetAlert.fire({
+            sweetAlert.fire({
                 icon: 'success',
                 title: 'Berhasil',
                 text: 'Berhasil menambahkan kursus baru. Silahkan lengkapi data lainnya.',
 
-           }).then(() => {
-               navigate(`/instructor/courses/${courseId}/update-thumbnail`);
-           })
+            }).then(() => {
+                navigate(`/instructor/courses/${courseId}/update-thumbnail`);
+            })
 
-       }
+        }
     };
 
     return (
@@ -228,7 +235,7 @@ export const CreateCourse = () => {
                                         <button className="button -md -purple-1 text-white" disabled={loading}>
                                             {
                                                 loading ? (
-                                                   'Menyimpan...'
+                                                    'Menyimpan...'
                                                 ) : 'Simpan'
                                             }
                                         </button>
@@ -242,5 +249,3 @@ export const CreateCourse = () => {
         </div>
     );
 };
-
-export default CreateCourse;

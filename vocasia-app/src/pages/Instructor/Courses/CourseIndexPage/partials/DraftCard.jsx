@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import {useState, useEffect} from "react";
 import {generateAWSObjectUrl} from "../../../../../utils/utils.js";
 
-export const Card = ({data}) => {
+export const DraftCard = ({data}) => {
     const [activeShare, setActiveShare] = useState(false);
     const [rating, setRating] = useState([]);
 
@@ -15,9 +15,9 @@ export const Card = ({data}) => {
     }, []);
 
     return (
-        <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3">
-            <div className="relative">
-                <img className="rounded-8 w-1/1" src={generateAWSObjectUrl(data.picture)} alt="image"/>
+        <div className="w-1/5 p-4">
+            <div className="relative shadow-lg rounded-lg overflow-hidden">
+                <img className="rounded-8 w-1/1" src={data.featured_picture_url ?? 'https://vocasia.s3.ap-southeast-1.amazonaws.com/no-media.png'} alt="image"/>
 
                 <button
                     onClick={() => setActiveShare((pre) => !pre)}
@@ -35,10 +35,10 @@ export const Card = ({data}) => {
                     } `}
                 >
                     <div className="px-25 py-25 bg-white -dark-bg-dark-2 shadow-1 border-light rounded-8">
-                        <a href="#" className="d-flex items-center">
+                        <Link to={`/instructor/courses/${data.id}/edit`} className="d-flex items-center">
                             <div className="icon-edit"></div>
                             <div className="text-17 lh-1 fw-500 ml-12">Edit</div>
-                        </a>
+                        </Link>
 
                         <a href="#" className="d-flex items-center mt-20">
                             <div className="icon-link"></div>
@@ -61,15 +61,6 @@ export const Card = ({data}) => {
 
                 <h3 className="text-16 fw-500 lh-15 mt-10">{data.title}</h3>
 
-                <div className="progress-bar mt-10">
-                    <div className="progress-bar__bg bg-light-3"></div>
-                    <div className="progress-bar__bar bg-purple-1 w-1/5"></div>
-                </div>
-
-                <div className="d-flex y-gap-10 justify-between items-center mt-10">
-                    {/*<div className="text-dark-1">% {data.completed} Completed</div>*/}
-                    <div>25%</div>
-                </div>
             </div>
         </div>
     );

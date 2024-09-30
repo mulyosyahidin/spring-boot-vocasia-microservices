@@ -14,4 +14,6 @@ public interface IUserService {
     boolean isUsernameAlreadyRegistered(String username);
     User loginWithEmailAndPassword(LoginRequest loginRequest) throws NoSuchAlgorithmException, InvalidKeySpecException;
 
+    User findById(Long id);
+
 }

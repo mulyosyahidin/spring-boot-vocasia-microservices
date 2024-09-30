@@ -18,7 +18,7 @@ export const Sidebar = () => {
         <div className="sidebar -dashboard">
             {sidebarItems.map((item) => (
                 <div
-                    key={item.id}
+                    key={`${item.id}-${item.href}`}
                     className={`sidebar__item ${isActive(item.href, item.activeWhen) ? "-is-active" : ""}`}
                 >
                     <Link

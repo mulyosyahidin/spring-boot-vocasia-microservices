@@ -6,6 +6,8 @@ import {DashboardPage} from "../pages/Instructor/DashboardPage/Index.jsx";
 import {CreateCoursePage} from "../pages/Instructor/Courses/CreateCoursePage/Index.jsx";
 import {CourseIndexPage} from "../pages/Instructor/Courses/CourseIndexPage/Index.jsx";
 import {UpdateThumbnailPage} from "../pages/Instructor/Courses/UpdateThumbnailPage/Index.jsx";
+import {EditCoursePage} from "../pages/Instructor/Courses/EditCoursePage/Index.jsx";
+import {ChapterPage} from "../pages/Instructor/Courses/ChapterPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -35,6 +37,14 @@ const routes = createBrowserRouter([
     {
         path: '/instructor/courses/:id/update-thumbnail',
         element: <UpdateThumbnailPage/>,
+    },
+    {
+        path: '/instructor/courses/:id/edit',
+        element: <EditCoursePage/>,
+    },
+    {
+        path: '/instructor/courses/:id/chapters',
+        element: <ChapterPage/>,
     }
 ]);
 

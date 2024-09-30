@@ -1,4 +1,15 @@
-export const SelectField = ({ label, name, options, value, onChange, error, placeholder = null, isRequired = false, hint = null}) => {
+export const SelectField = ({
+                                label,
+                                name,
+                                options,
+                                value,
+                                onChange,
+                                error,
+                                placeholder = null,
+                                isRequired = false,
+                                selectedId = null,
+                                hint = null
+                            }) => {
     return (
         <>
             {label && <label className="text-16 lh-1 fw-500 text-dark-1 mb-10">{label}</label>}
@@ -7,7 +18,11 @@ export const SelectField = ({ label, name, options, value, onChange, error, plac
                     placeholder && <option disabled>{placeholder}</option>
                 }
                 {options.map(option => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
+                    <option
+                        key={option.value}
+                        value={option.value}
+                        selected={option.value === selectedId}
+                    >{option.label}</option>
                 ))}
             </select>
 

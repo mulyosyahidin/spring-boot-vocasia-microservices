@@ -1,6 +1,6 @@
 package com.vocasia.instructor.mapper;
 
-import com.vocasia.instructor.dto.UserDto;
+import com.vocasia.instructor.dto.feign.UserDto;
 
 import java.util.HashMap;
 import java.util.Map;

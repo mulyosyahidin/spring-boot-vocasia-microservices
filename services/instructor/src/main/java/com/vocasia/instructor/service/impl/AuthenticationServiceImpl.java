@@ -2,7 +2,7 @@ package com.vocasia.instructor.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vocasia.instructor.dto.UserDto;
+import com.vocasia.instructor.dto.feign.UserDto;
 import com.vocasia.instructor.exception.CustomFeignException;
 import com.vocasia.instructor.request.RegisterRequest;
 import com.vocasia.instructor.service.IAuthenticationService;
@@ -30,16 +30,15 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     public UserDto registerNewUser(RegisterRequest registerRequest, String correlationId) {
         try {
             ResponseEntity<Map<String, Object>> registerNewUserResponseEntity = authenticationFeignClient.register(correlationId, registerRequest);
+            logger.info("registerNewUserResponseEntity: {}", registerNewUserResponseEntity);
 
             Map<String, Object> responseBody = registerNewUserResponseEntity.getBody();
-            logger.info("Response Body: {}", responseBody);
 
             if (responseBody != null && responseBody.get("success") != null && (Boolean) responseBody.get("success")) {
                 Map<String, Object> data = (Map<String, Object>) responseBody.get("data");
 
                 if (data != null) {
                     Map<String, Object> user = (Map<String, Object>) data.get("user");
-                    logger.info("User Data: {}", user);
 
                     UserDto userDto = new UserDto();
 
@@ -69,6 +68,44 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             } catch (IOException ioException) {
                 throw new RuntimeException("Failed to parse error response", ioException);
             }
+        }
+    }
+
+    @Override
+    public UserDto getByUserId(Long userId) {
+        try {
+            ResponseEntity<Map<String, Object>> getUserProfileByUserIdResponseEntity = authenticationFeignClient.getUserById(userId);
+            logger.info("getUserProfileByUserIdResponseEntity: {}", getUserProfileByUserIdResponseEntity);
+
+            Map<String, Object> responseBody = getUserProfileByUserIdResponseEntity.getBody();
+
+            if (responseBody != null && responseBody.get("success") != null && (Boolean) responseBody.get("success")) {
+                Map<String, Object> data = (Map<String, Object>) responseBody.get("data");
+
+                if (data != null) {
+                    Map<String, Object> user = (Map<String, Object>) data.get("user");
+
+                    UserDto userDto = new UserDto();
+
+                    userDto.setId(Long.parseLong(user.get("id").toString()));
+                    userDto.setUid(user.get("uid").toString());
+                    userDto.setEmail(user.get("email").toString());
+                    userDto.setUsername(user.get("username").toString());
+                    userDto.setName(user.get("name").toString());
+                    userDto.setRole(user.get("role").toString());
+                    userDto.setProfilePicture(user.get("profile_picture") != null ? user.get("profile_picture").toString() : null);
+                    userDto.setCreatedAt(LocalDateTime.parse(user.get("created_at").toString()));
+                    userDto.setUpdatedAt(LocalDateTime.parse(user.get("updated_at").toString()));
+
+                    return userDto;
+                }
+            } else {
+                logger.warn("get user profile by user id failed: {}", responseBody != null ? responseBody.get("message") : "No response body");
+            }
+
+            return null;
+        } catch (FeignException e) {
+            throw new RuntimeException("Failed to parse error response", e);
         }
     }
 

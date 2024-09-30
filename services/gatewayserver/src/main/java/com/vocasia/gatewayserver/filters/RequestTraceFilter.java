@@ -7,6 +7,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -24,6 +25,7 @@ public class RequestTraceFilter implements GlobalFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
 
+        // Check if the correlation ID is present, if not, generate one
         if (isCorrelationIdPresent(requestHeaders)) {
             logger.debug("vocasia-correlation-id found in RequestTraceFilter : {}",
                     filterUtility.getCorrelationId(requestHeaders));
@@ -33,7 +35,15 @@ public class RequestTraceFilter implements GlobalFilter {
             logger.debug("vocasia-correlation-id generated in RequestTraceFilter : {}", correlationID);
         }
 
-        return chain.filter(exchange);
+        ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
+                .headers(httpHeaders -> {
+                    httpHeaders.putAll(requestHeaders);
+                })
+                .build();
+
+        ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
+
+        return chain.filter(mutatedExchange);
     }
 
     private boolean isCorrelationIdPresent(HttpHeaders requestHeaders) {

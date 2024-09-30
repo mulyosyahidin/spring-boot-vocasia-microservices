@@ -1,7 +1,7 @@
 package com.vocasia.instructor.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vocasia.instructor.dto.response.ValidationErrorResponse;
+import com.vocasia.instructor.dto.ValidationErrorResponse;
 import com.vocasia.instructor.exception.UnprocessableEntityException;
 import feign.Response;
 import feign.codec.ErrorDecoder;

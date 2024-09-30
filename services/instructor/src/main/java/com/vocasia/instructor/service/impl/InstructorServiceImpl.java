@@ -23,4 +23,14 @@ public class InstructorServiceImpl implements IInstructorService {
 
         return instructorRepository.save(instructor);
     }
+
+    @Override
+    public Instructor getInstructorById(Long id) {
+        return instructorRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Instructor getInstructorByUserId(Long id) {
+        return instructorRepository.findByUserId(id);
+    }
 }

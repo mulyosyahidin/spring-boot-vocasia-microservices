@@ -1,4 +1,4 @@
-package com.vocasia.instructor.dto;
+package com.vocasia.course.dto.feign;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -10,13 +10,14 @@ import java.time.LocalDateTime;
 @Setter
 public class UserDto {
 
-    private Long id;
+    private Integer id;
     private String uid;
     private String email;
     private String username;
     private String name;
-    private String password;
     private String role;
+
+    @JsonProperty("profile_picture")
     private String profilePicture;
 
     @JsonProperty("created_at")
@@ -26,4 +27,3 @@ public class UserDto {
     private LocalDateTime updatedAt;
 
 }
-

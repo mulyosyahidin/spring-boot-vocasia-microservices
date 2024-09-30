@@ -1,26 +1,41 @@
 package com.vocasia.authentication.mapper;
 
+import com.vocasia.authentication.dto.UserDto;
 import com.vocasia.authentication.entity.User;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
 
 public class UserMapper {
 
-    public static Map<String, Object> mapUserToResponse(User user) {
-        Map<String, Object> userData = new HashMap<>();
+    public static UserDto mapToDto(User user) {
+        UserDto userDto = new UserDto();
 
-        userData.put("id", user.getId());
-        userData.put("uid", user.getUid());
-        userData.put("username", user.getUsername());
-        userData.put("email", user.getEmail());
-        userData.put("name", user.getName());
-        userData.put("role", user.getRole());
-        userData.put("profile_picture", user.getProfilePicture());
-        userData.put("created_at", user.getCreatedAt());
-        userData.put("updated_at", user.getUpdatedAt());
+        userDto.setId(user.getId());
+        userDto.setUid(user.getUid());
+        userDto.setEmail(user.getEmail());
+        userDto.setUsername(user.getUsername());
+        userDto.setName(user.getName());
+        userDto.setRole(user.getRole());
+        userDto.setProfilePicture(user.getProfilePicture());
+        userDto.setCreatedAt(user.getCreatedAt().toString());
+        userDto.setUpdatedAt(user.getUpdatedAt().toString());
 
-        return userData;
+        return userDto;
     }
 
+    public static User mapToEntity(UserDto userDto) {
+        User user = new User();
+
+        user.setId(userDto.getId());
+        user.setUid(userDto.getUid());
+        user.setEmail(userDto.getEmail());
+        user.setUsername(userDto.getUsername());
+        user.setName(userDto.getName());
+        user.setRole(userDto.getRole());
+        user.setProfilePicture(userDto.getProfilePicture());
+        user.setCreatedAt(LocalDateTime.parse(userDto.getCreatedAt()));
+        user.setUpdatedAt(LocalDateTime.parse(userDto.getUpdatedAt()));
+
+        return user;
+    }
 }

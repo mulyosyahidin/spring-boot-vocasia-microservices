@@ -6,6 +6,8 @@ export const AUTH_USER = '_vocasia_user';
 export const AUTH_ACCESS_TOKEN = '_vocasia_access_token';
 export const AUTH_REFRESH_TOKEN = '_vocasia_refresh_token';
 
+export const INSTRUCTOR_AUTH_DATA = '_vocasia_instructor_auth_data';
+
 // roles
 export const INSTRUCTOR = 'instructor';
 

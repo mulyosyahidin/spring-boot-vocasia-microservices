@@ -1,7 +1,7 @@
 package com.vocasia.instructor.controller;
 
 import com.vocasia.instructor.config.AppConfigProperties;
-import com.vocasia.instructor.dto.response.ResponseDto;
+import com.vocasia.instructor.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
