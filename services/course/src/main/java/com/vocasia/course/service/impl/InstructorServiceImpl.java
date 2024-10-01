@@ -35,7 +35,6 @@ public class InstructorServiceImpl implements IInstructorService {
 
                 if (data != null) {
                     Map<String, Object> instructor = (Map<String, Object>) data.get("instructor");
-                    logger.info("Instructor: {}", instructor);
 
                     InstructorDto instructorDto = new InstructorDto();
 
@@ -45,7 +44,6 @@ public class InstructorServiceImpl implements IInstructorService {
                     instructorDto.setPhoneNumber((String) instructor.get("phone_number"));
 
                     Map<String, Object> user = (Map<String, Object>) instructor.get("user");
-                    logger.info("User: {}", user);
 
                     UserDto userDto = new UserDto();
 

@@ -35,10 +35,6 @@ public class LessonServiceImpl implements ILessonService {
         lesson.setContentVideoDuration(storeLessonRequest.getContentVideoDuration());
         lesson.setContentVideoUrl(storeLessonRequest.getContentVideoUrl());
         lesson.setContentText(storeLessonRequest.getContentText());
-        lesson.setContentFileUrl(storeLessonRequest.getContentFileUrl());
-        lesson.setContentFileName(storeLessonRequest.getContentFileName());
-        lesson.setContentFileSize(storeLessonRequest.getContentFileSize());
-        lesson.setContentFileType(storeLessonRequest.getContentFileType());
 
         return lessonRepository.save(lesson);
     }
@@ -58,10 +54,6 @@ public class LessonServiceImpl implements ILessonService {
         lesson.setContentVideoDuration(updateLessonRequest.getContentVideoDuration());
         lesson.setContentVideoUrl(updateLessonRequest.getContentVideoUrl());
         lesson.setContentText(updateLessonRequest.getContentText());
-        lesson.setContentFileUrl(updateLessonRequest.getContentFileUrl());
-        lesson.setContentFileName(updateLessonRequest.getContentFileName());
-        lesson.setContentFileSize(updateLessonRequest.getContentFileSize());
-        lesson.setContentFileType(updateLessonRequest.getContentFileType());
 
         return lessonRepository.save(lesson);
     }

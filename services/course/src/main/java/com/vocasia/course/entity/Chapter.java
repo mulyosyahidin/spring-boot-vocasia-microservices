@@ -1,7 +1,11 @@
 package com.vocasia.course.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,6 +29,10 @@ public class Chapter extends BaseEntity {
 
     @Column(name = "total_duration")
     private String totalDuration;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<Lesson> lessons;
 
 }
 

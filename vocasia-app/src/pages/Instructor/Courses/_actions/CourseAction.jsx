@@ -4,7 +4,7 @@ import {
     update,
     store,
     uploadThumbnail,
-    getAllChaptersByCourseId, addNewChapter, editChapterData, deleteChapterData
+    getAllChaptersByCourseId, addNewChapter, editChapterData, deleteChapterData, getChapterDataById
 } from "../../../../services/courses/courseService.js";
 
 export const findCourseById = async (id) => {
@@ -196,10 +196,21 @@ export const updateChapter = async (courseId, chapterId, formData, setLoading, s
 export const deleteChapter = async (courseId, chapterId) => {
     try {
         const response = await deleteChapterData(courseId, chapterId);
-        console.log('deleteChapter::response', response);
 
         if (response.success) {
             return response;
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const getChapterById = async (courseId, chapterId) => {
+    try {
+        const response = await getChapterDataById(courseId, chapterId);
+
+        if (response.success) {
+            return response.data;
         }
     } catch (error) {
         console.error(error)

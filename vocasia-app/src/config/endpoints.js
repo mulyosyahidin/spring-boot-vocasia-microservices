@@ -13,3 +13,7 @@ export const COURSES_CHAPTERS_GETALL = '/course/:courseId/chapters'; // hasRole(
 export const COURSES_CHAPTERS_CREATE = '/course/:courseId/chapters'; // hasRole("INSTRUCTOR")
 export const COURSES_CHAPTERS_UPDATE = '/course/:courseId/chapters/:chapterId'; // hasRole("INSTRUCTOR")
 export const COURSES_CHAPTERS_DELETE = '/course/:courseId/chapters/:chapterId'; // hasRole("INSTRUCTOR")
+export const COURSES_CHAPTERS_SHOW = '/course/:courseId/chapters/:chapterId'; // permitAll
+
+export const COURSES_CHAPTERS_LESSONS_INDEX = '/course/:courseId/chapters/:chapterId/lessons'; // hasRole("INSTRUCTOR")
+export const COURSES_CHAPTERS_LESSONS_STORE = '/course/:courseId/chapters/:chapterId/lessons'; // hasRole("INSTRUCTOR")

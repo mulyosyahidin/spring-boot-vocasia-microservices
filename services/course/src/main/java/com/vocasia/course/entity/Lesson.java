@@ -1,5 +1,9 @@
 package com.vocasia.course.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,6 +22,7 @@ public class Lesson extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chapter_id", nullable = false)
+    @JsonBackReference
     private Chapter chapter;
 
     @Column(nullable = false)
@@ -40,18 +45,6 @@ public class Lesson extends BaseEntity {
 
     @Column(name = "content_text", columnDefinition = "TEXT")
     private String contentText;
-
-    @Column(name = "content_file_url")
-    private String contentFileUrl;
-
-    @Column(name = "content_file_name")
-    private String contentFileName;
-
-    @Column(name = "content_file_size")
-    private Integer contentFileSize;
-
-    @Column(name = "content_file_type")
-    private String contentFileType;
 
 }
 

@@ -343,7 +343,7 @@ export const Chapter = () => {
                                                         className="accordion__content"
                                                         style={
                                                             currentOpenItem == `${index}`
-                                                                ? {maxHeight: "100px"}
+                                                                ? {maxHeight: "none"}
                                                                 : {}
                                                         }
                                                     >
@@ -351,14 +351,46 @@ export const Chapter = () => {
                                                             <div
                                                                 className="d-flex x-gap-10 y-gap-10 flex-wrap justify-content-end">
                                                                 <div>
-                                                                    <a
-                                                                        href="#"
+                                                                    <Link
+                                                                        to={`/instructor/courses/${id}/chapters/${chapter.id}/lessons`}
                                                                         className="button -sm py-15 -purple-3 text-purple-1 fw-500"
                                                                     >
-                                                                        Tambah Pelajaran
-                                                                    </a>
+                                                                        Kelola Pelajaran
+                                                                    </Link>
                                                                 </div>
                                                             </div>
+
+                                                            {
+                                                                chapter.lessons.map((lesson, index) => (
+                                                                    <div key={index}
+                                                                         className="d-flex x-gap-10 y-gap-10 mb-5 align-items-center">
+                                                                        {
+                                                                            lesson.type === 'video' && (
+                                                                                <div className="icon icon-play"></div>
+                                                                            )
+                                                                        }
+
+                                                                        {
+                                                                            lesson.type === 'text' && (
+                                                                                <div className="icon icon-book"></div>
+                                                                            )
+                                                                        }
+
+                                                                        <div
+                                                                            className="text-16 lh-14 fw-500 text-dark-1">
+                                                                            {lesson.title}
+
+                                                                            {
+                                                                                lesson.type === 'video' && (
+                                                                                    <span className="text-14 lh-14 fw-400 text-dark-2 ml-5">
+                                                                                        ({lesson.content_video_duration})
+                                                                                    </span>
+                                                                                )
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                ))
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>

@@ -8,6 +8,8 @@ import {CourseIndexPage} from "../pages/Instructor/Courses/CourseIndexPage/Index
 import {UpdateThumbnailPage} from "../pages/Instructor/Courses/UpdateThumbnailPage/Index.jsx";
 import {EditCoursePage} from "../pages/Instructor/Courses/EditCoursePage/Index.jsx";
 import {ChapterPage} from "../pages/Instructor/Courses/ChapterPage/Index.jsx";
+import {ManageLessonsPage} from "../pages/Instructor/Courses/ManageLessonsPage/Index.jsx";
+import {CreateLessonPage} from "../pages/Instructor/Courses/CreateLessonPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -45,6 +47,14 @@ const routes = createBrowserRouter([
     {
         path: '/instructor/courses/:id/chapters',
         element: <ChapterPage/>,
+    },
+    {
+        path: '/instructor/courses/:courseId/chapters/:chapterId/lessons',
+        element: <ManageLessonsPage/>,
+    },
+    {
+        path: '/instructor/courses/:courseId/chapters/:chapterId/lessons/create',
+        element: <CreateLessonPage/>,
     }
 ]);
 

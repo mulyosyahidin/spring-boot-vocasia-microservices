@@ -7,8 +7,7 @@ import {TinyMCEField} from '../../../../components/commons/Input/TinyMCEField.js
 import {organizeCategories} from '../../../../utils/courses.js';
 import {AuthContext} from "../../../../states/contexts/AuthContext.jsx";
 import {createCourse} from "../_actions/CourseAction.jsx";
-import {apiBaseUrl, AUTH_USER, INSTRUCTOR_AUTH_DATA} from "../../../../config/consts.js";
-import {COURSES_CREATE_NEW_COURSE} from "../../../../config/endpoints.js";
+import {INSTRUCTOR_AUTH_DATA} from "../../../../config/consts.js";
 
 export const CreateCourse = () => {
     const {sweetAlert} = useContext(AuthContext);

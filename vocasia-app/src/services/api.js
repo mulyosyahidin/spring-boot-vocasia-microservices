@@ -2,10 +2,7 @@ import axios from "axios";
 import {AUTH_ACCESS_TOKEN, AUTH_REFRESH_TOKEN} from "../config/consts.js";
 
 export const axiosGet = async ({url, headers = {}}) => {
-    console.log(`GET ${url}`);
-
     const accessToken = localStorage.getItem(AUTH_ACCESS_TOKEN);
-    const refreshToken = localStorage.getItem(AUTH_REFRESH_TOKEN);
 
     const config = accessToken ? {
         headers: {

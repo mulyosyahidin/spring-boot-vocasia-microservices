@@ -1,7 +1,7 @@
 import {axiosDelete, axiosGet, axiosPost, axiosPut} from "../api.js";
 import {
     COURSES_CHAPTERS_CREATE, COURSES_CHAPTERS_DELETE,
-    COURSES_CHAPTERS_GETALL, COURSES_CHAPTERS_UPDATE,
+    COURSES_CHAPTERS_GETALL, COURSES_CHAPTERS_SHOW, COURSES_CHAPTERS_UPDATE,
     COURSES_CREATE_NEW_COURSE,
     COURSES_GET_DRAFT,
     COURSES_SHOW,
@@ -40,7 +40,7 @@ export const update = async (id, formData) => {
     });
 }
 
-export const uploadThumbnail = async ({ id, formData }) => {
+export const uploadThumbnail = async ({id, formData}) => {
     let uploadThumbnailEndpoint = `${apiBaseUrl}${COURSES_UPLOAD_THUMBNAIL}`;
     uploadThumbnailEndpoint = uploadThumbnailEndpoint.replace(':id', id);
 
@@ -69,7 +69,11 @@ export const addNewChapter = async (courseId, formData) => {
     let endpoint = `${apiBaseUrl}${COURSES_CHAPTERS_CREATE}`;
     endpoint = endpoint.replace(':courseId', courseId);
 
-    return await axiosPost({url: endpoint, data: JSON.stringify(formData), headers: {'Content-Type': 'application/json'}});
+    return await axiosPost({
+        url: endpoint,
+        data: JSON.stringify(formData),
+        headers: {'Content-Type': 'application/json'}
+    });
 }
 
 export const editChapterData = async (courseId, chapterId, formData) => {
@@ -77,7 +81,11 @@ export const editChapterData = async (courseId, chapterId, formData) => {
     endpoint = endpoint.replace(':courseId', courseId);
     endpoint = endpoint.replace(':chapterId', chapterId);
 
-    return await axiosPut({url: endpoint, data: JSON.stringify(formData), headers: {'Content-Type': 'application/json'}});
+    return await axiosPut({
+        url: endpoint,
+        data: JSON.stringify(formData),
+        headers: {'Content-Type': 'application/json'}
+    });
 }
 
 export const deleteChapterData = async (courseId, chapterId) => {
@@ -85,5 +93,16 @@ export const deleteChapterData = async (courseId, chapterId) => {
     endpoint = endpoint.replace(':courseId', courseId);
     endpoint = endpoint.replace(':chapterId', chapterId);
 
-    return await axiosDelete({url: endpoint, data: JSON.stringify({isDeleted: true}), headers: {'Content-Type': 'application/json'}});
+    return await axiosDelete({
+        url: endpoint,
+        data: JSON.stringify({isDeleted: true}),
+        headers: {'Content-Type': 'application/json'}
+    });
+}
+
+export const getChapterDataById = async (courseId, chapterId) => {
+    let endpoint = `${apiBaseUrl}${COURSES_CHAPTERS_SHOW}`;
+    endpoint = endpoint.replace(':chapterId', chapterId).replace(':courseId', courseId);
+
+    return await axiosGet({url: endpoint});
 }

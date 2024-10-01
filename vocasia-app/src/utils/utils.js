@@ -28,4 +28,11 @@ const generateAWSObjectUrl = (key) => {
     return `https://${bucketName}.s3.${region}.amazonaws.com/${key}`;
 }
 
-export { _api, getLocalStorageItem, generateAWSObjectUrl };
+const getYouTubeVideoId = (url) => {
+    const urlObject = new URL(url);
+    const searchParams = new URLSearchParams(urlObject.search);
+
+    return searchParams.get('v');
+}
+
+export { _api, getLocalStorageItem, generateAWSObjectUrl, getYouTubeVideoId };

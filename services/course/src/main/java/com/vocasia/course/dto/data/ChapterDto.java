@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,12 +16,12 @@ public class ChapterDto {
     @JsonProperty("course_id")
     private Long courseId;
 
-    private CourseDto course;
-
     private String title;
 
     @JsonProperty("total_duration")
     private String totalDuration;
+
+    List<LessonDto> lessons;
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;

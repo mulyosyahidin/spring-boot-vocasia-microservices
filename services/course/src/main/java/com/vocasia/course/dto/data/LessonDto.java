@@ -15,8 +15,6 @@ public class LessonDto {
     @JsonProperty("chapter_id")
     private Long chapterId;
 
-    private ChapterDto chapter;
-
     private String title;
 
     private String type;
@@ -35,18 +33,6 @@ public class LessonDto {
 
     @JsonProperty("content_text")
     private String contentText;
-
-    @JsonProperty("content_file_url")
-    private String contentFileUrl;
-
-    @JsonProperty("content_file_name")
-    private String contentFileName;
-
-    @JsonProperty("content_file_size")
-    private Integer contentFileSize;
-
-    @JsonProperty("content_file_type")
-    private String contentFileType;
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
