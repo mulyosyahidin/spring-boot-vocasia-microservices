@@ -38,7 +38,7 @@ export const CreateCourse = () => {
             try {
                 const categoriesData = await getAllCategories();
 
-                setCategories(organizeCategories(categoriesData));
+                setCategories(organizeCategories(categoriesData.categories));
 
                 const levels = {
                     'all': 'Semua',

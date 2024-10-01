@@ -33,6 +33,7 @@ export const EditCourse = () => {
     const [errors, setErrors] = useState({});
 
     const navigate = useNavigate();
+
     const shortDescriptionEditorRef = useRef(null);
     const descriptionEditorRef = useRef(null);
 
@@ -71,7 +72,7 @@ export const EditCourse = () => {
                     total_duration: course.total_duration,
                 });
 
-                setCategories(organizeCategories(categoriesData, course.category.id));
+                setCategories(organizeCategories(categoriesData.categories, course.category.id));
 
                 shortDescriptionEditorRef.current.setContent(course.short_description);
                 descriptionEditorRef.current.setContent(course.description);

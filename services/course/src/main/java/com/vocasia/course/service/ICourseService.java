@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface ICourseService {
 
-    Course findById(Long courseId);
-    Course createNewCourse(CreateNewCourseRequest createNewCourseRequest);
+    Course store(CreateNewCourseRequest createNewCourseRequest);
     Course updateThumbnail(Course course, UpdateCourseThumbnailRequest updateCourseThumbnailRequest) throws IOException;
+    Course show(Long courseId);
 
     List<Course> getDraftCourses();
     List<Course> getDraftCoursesByInstructorId(Long instructorId);

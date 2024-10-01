@@ -25,12 +25,10 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/chapters")
+@RequestMapping("/api")
 @Validated
 @Tag(name = "Course Chapter Controller", description = "Controller untuk manajemen chapter kursus")
 public class ChapterController {
-
-    private final Logger logger = LoggerFactory.getLogger(CreateCourseController.class);
 
     private final ICourseService courseService;
     private final IChapterService chapterService;
@@ -38,6 +36,24 @@ public class ChapterController {
     public ChapterController(ICourseService courseService, IChapterService chapterService) {
         this.courseService = courseService;
         this.chapterService = chapterService;
+    }
+
+    @Operation(
+            summary = "Mendapatkan semua chapter",
+            description = "Mendapatkan semua chapter dari kursus"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Berhasil mendapatkan data"
+    )
+    @GetMapping("/{courseId}/chapters")
+    public ResponseEntity<ResponseDto> index(@PathVariable Long courseId) {
+        List<Chapter> chapters = chapterService.index(courseId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("chapters", chapters.stream().map(ChapterMapper::mapToDto));
+
+        return ResponseEntity.ok(new ResponseDto(true, "Berhasil mendapatkan data chapter", response, null));
     }
 
     @Operation(
@@ -58,10 +74,10 @@ public class ChapterController {
                     description = "Terjadi kesalahan tidak terduga"
             )
     })
-    @PostMapping("/{courseId}/add-chapter")
-    public ResponseEntity<ResponseDto> createChapter(@PathVariable Long courseId, @Valid @RequestBody CreateChapterRequest createChapterRequest) {
-        Course course = courseService.findById(courseId);
-        Chapter chapter = chapterService.createChapter(course, createChapterRequest);
+    @PostMapping("/{courseId}/chapters")
+    public ResponseEntity<ResponseDto> store(@PathVariable Long courseId, @Valid @RequestBody CreateChapterRequest createChapterRequest) {
+        Course course = courseService.show(courseId);
+        Chapter chapter = chapterService.store(course, createChapterRequest);
 
         Map<String, Object> response = new HashMap<>();
         response.put("chapter", ChapterMapper.mapToDto(chapter));
@@ -70,19 +86,19 @@ public class ChapterController {
     }
 
     @Operation(
-            summary = "Mendapatkan semua chapter",
-            description = "Mendapatkan semua chapter dari kursus"
+            summary = "Mendapatkan data chapter",
+            description = "Mendapatkan data chapter dari kursus"
     )
     @ApiResponse(
             responseCode = "200",
             description = "Berhasil mendapatkan data"
     )
-    @GetMapping("/{courseId}/get-all-chapters")
-    public ResponseEntity<ResponseDto> getAllCourseChapters(@PathVariable Long courseId) {
-        List<Chapter> chapters = chapterService.getChaptersByCourseId(courseId);
+    @GetMapping("/{courseId}/chapters/{chapterId}")
+    public ResponseEntity<ResponseDto> show(@PathVariable Long courseId, @PathVariable Long chapterId) {
+        Chapter chapter = chapterService.show(chapterId);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("chapters", chapters.stream().map(ChapterMapper::mapToDto));
+        response.put("chapter", ChapterMapper.mapToDto(chapter));
 
         return ResponseEntity.ok(new ResponseDto(true, "Berhasil mendapatkan data chapter", response, null));
     }
@@ -105,32 +121,15 @@ public class ChapterController {
                     description = "Terjadi kesalahan tidak terduga"
             )
     })
-    @PutMapping("/{courseId}/update-chapter/{chapterId}")
-    public ResponseEntity<ResponseDto> updateChapter(@PathVariable Long courseId, @PathVariable Long chapterId, @Valid @RequestBody UpdateChapterRequest updateChapterRequest) {
-        Chapter chapter = chapterService.updateChapter(chapterId, updateChapterRequest);
+    @PutMapping("/{courseId}/chapters/{chapterId}")
+    public ResponseEntity<ResponseDto> update(@PathVariable Long courseId, @PathVariable Long chapterId, @Valid @RequestBody UpdateChapterRequest updateChapterRequest) {
+        Chapter chapter = chapterService.show(chapterId);
+        Chapter updatedChapter = chapterService.update(chapter, updateChapterRequest);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("chapter", ChapterMapper.mapToDto(chapter));
+        response.put("chapter", ChapterMapper.mapToDto(updatedChapter));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDto(true, "Berhasil memperbarui data chapter", response, null));
-    }
-
-    @Operation(
-            summary = "Mendapatkan data chapter",
-            description = "Mendapatkan data chapter dari kursus"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Berhasil mendapatkan data"
-    )
-    @GetMapping("/{courseId}/get-chapter/{chapterId}")
-    public ResponseEntity<ResponseDto> getChapterById(@PathVariable Long courseId, @PathVariable Long chapterId) {
-        Chapter chapter = chapterService.findById(chapterId);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("chapter", ChapterMapper.mapToDto(chapter));
-
-        return ResponseEntity.ok(new ResponseDto(true, "Berhasil mendapatkan data chapter", response, null));
     }
 
     @Operation(
@@ -141,9 +140,10 @@ public class ChapterController {
             responseCode = "200",
             description = "Berhasil menghapus data"
     )
-    @DeleteMapping("/{courseId}/delete-chapter/{chapterId}")
-    public ResponseEntity<ResponseDto> deleteChapterById(@PathVariable Long courseId, @PathVariable Long chapterId) {
-        chapterService.deleteChapterById(chapterId);
+    @DeleteMapping("/{courseId}/chapters/{chapterId}")
+    public ResponseEntity<ResponseDto> destroy(@PathVariable Long courseId, @PathVariable Long chapterId) {
+        Chapter chapter = chapterService.show(chapterId);
+        chapterService.delete(chapter);
 
         return ResponseEntity.ok(new ResponseDto(true, "Berhasil menghapus data chapter", null, null));
     }

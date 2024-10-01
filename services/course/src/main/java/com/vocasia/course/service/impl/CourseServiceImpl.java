@@ -37,13 +37,7 @@ public class CourseServiceImpl implements ICourseService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Course findById(Long courseId) {
-        return courseRepository.findById(courseId)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
-    }
-
-    @Override
-    public Course createNewCourse(CreateNewCourseRequest createNewCourseRequest) {
+    public Course store(CreateNewCourseRequest createNewCourseRequest) {
         Course course = new Course();
 
         course.setInstructorId(createNewCourseRequest.getInstructorId());
@@ -95,10 +89,15 @@ public class CourseServiceImpl implements ICourseService {
         InputStream inputStream = picture.getInputStream();
 
         awsService.uploadFile(bucketName, fileName, fileSize, contentType, inputStream);
-
         course.setFeaturedPicture(fileName);
 
         return courseRepository.save(course);
+    }
+
+    @Override
+    public Course show(Long courseId) {
+        return courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
     }
 
     @Override

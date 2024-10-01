@@ -2,41 +2,47 @@ package com.vocasia.course.controller;
 
 import com.vocasia.course.dto.ResponseDto;
 import com.vocasia.course.dto.data.CategoryDto;
+import com.vocasia.course.entity.Category;
+import com.vocasia.course.mapper.CategoryMapper;
 import com.vocasia.course.service.ICategoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api")
 @Validated
 @Tag(name = "Category Controller", description = "Controller untuk kategori")
 public class CategoryController {
 
     private final ICategoryService categoryService;
 
-    private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
-
     public CategoryController(ICategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
-    @GetMapping
+    @GetMapping("/categories")
     public ResponseDto index() {
-        List<CategoryDto> categories = categoryService.findAll();
+        List<Category> categories = categoryService.index();
 
-        return new ResponseDto(true, "Berhasil mendapatkan data kategori", categories, null);
+        Map<String, Object> response = new HashMap<>();
+        response.put("categories", categories.stream().map(CategoryMapper::mapToDto));
+
+        return new ResponseDto(true, "Berhasil mendapatkan data kategori", response, null);
     }
 
-    @GetMapping("/{id}")
-    public ResponseDto getCategoryById(@PathVariable Long id) {
-        CategoryDto category = categoryService.findById(id);
+    @GetMapping("/categories/{categoryId}")
+    public ResponseDto show(@PathVariable Long categoryId) {
+        Category category = categoryService.show(categoryId);
 
-        return new ResponseDto(true, "Berhasil mendapatkan data kategori", category, null);
+        Map<String, Object> response = new HashMap<>();
+        response.put("category", CategoryMapper.mapToDto(category));
+
+        return new ResponseDto(true, "Berhasil mendapatkan data kategori", response, null);
     }
 
     @PostMapping

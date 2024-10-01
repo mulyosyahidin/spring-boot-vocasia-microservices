@@ -2,6 +2,7 @@ package com.vocasia.course.service.impl;
 
 import com.vocasia.course.entity.Chapter;
 import com.vocasia.course.entity.Course;
+import com.vocasia.course.exception.ResourceNotFoundException;
 import com.vocasia.course.repository.ChapterRepository;
 import com.vocasia.course.request.CreateChapterRequest;
 import com.vocasia.course.request.UpdateChapterRequest;
@@ -18,7 +19,12 @@ public class ChapterServiceImpl implements IChapterService {
     private final ChapterRepository chapterRepository;
 
     @Override
-    public Chapter createChapter(Course course, CreateChapterRequest createChapterRequest) {
+    public List<Chapter> index(Long courseId) {
+        return chapterRepository.findAllByCourseId(courseId);
+    }
+
+    @Override
+    public Chapter store(Course course, CreateChapterRequest createChapterRequest) {
         Chapter chapter = new Chapter();
 
         chapter.setCourse(course);
@@ -29,14 +35,13 @@ public class ChapterServiceImpl implements IChapterService {
     }
 
     @Override
-    public List<Chapter> getChaptersByCourseId(Long courseId) {
-        return chapterRepository.findAllByCourseId(courseId);
+    public Chapter show(Long chapterId) {
+        return chapterRepository.findById(chapterId)
+                .orElseThrow(() -> new ResourceNotFoundException("Chapter tidak ditemukan"));
     }
 
     @Override
-    public Chapter updateChapter(Long chapterId, UpdateChapterRequest createChapterRequest) {
-        Chapter chapter = chapterRepository.findById(chapterId).orElseThrow(() -> new RuntimeException("Chapter not found"));
-
+    public Chapter update(Chapter chapter, UpdateChapterRequest createChapterRequest) {
         chapter.setTitle(createChapterRequest.getTitle());
         chapter.setTotalDuration(createChapterRequest.getTotalDuration());
 
@@ -44,15 +49,7 @@ public class ChapterServiceImpl implements IChapterService {
     }
 
     @Override
-    public Chapter findById(Long chapterId) {
-        return chapterRepository.findById(chapterId).orElseThrow(() -> new RuntimeException("Chapter not found"));
-    }
-
-    @Override
-    public void deleteChapterById(Long chapterId) {
-        Chapter chapter = chapterRepository.findById(chapterId)
-                .orElseThrow(() -> new RuntimeException("Chapter not found"));
-
+    public void delete(Chapter chapter) {
         chapterRepository.delete(chapter);
     }
 }

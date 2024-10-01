@@ -355,7 +355,7 @@ export const Chapter = () => {
                                                                         href="#"
                                                                         className="button -sm py-15 -purple-3 text-purple-1 fw-500"
                                                                     >
-                                                                        Add Article +
+                                                                        Tambah Pelajaran
                                                                     </a>
                                                                 </div>
                                                             </div>

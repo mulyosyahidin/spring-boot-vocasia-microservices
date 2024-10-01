@@ -43,7 +43,6 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET,"/instructors/profile/**").permitAll()
                         .pathMatchers(HttpMethod.GET,"/instructors/profile-by-user-id/{userId}").permitAll()
 
-
                         // course service
                         .pathMatchers("/course/actuator/**").permitAll()
 
@@ -51,23 +50,25 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET,"/course/welcome").permitAll()
 
                         .pathMatchers(HttpMethod.GET,"/course/categories").permitAll()
-                        .pathMatchers(HttpMethod.GET,"/course/categories/**").permitAll()
+                        .pathMatchers(HttpMethod.GET,"/course/categories/{categoryId}").permitAll()
 
-                        // course data
-                        .pathMatchers(HttpMethod.GET,"/course/get/draft").hasAnyRole("INSTRUCTOR", "ADMIN")
-                        .pathMatchers(HttpMethod.GET,"/course/data/{courseId}").permitAll()
+                        .pathMatchers(HttpMethod.GET,"/course/courses/draft").hasAnyRole("INSTRUCTOR", "ADMIN")
+                        .pathMatchers(HttpMethod.POST,"/course/courses").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET,"/course/courses/{courseId}").permitAll()
+                        .pathMatchers(HttpMethod.PUT, "/course/courses/{courseId}/thumbnail").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.PUT, "/course/courses/{courseId}").hasRole("INSTRUCTOR")
 
-                        // create new course
-                        .pathMatchers(HttpMethod.POST,"/course/create-courses/new").hasRole("INSTRUCTOR")
-                        .pathMatchers(HttpMethod.PUT, "/course/create-courses/{courseId}/update-thumbnail").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/course/{courseId}/chapters").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.POST, "/course/{courseId}/chapters").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/course/{courseId}/chapters/{chapterId}").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.PUT, "/course/{courseId}/chapters/{chapterId}").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.DELETE, "/course/{courseId}/chapters/{chapterId}").hasRole("INSTRUCTOR")
 
-                        .pathMatchers(HttpMethod.PUT, "/course/update-course/{courseId}").hasRole("INSTRUCTOR")
-
-                        .pathMatchers(HttpMethod.POST, "/course/chapters/{courseId}/add-chapter").hasRole("INSTRUCTOR")
-                        .pathMatchers(HttpMethod.GET, "/course/chapters/{courseId}/get-all-chapters").hasRole("INSTRUCTOR")
-                        .pathMatchers(HttpMethod.PUT, "/course/chapters/{courseId}/update-chapter/{chapterId}").hasRole("INSTRUCTOR")
-                        .pathMatchers(HttpMethod.GET, "/course/chapters/{courseId}/get-chapter/{chapterId}").hasRole("INSTRUCTOR")
-                        .pathMatchers(HttpMethod.DELETE, "/course/chapters/{courseId}/delete-chapter/{chapterId}").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/course/{courseId}/chapters/{chapterId}/lessons").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.POST, "/course/{courseId}/chapters/{chapterId}/lessons").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/course/{courseId}/chapters/{chapterId}/lessons/{lessonId}").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.PUT, "/course/{courseId}/chapters/{chapterId}/lessons/{lessonId}").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.DELETE, "/course/{courseId}/chapters/{chapterId}/lessons/{lessonId}").hasRole("INSTRUCTOR")
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));
