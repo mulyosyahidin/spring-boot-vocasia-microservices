@@ -6,7 +6,7 @@ app:
 keycloack:
   server_url: "http://localhost:7080"
   client_id: "vocasia-users"
-  client_secret: "3sQonBKkutMPLtISDo4K92YTVKoNAv9w"
+  client_secret: "fr8AziJmAQZ8Yi7gL396qticjOHvzxGt"
   realm: "Vocasia"
   auth_client_id: "vocasia-auth"
 

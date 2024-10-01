@@ -1,0 +1,31 @@
+server:
+  port: 14123
+
+spring:
+  application:
+    name: "playground"
+  profiles:
+    active: "development"
+  config:
+    import: "optional:configserver:http://localhost:14117/"
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:14118/eureka/
+
+info:
+  app:
+    name: "course"
+    description: "Course Service"
+    version: "1.0.0"
+
+logging:
+  level:
+    com:
+      vocasia:
+        course: DEBUG

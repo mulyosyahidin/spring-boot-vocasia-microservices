@@ -122,6 +122,11 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+      KEYCLOACK_SERVER_URL: "http://keycloak:8080"
+      KEYCLOACK_CLIENT_ID: "vocasia-users"
+      KEYCLOACK_CLIENT_SECRET: "fr8AziJmAQZ8Yi7gL396qticjOHvzxGt"
+      KEYCLOACK_REALM: "Vocasia"
+      KEYCLOACK_AUTH_CLIENT_ID: "vocasia-auth"
     healthcheck:
       test: "curl --fail --silent localhost:14120/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
@@ -185,6 +190,23 @@ services:
     depends_on:
       db_course:
         condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  playground_service:
+    image: martinms20/playground:v1.0.0
+    container_name: service-playground
+    ports:
+      - "14123:14123"
+    environment:
+      SPRING_PROFILES_ACTIVE: "development"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+      KEYCLOACK_SERVER: "INI DOCKER COMPOSE"
+    depends_on:
       eurekaserver:
         condition: service_healthy
     extends:

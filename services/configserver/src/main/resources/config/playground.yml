@@ -1,0 +1,7 @@
+app:
+  version: 1.0.0
+  name: "Playground Service"
+  environment: "default"
+
+keycloack:
+  server: "INI DI CONFIG SERVER"

@@ -33,3 +33,4 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 1. Menyelesaikan: Kategori kursus [Index, Show]
 2. Menyelesaikan: Instruktur [Get Data]
 3. Menyelesaikan: Kursus [Tambah, Edit, Edit Thumbnail, Bab]
+4. Inisialisasi Playgroud Service

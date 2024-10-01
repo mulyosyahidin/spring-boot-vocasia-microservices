@@ -22,6 +22,8 @@ public class SecurityConfig {
         serverHttpSecurity.authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
+                        .pathMatchers(HttpMethod.GET, "/playground/config").permitAll()
+
                         // authentication service
                         .pathMatchers("/auth/actuator/**").permitAll()
 
