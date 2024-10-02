@@ -12,3 +12,9 @@ keycloack:
 
 security:
   salt: "salt"
+
+default:
+  admin:
+    username: "admin"
+    password: "password"
+    email: "admin@local.test"

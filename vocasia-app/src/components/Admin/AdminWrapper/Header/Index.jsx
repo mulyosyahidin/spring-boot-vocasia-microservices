@@ -1,11 +1,8 @@
 import {useEffect, useState} from "react";
-import {CartToggle} from "../../commons/CartToggle/Index.jsx";
 import {Link} from "react-router-dom";
-import {notifications, sidebarItems} from "./data.js";
 
 export const Header = () => {
     const [isfullScreen, setIsfullScreen] = useState(false);
-    const [isOnNotification, setIsOnNotification] = useState(false);
     const [isOnProfile, setIsOnProfile] = useState(false);
 
     const [documentElement, setDocumentElement] = useState();

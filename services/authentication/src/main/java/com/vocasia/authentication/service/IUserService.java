@@ -6,6 +6,7 @@ import com.vocasia.authentication.request.RegisterRequest;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 public interface IUserService {
 
@@ -15,5 +16,6 @@ public interface IUserService {
     User loginWithEmailAndPassword(LoginRequest loginRequest) throws NoSuchAlgorithmException, InvalidKeySpecException;
 
     User findById(Long id);
+    List<User> getByRole(String role);
 
 }

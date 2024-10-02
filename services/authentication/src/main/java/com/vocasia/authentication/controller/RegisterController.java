@@ -35,8 +35,6 @@ public class RegisterController {
     private final IUserService iUserService;
     private final IKeyCloackService iKeyCloackService;
 
-    private final Logger logger = LoggerFactory.getLogger(RegisterController.class);
-
     public RegisterController(IUserService iUserService, IKeyCloackService iKeyCloackService) {
         this.iUserService = iUserService;
         this.iKeyCloackService = iKeyCloackService;

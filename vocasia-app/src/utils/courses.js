@@ -1,12 +1,16 @@
-export const organizeCategories = (categories, defaultSelectedId = null) => {
-    console.log('Selected ID:', defaultSelectedId);
-
+export const organizeCategories = ({categories, defaultSelectedId = null, addNull = false}) => {
     let organizedCategories = [];
+
+    if (addNull) {
+        organizedCategories.push({
+            value: null,
+            label: 'Pilih Kategori',
+            selected: false,
+        });
+    }
 
     categories.forEach(category => {
         const isSelected = category.id === defaultSelectedId;
-
-        console.log(`Is ${category.name} with ID ${category.id} selected? ${isSelected}`);
 
         organizedCategories.push({
             value: category.id,
@@ -18,8 +22,6 @@ export const organizeCategories = (categories, defaultSelectedId = null) => {
         if (children.length > 0) {
             children.forEach(child => {
                 const isChildSelected = child.id === defaultSelectedId;
-
-                console.log(`Is ${child.name} with ID ${child.id} selected? ${isChildSelected}`);
 
                 organizedCategories.push({
                     value: child.id,

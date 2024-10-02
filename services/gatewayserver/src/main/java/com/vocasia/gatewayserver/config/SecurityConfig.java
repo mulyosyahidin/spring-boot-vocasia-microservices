@@ -50,7 +50,12 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET,"/course/welcome").permitAll()
 
                         .pathMatchers(HttpMethod.GET,"/course/categories").permitAll()
-                        .pathMatchers(HttpMethod.GET,"/course/categories/{categoryId}").permitAll()
+
+                        .pathMatchers(HttpMethod.GET,"/course/admin/categories").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.POST,"/course/admin/categories").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET,"/course/admin/categories/{categoryId}").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.PUT,"/course/admin/categories/{categoryId}").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.DELETE,"/course/admin/categories/{categoryId}").hasRole("ADMIN")
 
                         .pathMatchers(HttpMethod.GET,"/course/courses/all").hasAnyRole("INSTRUCTOR", "ADMIN")
                         .pathMatchers(HttpMethod.GET,"/course/courses/draft").hasAnyRole("INSTRUCTOR", "ADMIN")

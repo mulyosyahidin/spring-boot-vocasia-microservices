@@ -10,6 +10,7 @@ export const INSTRUCTOR_AUTH_DATA = '_vocasia_instructor_auth_data';
 
 // roles
 export const INSTRUCTOR = 'instructor';
+export const ADMIN = 'admin';
 
 // AWS
 export const AWS_BUCKET_NAME = import.meta.env.VITE_AWS_BUCKET_NAME;

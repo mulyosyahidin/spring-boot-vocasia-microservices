@@ -15,6 +15,14 @@ public class CategoryDto {
     private String name;
     private String slug;
 
+    @JsonProperty("parent_id")
+    private Long parentId;
+
+    private String icon;
+
+    @JsonProperty("icon_url")
+    private String iconUrl;
+
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
 

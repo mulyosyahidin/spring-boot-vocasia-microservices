@@ -18,7 +18,6 @@ export const InputField = ({
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
-                required={isRequired}
             />
 
             {hint && <small className="text-dark-1">{hint}</small>}

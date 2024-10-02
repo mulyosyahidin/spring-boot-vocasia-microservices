@@ -11,6 +11,12 @@ import {ChapterPage} from "../pages/Instructor/Courses/ChapterPage/Index.jsx";
 import {ManageLessonsPage} from "../pages/Instructor/Courses/ManageLessonsPage/Index.jsx";
 import {CreateLessonPage} from "../pages/Instructor/Courses/CreateLessonPage/Index.jsx";
 import {CourseOverviewPage} from "../pages/Instructor/Courses/CourseOverviewPage/Index.jsx";
+import {Logout} from "../pages/Logout/Logout.jsx";
+
+import {DashboardPage as AdminDashboardPage} from "../pages/Admin/DashboardPage/Index.jsx";
+import {CategoryIndexPage} from "../pages/Admin/Categories/CategoryIndexPage/Index.jsx";
+import {CreateCategoryPage} from "../pages/Admin/Categories/CreateCategoryPage/Index.jsx";
+import {EditCategoryPage} from "../pages/Admin/Categories/EditCategoryPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -24,6 +30,10 @@ const routes = createBrowserRouter([
     {
         path: '/auth/login',
         element: <LoginPage/>
+    },
+    {
+        path: '/logout',
+        element: <Logout/>,
     },
     {
         path: '/instructor',
@@ -60,7 +70,25 @@ const routes = createBrowserRouter([
     {
         path: '/instructor/courses/:courseId/overview',
         element: <CourseOverviewPage/>,
-    }
+    },
+
+    // admin
+    {
+        path: '/admin',
+        element: <AdminDashboardPage/>,
+    },
+    {
+        path: '/admin/categories',
+        element: <CategoryIndexPage/>,
+    },
+    {
+        path: '/admin/categories/create',
+        element: <CreateCategoryPage/>,
+    },
+    {
+        path: '/admin/categories/:categoryId/edit',
+        element: <EditCategoryPage/>,
+    },
 ]);
 
 export default routes;

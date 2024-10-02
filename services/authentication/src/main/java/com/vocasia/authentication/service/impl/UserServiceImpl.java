@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -63,6 +64,11 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<User> getByRole(String role) {
+        return userRepository.getByRole(role);
     }
 
 }

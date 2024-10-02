@@ -12,6 +12,12 @@ export const COURSES_SHOW = '/course/courses/:id'; // permitAll
 export const COURSES_CATEGORIES_GETALL = '/course/categories'; // permitAll
 export const COURSES_PUBLISH = '/course/courses/:courseId/publish'; // permitAll
 
+export const COURSES_CATEGORIES_ADMIN_GETALL = '/course/admin/categories';
+export const COURSES_CATEGORIES_ADMIN_STORE = '/course/admin/categories';
+export const COURSES_CATEGORIES_ADMIN_UPDATE = '/course/admin/categories/:categoryId';
+export const COURSES_CATEGORIES_ADMIN_SHOW = '/course/admin/categories/:categoryId';
+export const COURSES_CATEGORIES_ADMIN_DELETE = '/course/admin/categories/:categoryId';
+
 export const COURSES_CHAPTERS_GETALL = '/course/:courseId/chapters'; // hasRole("INSTRUCTOR")
 export const COURSES_CHAPTERS_CREATE = '/course/:courseId/chapters'; // hasRole("INSTRUCTOR")
 export const COURSES_CHAPTERS_UPDATE = '/course/:courseId/chapters/:chapterId'; // hasRole("INSTRUCTOR")

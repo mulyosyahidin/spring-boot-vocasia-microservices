@@ -3,6 +3,7 @@ import {submitLoginForm} from "../actions/LoginAction.jsx";
 import {InputField} from "../../../../components/commons/Input/InputField.jsx";
 import {Link, useNavigate} from "react-router-dom";
 import {
+    ADMIN,
     AUTH_ACCESS_TOKEN,
     AUTH_REFRESH_TOKEN,
     AUTH_USER,
@@ -62,6 +63,9 @@ export const LoginForm = () => {
                     localStorage.setItem(INSTRUCTOR_AUTH_DATA, JSON.stringify(instructor));
 
                     navigate('/instructor');
+                }
+                else if (user.role === ADMIN) {
+                    navigate('/admin');
                 }
             }, 5000);
         }

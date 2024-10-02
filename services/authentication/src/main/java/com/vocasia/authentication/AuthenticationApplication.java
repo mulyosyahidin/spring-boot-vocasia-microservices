@@ -1,6 +1,7 @@
 package com.vocasia.authentication;
 
 import com.vocasia.authentication.config.AppConfigProperties;
+import com.vocasia.authentication.config.DefaultAdminConfig;
 import com.vocasia.authentication.config.KeycloackConfig;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
-@EnableConfigurationProperties(value = {AppConfigProperties.class, KeycloackConfig.class})
+@EnableConfigurationProperties(value = {AppConfigProperties.class, KeycloackConfig.class, DefaultAdminConfig.class})
 @EnableFeignClients
 @EnableJpaAuditing
 @OpenAPIDefinition(

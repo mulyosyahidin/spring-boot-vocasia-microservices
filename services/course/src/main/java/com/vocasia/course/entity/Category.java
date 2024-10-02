@@ -33,6 +33,6 @@ public class Category extends BaseEntity {
     @Column(nullable = false)
     private String slug;
 
-    private String picture;
+    private String icon;
 
 }

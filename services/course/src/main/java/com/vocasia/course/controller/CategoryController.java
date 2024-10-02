@@ -5,6 +5,8 @@ import com.vocasia.course.dto.data.CategoryDto;
 import com.vocasia.course.entity.Category;
 import com.vocasia.course.mapper.CategoryMapper;
 import com.vocasia.course.service.ICategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,14 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    @Operation(
+            summary = "Mendapatkan semua kategori",
+            description = "Mendapatkan semua kategori kursus"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Berhasil mendapatkan data"
+    )
     @GetMapping("/categories")
     public ResponseDto index() {
         List<Category> categories = categoryService.index();
@@ -35,6 +45,14 @@ public class CategoryController {
         return new ResponseDto(true, "Berhasil mendapatkan data kategori", response, null);
     }
 
+    @Operation(
+            summary = "Mendapatkan data kategori",
+            description = "Mendapatkan data kategori kursus berdasarkan ID"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Berhasil mendapatkan data"
+    )
     @GetMapping("/categories/{categoryId}")
     public ResponseDto show(@PathVariable Long categoryId) {
         Category category = categoryService.show(categoryId);
@@ -43,11 +61,6 @@ public class CategoryController {
         response.put("category", CategoryMapper.mapToDto(category));
 
         return new ResponseDto(true, "Berhasil mendapatkan data kategori", response, null);
-    }
-
-    @PostMapping
-    public ResponseDto store() {
-        return new ResponseDto(true, "Berhasil menambah data kategori", null, null);
     }
 
 }
