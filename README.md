@@ -36,4 +36,4 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 4. Inisialisasi Playgroud Service
 5. Menyelesaikan: Pelajaran [CRUD]
 6. Refactor routing
-7. Menyelesaikan: Implementasi Manajemen Pelajaran (5)
+7. Menyelesaikan: Implementasi Manajemen Pelajaran (5) [Tambah, ~~Edit~~, ~~Hapus~~]

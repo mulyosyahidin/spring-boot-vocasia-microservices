@@ -52,11 +52,15 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET,"/course/categories").permitAll()
                         .pathMatchers(HttpMethod.GET,"/course/categories/{categoryId}").permitAll()
 
+                        .pathMatchers(HttpMethod.GET,"/course/courses/all").hasAnyRole("INSTRUCTOR", "ADMIN")
                         .pathMatchers(HttpMethod.GET,"/course/courses/draft").hasAnyRole("INSTRUCTOR", "ADMIN")
+                        .pathMatchers(HttpMethod.GET,"/course/courses/published").hasAnyRole("INSTRUCTOR", "ADMIN")
+
                         .pathMatchers(HttpMethod.POST,"/course/courses").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.GET,"/course/courses/{courseId}").permitAll()
                         .pathMatchers(HttpMethod.PUT, "/course/courses/{courseId}/thumbnail").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.PUT, "/course/courses/{courseId}").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.POST, "/course/courses/{courseId}/publish").hasRole("INSTRUCTOR")
 
                         .pathMatchers(HttpMethod.GET, "/course/{courseId}/chapters").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.POST, "/course/{courseId}/chapters").hasRole("INSTRUCTOR")

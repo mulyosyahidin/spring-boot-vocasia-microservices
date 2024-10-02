@@ -14,17 +14,16 @@ export const CourseIndex = () => {
     const [activeTab, setActiveTab] = useState('all');
 
     const [pageItems, setPageItems] = useState([]);
+    const [filteredItems, setFilteredItems] = useState([]); // state untuk hasil filter
 
-    useEffect( () => {
+    useEffect(() => {
         const fetchInitialData = async () => {
             try {
                 const getCourses = await getAllCourses(activeTab);
 
                 if (getCourses) {
-                    // clear the page items
-                    setPageItems([]);
-
                     setPageItems(getCourses);
+                    setFilteredItems(getCourses); // simpan juga ke filteredItems
                 }
             } catch (error) {
                 console.error('Error fetching initial data:', error);
@@ -34,10 +33,26 @@ export const CourseIndex = () => {
         fetchInitialData();
     }, [activeTab]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    };
+    const [searchQuery, setSearchQuery] = useState('');
 
+    const handleSearch = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+
+        if (query.length > 0) {
+            const searchResults = pageItems.filter((item) => {
+                return (
+                    item.title.toLowerCase().includes(query.toLowerCase()) ||
+                    item.status.toLowerCase().includes(query.toLowerCase())
+                );
+            });
+
+            setFilteredItems(searchResults);
+        } else {
+            setFilteredItems(pageItems);
+        }
+
+    };
 
     return (
         <div className="dashboard__content bg-light-4">
@@ -67,19 +82,17 @@ export const CourseIndex = () => {
                                 className="tabs__controls d-flex items-center pt-20 px-30 border-bottom-light js-tabs-controls">
                                 {
                                     courseStatuses.map((status, index) => (
-                                        <>
-                                            <button
-                                                className={`text-light-1 lh-12 tabs__button js-tabs-button ${index > 0 ? 'ml-30' : ''} ${
-                                                    activeTab == status.value ? "is-active" : ""
-                                                } `}
-                                                data-tab-target={`.-tab-item-${status.value}`}
-                                                type="button"
-                                                key={status.value}
-                                                onClick={() => setActiveTab(status.value)}
-                                            >
-                                                {status.label}
-                                            </button>
-                                        </>
+                                        <button
+                                            className={`text-light-1 lh-12 tabs__button js-tabs-button ${index > 0 ? 'ml-30' : ''} ${
+                                                activeTab == status.value ? "is-active" : ""
+                                            } `}
+                                            data-tab-target={`.-tab-item-${status.value}`}
+                                            type="button"
+                                            key={status.value}
+                                            onClick={() => setActiveTab(status.value)}
+                                        >
+                                            {status.label}
+                                        </button>
                                     ))
                                 }
                             </div>
@@ -90,13 +103,14 @@ export const CourseIndex = () => {
                                         <div className="col-12">
                                             <form
                                                 className="search-field border-light rounded-8 h-50"
-                                                onSubmit={handleSubmit}
                                             >
                                                 <input
                                                     required
                                                     className="bg-white -dark-bg-dark-2 pr-50"
                                                     type="text"
-                                                    placeholder="Search Courses"
+                                                    value={searchQuery}
+                                                    onChange={handleSearch}
+                                                    placeholder="Cari..."
                                                 />
                                                 <button className="" type="submit">
                                                     <i className="icon-search text-light-1 text-20"></i>
@@ -106,9 +120,19 @@ export const CourseIndex = () => {
                                     </div>
 
                                     <div className="row y-gap-30 pt-30">
-                                        {pageItems.map((data, i) => (
-                                            <DraftCard data={data} key={data.id || i} />
+                                        {filteredItems.map((data, i) => (
+                                            <DraftCard data={data} key={data.id || i}/>
                                         ))}
+
+                                        {
+                                            filteredItems.length === 0 && (
+                                                <div className="col-12 text-center">
+                                                    <div className="text-16 text-light-1">
+                                                        Belum ada kursus yang tersedia
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
                                     </div>
 
                                     {/*<div className="row justify-center pt-30">*/}

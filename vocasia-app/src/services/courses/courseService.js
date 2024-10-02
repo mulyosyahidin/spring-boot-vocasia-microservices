@@ -2,8 +2,8 @@ import {axiosDelete, axiosGet, axiosPost, axiosPut} from "../api.js";
 import {
     COURSES_CHAPTERS_CREATE, COURSES_CHAPTERS_DELETE,
     COURSES_CHAPTERS_GETALL, COURSES_CHAPTERS_SHOW, COURSES_CHAPTERS_UPDATE,
-    COURSES_CREATE_NEW_COURSE,
-    COURSES_GET_DRAFT,
+    COURSES_CREATE_NEW_COURSE, COURSES_GET_ALL,
+    COURSES_GET_DRAFT, COURSES_GET_PUBLISHED, COURSES_PUBLISH,
     COURSES_SHOW,
     COURSES_UPDATE,
     COURSES_UPLOAD_THUMBNAIL
@@ -52,6 +52,12 @@ export const getDataByStatus = async (status) => {
 
     if (status === 'draft') {
         endpoint = `${apiBaseUrl}${COURSES_GET_DRAFT}`;
+    }
+    else if (status === 'published') {
+        endpoint = `${apiBaseUrl}${COURSES_GET_PUBLISHED}`;
+    }
+    else {
+        endpoint = `${apiBaseUrl}${COURSES_GET_ALL}`;
     }
 
     const instructorData = JSON.parse(localStorage.getItem(INSTRUCTOR_AUTH_DATA));
@@ -105,4 +111,11 @@ export const getChapterDataById = async (courseId, chapterId) => {
     endpoint = endpoint.replace(':chapterId', chapterId).replace(':courseId', courseId);
 
     return await axiosGet({url: endpoint});
+}
+
+export const publishById = async (courseId) => {
+    let endpoint = `${apiBaseUrl}${COURSES_PUBLISH}`;
+    endpoint = endpoint.replace(':courseId', courseId);
+
+    return await axiosPost({url: endpoint});
 }

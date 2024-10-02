@@ -40,10 +40,10 @@ export const DraftCard = ({data}) => {
                             <div className="text-17 lh-1 fw-500 ml-12">Edit</div>
                         </Link>
 
-                        <a href="#" className="d-flex items-center mt-20">
-                            <div className="icon-link"></div>
+                        <Link to={`/instructor/courses/${data.id}/overview`} className="d-flex items-center mt-20">
+                            <div className="icon icon-book"></div>
                             <div className="text-17 lh-1 fw-500 ml-12">Lihat</div>
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -10,6 +10,7 @@ import {EditCoursePage} from "../pages/Instructor/Courses/EditCoursePage/Index.j
 import {ChapterPage} from "../pages/Instructor/Courses/ChapterPage/Index.jsx";
 import {ManageLessonsPage} from "../pages/Instructor/Courses/ManageLessonsPage/Index.jsx";
 import {CreateLessonPage} from "../pages/Instructor/Courses/CreateLessonPage/Index.jsx";
+import {CourseOverviewPage} from "../pages/Instructor/Courses/CourseOverviewPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -55,6 +56,10 @@ const routes = createBrowserRouter([
     {
         path: '/instructor/courses/:courseId/chapters/:chapterId/lessons/create',
         element: <CreateLessonPage/>,
+    },
+    {
+        path: '/instructor/courses/:courseId/overview',
+        element: <CourseOverviewPage/>,
     }
 ]);
 

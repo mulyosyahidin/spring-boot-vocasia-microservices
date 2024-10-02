@@ -1,4 +1,5 @@
 import {apiBaseUrl, AWS_BUCKET_NAME, AWS_REGION} from "../config/consts.js";
+import moment from "moment";
 
 const _api = ({ endpoint, replaces = [] }) => {
     let replacedEndpoint = endpoint;
@@ -35,4 +36,20 @@ const getYouTubeVideoId = (url) => {
     return searchParams.get('v');
 }
 
-export { _api, getLocalStorageItem, generateAWSObjectUrl, getYouTubeVideoId };
+const rupiahFormatter = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0
+});
+
+const getPercentOf = (percent, total) => {
+    return (percent / 100) * total;
+}
+
+const makeDateReadable = (date) => {
+    let parseDate = moment(date);
+
+    return parseDate.format('DD MMMM YYYY HH:mm');
+}
+
+export { _api, getLocalStorageItem, generateAWSObjectUrl, getYouTubeVideoId, rupiahFormatter, getPercentOf, makeDateReadable };

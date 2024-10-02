@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {AuthContext} from "../../../../states/contexts/AuthContext.jsx";
 import {Link, useParams} from "react-router-dom";
 import {addChapter, findCourseById, getChaptersByCourseId, updateChapter, deleteChapter} from "../_actions/CourseAction.jsx";
@@ -292,6 +292,7 @@ export const Chapter = () => {
                                    onClick={() => setIsAddChapterSectionOpen(true)}>
                                     Tambah Bab
                                 </a>
+
                                 <Link to={`/instructor/courses/${id}/overview`}
                                       className="button -sm -dark-2 text-white">
                                     Ringkasan <i className={'fa fa-arrow-right ml-5'}/>
@@ -300,7 +301,7 @@ export const Chapter = () => {
                         </div>
 
                         <div className="py-30 px-30">
-                            <div className={'row pt-30'}>
+                        <div className={'row pt-30'}>
                                 <div className="col-12">
                                     <div className="accordion -block-2 text-left js-accordion">
                                         {
@@ -329,7 +330,8 @@ export const Chapter = () => {
                                                         <div className="d-flex x-gap-10 items-center">
                                                             <a href="#" className="icon icon-edit mr-5"
                                                                onClick={() => setCurrentEditedChapterId(chapter.id)}></a>
-                                                            <a href="#" className="icon icon-bin" onClick={() => confirmDeleteChapter(chapter.id)}></a>
+                                                            <a href="#" className="icon icon-bin"
+                                                               onClick={() => confirmDeleteChapter(chapter.id)}></a>
                                                             <div className="accordion__icon mr-0">
                                                                 <div
                                                                     className="d-flex items-center justify-center icon icon-chevron-down"></div>
@@ -382,7 +384,8 @@ export const Chapter = () => {
 
                                                                             {
                                                                                 lesson.type === 'video' && (
-                                                                                    <span className="text-14 lh-14 fw-400 text-dark-2 ml-5">
+                                                                                    <span
+                                                                                        className="text-14 lh-14 fw-400 text-dark-2 ml-5">
                                                                                         ({lesson.content_video_duration})
                                                                                     </span>
                                                                                 )

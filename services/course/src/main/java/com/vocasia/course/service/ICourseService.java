@@ -17,6 +17,14 @@ public interface ICourseService {
     List<Course> getDraftCourses();
     List<Course> getDraftCoursesByInstructorId(Long instructorId);
 
+    List<Course> getAllCourses();
+    List<Course> getAllCoursesByInstructorId(Long instructorId);
+
+    List<Course> getPublishedCourses();
+    List<Course> getPublishedCoursesByInstructorId(Long instructorId);
+
     Course updateCourse(Long courseId, UpdateCourseRequest updateCourseRequest);
+
+    Course publish(Course course);
 
 }

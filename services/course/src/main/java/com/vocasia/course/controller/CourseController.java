@@ -36,6 +36,66 @@ public class CourseController {
     }
 
     @Operation(
+            summary = "Mendapatkan semua kursus",
+            description = "Mengambil semua kursus yang dimiliki oleh instruktur atau semua instruktur"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Berhasil mendapatkan data"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Terjadi kesalahan tidak terduga"
+            )
+    })
+    @GetMapping("/courses/all")
+    public ResponseEntity<ResponseDto> indexAll(@RequestHeader(value = "X-INSTRUCTOR-ID", required = false) Long instructorId) {
+        List<Course> courses = List.of();
+
+        if (instructorId != null) {
+            courses = courseService.getAllCoursesByInstructorId(instructorId);
+        } else {
+            courses = courseService.getAllCourses();
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("courses", courses.stream().map(CourseMapper::mapToDto));
+
+        return ResponseEntity.ok(new ResponseDto(true, "Data semua kursus berhasil didapatkan", response, null));
+    }
+
+    @Operation(
+            summary = "Mendapatkan semua kursus",
+            description = "Mengambil semua kursus yang dimiliki oleh instruktur atau semua instruktur"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Berhasil mendapatkan data"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Terjadi kesalahan tidak terduga"
+            )
+    })
+    @GetMapping("/courses/published")
+    public ResponseEntity<ResponseDto> indexPublished(@RequestHeader(value = "X-INSTRUCTOR-ID", required = false) Long instructorId) {
+        List<Course> courses = List.of();
+
+        if (instructorId != null) {
+            courses = courseService.getPublishedCoursesByInstructorId(instructorId);
+        } else {
+            courses = courseService.getPublishedCourses();
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("courses", courses.stream().map(CourseMapper::mapToDto));
+
+        return ResponseEntity.ok(new ResponseDto(true, "Data semua kursus berhasil didapatkan", response, null));
+    }
+
+    @Operation(
             summary = "Mendapatkan draft kursus",
             description = "Mengambil draft kursus yang dimiliki oleh instruktur atau semua instruktur"
     )
@@ -183,6 +243,25 @@ public class CourseController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto(true, "Berhasil mengupdate thumbnail", response, null));
+    }
+
+    @Operation(
+            summary = "Terbitkan kursus",
+            description = "Menerbitkan kursus yang sudah dibuat"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Berhasil menerbitkan kursus"
+    )
+    @PostMapping("/courses/{courseId}/publish")
+    public ResponseEntity<ResponseDto> publish(@PathVariable Long courseId) {
+        Course course = courseService.show(courseId);
+        Course publishedCourse = courseService.publish(course);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("course", CourseMapper.mapToDto(publishedCourse));
+
+        return ResponseEntity.ok(new ResponseDto(true, "Berhasil menerbitkan kursus", response, null));
     }
 
 }

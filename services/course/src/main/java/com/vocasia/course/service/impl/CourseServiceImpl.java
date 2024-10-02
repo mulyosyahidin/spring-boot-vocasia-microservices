@@ -111,6 +111,26 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
+    public List<Course> getAllCourses() {
+        return courseRepository.findAll();
+    }
+
+    @Override
+    public List<Course> getAllCoursesByInstructorId(Long instructorId) {
+        return courseRepository.findByInstructorId(instructorId);
+    }
+
+    @Override
+    public List<Course> getPublishedCourses() {
+        return courseRepository.findByStatus("published");
+    }
+
+    @Override
+    public List<Course> getPublishedCoursesByInstructorId(Long instructorId) {
+        return courseRepository.findByInstructorIdAndStatus(instructorId, "published");
+    }
+
+    @Override
     public Course updateCourse(Long courseId, UpdateCourseRequest updateCourseRequest) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
@@ -145,6 +165,13 @@ public class CourseServiceImpl implements ICourseService {
 
             course.setCategory(category);
         }
+
+        return courseRepository.save(course);
+    }
+
+    @Override
+    public Course publish(Course course) {
+        course.setStatus("published");
 
         return courseRepository.save(course);
     }
