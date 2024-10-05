@@ -20,6 +20,9 @@ public class UserDto {
     @JsonProperty("profile_picture")
     private String profilePicture;
 
+    @JsonProperty("profile_picture_url")
+    private String profilePictureUrl;
+
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
 

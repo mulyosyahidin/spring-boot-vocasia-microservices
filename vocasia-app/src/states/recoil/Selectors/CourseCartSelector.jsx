@@ -5,7 +5,48 @@ const cartTotalPriceSelector = selector({
     key: 'cartTotalPrice',
     get: ({ get }) => {
         const cartCourses = get(courseCartAtom);
-        return cartCourses.reduce((total, course) => total + course.price, 0);
+
+        return cartCourses.reduce((total, course) => {
+            if (course.is_free) {
+                return total;
+            }
+
+            if (course.is_discount) {
+                return total + (course.price - course.discount);
+            }
+
+            return total + course.price;
+        }, 0);
+    },
+});
+
+const cartTotalPriceWithoutDiscountSelector = selector({
+    key: 'cartTotalPriceWithoutDiscount',
+    get: ({ get }) => {
+        const cartCourses = get(courseCartAtom);
+
+        return cartCourses.reduce((total, course) => {
+            if (course.is_free) {
+                return total;
+            }
+
+            return total + course.price;
+        }, 0);
+    },
+});
+
+const cartTotalDiscountSelector = selector({
+    key: 'cartTotalDiscount',
+    get: ({ get }) => {
+        const cartCourses = get(courseCartAtom);
+
+        return cartCourses.reduce((totalDiscount, course) => {
+            if (course.is_free || !course.is_discount) {
+                return totalDiscount; // Abaikan kursus gratis atau tanpa diskon
+            }
+
+            return totalDiscount + course.discount; // Tambahkan diskon kursus
+        }, 0);
     },
 });
 
@@ -25,4 +66,4 @@ const coursesByIdSelector = selector({
     },
 });
 
-export { cartTotalPriceSelector, cartItemCountSelector, coursesByIdSelector };
+export { cartTotalPriceSelector, cartItemCountSelector, coursesByIdSelector, cartTotalPriceWithoutDiscountSelector, cartTotalDiscountSelector};

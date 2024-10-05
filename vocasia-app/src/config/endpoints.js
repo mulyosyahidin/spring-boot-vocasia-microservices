@@ -35,3 +35,6 @@ export const PUBLIC_COURSES_SHOW_CHAPTERS = '/course/public/:slug/:courseId/chap
 
 export const INSTRUCTORS_GET_PROFILE = '/instructors/profile/:instructorId'; // hasRole("INSTRUCTOR")
 export const INSTRUCTORS_UPDATE_PROFILE = '/instructors/profile'; // hasRole("INSTRUCTOR")
+
+export const USER_ORDER_PLACE_NEW_ORDER = '/order/place-new-order'; // hasRole("STUDENT")
+export const USER_ORDER_GET_DATA = '/order/get-data/:orderId'; // hasRole("STUDENT")

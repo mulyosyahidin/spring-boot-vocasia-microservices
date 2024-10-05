@@ -85,6 +85,27 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/course/public/editor-choices").permitAll()
                         .pathMatchers(HttpMethod.GET, "/course/public/{slug}/{courseId}/overview").permitAll()
                         .pathMatchers(HttpMethod.GET, "/course/public/{slug}/{courseId}/chapters").permitAll()
+
+                        // order service
+                        .pathMatchers("/order/actuator/**").permitAll()
+
+                        .pathMatchers(HttpMethod.GET,"/order/build-info").permitAll()
+                        .pathMatchers(HttpMethod.GET,"/order/welcome").permitAll()
+
+                        .pathMatchers(HttpMethod.POST, "/order/place-new-order").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.GET, "/order/get-data/{orderId}").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.PUT, "/order/update-payment-status/{orderId}").permitAll()
+
+                        // payment service
+                        .pathMatchers("/payment/actuator/**").permitAll()
+
+                        .pathMatchers(HttpMethod.GET,"/payment/build-info").permitAll()
+                        .pathMatchers(HttpMethod.GET,"/payment/welcome").permitAll()
+
+                        .pathMatchers(HttpMethod.POST, "/payment/create-order-payment").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.GET, "/payment/payment-data-by-order-id/{orderId}").hasRole("STUDENT")
+
+                        .pathMatchers(HttpMethod.POST, "/payment/midtrans-callback").permitAll()
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));

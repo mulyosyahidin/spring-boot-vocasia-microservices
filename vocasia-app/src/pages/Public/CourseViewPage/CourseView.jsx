@@ -162,6 +162,7 @@ export const CourseView = () => {
                                     </div>
                                 </div>
                             </section>
+
                             <PinContent course={course}/>
 
                             <section className="layout-pt-md layout-pb-md">
@@ -187,8 +188,8 @@ export const CourseView = () => {
 
                                             <Overview course={course} />
                                             <CourseContent course={course} />
-                                            <Instructor/>
-                                            <Reviews/>
+                                            <Instructor instructor={course.instructor}/>
+                                            {/*<Reviews/>*/}
 
                                         </div>
                                     </div>

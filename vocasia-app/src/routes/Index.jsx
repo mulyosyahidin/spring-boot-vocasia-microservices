@@ -22,6 +22,9 @@ import {RegisterPage} from "../pages/Authentication/RegisterPage/Index.jsx";
 import {DashboardPage as UserDashboardPage} from "../pages/User/DashboardPage/Index.jsx";
 import {CourseViewPage} from "../pages/Public/CourseViewPage/Index.jsx";
 import {ProfilePage} from "../pages/Instructor/ProfilePage/Index.jsx";
+import CourseCartPage from "../pages/Public/CourseCartPage/Index.jsx";
+import {CourseCheckoutPage} from "../pages/Public/CourseCheckoutPage/Index.jsx";
+import {OrderDataPage} from "../pages/User/OrderDataPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -107,8 +110,16 @@ const routes = createBrowserRouter([
 
     // user dashboard
     {
-        path: '/user',
+        path: '/users',
         element: <UserDashboardPage/>,
+    },
+    {
+        path: '/users/orders',
+        element: <div>Orders</div>,
+    },
+    {
+        path: '/users/orders/:orderId',
+        element: <OrderDataPage />
     },
 
     // public
@@ -119,6 +130,14 @@ const routes = createBrowserRouter([
     {
         path: '/courses/:slug/:id',
         element: <CourseViewPage />
+    },
+    {
+        path: '/course-cart',
+        element: <CourseCartPage />
+    },
+    {
+        path: '/course-checkout',
+        element: <CourseCheckoutPage />
     },
 ]);
 

@@ -1,23 +1,27 @@
-import React from "react";
+import React, {useEffect} from "react";
 
-export default function Instructor() {
+export default function Instructor({instructor}) {
+    useEffect(() => {
+        console.log(instructor);
+    }, []);
+
     return (
         <div id="instructors" className="pt-60 lg:pt-40">
-            <h2 className="text-20 fw-500">Instructor</h2>
+            <h2 className="text-20 fw-500">Instruktur</h2>
 
             <div className="mt-30">
                 <div className="d-flex x-gap-20 y-gap-20 items-center flex-wrap">
                     <div className="size-120">
                         <img
                             className="object-cover"
-                            src="/assets/img/misc/verified/1.png"
+                            src={`${instructor.user.profile_picture_url}`}
                             alt="image"
                         />
                     </div>
 
                     <div className="">
-                        <h5 className="text-17 lh-14 fw-500">Floyd Miles</h5>
-                        <p className="mt-5">President of Sales</p>
+                        <h5 className="text-17 lh-14 fw-500">{instructor.user.name}</h5>
+                        <p className="mt-5">Instruktur</p>
 
                         <div className="d-flex x-gap-20 y-gap-10 flex-wrap items-center pt-10">
                             <div className="d-flex items-center">
@@ -47,18 +51,9 @@ export default function Instructor() {
                 </div>
 
                 <div className="mt-30">
-                    <p>
-                        Back in 2010, I started brainspin with a desire to design compelling
-                        and engaging apps. For over 7 years, I have designed many high
-                        profile web and iPhone applications. The applications range from 3D
-                        medical aided web applications to project management applications
-                        for niche industries.
-                        <br />
-                        <br />I am also the founder of a large local design organization,
-                        Salt Lake Designers, where I and other local influencers help
-                        cultivate the talents of up and coming UX designers through
-                        workshops and panel discussions.
-                    </p>
+                    <div
+                        dangerouslySetInnerHTML={{__html: instructor.summary}}
+                    />
                 </div>
             </div>
         </div>

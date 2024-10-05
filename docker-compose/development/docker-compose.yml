@@ -73,6 +73,46 @@ services:
       file: common-config.yml
       service: base-config
 
+  db_order:
+    image: mysql:8.0
+    container_name: db-order
+    ports:
+      - "30621:3306"
+    environment:
+      MYSQL_DATABASE: order_db
+      MYSQL_ROOT_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    volumes:
+      - order_db_data:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  db_payment:
+    image: mysql:8.0
+    container_name: db-payment
+    ports:
+      - "30622:3306"
+    environment:
+      MYSQL_DATABASE: payment_db
+      MYSQL_ROOT_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    volumes:
+      - payment_db_data:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: base-config
+
   configserver:
     image: martinms20/configserver:v1.0.0
     container_name: config-server
@@ -196,6 +236,60 @@ services:
       file: common-config.yml
       service: base-config
 
+  order_service:
+    image: martinms20/order:v1.0.0
+    container_name: order-course
+    ports:
+      - "14124:14124"
+    environment:
+      SPRING_PROFILES_ACTIVE: "development"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-order:3306/order_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+    healthcheck:
+      test: "curl --fail --silent localhost:14124/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      db_order:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  payment_service:
+    image: martinms20/payment:v1.0.0
+    container_name: payment-course
+    ports:
+      - "14125:14124"
+    environment:
+      SPRING_PROFILES_ACTIVE: "development"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-payment:3306/payment_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+    healthcheck:
+      test: "curl --fail --silent localhost:14125/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      db_payment:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: base-config
+
   playground_service:
     image: martinms20/playground:v1.0.0
     container_name: service-playground
@@ -245,4 +339,8 @@ volumes:
   instructor_db_data:
     driver: local
   course_db_data:
+    driver: local
+  order_db_data:
+    driver: local
+  payment_db_data:
     driver: local

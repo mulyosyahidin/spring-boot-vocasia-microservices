@@ -3,6 +3,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { Link } from "react-router-dom";
 import {courseCartAtom} from "../../../../states/recoil/Atoms/CourseCart.jsx";
 import {cartTotalPriceSelector} from "../../../../states/recoil/Selectors/CourseCartSelector.jsx";
+import {rupiahFormatter} from "../../../../utils/utils.js";
 
 export const CourseCart = () => {
     const [cartCourses, setCartCourses] = useRecoilState(courseCartAtom);
@@ -23,7 +24,7 @@ export const CourseCart = () => {
                     <div key={i} className="row justify-between x-gap-40 pb-20">
                         <Link
                             style={{ textDecoration: "none" }}
-                            to={`/courses/${elm.id}`}
+                            to={`/courses/${elm.slug}/${elm.id}`}
                             className="col"
                         >
                             <div className="row x-gap-10 y-gap-10">
@@ -34,7 +35,7 @@ export const CourseCart = () => {
                                             height: "80px",
                                             objectFit: "contain",
                                         }}
-                                        src={elm.imageSrc}
+                                        src={elm.featured_picture_url}
                                         alt="image"
                                     />
                                 </div>
@@ -43,18 +44,33 @@ export const CourseCart = () => {
                                     <div className="text-dark-1 lh-15">{elm.title}</div>
 
                                     <div className="d-flex items-center mt-10">
-                                        {elm.paid ? (
+                                        {!elm.is_free ? (
                                             <>
-                                                <div className="lh-12 fw-500 line-through text-light-1 mr-10">
-                                                    ${elm.originalPrice}
-                                                </div>
-                                                <div className="text-18 lh-12 fw-500 text-dark-1">
-                                                    ${elm.discountedPrice}
-                                                </div>
+                                                {
+                                                    elm.is_discount ? (
+                                                        <>
+                                                            <div
+                                                                className="lh-12 fw-500 line-through text-light-1 mr-10">
+                                                                {rupiahFormatter.format(elm.price)}
+                                                            </div>
+                                                            <div className="text-18 lh-12 fw-500 text-dark-1">
+                                                                {rupiahFormatter.format(elm.price - elm.discount)}
+                                                            </div>
+
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div
+                                                                className="lh-12 fw-500 text-light-1 mr-10">
+                                                                {rupiahFormatter.format(elm.price)}
+                                                            </div>
+                                                        </>
+                                                    )
+                                                }
                                             </>
                                         ) : (
                                             <div className="text-18 lh-12 fw-500 text-dark-1">
-                                                Free
+                                                Gratis
                                             </div>
                                         )}
                                     </div>
@@ -79,7 +95,7 @@ export const CourseCart = () => {
             <div className="px-30 pt-20 pb-30 border-top-light">
                 <div className="d-flex justify-between">
                     <div className="text-18 lh-12 text-dark-1 fw-500">Total:</div>
-                    <div className="text-18 lh-12 text-dark-1 fw-500">Rp {totalPrice}</div>
+                    <div className="text-18 lh-12 text-dark-1 fw-500">{rupiahFormatter.format(totalPrice)}</div>
                 </div>
 
                 <div className="row x-gap-20 y-gap-10 pt-30">

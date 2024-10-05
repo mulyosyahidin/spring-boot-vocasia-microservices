@@ -41,3 +41,8 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 
 05/10/2024:
 1. Menyelesaikan: Update profile instruktur
+
+06/10/2024:
+1. Inisialisasi Order Service
+2. Inisialisasi Payment Service
+3. Menyelesaikan: Checkout Keranjang Belanja

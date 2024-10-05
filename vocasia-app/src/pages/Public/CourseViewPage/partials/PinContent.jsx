@@ -1,21 +1,40 @@
 import {useEffect, useState} from "react";
 import {rupiahFormatter} from "../../../../utils/utils.js";
+import {courseCartAtom} from "../../../../states/recoil/Atoms/CourseCart.jsx";
+import {useRecoilState} from "recoil";
 
 export default function PinContent({ course }) {
     const [isOpen, setIsOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [cart, setCart] = useRecoilState(courseCartAtom);
 
     useEffect(() => {
         const handleResize = () => {
             setScreenWidth(window.innerWidth);
         };
 
+        localStorage.setItem('courseCart', JSON.stringify(cart));
+
         window.addEventListener("resize", handleResize);
 
         return () => {
             window.removeEventListener("resize", handleResize);
         };
-    }, []);
+    }, [cart]);
+
+    const isCourseInCart = cart.some(item => item.id === course.id);
+
+    const handleAddToCart = () => {
+        if (!isCourseInCart) {
+            setCart([...cart, course]);
+        }
+    };
+
+    const handleRemoveFromCart = () => {
+        if (isCourseInCart) {
+            setCart(cart.filter(item => item.id !== course.id));
+        }
+    };
 
     return (
         <>
@@ -34,33 +53,24 @@ export default function PinContent({ course }) {
                 >
                     <div className="relative">
                         <img className="w-1/1" src={course.featured_picture_url} alt="image" />
-                        {/*<div className="absolute-full-center d-flex justify-center items-center">*/}
-                        {/*    <div*/}
-                        {/*        onClick={() => setIsOpen(true)}*/}
-                        {/*        className="d-flex justify-center items-center size-60 rounded-full bg-white js-gallery cursor"*/}
-                        {/*        data-gallery="gallery1"*/}
-                        {/*    >*/}
-                        {/*        <div className="icon-play text-18"></div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
                     </div>
 
                     <div className="courses-single-info__content scroll-bar-1 pt-30 pb-20 px-20">
                         <div className="d-flex justify-between items-center mb-30">
                             {!course.is_free ? (
-                               course.is_discount ? (
-                                   <>
-                                       <div className="text-24 lh-1 text-dark-1 fw-500">
-                                           {`${rupiahFormatter.format(course.price - course.discount)}`}
-                                       </div>
-                                       <div className="lh-1 line-through">
-                                           {`${rupiahFormatter.format(course.price)}`}
-                                       </div>
-                                   </>
-                               ) : (
-                                   <>
-                                   </>
-                               )
+                                course.is_discount ? (
+                                    <>
+                                        <div className="text-24 lh-1 text-dark-1 fw-500">
+                                            {`${rupiahFormatter.format(course.price - course.discount)}`}
+                                        </div>
+                                        <div className="lh-1 line-through">
+                                            {`${rupiahFormatter.format(course.price)}`}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                    </>
+                                )
                             ) : (
                                 <>
                                     <div className="text-24 lh-1 text-dark-1 fw-500">Gratis!</div>
@@ -69,17 +79,21 @@ export default function PinContent({ course }) {
                             )}
                         </div>
 
-                        {/*<button*/}
-                        {/*    className="button -md -purple-1 text-white w-1/1"*/}
-                        {/*    onClick={() => addCourseToCart(pageItem.id)}*/}
-                        {/*>*/}
-                        {/*    {isAddedToCartCourses(pageItem.id)*/}
-                        {/*        ? "Already Added"*/}
-                        {/*        : "Add To Cart"}*/}
-                        {/*</button>*/}
-                        {/*<button className="button -md -outline-dark-1 text-dark-1 w-1/1 mt-10">*/}
-                        {/*    Buy Now*/}
-                        {/*</button>*/}
+                        {isCourseInCart ? (
+                            <button
+                                className="button -md -outline-dark-1 text-dark-1 w-1/1 mt-10"
+                                onClick={handleRemoveFromCart}
+                            >
+                                Hapus dari Keranjang
+                            </button>
+                        ) : (
+                            <button
+                                className="button -md -outline-dark-1 text-dark-1 w-1/1 mt-10"
+                                onClick={handleAddToCart}
+                            >
+                                Tambah ke Keranjang
+                            </button>
+                        )}
 
                         <div className="text-14 lh-1 text-center mt-30">
                             Akses seumur hidup

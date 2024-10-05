@@ -54,6 +54,7 @@ public class InstructorServiceImpl implements IInstructorService {
                     userDto.setName((String) user.get("name"));
                     userDto.setRole((String) user.get("role"));
                     userDto.setProfilePicture((String) user.get("profile_picture"));
+                    userDto.setProfilePictureUrl((String) user.get("profile_picture_url"));
                     userDto.setCreatedAt(LocalDateTime.parse(user.get("created_at").toString()));
                     userDto.setUpdatedAt(LocalDateTime.parse(user.get("updated_at").toString()));
 
