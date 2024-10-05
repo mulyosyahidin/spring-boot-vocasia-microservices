@@ -38,3 +38,6 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 6. Refactor routing
 7. Menyelesaikan: Implementasi Manajemen Pelajaran (5) [Tambah, ~~Edit~~, ~~Hapus~~]
 8. Menyelesaikan: Implementasi Manajemen Kategori Kursus [CRUD, App]
+
+05/10/2024:
+1. Menyelesaikan: Update profile instruktur

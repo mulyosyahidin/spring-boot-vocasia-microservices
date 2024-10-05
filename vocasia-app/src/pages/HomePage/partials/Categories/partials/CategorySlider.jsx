@@ -3,10 +3,21 @@ import {Navigation, Pagination} from "swiper";
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {topCategories} from "../data.js";
+import {getAdminCategories} from "../../../../../services/courses/admin-category-service.js";
+import {getSliderCategories} from "../../../../../services/courses/public-course.js";
 
 export const CategorySlider = () => {
+    const [categories, setCategories] = useState([]);
     const [showSlider, setShowSlider] = useState(false);
+
     useEffect(() => {
+        const fetchInitialData = async () => {
+            const getCategories = await getSliderCategories();
+
+            setCategories(getCategories);
+        }
+
+        fetchInitialData();
         setShowSlider(true);
     }, []);
 
@@ -14,8 +25,6 @@ export const CategorySlider = () => {
         <div className="overflow-hidden pt-50 js-section-slider">
             {showSlider && (
                 <Swiper
-                    // {...setting}
-
                     modules={[Navigation, Pagination]}
                     pagination={{
                         el: ".swiper-paginationx",
@@ -43,27 +52,25 @@ export const CategorySlider = () => {
                     }}
                     loop={true}
                 >
-                    {topCategories.map((item, i) => (
+                    {categories.map((item, i) => (
                         <SwiperSlide key={i}>
                             <Link
-                                to={`/courses-list-${item.id > 8 ? 1 : item.id}`}
+                                to={`/courses/by-category/${item.id}`}
                                 data-aos="fade-left"
                                 data-aos-duration={(i + 1) * 350}
                                 className="featureCard -type-1 -featureCard-hover linkCustomTwo"
                             >
                                 <div className="featureCard__content">
                                     <div className="featureCard__icon">
-                                        <img src={item.iconSrc} alt="icon"/>
+                                        <img src={item.icon_url} alt="icon"/>
                                     </div>
                                     <div className="featureCard__title">
-                                        {item.title.split(" ")[0]} <br/>
-                                        {item.title.split(" ")[1] && item.title.split(" ")[1]}
+                                        {item.name.split(" ")[0]} <br/>
+                                        {item.name.split(" ")[1] && item.name.split(" ")[1]}
                                     </div>
-                                    <div className="featureCard__text">{item.text}</div>
                                 </div>
                             </Link>
                         </SwiperSlide>
-                        // 140,90
                     ))}
                 </Swiper>
             )}

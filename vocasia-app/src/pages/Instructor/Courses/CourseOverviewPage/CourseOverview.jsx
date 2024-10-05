@@ -22,6 +22,7 @@ export const CourseOverview = () => {
     const {sweetAlert} = useContext(AuthContext);
     const {courseId} = useParams();
     const [activeTab, setActiveTab] = useState(1);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [course, setCourse] = useState({});
 
@@ -32,6 +33,9 @@ export const CourseOverview = () => {
                 setCourse(getCourse.course);
             } catch (error) {
                 console.error('Error fetching initial data:', error);
+            }
+            finally {
+                setIsLoading(false);
             }
         };
 
@@ -68,8 +72,8 @@ export const CourseOverview = () => {
                             </div>
 
                             <div className="tabs__content py-30 px-30 js-tabs-content">
-                                <Information activeTab={activeTab} course={course}/>
-                                <Contents activeTab={activeTab} course={course} courseId={courseId}/>
+                                <Information activeTab={activeTab} course={course} isLoading={isLoading}/>
+                                <Contents activeTab={activeTab} course={course} courseId={courseId} isLoading={isLoading}/>
                                 <Students activeTab={activeTab} course={course}/>
                                 <QnA activeTab={activeTab} course={course}/>
                                 <Earnings activeTab={activeTab} course={course}/>

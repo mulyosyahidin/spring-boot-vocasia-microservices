@@ -14,7 +14,7 @@ export const AuthenticationHeader = () => {
                         <div className="header-left">
                             <div className="header__logo ">
                                 <Link data-barba to="/">
-                                    <img src="/assets/img/general/logo.svg" alt="logo" />
+                                    <img src="/logo-white.svg" alt="logo" />
                                 </Link>
                             </div>
                         </div>
@@ -38,15 +38,6 @@ export const AuthenticationHeader = () => {
                                         <i className="text-11 icon icon-mobile-menu"></i>
                                     </button>
                                 </div>
-                            </div>
-
-                            <div className="header-right__buttons md:d-none">
-                                <a
-                                    href="signup"
-                                    className="button -sm -rounded -dark-1 text-white"
-                                >
-                                    Sign Up
-                                </a>
                             </div>
                         </div>
                     </div>

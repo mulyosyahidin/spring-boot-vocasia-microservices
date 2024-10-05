@@ -1,6 +1,5 @@
 package com.vocasia.course.service.impl;
 
-import com.amazonaws.services.macie2.model.AwsService;
 import com.vocasia.course.config.AwsConfigProperties;
 import com.vocasia.course.entity.Category;
 import com.vocasia.course.entity.Chapter;
@@ -8,14 +7,13 @@ import com.vocasia.course.entity.Course;
 import com.vocasia.course.exception.ResourceNotFoundException;
 import com.vocasia.course.packages.aws.service.IAwsService;
 import com.vocasia.course.repository.CategoryRepository;
+import com.vocasia.course.repository.ChapterRepository;
 import com.vocasia.course.repository.CourseRepository;
-import com.vocasia.course.request.CreateChapterRequest;
 import com.vocasia.course.request.CreateNewCourseRequest;
 import com.vocasia.course.request.UpdateCourseRequest;
 import com.vocasia.course.request.UpdateCourseThumbnailRequest;
 import com.vocasia.course.service.ICourseService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +33,7 @@ public class CourseServiceImpl implements ICourseService {
 
     private final CourseRepository courseRepository;
     private final CategoryRepository categoryRepository;
+    private final ChapterRepository chapterRepository;
 
     @Override
     public Course store(CreateNewCourseRequest createNewCourseRequest) {
@@ -48,6 +47,7 @@ public class CourseServiceImpl implements ICourseService {
         course.setLevel(createNewCourseRequest.getLevel());
         course.setLanguage(createNewCourseRequest.getLanguage());
         course.setDescription(createNewCourseRequest.getDescription());
+        course.setTotalDuration(createNewCourseRequest.getTotalDuration());
         course.setStatus("draft");
 
         if (createNewCourseRequest.getPrice() != null) {
@@ -174,6 +174,43 @@ public class CourseServiceImpl implements ICourseService {
         course.setStatus("published");
 
         return courseRepository.save(course);
+    }
+
+    @Override
+    public List<Course> getEditorsChoices() {
+        return courseRepository.findByStatus("published");
+    }
+
+    @Override
+    public Integer chapterCount(Long courseId) {
+        return chapterRepository.countByCourseId(courseId);
+    }
+
+    @Override
+    public Integer lessonCount(Long courseId) {
+        List<Chapter> chapters = chapterRepository.findAllByCourseId(courseId);
+        int count = 0;
+
+        for (Chapter chapter : chapters) {
+            count += chapter.getLessons().size();
+        }
+
+        return count;
+    }
+
+    @Override
+    public Double rating(Long courseId) {
+        return 0.0;
+    }
+
+    @Override
+    public Integer ratingCount(Long courseId) {
+        return 0;
+    }
+
+    @Override
+    public Integer enrollmentCount(Long courseId) {
+        return 0;
     }
 
 }

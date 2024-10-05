@@ -24,6 +24,7 @@ export const CreateCourse = () => {
         discount: '0',
         level: 'all',
         language: 'id',
+        total_duration: '',
     });
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
@@ -37,7 +38,7 @@ export const CreateCourse = () => {
             try {
                 const categoriesData = await getAllCategories();
 
-                setCategories(organizeCategories(categoriesData.categories));
+                setCategories(organizeCategories(categoriesData));
 
                 const levels = {
                     'all': 'Semua',
@@ -213,6 +214,17 @@ export const CreateCourse = () => {
                                 </div>
 
                                 <div className="col-12">
+                                    <InputField
+                                        label="Total Durasi"
+                                        name="total_duration"
+                                        placeholder="Total durasi kursus"
+                                        value={formData.total_duration}
+                                        onChange={handleChange}
+                                        error={errors.total_duration}
+                                    />
+                                </div>
+
+                                <div className="col-12">
                                     <TinyMCEField
                                         onInit={(_evt, editor) => shortDescriptionEditorRef.current = editor}
                                         label="Deskripsi Singkat"
@@ -245,6 +257,7 @@ export const CreateCourse = () => {
                     </div>
                 </div>
             </div>
+
         </div>
     );
 };

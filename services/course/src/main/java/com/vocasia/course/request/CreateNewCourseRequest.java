@@ -30,6 +30,9 @@ public class CreateNewCourseRequest {
     private Double discount;
     private String description;
 
+    @JsonProperty("total_duration")
+    private String totalDuration;
+
     public String getSlug() {
         final Slugify slg = Slugify.builder().build();
 

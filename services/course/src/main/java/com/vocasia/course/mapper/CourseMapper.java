@@ -6,6 +6,7 @@ import com.vocasia.course.dto.data.CourseDto;
 import com.vocasia.course.dto.feign.InstructorDto;
 import com.vocasia.course.entity.Category;
 import com.vocasia.course.entity.Course;
+import com.vocasia.course.service.ICourseService;
 import com.vocasia.course.service.IInstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -16,15 +17,24 @@ public class CourseMapper {
 
     private static AwsConfigProperties awsConfigProperties;
     private static IInstructorService iInstructorService;
+    private static ICourseService iCourseService;
 
     @Autowired
-    public CourseMapper(AwsConfigProperties awsConfigProperties, IInstructorService iInstructorService, ApplicationContext applicationContext) {
+    public CourseMapper(AwsConfigProperties awsConfigProperties, IInstructorService iInstructorService, ICourseService iCourseService, ApplicationContext applicationContext) {
         CourseMapper.awsConfigProperties = awsConfigProperties;
         CourseMapper.iInstructorService = iInstructorService;
+        CourseMapper.iCourseService = iCourseService;
     }
 
     public static CourseDto mapToDto(Course course) {
         CourseDto courseDto = new CourseDto();
+
+        Integer chapterCount = iCourseService.chapterCount(course.getId());
+        Integer lessonCount = iCourseService.lessonCount(course.getId());
+
+        Double rating  = iCourseService.rating(course.getId());
+        Integer ratingCount = iCourseService.ratingCount(course.getId());
+        Integer enrollmentCount = iCourseService.enrollmentCount(course.getId());
 
         courseDto.setId(course.getId());
         courseDto.setInstructorId(course.getInstructorId());
@@ -47,6 +57,11 @@ public class CourseMapper {
         courseDto.setIsDiscount(course.getIsDiscount());
         courseDto.setDiscount(course.getDiscount());
         courseDto.setStatus(course.getStatus());
+        courseDto.setChapterCount(chapterCount);
+        courseDto.setLessonCount(lessonCount);
+        courseDto.setRating(rating);
+        courseDto.setRatingCount(ratingCount);
+        courseDto.setEnrollmentCount(enrollmentCount);
         courseDto.setCreatedAt(course.getCreatedAt());
         courseDto.setUpdatedAt(course.getUpdatedAt());
         courseDto.setDeletedAt(course.getDeletedAt());

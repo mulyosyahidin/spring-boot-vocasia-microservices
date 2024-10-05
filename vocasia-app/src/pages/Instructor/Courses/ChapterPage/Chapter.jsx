@@ -363,7 +363,7 @@ export const Chapter = () => {
                                                             </div>
 
                                                             {
-                                                                chapter.lessons.map((lesson, index) => (
+                                                                chapter.lessons && chapter.lessons.map((lesson, index) => (
                                                                     <div key={index}
                                                                          className="d-flex x-gap-10 y-gap-10 mb-5 align-items-center">
                                                                         {

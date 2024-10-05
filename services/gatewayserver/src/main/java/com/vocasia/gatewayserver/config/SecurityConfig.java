@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.POST,"/auth/register").permitAll()
                         .pathMatchers(HttpMethod.POST,"/auth/login").permitAll()
                         .pathMatchers(HttpMethod.POST,"/auth/refresh-token").hasAnyRole("ADMIN", "LECTURER", "STUDENT")
+                        .pathMatchers(HttpMethod.PUT,"/auth/user/{userId}/update-user").permitAll()
 
                         // instructors service
                         .pathMatchers("/instructors/actuator/**").permitAll()
@@ -40,8 +41,9 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET,"/instructors/build-info").permitAll()
                         .pathMatchers(HttpMethod.GET,"/instructors/welcome").permitAll()
                         .pathMatchers(HttpMethod.POST,"/instructors/register").permitAll()
-                        .pathMatchers(HttpMethod.GET,"/instructors/profile/**").permitAll()
+                        .pathMatchers(HttpMethod.GET,"/instructors/profile/{instructorId}").permitAll()
                         .pathMatchers(HttpMethod.GET,"/instructors/profile-by-user-id/{userId}").permitAll()
+                        .pathMatchers(HttpMethod.PUT, "/instructors/profile").hasRole("INSTRUCTOR")
 
                         // course service
                         .pathMatchers("/course/actuator/**").permitAll()
@@ -51,7 +53,7 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.GET,"/course/categories").permitAll()
 
-                        .pathMatchers(HttpMethod.GET,"/course/admin/categories").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET,"/course/admin/categories").permitAll()
                         .pathMatchers(HttpMethod.POST,"/course/admin/categories").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.GET,"/course/admin/categories/{categoryId}").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.PUT,"/course/admin/categories/{categoryId}").hasRole("ADMIN")
@@ -78,6 +80,11 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/course/{courseId}/chapters/{chapterId}/lessons/{lessonId}").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.PUT, "/course/{courseId}/chapters/{chapterId}/lessons/{lessonId}").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.DELETE, "/course/{courseId}/chapters/{chapterId}/lessons/{lessonId}").hasRole("INSTRUCTOR")
+
+                        .pathMatchers(HttpMethod.GET, "/course/public/categories").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/course/public/editor-choices").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/course/public/{slug}/{courseId}/overview").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/course/public/{slug}/{courseId}/chapters").permitAll()
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));

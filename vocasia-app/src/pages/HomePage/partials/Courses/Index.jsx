@@ -9,8 +9,7 @@ export const Courses = () => {
     return (
         <section className="layout-pt-lg layout-pb-lg">
             <Title/>
-            <CategorySelector category={category} setCategory={setCategory}/>
-            <CourseItems category={category}/>
+            <CourseItems/>
         </section>
     );
 }

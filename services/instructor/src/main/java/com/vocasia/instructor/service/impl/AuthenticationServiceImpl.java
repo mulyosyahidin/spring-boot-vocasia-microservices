@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocasia.instructor.dto.feign.UserDto;
 import com.vocasia.instructor.exception.CustomFeignException;
 import com.vocasia.instructor.request.RegisterRequest;
+import com.vocasia.instructor.request.UpdateProfileRequest;
 import com.vocasia.instructor.service.IAuthenticationService;
 import com.vocasia.instructor.service.client.AuthenticationFeignClient;
 import feign.FeignException;
@@ -49,6 +50,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                     userDto.setName(user.get("name").toString());
                     userDto.setRole(user.get("role").toString());
                     userDto.setProfilePicture(user.get("profile_picture") != null ? user.get("profile_picture").toString() : null);
+                    userDto.setProfilePictureUrl(user.get("profile_picture") != null ? user.get("profile_picture_url").toString() : null);
                     userDto.setCreatedAt(LocalDateTime.parse(user.get("created_at").toString()));
                     userDto.setUpdatedAt(LocalDateTime.parse(user.get("updated_at").toString()));
 
@@ -94,6 +96,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                     userDto.setName(user.get("name").toString());
                     userDto.setRole(user.get("role").toString());
                     userDto.setProfilePicture(user.get("profile_picture") != null ? user.get("profile_picture").toString() : null);
+                    userDto.setProfilePictureUrl(user.get("profile_picture") != null ? user.get("profile_picture_url").toString() : null);
                     userDto.setCreatedAt(LocalDateTime.parse(user.get("created_at").toString()));
                     userDto.setUpdatedAt(LocalDateTime.parse(user.get("updated_at").toString()));
 
@@ -106,6 +109,52 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             return null;
         } catch (FeignException e) {
             throw new RuntimeException("Failed to parse error response", e);
+        }
+    }
+
+    @Override
+    public UserDto updateProfile(UpdateProfileRequest updateProfileRequest) {
+        try {
+            logger.info("Profile picture: {}", updateProfileRequest.getProfilePicture());
+            ResponseEntity<Map<String, Object>> updateProfileResponseEntity = authenticationFeignClient.updateUser(updateProfileRequest.getUserId(),
+                    updateProfileRequest.getProfilePicture(),
+                    updateProfileRequest.getName(),
+                    updateProfileRequest.getEmail(),
+                    updateProfileRequest.getPassword()
+                    );
+
+            logger.info("updateProfileResponseEntity: {}", updateProfileResponseEntity);
+
+            Map<String, Object> responseBody = updateProfileResponseEntity.getBody();
+
+            if (responseBody != null && responseBody.get("success") != null && (Boolean) responseBody.get("success")) {
+                Map<String, Object> data = (Map<String, Object>) responseBody.get("data");
+
+                if (data != null) {
+                    Map<String, Object> user = (Map<String, Object>) data.get("user");
+
+                    UserDto userDto = new UserDto();
+
+                    userDto.setId(Long.parseLong(user.get("id").toString()));
+                    userDto.setUid(user.get("uid").toString());
+                    userDto.setEmail(user.get("email").toString());
+                    userDto.setUsername(user.get("username").toString());
+                    userDto.setName(user.get("name").toString());
+                    userDto.setRole(user.get("role").toString());
+                    userDto.setProfilePicture(user.get("profile_picture") != null ? user.get("profile_picture").toString() : null);
+                    userDto.setProfilePictureUrl(user.get("profile_picture") != null ? user.get("profile_picture_url").toString() : null);
+                    userDto.setCreatedAt(LocalDateTime.parse(user.get("created_at").toString()));
+                    userDto.setUpdatedAt(LocalDateTime.parse(user.get("updated_at").toString()));
+
+                    return userDto;
+                }
+            } else {
+                logger.warn("update profile failed: {}", responseBody != null ? responseBody.get("message") : "No response body");
+            }
+
+            return null;
+        } catch (FeignException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 

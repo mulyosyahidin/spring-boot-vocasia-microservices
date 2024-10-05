@@ -27,4 +27,13 @@ public interface ICourseService {
 
     Course publish(Course course);
 
+    List<Course> getEditorsChoices();
+
+    Integer chapterCount(Long courseId);
+    Integer lessonCount(Long courseId);
+
+    Double rating(Long courseId);
+    Integer ratingCount(Long courseId);
+    Integer enrollmentCount(Long courseId);
+
 }

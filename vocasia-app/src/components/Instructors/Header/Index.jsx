@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {CartToggle} from "../../commons/CartToggle/Index.jsx";
 import {Link} from "react-router-dom";
 import {notifications, sidebarItems} from "./data.js";
+import {getUserProfilePictureUrl} from "../../../utils/utils.js";
 
 export const Header = () => {
     const [isfullScreen, setIsfullScreen] = useState(false);
@@ -190,8 +191,8 @@ export const Header = () => {
                                 >
                                     <a href="#" data-el-toggle=".js-profile-toggle">
                                         <img
-                                            className="size-50"
-                                            src="/assets/img/misc/user-profile.png"
+                                            className="size-50" style={{borderRadius: '50%'}}
+                                            src={getUserProfilePictureUrl()}
                                             alt="image"
                                         />
                                     </a>
@@ -209,13 +210,13 @@ export const Header = () => {
                                                         key={'dp-1'}
                                                         className={`sidebar__item`}
                                                     >
-                                                        <a
-                                                            href="#"
+                                                        <Link
+                                                            to={'/instructor/profile'}
                                                             className="d-flex items-center text-17 lh-1 fw-500 "
                                                         >
                                                             <i className={'fa fa-user'}></i>
                                                             <span className="ml-15">Profile</span>
-                                                        </a>
+                                                        </Link>
                                                     </div>
 
                                                     <div

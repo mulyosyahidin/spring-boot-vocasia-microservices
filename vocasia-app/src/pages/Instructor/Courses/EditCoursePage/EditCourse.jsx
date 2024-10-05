@@ -72,7 +72,7 @@ export const EditCourse = () => {
                     total_duration: course.total_duration,
                 });
 
-                setCategories(organizeCategories(categoriesData.categories, course.category.id));
+                setCategories(organizeCategories(categoriesData, course.category.id));
 
                 shortDescriptionEditorRef.current.setContent(course.short_description);
                 descriptionEditorRef.current.setContent(course.description);

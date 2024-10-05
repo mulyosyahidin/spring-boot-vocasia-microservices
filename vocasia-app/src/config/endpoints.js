@@ -1,4 +1,5 @@
 export const AUTH_LOGIN = '/auth/login'; // permitAll
+export const AUTH_REGISTER = '/auth/register'; // permitAll
 export const INSTRUCTOR_REGISTER = '/instructors/register'; // permitAll
 
 export const COURSES_GET_ALL = '/course/courses/all'; // hasAnyRole("INSTRUCTOR", "ADMIN")
@@ -26,3 +27,11 @@ export const COURSES_CHAPTERS_SHOW = '/course/:courseId/chapters/:chapterId'; //
 
 export const COURSES_CHAPTERS_LESSONS_INDEX = '/course/:courseId/chapters/:chapterId/lessons'; // hasRole("INSTRUCTOR")
 export const COURSES_CHAPTERS_LESSONS_STORE = '/course/:courseId/chapters/:chapterId/lessons'; // hasRole("INSTRUCTOR")
+
+export const PUBLIC_COURSES_GET_CATEGORIES = '/course/public/categories'; // permitAll
+export const PUBLIC_COURSES_GET_EDITOR_CHOICES = '/course/public/editor-choices'; // permitAll
+export const PUBLIC_COURSES_SHOW_OVERVIEW = '/course/public/:slug/:courseId/overview'; // permitAll
+export const PUBLIC_COURSES_SHOW_CHAPTERS = '/course/public/:slug/:courseId/chapters'; // permitAll
+
+export const INSTRUCTORS_GET_PROFILE = '/instructors/profile/:instructorId'; // hasRole("INSTRUCTOR")
+export const INSTRUCTORS_UPDATE_PROFILE = '/instructors/profile'; // hasRole("INSTRUCTOR")

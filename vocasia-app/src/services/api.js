@@ -1,15 +1,19 @@
 import axios from "axios";
 import {AUTH_ACCESS_TOKEN, AUTH_REFRESH_TOKEN} from "../config/consts.js";
 
-export const axiosGet = async ({url, headers = {}}) => {
+export const axiosGet = async ({url, headers = {}, includeAuthentication = true}) => {
     const accessToken = localStorage.getItem(AUTH_ACCESS_TOKEN);
 
-    const config = accessToken ? {
+    const config = includeAuthentication ? {
         headers: {
-            Authorization: `Bearer ${accessToken}`,
+            ...headers,
+            ...(accessToken ? {Authorization: `Bearer ${accessToken}`} : {}),
+        }
+    } : {
+        headers: {
             ...headers,
         }
-    } : {};
+    };
 
     const response = await axios.get(url, config);
 
@@ -23,7 +27,7 @@ export const axiosPost = async ({url, data, headers = {}}) => {
         method: 'POST',
         headers: {
             ...headers,
-            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+            ...(accessToken ? {Authorization: `Bearer ${accessToken}`} : {}),
         },
         body: data,
     };
@@ -44,14 +48,14 @@ export const axiosPost = async ({url, data, headers = {}}) => {
     }
 };
 
-export  const axiosPut = async ({url, data, headers = {}}) => {
+export const axiosPut = async ({url, data, headers = {}}) => {
     const accessToken = localStorage.getItem(AUTH_ACCESS_TOKEN);
 
     const config = {
         method: 'PUT',
         headers: {
             ...headers,
-            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+            ...(accessToken ? {Authorization: `Bearer ${accessToken}`} : {}),
         },
         body: data,
     };
@@ -80,7 +84,7 @@ export const axiosDelete = async ({url, headers = {}}) => {
         method: 'DELETE',
         headers: {
             ...headers,
-            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+            ...(accessToken ? {Authorization: `Bearer ${accessToken}`} : {}),
         },
     };
 

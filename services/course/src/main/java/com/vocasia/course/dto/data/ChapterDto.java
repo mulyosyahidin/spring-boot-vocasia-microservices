@@ -21,6 +21,9 @@ public class ChapterDto {
     @JsonProperty("total_duration")
     private String totalDuration;
 
+    @JsonProperty("lesson_count")
+    Integer lessonCount = 0;
+
     List<LessonDto> lessons;
 
     @JsonProperty("created_at")

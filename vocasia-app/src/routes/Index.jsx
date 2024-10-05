@@ -17,6 +17,11 @@ import {DashboardPage as AdminDashboardPage} from "../pages/Admin/DashboardPage/
 import {CategoryIndexPage} from "../pages/Admin/Categories/CategoryIndexPage/Index.jsx";
 import {CreateCategoryPage} from "../pages/Admin/Categories/CreateCategoryPage/Index.jsx";
 import {EditCategoryPage} from "../pages/Admin/Categories/EditCategoryPage/Index.jsx";
+import {RegisterPage} from "../pages/Authentication/RegisterPage/Index.jsx";
+
+import {DashboardPage as UserDashboardPage} from "../pages/User/DashboardPage/Index.jsx";
+import {CourseViewPage} from "../pages/Public/CourseViewPage/Index.jsx";
+import {ProfilePage} from "../pages/Instructor/ProfilePage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -32,12 +37,22 @@ const routes = createBrowserRouter([
         element: <LoginPage/>
     },
     {
+        path: '/auth/register',
+        element: <RegisterPage/>
+    },
+    {
         path: '/logout',
         element: <Logout/>,
     },
+
+    // instructor
     {
         path: '/instructor',
         element: <DashboardPage/>,
+    },
+    {
+        path: '/instructor/profile',
+        element: <ProfilePage/>,
     },
     {
         path: '/instructor/courses',
@@ -88,6 +103,22 @@ const routes = createBrowserRouter([
     {
         path: '/admin/categories/:categoryId/edit',
         element: <EditCategoryPage/>,
+    },
+
+    // user dashboard
+    {
+        path: '/user',
+        element: <UserDashboardPage/>,
+    },
+
+    // public
+    {
+        path: '/courses/by-category/:categoryId',
+        element: <div>Courses List</div>
+    },
+    {
+        path: '/courses/:slug/:id',
+        element: <CourseViewPage />
     },
 ]);
 

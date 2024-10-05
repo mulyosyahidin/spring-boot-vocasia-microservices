@@ -1,4 +1,4 @@
-import {apiBaseUrl, AWS_BUCKET_NAME, AWS_REGION} from "../config/consts.js";
+import {apiBaseUrl, AUTH_USER, AWS_BUCKET_NAME, AWS_REGION} from "../config/consts.js";
 import moment from "moment";
 
 const _api = ({ endpoint, replaces = [] }) => {
@@ -42,14 +42,21 @@ const rupiahFormatter = new Intl.NumberFormat('id-ID', {
     minimumFractionDigits: 0
 });
 
-const getPercentOf = (percent, total) => {
-    return (percent / 100) * total;
+const getPercentage = (total, discount) => {
+    return Math.round((discount / total) * 100);
 }
 
-const makeDateReadable = (date) => {
+const makeDateReadable = ({date, format = 'DD MMMM YYYY HH:mm'}) => {
     let parseDate = moment(date);
 
-    return parseDate.format('DD MMMM YYYY HH:mm');
+    return parseDate.format(format);
 }
 
-export { _api, getLocalStorageItem, generateAWSObjectUrl, getYouTubeVideoId, rupiahFormatter, getPercentOf, makeDateReadable };
+const getUserProfilePictureUrl = () => {
+    let userData = localStorage.getItem(AUTH_USER);
+    userData = JSON.parse(userData);
+
+    return userData.profile_picture_url ? userData.profile_picture_url : "/assets/img/misc/user-profile.png";
+}
+
+export { _api, getLocalStorageItem, generateAWSObjectUrl, getYouTubeVideoId, rupiahFormatter, getPercentage, makeDateReadable, getUserProfilePictureUrl };

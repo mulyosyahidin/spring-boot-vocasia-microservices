@@ -26,6 +26,7 @@ public class ChapterMapper {
 
         if (lessons != null) {
             chapterDto.setLessons(lessons.stream().map(LessonMapper::mapToDto).toList());
+            chapterDto.setLessonCount(lessons.size());
         }
 
         return chapterDto;

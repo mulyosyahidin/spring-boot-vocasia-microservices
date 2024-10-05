@@ -25,9 +25,9 @@ export const Home = () => {
                 <Testimonials/>
                 <Featured />
                 <WhyVocasia/>
-                <Instructors/>
+                {/*<Instructors/>*/}
                 <GetApp/>
-                <Blog/>
+                {/*<Blog/>*/}
                 <Join/>
                 <Footer />
             </div>

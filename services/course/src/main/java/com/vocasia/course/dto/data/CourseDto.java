@@ -51,6 +51,20 @@ public class CourseDto {
 
     private String status;
 
+    @JsonProperty("chapter_count")
+    private Integer chapterCount;
+
+    @JsonProperty("lesson_count")
+    private Integer lessonCount;
+
+    private Double rating;
+
+    @JsonProperty("rating_count")
+    private Integer ratingCount;
+
+    @JsonProperty("enrollment_count")
+    private Integer enrollmentCount;
+
     @JsonProperty("deleted_at")
     private LocalDateTime deletedAt;
 

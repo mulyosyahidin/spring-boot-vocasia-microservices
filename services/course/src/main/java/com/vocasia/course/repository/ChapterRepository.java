@@ -9,4 +9,6 @@ public interface ChapterRepository extends JpaRepository<Chapter, Long> {
 
     List<Chapter> findAllByCourseId(Long courseId);
 
+    Integer countByCourseId(Long courseId);
+
 }

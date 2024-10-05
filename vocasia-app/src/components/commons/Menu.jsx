@@ -13,14 +13,8 @@ const menuList = [
     },
     {
         title: "Bootcamp",
-        links: [
-            { href: "/event-list-1", label: "Event List 1" },
-            { href: "/event-list-2", label: "Event List 2" },
-            { href: "/events/1", label: "Event Single" },
-            { href: "/event-cart", label: "Event Cart" },
-            { href: "/event-checkout", label: "Event Checkout" },
-        ],
-    }
+        href: "/bootcamp"
+    },
 ];
 
 export default function Menu({ allClasses, headerPosition }) {

@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../../states/contexts/AuthContext.jsx";
-import {INSTRUCTOR} from "../../../config/consts.js";
+import {ADMIN, INSTRUCTOR} from "../../../config/consts.js";
 
 export const Join = () => {
     const {isLoggedIn, user} = useContext(AuthContext);
@@ -20,11 +20,19 @@ export const Join = () => {
                     <div className="col-auto">
                         {
                             isLoggedIn ? (
-                                user.role == INSTRUCTOR ? (
+                                user.role === INSTRUCTOR ? (
                                     <Link to={'/instructor'} className="button -md -green-1 text-dark-1">
                                         Buka Dasbor
                                     </Link>
-                                ) : (<></>)
+                                ) : user.role === ADMIN ? (
+                                    <Link to={'/admin'} className="button -md -green-1 text-dark-1">
+                                        Buka Dasbor
+                                    </Link>
+                                ) : (
+                                    <Link to="#" className="button -md -green-1 text-dark-1">
+                                        Ayo Bergabung Sekarang!
+                                    </Link>
+                                )
                             ) : (
                                 <Link to="#" className="button -md -green-1 text-dark-1">
                                     Ayo Bergabung Sekarang!

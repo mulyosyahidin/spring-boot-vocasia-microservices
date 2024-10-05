@@ -19,8 +19,6 @@ export const InstructorWrapper = ({children}) => {
 
                         <div className="dashboard__main">
                             {children}
-                            
-                            <Footer/>
                         </div>
                     </div>
                 </div>

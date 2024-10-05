@@ -1,23 +1,34 @@
 package com.vocasia.authentication.service.impl;
 
+import com.vocasia.authentication.config.AwsConfigProperties;
 import com.vocasia.authentication.entity.User;
+import com.vocasia.authentication.packages.aws.service.IAwsService;
 import com.vocasia.authentication.repository.UserRepository;
 import com.vocasia.authentication.request.LoginRequest;
 import com.vocasia.authentication.request.RegisterRequest;
+import com.vocasia.authentication.request.UpdateProfileRequest;
 import com.vocasia.authentication.service.IUserService;
 import com.vocasia.authentication.util.PasswordHashUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements IUserService {
 
     private UserRepository userRepository;
+
+    private final AwsConfigProperties awsConfigProperties;
+    private final IAwsService awsService;
     private PasswordHashUtil passwordHashUtil;
 
     @Override
@@ -69,6 +80,49 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<User> getByRole(String role) {
         return userRepository.getByRole(role);
+    }
+
+    @Override
+    public User updateProfile(Long id, UpdateProfileRequest updateUserRequest) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+
+        if (updateUserRequest.getName() != null) {
+            user.setName(updateUserRequest.getName());
+        }
+
+        if (updateUserRequest.getEmail() != null) {
+            user.setEmail(updateUserRequest.getEmail());
+        }
+
+        if (updateUserRequest.getPassword() != null) {
+            String encryptedPassword = passwordHashUtil.hashPassword(updateUserRequest.getPassword());
+            user.setPassword(encryptedPassword);
+        }
+
+        if (updateUserRequest.getProfilePicture() != null) {
+            String bucketName = awsConfigProperties.getS3().getBucket();
+
+            if (user.getProfilePicture() != null) {
+                awsService.deleteFile(bucketName, user.getProfilePicture());
+            }
+
+            MultipartFile profilePicture = updateUserRequest.getProfilePicture();
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(profilePicture.getOriginalFilename()));
+            String contentType = profilePicture.getContentType();
+            long fileSize = profilePicture.getSize();
+            InputStream inputStream = profilePicture.getInputStream();
+
+            awsService.uploadFile(bucketName, fileName, fileSize, contentType, inputStream);
+
+            user.setProfilePicture(fileName);
+        }
+
+        userRepository.save(user);
+
+        return user;
     }
 
 }

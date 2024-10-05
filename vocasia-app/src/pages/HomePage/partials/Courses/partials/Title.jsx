@@ -10,7 +10,7 @@ export const Title = () => {
                     </h2>
 
                     <p className="sectionTitle__text ">
-                        Lihat kursus pilihan editor kami, atau jelajahi banyak lainnya.
+                        lihat kursus terbaik pilihan editor kami
                     </p>
                 </div>
             </div>

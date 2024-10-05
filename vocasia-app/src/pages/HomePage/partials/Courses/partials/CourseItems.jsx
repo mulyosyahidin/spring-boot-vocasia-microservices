@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {CourseCard} from "../../../../../components/commons/CourseCard.jsx";
 import {coursesData} from "../data.js";
+import {getEditorChoiceCourses} from "../../../../../services/courses/public-course.js";
 
-export const CourseItems = ({ category }) => {
-    const [filtered, setFiltered] = useState([]);
+export const CourseItems = ({category}) => {
+    const [courses, setCourses] = useState([]);
 
     useEffect(() => {
-        if (category === "Semua Kategori") {
-            setFiltered(coursesData);
-        } else {
-            const filteredData = coursesData.filter(
-                (course) => course.category === category
-            );
-            setFiltered(filteredData);
+        const fetchInitialData = async () => {
+            try {
+                const getCourses = await getEditorChoiceCourses();
+                setCourses(getCourses);
+            }
+            catch (e) {
+                console.error(e);
+            }
         }
+
+        fetchInitialData();
     }, [category]);
 
     return (
@@ -23,7 +27,7 @@ export const CourseItems = ({ category }) => {
             data-aos-offset="80"
             data-aos-duration={800}
         >
-            {filtered.slice(0, 8).map((course, index) => (
+            {courses.slice(0, 8).map((course, index) => (
                 <CourseCard
                     key={index}
                     data={course}

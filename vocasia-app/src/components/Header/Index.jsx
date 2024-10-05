@@ -5,7 +5,7 @@ import {SearchToggle} from "./partials/SearchToggle.jsx";
 import {AuthContext} from "../../states/contexts/AuthContext.jsx";
 import Menu from "../commons/Menu.jsx";
 import MobileMenu from "../commons/MobileMenu.jsx";
-import {INSTRUCTOR} from "../../config/consts.js";
+import {ADMIN, INSTRUCTOR} from "../../config/consts.js";
 import {CartToggle} from "../commons/CartToggle/Index.jsx";
 
 export const Header = () => {
@@ -21,19 +21,19 @@ export const Header = () => {
                             <div className="header-left">
                                 <div className="header__logo ">
                                     <Link to={'/'}>
-                                        <img src="/logo-white.svg" alt="logo" />
+                                        <img src="/logo-white.svg" alt="logo"/>
                                     </Link>
                                 </div>
 
-                                <CategoryButton
-                                    allClasses={
-                                        "header__explore text-green-1 ml-60 xl:ml-30 xl:d-none"
-                                    }
-                                />
+                                {/*<CategoryButton*/}
+                                {/*    allClasses={*/}
+                                {/*        "header__explore text-green-1 ml-60 xl:ml-30 xl:d-none"*/}
+                                {/*    }*/}
+                                {/*/>*/}
                             </div>
                         </div>
 
-                        <Menu allClasses={"menu__nav text-white -is-active"} />
+                        <Menu allClasses={"menu__nav text-white -is-active"}/>
 
                         <MobileMenu
                             setActiveMobileMenu={setActiveMobileMenu}
@@ -43,7 +43,7 @@ export const Header = () => {
                         <div className="col-auto">
                             <div className="header-right d-flex items-center">
                                 <div className="header-right__icons text-white d-flex items-center">
-                                    <SearchToggle />
+                                    <SearchToggle/>
 
                                     <CartToggle
                                         parentClassess={"relative ml-30 xl:ml-20"}
@@ -74,12 +74,21 @@ export const Header = () => {
                                                             Dashboard
                                                         </Link>
                                                     ) : (
-                                                        <Link
-                                                            to="#"
-                                                            className="button -sm -white text-dark-1 ml-30"
-                                                        >
-                                                            Dashboard
-                                                        </Link>
+                                                        user.role === ADMIN ? (
+                                                            <Link
+                                                                to={'/admin'}
+                                                                className="button -sm -white text-dark-1 ml-30"
+                                                            >
+                                                                Dashboard
+                                                            </Link>
+                                                        ) : (
+                                                            <Link
+                                                                to={'/user'}
+                                                                className="button -sm -white text-dark-1 ml-30"
+                                                            >
+                                                                Dashboard
+                                                            </Link>
+                                                        )
                                                     )
                                                 }
                                             </>
