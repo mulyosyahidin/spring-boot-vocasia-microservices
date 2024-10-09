@@ -1,6 +1,5 @@
 package com.vocasia.order.service.client;
 
-import com.vocasia.order.request.PlaceNewOrderRequest;
 import com.vocasia.order.request.client.CreateOrderPaymentRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

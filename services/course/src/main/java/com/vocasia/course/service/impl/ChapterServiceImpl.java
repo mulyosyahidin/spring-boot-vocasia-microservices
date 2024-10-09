@@ -37,7 +37,7 @@ public class ChapterServiceImpl implements IChapterService {
     @Override
     public Chapter show(Long chapterId) {
         return chapterRepository.findById(chapterId)
-                .orElseThrow(() -> new ResourceNotFoundException("Chapter tidak ditemukan"));
+                .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
     }
 
     @Override

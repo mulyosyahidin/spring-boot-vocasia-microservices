@@ -3,6 +3,8 @@
 
 Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas Bengkulu) yang berjudul "**Rancang Bangun Arsitektur Microservices untuk Massive Open Online Courses (Studi Kasus: Vocasia.id)**". Secara garis besar, proyek ini membangun aplikasi *microservices* dari Vocasia.id berdasarkan rancangan dan alur bisnis yang sudah berjalan.
 
+> Repository ini bukan merupakan repository kode dari vocasia.id, hanya merupakan proyek akademik yang mengimplementasikan arsitektur microservices berdasarkan vocasia.id
+
 ## *Tech Stack*
 **Microservices**
 1. Java 17
@@ -46,3 +48,5 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 1. Inisialisasi Order Service
 2. Inisialisasi Payment Service
 3. Menyelesaikan: Checkout Keranjang Belanja
+4. Inisialisasi Enrollment Service
+5. Menyelesaikan: Membuat enrollment saat mengupdate status pembayaran

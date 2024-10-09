@@ -41,6 +41,19 @@ management:
     env:
       enabled: true
 
+endpoints:
+  shutdown:
+    enabled: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:14118/eureka/
+
 info:
   app:
     name: "gatewayserver"

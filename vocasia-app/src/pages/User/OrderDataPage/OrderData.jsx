@@ -131,6 +131,18 @@ export const OrderData = () => {
                         {
                             !isLoading && (
                                 <div className="row y-gap-50">
+                                    {
+                                        orderData.payment_status === 'success' && (
+                                            <div className="col-lg-12">
+                                                <div
+                                                    className="d-flex items-center justify-between bg-success-1 pl-30 pr-20 py-30 rounded-8">
+                                                    <div className="text-success-2 lh-1 fw-500">
+                                                        Pembayaran berhasil dikonfirmasi!
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
                                     <div className="col-lg-8">
                                         <div className="pt-30 pb-15 bg-white border-light rounded-8 bg-light-4">
                                             <h5 className="px-30 text-20 fw-500">Data Order</h5>
@@ -197,12 +209,16 @@ export const OrderData = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="mt-30">
-                                                <button onClick={() => handlePayButton()}
-                                                      className="button -md -black col-12 -uppercase text-white">
-                                                    Bayar
-                                                </button>
-                                            </div>
+                                            {
+                                                orderData.payment_status !== 'success' && (
+                                                    <div className="mt-30">
+                                                        <button onClick={() => handlePayButton()}
+                                                                className="button -md -black col-12 -uppercase text-white">
+                                                            Bayar
+                                                        </button>
+                                                    </div>
+                                                )
+                                            }
                                         </div>
                                     </div>
 

@@ -1,5 +1,5 @@
-import { selector } from 'recoil';
-import { authAtom } from "../Atoms/Auth.jsx";
+import {selector} from 'recoil';
+import {authAtom} from "../Atoms/Auth.jsx";
 
 export const authStatusSelector = selector({
     key: 'authStatusSelector',
@@ -15,7 +15,7 @@ export const authStatusSelector = selector({
 
 export const tokensSelector = selector({
     key: 'tokensSelector',
-    get: ({ get }) => {
+    get: ({get}) => {
         const auth = get(authAtom);
 
         return {

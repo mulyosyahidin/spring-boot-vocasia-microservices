@@ -97,7 +97,7 @@ public class CourseServiceImpl implements ICourseService {
     @Override
     public Course show(Long courseId) {
         return courseRepository.findById(courseId)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
     }
 
     @Override

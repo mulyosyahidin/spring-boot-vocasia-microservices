@@ -1,5 +1,6 @@
 package com.vocasia.instructor.service.impl;
 
+import com.vocasia.authentication.exception.ResourceNotFoundException;
 import com.vocasia.instructor.entity.Instructor;
 import com.vocasia.instructor.repository.InstructorRepository;
 import com.vocasia.instructor.request.RegisterRequest;
@@ -27,7 +28,9 @@ public class InstructorServiceImpl implements IInstructorService {
 
     @Override
     public Instructor getInstructorById(Long id) {
-        return instructorRepository.findById(id).orElse(null);
+        return instructorRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Data tidak ditemukan")
+        );
     }
 
     @Override

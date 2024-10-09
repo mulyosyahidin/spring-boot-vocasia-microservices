@@ -4,7 +4,7 @@ import {InputField} from "../../../../components/commons/Input/InputField.jsx";
 import {Link, useNavigate} from "react-router-dom";
 import {
     ADMIN,
-    AUTH_ACCESS_TOKEN,
+    AUTH_ACCESS_TOKEN, AUTH_DATE,
     AUTH_REFRESH_TOKEN,
     AUTH_USER,
     INSTRUCTOR,
@@ -50,6 +50,7 @@ export const LoginForm = () => {
             localStorage.setItem(AUTH_USER, JSON.stringify(user));
             localStorage.setItem(AUTH_ACCESS_TOKEN, access_token);
             localStorage.setItem(AUTH_REFRESH_TOKEN, refresh_token);
+            localStorage.setItem(AUTH_DATE, new Date().getTime().toString());
 
             setAuthState({
                 user,

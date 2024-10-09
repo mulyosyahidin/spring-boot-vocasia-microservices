@@ -38,3 +38,5 @@ export const INSTRUCTORS_UPDATE_PROFILE = '/instructors/profile'; // hasRole("IN
 
 export const USER_ORDER_PLACE_NEW_ORDER = '/order/place-new-order'; // hasRole("STUDENT")
 export const USER_ORDER_GET_DATA = '/order/get-data/:orderId'; // hasRole("STUDENT")
+export const USER_ENROLLMENT_GET_ALL = '/enrollment/courses'; // hasRole("STUDENT")
+export const USER_ENROLLMENT_GET_BY_ID = '/enrollment/courses/:enrollmentId'; // hasRole("STUDENT")

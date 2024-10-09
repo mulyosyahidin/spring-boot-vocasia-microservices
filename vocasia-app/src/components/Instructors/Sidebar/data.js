@@ -14,14 +14,14 @@ export const sidebarItems = [
         activeWhen: "/instructor/courses/*",
     },
     {
-        id: 2,
+        id: 3,
         href: "/instructor/students",
         iconClass: "text-20 icon-play-button",
         text: "Siswa",
         activeWhen: "/instructor/students/*",
     },
     {
-        id: 2,
+        id: 4,
         href: "/instructor/reports",
         iconClass: "text-20 icon-play-button",
         text: "Laporan",

@@ -111,6 +111,8 @@ public class MidtransController {
             UpdateOrderPaymentStatus updateOrderPaymentStatus = new UpdateOrderPaymentStatus();
 
             updateOrderPaymentStatus.setStatus(paymentStatus);
+            updateOrderPaymentStatus.setTransactionStatus(transactionStatus);
+
             OrderDto orderDto = orderService.updatePaymentStatus(payment.getOrderId(), updateOrderPaymentStatus);
 
             logger.debug("Order status updated: " + orderDto.getPaymentStatus());

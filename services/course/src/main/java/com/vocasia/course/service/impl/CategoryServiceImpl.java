@@ -37,7 +37,7 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public Category show(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Kategori tidak ditemukan"));
+                .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public Category update(Long categoryId, UpdateCategoryRequest updateCategoryRequest) throws IOException {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NoSuchElementException("Kategori tidak ditemukan"));
+                .orElseThrow(() -> new NoSuchElementException("Data tidak ditemukan"));
 
         category.setName(updateCategoryRequest.getName());
         category.setParent(updateCategoryRequest.getParentId() != null ?

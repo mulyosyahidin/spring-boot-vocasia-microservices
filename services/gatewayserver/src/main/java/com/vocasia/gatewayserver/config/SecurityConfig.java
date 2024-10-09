@@ -106,6 +106,16 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/payment/payment-data-by-order-id/{orderId}").hasRole("STUDENT")
 
                         .pathMatchers(HttpMethod.POST, "/payment/midtrans-callback").permitAll()
+
+                        // enrollment service
+                        .pathMatchers("/enrollment/actuator/**").permitAll()
+
+                        .pathMatchers(HttpMethod.GET,"/enrollment/build-info").permitAll()
+                        .pathMatchers(HttpMethod.GET,"/enrollment/welcome").permitAll()
+
+                        .pathMatchers(HttpMethod.POST,"/enrollment/enroll").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.GET,"/enrollment/courses").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.GET,"/enrollment/courses/{enrollmentId}").hasRole("STUDENT")
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));

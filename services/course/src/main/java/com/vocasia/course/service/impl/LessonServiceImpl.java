@@ -42,7 +42,7 @@ public class LessonServiceImpl implements ILessonService {
     @Override
     public Lesson show(Long lessonId) {
         return lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new ResourceNotFoundException("Lesson tidak ditemukan"));
+                .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
     }
 
     @Override

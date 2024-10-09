@@ -71,6 +71,11 @@ public class ProfileController {
     public ResponseEntity<ResponseDto> getProfileByUserId(@PathVariable Long userId) {
         Instructor instructor = iInstructorService.getInstructorByUserId(userId);
 
+        if (instructor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseDto(false, "Data instruktur tidak ditemukan", null, null));
+        }
+
         Map<String, Object> response = new HashMap<>();
         response.put("instructor", InstructorMapper.mapToDto(instructor));
 

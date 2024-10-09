@@ -2,6 +2,7 @@ package com.vocasia.order.service.impl;
 
 import com.vocasia.order.entity.Order;
 import com.vocasia.order.entity.OrderItem;
+import com.vocasia.order.exception.ResourceNotFoundException;
 import com.vocasia.order.repository.OrderItemRepository;
 import com.vocasia.order.repository.OrderRepository;
 import com.vocasia.order.request.PlaceNewOrderRequest;
@@ -65,7 +66,9 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public Order getOrderById(Long orderId) {
-        return orderRepository.findById(orderId).orElse(null);
+        return orderRepository.findById(orderId).orElseThrow(
+                () -> new ResourceNotFoundException("Data tidak ditemukan")
+        );
     }
 
     @Override

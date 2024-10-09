@@ -2,6 +2,7 @@ package com.vocasia.authentication.service.impl;
 
 import com.vocasia.authentication.config.AwsConfigProperties;
 import com.vocasia.authentication.entity.User;
+import com.vocasia.authentication.exception.ResourceNotFoundException;
 import com.vocasia.authentication.packages.aws.service.IAwsService;
 import com.vocasia.authentication.repository.UserRepository;
 import com.vocasia.authentication.request.LoginRequest;
@@ -74,7 +75,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Data tidak ditemukan")
+        );
     }
 
     @Override
