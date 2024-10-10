@@ -1,7 +1,7 @@
 package com.vocasia.authentication.controller;
 
 import com.vocasia.authentication.dto.ResponseDto;
-import com.vocasia.authentication.dto.feign.InstructorDto;
+import com.vocasia.authentication.dto.client.InstructorDto;
 import com.vocasia.authentication.entity.User;
 import com.vocasia.authentication.exception.CustomFeignException;
 import com.vocasia.authentication.mapper.UserMapper;
@@ -64,36 +64,36 @@ public class LoginController {
             )
     })
     @PostMapping("/login")
-    public ResponseEntity<ResponseDto> login(@RequestHeader("vocasia-correlation-id")
-                                             String correlationId, @Valid @RequestBody LoginRequest loginRequest)
+    public ResponseEntity<ResponseDto> login(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                             @Valid @RequestBody LoginRequest loginRequest)
             throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-        // login dari database
         User loggedUser = iUserService.loginWithEmailAndPassword(loginRequest);
 
         if (loggedUser == null) {
             return ResponseEntity.badRequest().body(new ResponseDto(false, "Email atau password salah", null, null));
         }
 
-        // Buat data pengguna untuk respons
         Map<String, Object> response = new HashMap<>();
         response.put("user", UserMapper.mapToDto(loggedUser));
         response.put("token", iKeyCloackService.getAccessToken(loggedUser.getUsername(), loginRequest.getPassword()));
 
         if (loggedUser.getRole().equals("instructor")) {
             try {
+                logger.debug("Get instructor profile by user id: {} started", correlationId);
                 InstructorDto getInstructorProfileByUserId = iInstructorService.getInstructorByUserId(loggedUser.getId(), correlationId);
+                logger.debug("Get instructor profile by user id: {} finished", correlationId);
 
                 response.put("instructor", getInstructorProfileByUserId);
             } catch (Exception e) {
-                logger.error("Failed to get instructor profile by user id", e);
+                logger.debug(e.getMessage(), e);
 
                 return ResponseEntity
-                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(new ResponseDto(false, "Internal server error", null, null));
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new ResponseDto(false, e.getMessage(), null, null));
             }
         }
 
-        return ResponseEntity.ok(new ResponseDto(true, "Berhasil login dengan email password", response, null));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto(true, "Berhasil login dengan email password", response, null));
     }
 
 

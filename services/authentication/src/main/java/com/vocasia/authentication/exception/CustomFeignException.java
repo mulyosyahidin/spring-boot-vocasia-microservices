@@ -1,14 +1,11 @@
 package com.vocasia.authentication.exception;
 
-import lombok.Getter;
-
-@Getter
 public class CustomFeignException extends RuntimeException {
-    private final Object errors;
+    public CustomFeignException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-    public CustomFeignException(String message, Object errors) {
+    public CustomFeignException(String message) {
         super(message);
-        this.errors = errors;
     }
 }
-

@@ -79,6 +79,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(CustomFeignException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ResponseDto> handleCustomFeignException(CustomFeignException ex) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("status", HttpStatus.BAD_REQUEST.value());
+        data.put("error", ex.getMessage());
+
+        ResponseDto responseDto = new ResponseDto(false, "Failed to get instructor by user id", data, null);
+        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ResponseDto> handleGlobalException(Exception ex) {
@@ -89,4 +100,5 @@ public class GlobalExceptionHandler {
         ResponseDto responseDto = new ResponseDto(false, "Internal server error", data, null);
         return new ResponseEntity<>(responseDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }

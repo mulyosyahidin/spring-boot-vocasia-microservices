@@ -1,6 +1,6 @@
 package com.vocasia.authentication.service;
 
-import com.vocasia.authentication.dto.feign.InstructorDto;
+import com.vocasia.authentication.dto.client.InstructorDto;
 
 public interface IInstructorService {
 

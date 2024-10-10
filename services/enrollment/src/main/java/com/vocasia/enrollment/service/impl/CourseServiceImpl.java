@@ -3,7 +3,7 @@ package com.vocasia.enrollment.service.impl;
 import com.vocasia.enrollment.dto.client.course.CategoryDto;
 import com.vocasia.enrollment.dto.client.course.CourseDto;
 import com.vocasia.enrollment.dto.client.course.InstructorDto;
-import com.vocasia.enrollment.dto.client.course.UserDto;
+import com.vocasia.enrollment.dto.client.authentication.UserDto;
 import com.vocasia.enrollment.service.ICourseService;
 import com.vocasia.enrollment.service.client.CourseFeignClient;
 import feign.FeignException;
@@ -84,7 +84,7 @@ public class CourseServiceImpl implements ICourseService {
                             if (user != null) {
                                 UserDto userDto = new UserDto();
 
-                                userDto.setId(Integer.valueOf(user.get("id").toString()));
+                                userDto.setId(Long.valueOf(user.get("id").toString()));
                                 userDto.setUid(user.get("uid").toString());
                                 userDto.setEmail(user.get("email").toString());
                                 userDto.setUsername(user.get("username").toString());

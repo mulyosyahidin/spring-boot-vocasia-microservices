@@ -1,4 +1,214 @@
 services:
+  read:
+    image: grafana/loki:3.1.0
+    command: "-config.file=/etc/loki/config.yaml -target=read"
+    ports:
+      - 3101:3100
+      - 7946
+      - 9095
+    volumes:
+      - ../observability/loki/loki-config.yaml:/etc/loki/config.yaml
+    depends_on:
+      - minio
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3100/ready || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: &loki-dns
+      vocasia:
+        aliases:
+          - loki
+
+  write:
+    image: grafana/loki:3.1.0
+    command: "-config.file=/etc/loki/config.yaml -target=write"
+    ports:
+      - 3102:3100
+      - 7946
+      - 9095
+    volumes:
+      - ../observability/loki/loki-config.yaml:/etc/loki/config.yaml
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3100/ready || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - minio
+    networks:
+      <<: *loki-dns
+
+  promtail:
+    image: grafana/promtail:2.8.3
+    volumes:
+      - ../observability/promtail/promtail-local-config.yaml:/etc/promtail/config.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/config.yaml
+    depends_on:
+      - gateway
+    networks:
+      - vocasia
+
+  minio:
+    image: minio/minio
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /data/loki-data && \
+        mkdir -p /data/loki-ruler && \
+        minio server /data
+    environment:
+      - MINIO_ROOT_USER=loki
+      - MINIO_ROOT_PASSWORD=password
+      - MINIO_PROMETHEUS_AUTH_TYPE=public
+      - MINIO_UPDATE=off
+    ports:
+      - 9000
+    volumes:
+      - ./.data/minio:/data
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 15s
+      timeout: 20s
+      retries: 5
+    networks:
+      - vocasia
+
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ../observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - vocasia
+
+  tempo:
+    image: grafana/tempo:2.4.2
+    container_name: tempo
+    command: -config.file /etc/tempo-config.yml
+    ports:
+      - "3110:3100"
+      - "4317:4317"
+    volumes:
+      - ../observability/tempo/tempo.yml:/etc/tempo-config.yml
+    networks:
+      - vocasia
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    depends_on:
+      - gateway
+      - tempo
+      - prometheus
+      - read
+      - write
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        /run.sh
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../observability/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yml
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1" ]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vocasia
+
+  backend:
+    image: grafana/loki:3.1.0
+    volumes:
+      - ../observability/loki/loki-config.yaml:/etc/loki/config.yaml
+    ports:
+      - "3100"
+      - "7946"
+    command: "-config.file=/etc/loki/config.yaml -target=backend -legacy-read-mode=false"
+    depends_on:
+      - gateway
+    networks:
+      - vocasia
+
+  gateway:
+    image: nginx:latest
+    depends_on:
+      - read
+      - write
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        cat <<EOF > /etc/nginx/nginx.conf
+        user  nginx;
+        worker_processes  5;  ## Default: 1
+
+        events {
+          worker_connections   1000;
+        }
+
+        http {
+          resolver 127.0.0.11;
+
+          server {
+            listen             3100;
+
+            location = / {
+              return 200 'OK';
+              auth_basic off;
+            }
+
+            location = /api/prom/push {
+              proxy_pass       http://write:3100\$$request_uri;
+            }
+
+            location = /api/prom/tail {
+              proxy_pass       http://read:3100\$$request_uri;
+              proxy_set_header Upgrade \$$http_upgrade;
+              proxy_set_header Connection "upgrade";
+            }
+
+            location ~ /api/prom/.* {
+              proxy_pass       http://read:3100\$$request_uri;
+            }
+
+            location = /loki/api/v1/push {
+              proxy_pass       http://write:3100\$$request_uri;
+            }
+
+            location = /loki/api/v1/tail {
+              proxy_pass       http://read:3100\$$request_uri;
+              proxy_set_header Upgrade \$$http_upgrade;
+              proxy_set_header Connection "upgrade";
+            }
+
+            location ~ /loki/api/.* {
+              proxy_pass       http://read:3100\$$request_uri;
+            }
+          }
+        }
+        EOF
+        /docker-entrypoint.sh nginx -g "daemon off;"
+    ports:
+      - "3100:3100"
+    healthcheck:
+      test: [ "CMD", "service", "nginx", "status" ]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vocasia
+
   keycloak:
     image: quay.io/keycloak/keycloak:25.0.6
     container_name: app-keycloak
@@ -133,6 +343,26 @@ services:
       file: common-config.yml
       service: base-config
 
+  db_finance:
+    image: mysql:8.0
+    container_name: db-finance
+    ports:
+      - "30624:3306"
+    environment:
+      MYSQL_DATABASE: finance_db
+      MYSQL_ROOT_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    volumes:
+      - finance_db_data:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: base-config
+
   configserver:
     image: martinms20/configserver:v1.0.0
     container_name: config-server
@@ -147,6 +377,11 @@ services:
     extends:
       file: common-config.yml
       service: base-config
+    environment:
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "configserver"
 
   eurekaserver:
     image: "martinms20/eurekaserver:v1.0.0"
@@ -157,6 +392,10 @@ services:
       SPRING_APPLICATION_NAME: "eurekaserver"
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "eurekaserver"
     depends_on:
       configserver:
         condition: service_healthy
@@ -191,6 +430,10 @@ services:
       AWS_SECRET_ACCESS_KEY: "4wujGs0MkMuI2li/UovC3J/s4y37EMJ2mSmMm46e"
       AWS_S3_REGION: "ap-southeast-1"
       AWS_S3_BUCKET: "vocasia"
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "authentication"
     healthcheck:
       test: "curl --fail --silent localhost:14120/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -218,6 +461,10 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "instructor"
     healthcheck:
       test: "curl --fail --silent localhost:14121/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -249,6 +496,10 @@ services:
       AWS_SECRET_ACCESS_KEY: "4wujGs0MkMuI2li/UovC3J/s4y37EMJ2mSmMm46e"
       AWS_S3_REGION: "ap-southeast-1"
       AWS_S3_BUCKET: "vocasia"
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "course"
     healthcheck:
       test: "curl --fail --silent localhost:14122/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -276,6 +527,10 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "order"
     healthcheck:
       test: "curl --fail --silent localhost:14124/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -307,6 +562,10 @@ services:
       MIDTRANS_CLIENT_KEY: "SB-Mid-client-4KbJJQfBaYS9Lplt"
       MIDTRANS_SERVER_KEY: "SB-Mid-server-l-PGFhcZZ-wTh5bebWsEefs0"
       MIDTRANS_IS_PRODUCTION: false
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "payment"
     healthcheck:
       test: "curl --fail --silent localhost:14125/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -334,6 +593,10 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "enrollment"
     healthcheck:
       test: "curl --fail --silent localhost:14126/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -342,6 +605,37 @@ services:
       start_period: 20s
     depends_on:
       db_enrollment:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  finance_service:
+    image: martinms20/finance:v1.0.0
+    container_name: service-finance
+    ports:
+      - "14127:14127"
+    environment:
+      SPRING_PROFILES_ACTIVE: "development"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-finance:3306/finance_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "finance"
+    healthcheck:
+      test: "curl --fail --silent localhost:14127/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_finance:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
@@ -391,6 +685,10 @@ services:
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "http://app-keycloak:8080/realms/Vocasia/protocol/openid-connect/certs"
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "gatewayserver"
     extends:
       file: common-config.yml
       service: base-config
@@ -411,4 +709,6 @@ volumes:
   payment_db_data:
     driver: local
   enrollment_db_data:
+    driver: local
+  finance_db_data:
     driver: local

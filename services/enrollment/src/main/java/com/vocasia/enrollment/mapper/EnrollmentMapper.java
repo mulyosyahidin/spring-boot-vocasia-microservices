@@ -1,9 +1,11 @@
 package com.vocasia.enrollment.mapper;
 
 import com.netflix.discovery.converters.Auto;
+import com.vocasia.enrollment.dto.client.authentication.UserDto;
 import com.vocasia.enrollment.dto.client.course.CourseDto;
 import com.vocasia.enrollment.dto.data.EnrollmentDto;
 import com.vocasia.enrollment.entity.Enrollment;
+import com.vocasia.enrollment.service.IAuthenticationService;
 import com.vocasia.enrollment.service.ICourseService;
 import feign.FeignException;
 import org.slf4j.Logger;
@@ -14,11 +16,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class EnrollmentMapper {
 
+    private static IAuthenticationService authenticationService;
     private static ICourseService courseService;
+
     private static Logger logger = LoggerFactory.getLogger(EnrollmentMapper.class);
 
     @Autowired
-    public EnrollmentMapper(ICourseService courseService) {
+    public EnrollmentMapper(IAuthenticationService authenticationService, ICourseService courseService) {
+        EnrollmentMapper.authenticationService = authenticationService;
         EnrollmentMapper.courseService = courseService;
     }
 
@@ -38,8 +43,10 @@ public class EnrollmentMapper {
 
         try {
             CourseDto courseDto = courseService.getCourseById(enrollment.getCourseId());
+            UserDto userDto = authenticationService.getUserById(enrollment.getUserId());
 
             enrollmentDto.setCourse(courseDto);
+            enrollmentDto.setUser(userDto);
         } catch (FeignException e) {
             logger.error(e.getMessage(), e);
 

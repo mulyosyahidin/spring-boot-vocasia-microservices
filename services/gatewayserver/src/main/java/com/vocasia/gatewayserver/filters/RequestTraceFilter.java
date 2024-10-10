@@ -24,8 +24,6 @@ public class RequestTraceFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
-
-        // Check if the correlation ID is present, if not, generate one
         if (isCorrelationIdPresent(requestHeaders)) {
             logger.debug("vocasia-correlation-id found in RequestTraceFilter : {}",
                     filterUtility.getCorrelationId(requestHeaders));
@@ -35,15 +33,7 @@ public class RequestTraceFilter implements GlobalFilter {
             logger.debug("vocasia-correlation-id generated in RequestTraceFilter : {}", correlationID);
         }
 
-        ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-                .headers(httpHeaders -> {
-                    httpHeaders.putAll(requestHeaders);
-                })
-                .build();
-
-        ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
-
-        return chain.filter(mutatedExchange);
+        return chain.filter(exchange);
     }
 
     private boolean isCorrelationIdPresent(HttpHeaders requestHeaders) {

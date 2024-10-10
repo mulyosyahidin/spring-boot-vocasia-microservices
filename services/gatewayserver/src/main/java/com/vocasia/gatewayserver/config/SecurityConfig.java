@@ -20,6 +20,7 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity serverHttpSecurity) {
         serverHttpSecurity.authorizeExchange(exchanges -> exchanges
+                        .pathMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         .pathMatchers(HttpMethod.GET, "/playground/config").permitAll()
@@ -68,6 +69,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.PUT, "/course/courses/{courseId}/thumbnail").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.PUT, "/course/courses/{courseId}").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.POST, "/course/courses/{courseId}/publish").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/course/courses/{courseId}/students").hasAnyRole("INSTRUCTOR", "ADMIN")
 
                         .pathMatchers(HttpMethod.GET, "/course/{courseId}/chapters").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.POST, "/course/{courseId}/chapters").hasRole("INSTRUCTOR")
@@ -116,6 +118,14 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.POST,"/enrollment/enroll").hasRole("STUDENT")
                         .pathMatchers(HttpMethod.GET,"/enrollment/courses").hasRole("STUDENT")
                         .pathMatchers(HttpMethod.GET,"/enrollment/courses/{enrollmentId}").hasRole("STUDENT")
+
+                        .pathMatchers(HttpMethod.GET,"/enrollment/course-data/{courseId}/students").hasAnyRole("INSTRUCTOR", "ADMIN")
+
+                        // finance service
+                        .pathMatchers("/finance/actuator/**").permitAll()
+
+                        .pathMatchers(HttpMethod.GET,"/finance/build-info").permitAll()
+                        .pathMatchers(HttpMethod.GET,"/finance/welcome").permitAll()
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));

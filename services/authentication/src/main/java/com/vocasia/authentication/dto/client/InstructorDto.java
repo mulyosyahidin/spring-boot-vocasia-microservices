@@ -1,4 +1,4 @@
-package com.vocasia.authentication.dto.feign;
+package com.vocasia.authentication.dto.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

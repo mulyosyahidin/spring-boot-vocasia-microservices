@@ -1,6 +1,7 @@
 package com.vocasia.enrollment.dto.client.course;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vocasia.enrollment.dto.client.authentication.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 

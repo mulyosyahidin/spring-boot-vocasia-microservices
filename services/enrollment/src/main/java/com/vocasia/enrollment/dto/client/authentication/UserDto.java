@@ -1,4 +1,4 @@
-package com.vocasia.enrollment.dto.client.course;
+package com.vocasia.enrollment.dto.client.authentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 public class UserDto {
 
-    private Integer id;
+    private Long id;
     private String uid;
     private String email;
     private String username;

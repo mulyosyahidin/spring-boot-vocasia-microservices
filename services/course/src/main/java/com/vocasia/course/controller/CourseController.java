@@ -264,4 +264,23 @@ public class CourseController {
         return ResponseEntity.ok(new ResponseDto(true, "Berhasil menerbitkan kursus", response, null));
     }
 
+    @Operation(
+            summary = "Mendapatkan data siswa",
+            description = "Mengambil data siswa yang terdaftar pada kursus"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Berhasil mendapatkan data siswa"
+    )
+    @PostMapping("/courses/{courseId}/students")
+    public ResponseEntity<ResponseDto> getStudents(@PathVariable Long courseId) {
+        Course course = courseService.show(courseId);
+        Course publishedCourse = courseService.publish(course);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("course", CourseMapper.mapToDto(publishedCourse));
+
+        return ResponseEntity.ok(new ResponseDto(true, "Berhasil menerbitkan kursus", response, null));
+    }
+
 }

@@ -1,19 +1,16 @@
 package com.vocasia.authentication.service.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vocasia.authentication.dto.feign.InstructorDto;
+import com.vocasia.authentication.dto.ResponseDto;
+import com.vocasia.authentication.dto.client.InstructorDto;
 import com.vocasia.authentication.exception.CustomFeignException;
 import com.vocasia.authentication.service.IInstructorService;
 import com.vocasia.authentication.service.client.InstructorFeignClient;
-import feign.FeignException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Map;
 
 @Service
@@ -27,32 +24,27 @@ public class InstructorServiceImpl implements IInstructorService {
     @Override
     public InstructorDto getInstructorByUserId(Long userId, String correlationId) {
         try {
-            ResponseEntity<Map<String, Object>> instructorProfileResponseEntity = instructorFeignClient.getInstructorByUserId(correlationId, userId);
+            ResponseEntity<ResponseDto> instructorFeignClientInstructorByUserId = instructorFeignClient.getInstructorByUserId(correlationId, userId);
+            ResponseDto responseBody = instructorFeignClientInstructorByUserId.getBody();
 
-            Map<String, Object> responseBody = instructorProfileResponseEntity.getBody();
-            logger.info("Response Body: {}", responseBody);
+            assert responseBody != null;
+            Map<String, Object> data = (Map<String, Object>) responseBody.getData();
+            Map<String, Object> instructor = data != null ? (Map<String, Object>) data.get("instructor") : null;
 
-            if (responseBody != null && responseBody.get("success") != null && (Boolean) responseBody.get("success")) {
-                Map<String, Object> data = (Map<String, Object>) responseBody.get("data");
+            logger.debug("InstructorServiceImpl.getInstructorByUserId() $instructor:: {}", instructor);
 
-                if (data != null) {
-                    Map<String, Object> instructor = (Map<String, Object>) data.get("instructor");
-                    InstructorDto instructorDto = new InstructorDto();
+            InstructorDto instructorDto = new InstructorDto();
 
-                    instructorDto.setId((Integer) instructor.get("id"));
-                    instructorDto.setStatus((String) instructor.get("status"));
-                    instructorDto.setSummary((String) instructor.get("summary"));
-                    instructorDto.setPhoneNumber((String) instructor.get("phone_number"));
-
-                    return instructorDto;
-                }
-            } else {
-                logger.warn("Feign failed: {}", responseBody != null ? responseBody.get("message") : "No response body");
+            if (instructor != null) {
+                instructorDto.setId((Integer) instructor.get("id"));
+                instructorDto.setStatus((String) instructor.get("status"));
+                instructorDto.setStatus((String) instructor.get("summary"));
+                instructorDto.setPhoneNumber((String) instructor.get("phone_number"));
             }
 
-            return null;
-        } catch (FeignException e) {
-            throw new RuntimeException("Failed to parse error response", e);
+            return instructorDto;
+        } catch (Exception e) {
+            throw new RuntimeException("InstructorServiceImpl.getInstructorByUserId() Exception:: " + e.getMessage(), e);
         }
     }
 }

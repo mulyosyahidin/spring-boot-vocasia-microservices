@@ -26,7 +26,7 @@ public class ResponseTraceFilter {
                 String correlationId = filterUtility.getCorrelationId(requestHeaders);
 
                 if (!(exchange.getResponse().getHeaders().containsKey(FilterUtility.CORRELATION_ID))) {
-                    logger.debug("updated the correlation id to the outbound headers: {}", correlationId);
+                    logger.debug("Updated the correlation id to the outbound headers: {}", correlationId);
                     exchange.getResponse().getHeaders().add(FilterUtility.CORRELATION_ID, correlationId);
                 }
             }));
