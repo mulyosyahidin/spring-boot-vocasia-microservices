@@ -13,6 +13,8 @@ spring:
     username: "root"
     password: "password"
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      schema: vocasia_db
   jpa:
     properties:
       hibernate:
@@ -23,9 +25,6 @@ spring:
       enabled: true
       max-file-size: 24MB
       max-request-size: 24MB
-  sql:
-    init:
-      mode: always
   cloud:
     openfeign:
       circuitbreaker:

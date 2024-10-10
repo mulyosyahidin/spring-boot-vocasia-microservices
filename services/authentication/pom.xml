@@ -12,7 +12,7 @@
 	<artifactId>authentication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>authentication</name>
-	<description>Authentication Service</description>
+	<description>Authentication Service for Vocasia Microservices</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -36,6 +36,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-mysql</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.opentelemetry.javaagent</groupId>
@@ -156,6 +164,16 @@
 					<to>
 						<image>martinms20/${project.artifactId}:v1.0.0</image>
 					</to>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>6.5.7</version>
+				<configuration>
+					<url>jdbc:mysql://localhost:30618/authentication_db</url>
+					<user>root</user>
+					<password>password</password>
 				</configuration>
 			</plugin>
 		</plugins>

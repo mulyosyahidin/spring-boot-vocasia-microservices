@@ -33,9 +33,6 @@ spring:
               - profile
               - email
             authorization-grant-type: password
-  sql:
-    init:
-      mode: always
   cloud:
     openfeign:
       circuitbreaker:

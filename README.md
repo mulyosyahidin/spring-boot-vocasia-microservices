@@ -50,3 +50,10 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 3. Menyelesaikan: Checkout Keranjang Belanja
 4. Inisialisasi Enrollment Service
 5. Menyelesaikan: Membuat enrollment saat mengupdate status pembayaran
+
+09/10/2024:
+1. Inisisalisasi Logging and Monitoring System
+
+10/10/2024:
+1. Menyelesaikan: Loggin and Monitoring System
+2. Menyelesaikan: Setup Migrasi Database dangan FlyWay
