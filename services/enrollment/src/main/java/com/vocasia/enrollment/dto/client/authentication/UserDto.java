@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 public class UserDto {
 
     private Long id;
-    private String uid;
     private String email;
     private String username;
     private String name;
@@ -22,11 +21,5 @@ public class UserDto {
 
     @JsonProperty("profile_picture_url")
     private String profilePictureUrl;
-
-    @JsonProperty("created_at")
-    private LocalDateTime createdAt;
-
-    @JsonProperty("updated_at")
-    private LocalDateTime updatedAt;
 
 }

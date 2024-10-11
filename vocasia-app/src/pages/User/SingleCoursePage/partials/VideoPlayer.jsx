@@ -24,13 +24,13 @@ export const VideoPlayer = ({course, currentLesson}) => {
                             <h4 className={'mt-5'}>{currentLesson.title}</h4>
 
                             <div className="absolute-full-center d-flex justify-center items-center">
-                    <span
-                        style={{cursor: "pointer"}}
-                        onClick={() => setIsOpen(true)}
-                        className="d-flex justify-center items-center size-60 rounded-full bg-white"
-                    >
-                        <span className="icon-play text-18"></span>
-                    </span>
+                                <span
+                                    style={{cursor: "pointer"}}
+                                    onClick={() => setIsOpen(true)}
+                                    className="d-flex justify-center items-center size-60 rounded-full bg-white"
+                                >
+                                    <span className="icon-play text-18"></span>
+                                </span>
                             </div>
                         </div>
                         <ModalVideoComponent
@@ -38,6 +38,12 @@ export const VideoPlayer = ({course, currentLesson}) => {
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
                         />
+
+                        <div className="mt-60 lg:mt-40">
+                            <div
+                                dangerouslySetInnerHTML={{__html: course.description}}
+                            />
+                        </div>
                     </>
                 )
             }

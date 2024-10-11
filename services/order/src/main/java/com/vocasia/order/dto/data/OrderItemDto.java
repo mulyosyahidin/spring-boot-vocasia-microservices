@@ -37,14 +37,8 @@ public class OrderItemDto {
     @JsonProperty("course_discount")
     private double courseDiscount;
 
-    @JsonProperty("course_discount_start")
+    @JsonProperty("course_subtotal")
     private double courseSubtotal;
-
-    @JsonProperty("created_at")
-    private String createdAt;
-
-    @JsonProperty("updated_at")
-    private String updatedAt;
 
 }
 

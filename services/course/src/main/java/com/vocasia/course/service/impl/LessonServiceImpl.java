@@ -19,12 +19,12 @@ public class LessonServiceImpl implements ILessonService {
     private final LessonRepository lessonRepository;
 
     @Override
-    public List<Lesson> index(Long chapterId) {
+    public List<Lesson> findAllByChapterId(Long chapterId) {
         return lessonRepository.findAllByChapterId(chapterId);
     }
 
     @Override
-    public Lesson store(Chapter chapter, StoreLessonRequest storeLessonRequest) {
+    public Lesson save(Chapter chapter, StoreLessonRequest storeLessonRequest) {
         Lesson lesson = new Lesson();
 
         lesson.setChapter(chapter);
@@ -40,7 +40,7 @@ public class LessonServiceImpl implements ILessonService {
     }
 
     @Override
-    public Lesson show(Long lessonId) {
+    public Lesson findById(Long lessonId) {
         return lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
     }
@@ -59,8 +59,19 @@ public class LessonServiceImpl implements ILessonService {
     }
 
     @Override
-    public void delete(Lesson lesson) {
+    public void deleteById(Lesson lesson) {
         lessonRepository.delete(lesson);
+    }
+
+    @Override
+    public Lesson findByChapterIdAndId(Long chapterId, Long lessonId) {
+        Lesson lesson = lessonRepository.findByChapterIdAndId(chapterId, lessonId);
+
+        if (lesson == null) {
+            throw new ResourceNotFoundException("Data tidak ditemukan");
+        }
+
+        return lesson;
     }
 
 }

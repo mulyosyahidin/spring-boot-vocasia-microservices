@@ -13,8 +13,6 @@ spring:
     username: "root"
     password: "password"
     driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      schema: vocasia_db
   jpa:
     properties:
       hibernate:
@@ -25,10 +23,6 @@ spring:
       enabled: true
       max-file-size: 24MB
       max-request-size: 24MB
-  cloud:
-    openfeign:
-      circuitbreaker:
-        enabled: true
 
 management:
   endpoints:
@@ -79,30 +73,3 @@ logging:
         course: DEBUG
   pattern:
     level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
-
-resilience4j.circuitbreaker:
-  configs:
-    default:
-      slidingWindowSize: 10
-      permittedNumberOfCallsInHalfOpenState: 2
-      failureRateThreshold: 50
-      waitDurationInOpenState: 10000
-
-resilience4j.retry:
-  configs:
-    default:
-      max-attempts: 3
-      waitDuration: 100
-      enableExponentialBackoff: true
-      exponentialBackoffMultiplier: 2
-      ignoreExceptions:
-        - java.lang.RuntimeException
-      retryExceptions:
-        - java.util.concurrent.TimeoutException
-
-resilience4j.ratelimiter:
-  configs:
-    default:
-      timeoutDuration: 1000
-      limitRefreshPeriod: 5000
-      limitForPeriod: 1

@@ -43,6 +43,7 @@ public class Course extends BaseEntity {
     private String description;
 
     @Column(nullable = false)
+    @Lob
     private String shortDescription;
 
     private String featuredPicture;

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 public class OrderDto {
@@ -36,5 +34,4 @@ public class OrderDto {
     @JsonProperty("updated_at")
     private String updatedAt;
 
-    private List<OrderItemDto> orderItems;
 }

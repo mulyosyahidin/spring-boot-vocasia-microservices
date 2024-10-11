@@ -25,20 +25,4 @@ public class OrderItemMapper {
         return orderItemDto;
     }
 
-    public static OrderItem mapToEntity(OrderItemDto orderItemDto) {
-        OrderItem orderItem = new OrderItem();
-
-        orderItem.setId(orderItemDto.getId());
-        orderItem.setCourseId(orderItemDto.getCourseId());
-        orderItem.setCourseTitle(orderItemDto.getCourseTitle());
-        orderItem.setCourseSlug(orderItemDto.getCourseSlug());
-        orderItem.setCourseFeaturedPictureUrl(orderItemDto.getCourseFeaturedPictureUrl());
-        orderItem.setCoursePrice(orderItemDto.getCoursePrice());
-        orderItem.setCourseIsFree(orderItemDto.isCourseIsFree());
-        orderItem.setCourseIsDiscount(orderItemDto.isCourseIsDiscount());
-        orderItem.setCourseDiscount(orderItemDto.getCourseDiscount());
-        orderItem.setCourseSubtotal(orderItemDto.getCourseSubtotal());
-
-        return orderItem;
-    }
 }

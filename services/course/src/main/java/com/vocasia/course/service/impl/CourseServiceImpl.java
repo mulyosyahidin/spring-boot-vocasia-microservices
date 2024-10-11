@@ -36,7 +36,7 @@ public class CourseServiceImpl implements ICourseService {
     private final ChapterRepository chapterRepository;
 
     @Override
-    public Course store(CreateNewCourseRequest createNewCourseRequest) {
+    public Course save(CreateNewCourseRequest createNewCourseRequest) {
         Course course = new Course();
 
         course.setInstructorId(createNewCourseRequest.getInstructorId());
@@ -78,7 +78,7 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
-    public Course updateThumbnail(Course course, UpdateCourseThumbnailRequest updateCourseThumbnailRequest) throws IOException {
+    public Course updateCourseThumbnail(Course course, UpdateCourseThumbnailRequest updateCourseThumbnailRequest) throws IOException {
         String bucketName = awsConfigProperties.getS3().getBucket();
         MultipartFile picture = updateCourseThumbnailRequest.getPicture();
 
@@ -95,7 +95,7 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
-    public Course show(Long courseId) {
+    public Course findById(Long courseId) {
         return courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
     }
@@ -131,10 +131,7 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
-    public Course updateCourse(Long courseId, UpdateCourseRequest updateCourseRequest) {
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
-
+    public Course update(Course course, UpdateCourseRequest updateCourseRequest) {
         course.setTitle(updateCourseRequest.getTitle());
         course.setShortDescription(updateCourseRequest.getShortDescription());
         course.setLevel(updateCourseRequest.getLevel());
@@ -170,7 +167,7 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
-    public Course publish(Course course) {
+    public Course publishCourseById(Course course) {
         course.setStatus("published");
 
         return courseRepository.save(course);

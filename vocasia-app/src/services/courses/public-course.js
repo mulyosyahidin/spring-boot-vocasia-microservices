@@ -23,6 +23,7 @@ export const getEditorChoiceCourses = async () => {
     let endpoint = `${apiBaseUrl}${PUBLIC_COURSES_GET_EDITOR_CHOICES}`;
 
     let response = await axiosGet({url: endpoint, includeAuthentication: false});
+    console.log(response);
 
     if (response.success) {
         return response.data.courses;
@@ -39,7 +40,7 @@ export const getOverview = async (slug, id) => {
     let response = await axiosGet({url: endpoint, includeAuthentication: false});
 
     if (response.success) {
-        return response.data.course;
+        return response.data;
     } else {
         return {};
     }

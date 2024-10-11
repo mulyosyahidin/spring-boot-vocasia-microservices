@@ -18,16 +18,18 @@ export const OrderData = () => {
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const [orderData, setOrderData] = useState({});
-    const [paymentData, setPaymentData] = useState({});
+    const [order, setOrder] = useState({});
+    const [payment, setPayment] = useState({});
+    const [items, setItems] = useState([]);
 
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
                 const order = await getOrderData(orderId);
 
-                setOrderData(order.order);
-                setPaymentData(order.payment);
+                setOrder(order.order);
+                setPayment(order.payment);
+                setItems(order.items);
             } catch (e) {
                 console.log(e);
             } finally {
@@ -52,9 +54,9 @@ export const OrderData = () => {
     }, [orderId]);
 
     const handlePayButton = () => {
-        window.snap.pay(paymentData.snap_token, {
+        window.snap.pay(payment.snap_token, {
             onSuccess: () => {
-                console.log('success')
+                window.location.reload();
             },
             onPending: (result) => {
                 console.log('pending transaction', result)
@@ -109,7 +111,7 @@ export const OrderData = () => {
 
                                     <div>
                                         <p className="page-header__text">
-                                            Order #{orderData.order_number}
+                                            Order #{order.order_number}
                                         </p>
                                     </div>
                                 </div>
@@ -132,7 +134,7 @@ export const OrderData = () => {
                             !isLoading && (
                                 <div className="row y-gap-50">
                                     {
-                                        orderData.payment_status === 'success' && (
+                                        order.payment_status === 'success' && (
                                             <div className="col-lg-12">
                                                 <div
                                                     className="d-flex items-center justify-between bg-success-1 pl-30 pr-20 py-30 rounded-8">
@@ -150,19 +152,19 @@ export const OrderData = () => {
                                             <div className="px-30 mt-25">
                                                 <div className="d-flex justify-between">
                                                     <div className="py-15 fw-500 text-dark-1">Order Number</div>
-                                                    <div className="py-15 text-grey">{orderData.order_number}</div>
+                                                    <div className="py-15 text-grey">{order.order_number}</div>
                                                 </div>
                                                 <div className="d-flex justify-between">
                                                     <div className="py-15 fw-500 text-dark-1">Jumlah Item</div>
-                                                    <div className="py-15 text-grey">{orderData.total_items}</div>
+                                                    <div className="py-15 text-grey">{order.total_items}</div>
                                                 </div>
                                                 <div className="d-flex justify-between">
                                                     <div className="py-15 fw-500 text-dark-1">Tanggal Order</div>
-                                                    <div className="py-15 text-grey">{makeDateReadable(orderData.created_at)}</div>
+                                                    <div className="py-15 text-grey">{makeDateReadable(order.created_at)}</div>
                                                 </div>
                                                 <div className="d-flex justify-between">
                                                     <div className="py-15 fw-500 text-dark-1">Status</div>
-                                                    <div className="py-15 text-grey">{orderData.payment_status}</div>
+                                                    <div className="py-15 text-grey">{order.payment_status}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -178,7 +180,7 @@ export const OrderData = () => {
                                                 </div>
 
 
-                                                {orderData.orderItems.map((elm, i) => (
+                                                {items.map((elm, i) => (
                                                     <div
                                                         key={i}
                                                         className={`d-flex justify-between ${
@@ -204,13 +206,13 @@ export const OrderData = () => {
                                                 <div className="d-flex justify-between border-top-dark px-30">
                                                     <div className="py-15 fw-500 text-dark-1">Total</div>
                                                     <div className="py-15 fw-500 text-dark-1">
-                                                        {rupiahFormatter.format(orderData.total_price)}
+                                                        {rupiahFormatter.format(order.total_price)}
                                                     </div>
                                                 </div>
                                             </div>
 
                                             {
-                                                orderData.payment_status !== 'success' && (
+                                                order.payment_status !== 'success' && (
                                                     <div className="mt-30">
                                                         <button onClick={() => handlePayButton()}
                                                                 className="button -md -black col-12 -uppercase text-white">

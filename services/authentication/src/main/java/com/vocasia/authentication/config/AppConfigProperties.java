@@ -8,7 +8,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 public class AppConfigProperties {
+
     private String name;
     private String version;
     private String environment;
+
 }

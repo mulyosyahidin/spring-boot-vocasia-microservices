@@ -10,7 +10,7 @@ export const Courses = () => {
 
     const [searchQuery, setSearchQuery] = useState('');
     const [pageItems, setPageItems] = useState([]);
-    const [filteredItems, setFilteredItems] = useState([]); // state untuk hasil filter
+    const [filteredItems, setFilteredItems] = useState([]);
 
     const handleSearch = (e) => {
         setSearchQuery(e.target.value);

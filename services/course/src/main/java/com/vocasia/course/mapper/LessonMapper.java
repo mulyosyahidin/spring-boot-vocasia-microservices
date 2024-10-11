@@ -1,7 +1,6 @@
 package com.vocasia.course.mapper;
 
 import com.vocasia.course.dto.data.LessonDto;
-import com.vocasia.course.entity.Chapter;
 import com.vocasia.course.entity.Lesson;
 import org.springframework.stereotype.Component;
 
@@ -24,20 +23,6 @@ public class LessonMapper {
         lessonDto.setUpdatedAt(lesson.getUpdatedAt());
 
         return lessonDto;
-    }
-
-    public static Lesson mapToEntity(LessonDto lessonDto, Chapter chapter) {
-        Lesson lesson = new Lesson();
-
-        lesson.setTitle(lessonDto.getTitle());
-        lesson.setType(lessonDto.getType());
-        lesson.setNeedPreviousLesson(lessonDto.getNeedPreviousLesson());
-        lesson.setIsFree(lessonDto.getIsFree());
-        lesson.setContentVideoDuration(lessonDto.getContentVideoDuration());
-        lesson.setContentVideoUrl(lessonDto.getContentVideoUrl());
-        lesson.setContentText(lessonDto.getContentText());
-
-        return lesson;
     }
 
 }

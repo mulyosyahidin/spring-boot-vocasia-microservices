@@ -22,11 +22,15 @@ export const show = async (id) => {
 export const store = async (formData) => {
     const storeEndpoint = `${apiBaseUrl}${COURSES_CREATE_NEW_COURSE}`;
 
-    return await axiosPost({
+    const response= await axiosPost({
         url: storeEndpoint,
         data: JSON.stringify(formData),
         headers: {'Content-Type': 'application/json'}
     });
+
+    console.log('response', response);
+
+    return response;
 }
 
 export const update = async (id, formData) => {

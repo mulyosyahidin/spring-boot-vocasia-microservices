@@ -1,5 +1,6 @@
 package com.vocasia.enrollment.service.client;
 
+import com.vocasia.enrollment.dto.ResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import java.util.Map;
 public interface CourseFeignClient {
 
     @GetMapping(value = "/api/courses/{courseId}", consumes = "application/json")
-    public ResponseEntity<Map<String, Object>> getCourseById(@PathVariable("courseId") Long courseId);
+    public ResponseEntity<ResponseDto> findById(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                     @PathVariable("courseId") Long courseId);
 
 }

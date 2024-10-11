@@ -30,12 +30,12 @@ public class CategoryServiceImpl implements ICategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public List<Category> index() {
+    public List<Category> findAll() {
         return categoryRepository.findAll();
     }
 
     @Override
-    public Category show(Long id) {
+    public Category findById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
     }

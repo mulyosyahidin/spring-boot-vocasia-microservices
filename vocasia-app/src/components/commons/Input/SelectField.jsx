@@ -13,15 +13,14 @@ export const SelectField = ({
     return (
         <>
             {label && <label className="text-16 lh-1 fw-500 text-dark-1 mb-10">{label}</label>}
-            <select name={name} value={value} onChange={onChange} required={isRequired} className="input-box">
+            <select name={name} value={value} onChange={onChange} required={isRequired} className="input-box" defaultValue={selectedId}>
                 {
                     placeholder && <option disabled>{placeholder}</option>
                 }
-                {options.map(option => (
+                {options.map((option, i) => (
                     <option
-                        key={option.value}
+                        key={`select-option-${option.value}-${i}`}
                         value={option.value}
-                        selected={option.value === selectedId}
                     >{option.label}</option>
                 ))}
             </select>

@@ -309,29 +309,29 @@ export const Chapter = () => {
                                                 <div
                                                     key={index}
                                                     className={`accordion__item -dark-bg-dark-1 mt-10 ${
-                                                        currentOpenItem == `${index}` ? "is-active" : ""
+                                                        currentOpenItem === `${index}` ? "is-active" : ""
                                                     } `}
                                                 >
                                                     <div
                                                         className="accordion__button py-20 px-30 bg-light-4"
                                                         onClick={() =>
                                                             setCurrentOpenItem((pre) =>
-                                                                pre == `${index}` ? "" : `${index}`,
+                                                                pre === `${index}` ? "" : `${index}`,
                                                             )
                                                         }
                                                     >
                                                         <div className="d-flex items-center">
                                                             <div className="icon icon-drag mr-10"></div>
                                                             <span className="text-16 lh-14 fw-500 text-dark-1">
-                                                                {chapter.title}
+                                                                {chapter.chapter.title}
                                                             </span>
                                                         </div>
 
                                                         <div className="d-flex x-gap-10 items-center">
                                                             <a href="#" className="icon icon-edit mr-5"
-                                                               onClick={() => setCurrentEditedChapterId(chapter.id)}></a>
+                                                               onClick={() => setCurrentEditedChapterId(chapter.chapter.id)}></a>
                                                             <a href="#" className="icon icon-bin"
-                                                               onClick={() => confirmDeleteChapter(chapter.id)}></a>
+                                                               onClick={() => confirmDeleteChapter(chapter.chapter.id)}></a>
                                                             <div className="accordion__icon mr-0">
                                                                 <div
                                                                     className="d-flex items-center justify-center icon icon-chevron-down"></div>
@@ -344,7 +344,7 @@ export const Chapter = () => {
                                                     <div
                                                         className="accordion__content"
                                                         style={
-                                                            currentOpenItem == `${index}`
+                                                            currentOpenItem === `${index}`
                                                                 ? {maxHeight: "none"}
                                                                 : {}
                                                         }
@@ -354,7 +354,7 @@ export const Chapter = () => {
                                                                 className="d-flex x-gap-10 y-gap-10 flex-wrap justify-content-end">
                                                                 <div>
                                                                     <Link
-                                                                        to={`/instructor/courses/${id}/chapters/${chapter.id}/lessons`}
+                                                                        to={`/instructor/courses/${id}/chapters/${chapter.chapter.id}/lessons`}
                                                                         className="button -sm py-15 -purple-3 text-purple-1 fw-500"
                                                                     >
                                                                         Kelola Pelajaran

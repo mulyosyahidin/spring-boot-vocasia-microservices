@@ -20,6 +20,6 @@ public interface IUserService {
     User findById(Long id);
     List<User> getByRole(String role);
 
-    User updateProfile(Long id, UpdateProfileRequest updateUserRequest) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException;
+    User updateProfile(User user, UpdateProfileRequest updateUserRequest) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException;
 
 }

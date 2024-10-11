@@ -17,7 +17,7 @@ export default function Overview({course}) {
             >
                 <div
                     className="show-more__content "
-                    style={showMore ? {maxHeight: "370px"} : {}}
+                    style={showMore ? {maxHeight: "1000px"} : {}}
                 >
                     <div
                         dangerouslySetInnerHTML={{__html: course.description}}

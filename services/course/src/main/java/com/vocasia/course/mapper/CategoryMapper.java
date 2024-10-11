@@ -3,7 +3,6 @@ package com.vocasia.course.mapper;
 import com.vocasia.course.config.AwsConfigProperties;
 import com.vocasia.course.dto.data.CategoryDto;
 import com.vocasia.course.entity.Category;
-import com.vocasia.course.service.IInstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -37,7 +36,9 @@ public class CategoryMapper {
             List<CategoryDto> childrenDtos = category.getChildren().stream()
                     .map(CategoryMapper::mapToDto)
                     .collect(Collectors.toList());
+
             categoryDto.setChildren(childrenDtos);
+            categoryDto.setChildrenCount(childrenDtos.size());
         } else {
             categoryDto.setChildren(new ArrayList<>());
         }
@@ -52,24 +53,36 @@ public class CategoryMapper {
         return categoryDto;
     }
 
-    public static Category mapToEntity(CategoryDto dto) {
-        Category category = new Category();
+    public static CategoryDto mapToDto(Category category, Boolean includeChildren) {
+        CategoryDto categoryDto = new CategoryDto();
 
-        category.setId(dto.getId());
-        category.setName(dto.getName());
-        category.setIcon(dto.getIcon());
-        category.setSlug(dto.getSlug());
-        category.setCreatedAt(dto.getCreatedAt());
-        category.setUpdatedAt(dto.getUpdatedAt());
+        categoryDto.setId(category.getId());
+        categoryDto.setParentId(category.getParent() != null ? category.getParent().getId() : null);
+        categoryDto.setName(category.getName());
+        categoryDto.setIcon(category.getIcon());
+        categoryDto.setSlug(category.getSlug());
+        categoryDto.setCreatedAt(category.getCreatedAt());
+        categoryDto.setUpdatedAt(category.getUpdatedAt());
 
-        if (dto.getChildren() != null) {
-            List<Category> childrenEntities = dto.getChildren().stream()
-                    .map(CategoryMapper::mapToEntity)
+        if (category.getChildren() != null && includeChildren) {
+            List<CategoryDto> childrenDtos = category.getChildren().stream()
+                    .map(CategoryMapper::mapToDto)
                     .collect(Collectors.toList());
-            category.setChildren(childrenEntities);
+
+            categoryDto.setChildren(childrenDtos);
+            categoryDto.setChildrenCount(childrenDtos.size());
+        } else {
+            categoryDto.setChildren(new ArrayList<>());
         }
 
-        return category;
+        if (category.getIcon() != null) {
+            String bucketUrl = String.format("https://%s.s3.%s.amazonaws.com/", awsConfigProperties.getS3().getBucket(), awsConfigProperties.getS3().getRegion());
+            String iconUrl = bucketUrl + category.getIcon();
+
+            categoryDto.setIconUrl(iconUrl);
+        }
+
+        return categoryDto;
     }
 
 }

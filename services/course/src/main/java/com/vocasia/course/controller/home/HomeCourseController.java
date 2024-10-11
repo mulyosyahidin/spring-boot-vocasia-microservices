@@ -1,23 +1,24 @@
 package com.vocasia.course.controller.home;
 
 import com.vocasia.course.dto.ResponseDto;
+import com.vocasia.course.dto.feign.InstructorDto;
 import com.vocasia.course.entity.Category;
 import com.vocasia.course.entity.Chapter;
 import com.vocasia.course.entity.Course;
+import com.vocasia.course.exception.CustomFeignException;
 import com.vocasia.course.mapper.CategoryMapper;
 import com.vocasia.course.mapper.ChapterMapper;
 import com.vocasia.course.mapper.CourseMapper;
-import com.vocasia.course.service.ICategoryService;
-import com.vocasia.course.service.IChapterService;
-import com.vocasia.course.service.ICourseService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.vocasia.course.mapper.LessonMapper;
+import com.vocasia.course.service.*;
+import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,17 +26,22 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @Validated
-@Tag(name = "Course Controller", description = "Controller untuk kursus yang ditampilkan di publik")
 public class HomeCourseController {
+
+    private final Logger logger = LoggerFactory.getLogger(HomeCourseController.class);
 
     private final ICourseService courseService;
     private final ICategoryService categoryService;
     private final IChapterService chapterService;
+    private final IInstructorService instructorService;
+    private final ILessonService lessonService;
 
-    public HomeCourseController(ICourseService courseService, ICategoryService categoryService, IChapterService chapterService) {
-        this.courseService = courseService;
-        this.categoryService = categoryService;
-        this.chapterService = chapterService;
+    public HomeCourseController(ICourseService iCourseService, ICategoryService iCategoryService, IChapterService iChapterService, IInstructorService iInstructorService, ILessonService iLessonService) {
+        this.courseService = iCourseService;
+        this.categoryService = iCategoryService;
+        this.chapterService = iChapterService;
+        this.instructorService = iInstructorService;
+        this.lessonService = iLessonService;
     }
 
     @GetMapping("/public/categories")
@@ -49,33 +55,99 @@ public class HomeCourseController {
     }
 
     @GetMapping("/public/editor-choices")
-    public ResponseEntity<ResponseDto> getEditorsChoices() {
+    public ResponseEntity<ResponseDto> getEditorsChoices(@RequestHeader("vocasia-correlation-id") String correlationId) {
+        logger.debug("HomeCourseController.getEditorsChoices called");
+
         List<Course> courses = courseService.getEditorsChoices();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("courses", courses.stream().map(CourseMapper::mapToDto));
+        List<Map<String, Object>> coursesData = new ArrayList<>();
 
-        return ResponseEntity.ok(new ResponseDto(true, "Berhasil menampilkan data kursus", response, null));
+        for (Course course : courses) {
+            Map<String, Object> courseData = new HashMap<>();
+
+            courseData.put("course", CourseMapper.mapToDto(course));
+            courseData.put("category", CategoryMapper.mapToDto(course.getCategory(), false));
+            courseData.put("instructor", instructorService.getInstructorById(course.getInstructorId(), correlationId));
+
+            coursesData.add(courseData);
+        }
+
+        response.put("courses", coursesData);
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil menampilkan data kursus", response, null));
     }
 
     @GetMapping("/public/{slug}/{courseId}/overview")
-    public ResponseEntity<ResponseDto> getOverview(@PathVariable String slug, @PathVariable Long courseId) {
-        Course course = courseService.show(courseId);
+    public ResponseEntity<ResponseDto> getCourseOverview(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                         @PathVariable String slug, @PathVariable Long courseId) {
+        logger.debug("HomeCourseController.getCourseOverview called");
+
+        Course course = courseService.findById(courseId);
+        List<Chapter> chapters = chapterService.findAllByCourseId(course);
 
         Map<String, Object> response = new HashMap<>();
         response.put("course", CourseMapper.mapToDto(course));
+        response.put("category", CategoryMapper.mapToDto(course.getCategory(), false));
 
-        return ResponseEntity.ok(new ResponseDto(true, "Berhasil menampilkan data kursus", response, null));
+        List<Map<String, Object>> chaptersData = new ArrayList<>();
+
+        for (Chapter chapter : chapters) {
+            Map<String, Object> chapterData = new HashMap<>();
+
+            chapterData.put("chapter", ChapterMapper.mapToDto(chapter));
+            chapterData.put("lessons", lessonService.findAllByChapterId(chapter.getId()).stream().map(LessonMapper::mapToDto));
+
+            chaptersData.add(chapterData);
+        }
+
+        response.put("chapters", chaptersData);
+
+        try {
+            InstructorDto getInstructorById = instructorService.getInstructorById(course.getInstructorId(), correlationId);
+
+            response.put("instructor", getInstructorById);
+        } catch (CustomFeignException e) {
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(org.apache.hc.core5.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, e.getMessage(), null, null));
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil menampilkan data kursus", response, null));
     }
 
     @GetMapping("/public/{slug}/{courseId}/chapters")
     public ResponseEntity<ResponseDto> getChapters(@PathVariable String slug, @PathVariable Long courseId) {
-        List<Chapter> chapters = chapterService.index(courseId);
+        logger.debug("HomeCourseController.getChapters called");
+
+        Course course = courseService.findById(courseId);
+        List<Chapter> chapters = chapterService.findAllByCourseId(course);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("chapters", chapters.stream().map(ChapterMapper::mapToDto));
+        List<Map<String, Object>> chaptersData = new ArrayList<>();
 
-        return ResponseEntity.ok(new ResponseDto(true, "Berhasil menampilkan data kursus", response, null));
+        for (Chapter chapter : chapters) {
+            Map<String, Object> chapterData = new HashMap<>();
+
+            chapterData.put("chapter", ChapterMapper.mapToDto(chapter));
+            chapterData.put("lessons", lessonService.findAllByChapterId(chapter.getId()).stream().map(LessonMapper::mapToDto));
+
+            chaptersData.add(chapterData);
+        }
+
+        response.put("chapters", chaptersData);
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil menampilkan chapter kursus", response, null));
     }
 
 }

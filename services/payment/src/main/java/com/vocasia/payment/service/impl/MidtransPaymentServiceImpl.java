@@ -2,14 +2,11 @@ package com.vocasia.payment.service.impl;
 
 import com.midtrans.Config;
 import com.midtrans.ConfigFactory;
-import com.midtrans.Midtrans;
-import com.midtrans.httpclient.SnapApi;
 import com.midtrans.httpclient.error.MidtransError;
 import com.midtrans.service.MidtransSnapApi;
-import com.midtrans.service.impl.MidtransSnapApiImpl;
 import com.vocasia.payment.config.MidtransConfigProperties;
-import com.vocasia.payment.service.IMidtransPaymentService;
 import com.vocasia.payment.request.CreateOrderPaymentRequest;
+import com.vocasia.payment.service.IMidtransPaymentService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

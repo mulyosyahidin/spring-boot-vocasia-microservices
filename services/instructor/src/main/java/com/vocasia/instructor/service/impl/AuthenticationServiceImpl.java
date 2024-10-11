@@ -1,8 +1,8 @@
 package com.vocasia.instructor.service.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vocasia.instructor.dto.feign.UserDto;
+import com.vocasia.instructor.dto.ResponseDto;
+import com.vocasia.instructor.dto.client.authentication.UserDto;
 import com.vocasia.instructor.exception.CustomFeignException;
 import com.vocasia.instructor.request.RegisterRequest;
 import com.vocasia.instructor.request.UpdateProfileRequest;
@@ -15,8 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -30,131 +28,97 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     @Override
     public UserDto registerNewUser(RegisterRequest registerRequest, String correlationId) {
         try {
-            ResponseEntity<Map<String, Object>> registerNewUserResponseEntity = authenticationFeignClient.register(correlationId, registerRequest);
-            logger.info("registerNewUserResponseEntity: {}", registerNewUserResponseEntity);
+            ResponseEntity<ResponseDto> authenticationFeignClientRegisterResponseEntity = authenticationFeignClient.register(correlationId, registerRequest);
+            ResponseDto responseBody = authenticationFeignClientRegisterResponseEntity.getBody();
 
-            Map<String, Object> responseBody = registerNewUserResponseEntity.getBody();
+            assert responseBody != null;
+            Map<String, Object> data = (Map<String, Object>) responseBody.getData();
+            Map<String, Object> user = data != null ? (Map<String, Object>) data.get("user") : null;
 
-            if (responseBody != null && responseBody.get("success") != null && (Boolean) responseBody.get("success")) {
-                Map<String, Object> data = (Map<String, Object>) responseBody.get("data");
+            logger.debug("AuthenticationServiceImpl.registerNewUser() $user:: {}", user);
 
-                if (data != null) {
-                    Map<String, Object> user = (Map<String, Object>) data.get("user");
+            UserDto userDto = new UserDto();
 
-                    UserDto userDto = new UserDto();
-
-                    userDto.setId(Long.parseLong(user.get("id").toString()));
-                    userDto.setUid(user.get("uid").toString());
-                    userDto.setEmail(user.get("email").toString());
-                    userDto.setUsername(user.get("username").toString());
-                    userDto.setName(user.get("name").toString());
-                    userDto.setRole(user.get("role").toString());
-                    userDto.setProfilePicture(user.get("profile_picture") != null ? user.get("profile_picture").toString() : null);
-                    userDto.setProfilePictureUrl(user.get("profile_picture") != null ? user.get("profile_picture_url").toString() : null);
-                    userDto.setCreatedAt(LocalDateTime.parse(user.get("created_at").toString()));
-                    userDto.setUpdatedAt(LocalDateTime.parse(user.get("updated_at").toString()));
-
-                    return userDto;
-                }
-            } else {
-                logger.warn("Registration failed: {}", responseBody != null ? responseBody.get("message") : "No response body");
+            if (user != null) {
+                userDto.setId(Long.parseLong(user.get("id").toString()));
+                userDto.setEmail(user.get("email").toString());
+                userDto.setUsername(user.get("username").toString());
+                userDto.setName(user.get("name").toString());
+                userDto.setRole(user.get("role").toString());
+                userDto.setProfilePicture(user.get("profile_picture") != null ? user.get("profile_picture").toString() : null);
+                userDto.setProfilePictureUrl(user.get("profile_picture") != null ? user.get("profile_picture_url").toString() : null);
             }
 
-            return null;
+            return userDto;
         } catch (FeignException e) {
-            try {
-                Map<String, Object> responseBody = new ObjectMapper().readValue(e.contentUTF8(), new TypeReference<Map<String, Object>>() {});
-                Object errors = responseBody.get("errors");
-
-                throw new CustomFeignException("Validation error", errors);
-            } catch (IOException ioException) {
-                throw new RuntimeException("Failed to parse error response", ioException);
-            }
+            throw new CustomFeignException(e, new ObjectMapper());
         }
     }
 
     @Override
-    public UserDto getByUserId(Long userId) {
+    public UserDto getByUserId(Long userId, String correlationId) {
         try {
-            ResponseEntity<Map<String, Object>> getUserProfileByUserIdResponseEntity = authenticationFeignClient.getUserById(userId);
-            logger.info("getUserProfileByUserIdResponseEntity: {}", getUserProfileByUserIdResponseEntity);
+            ResponseEntity<ResponseDto> authenticationFeignClientGetUserByIdResponseEntity = authenticationFeignClient.getUserById(correlationId, userId);
+            ResponseDto responseBody = authenticationFeignClientGetUserByIdResponseEntity.getBody();
 
-            Map<String, Object> responseBody = getUserProfileByUserIdResponseEntity.getBody();
+            assert responseBody != null;
+            Map<String, Object> data = (Map<String, Object>) responseBody.getData();
+            Map<String, Object> user = data != null ? (Map<String, Object>) data.get("user") : null;
 
-            if (responseBody != null && responseBody.get("success") != null && (Boolean) responseBody.get("success")) {
-                Map<String, Object> data = (Map<String, Object>) responseBody.get("data");
+            logger.debug("AuthenticationServiceImpl.getByUserId() $user:: {}", user);
 
-                if (data != null) {
-                    Map<String, Object> user = (Map<String, Object>) data.get("user");
+            UserDto userDto = new UserDto();
 
-                    UserDto userDto = new UserDto();
-
-                    userDto.setId(Long.parseLong(user.get("id").toString()));
-                    userDto.setUid(user.get("uid").toString());
-                    userDto.setEmail(user.get("email").toString());
-                    userDto.setUsername(user.get("username").toString());
-                    userDto.setName(user.get("name").toString());
-                    userDto.setRole(user.get("role").toString());
-                    userDto.setProfilePicture(user.get("profile_picture") != null ? user.get("profile_picture").toString() : null);
-                    userDto.setProfilePictureUrl(user.get("profile_picture") != null ? user.get("profile_picture_url").toString() : null);
-                    userDto.setCreatedAt(LocalDateTime.parse(user.get("created_at").toString()));
-                    userDto.setUpdatedAt(LocalDateTime.parse(user.get("updated_at").toString()));
-
-                    return userDto;
-                }
-            } else {
-                logger.warn("get user profile by user id failed: {}", responseBody != null ? responseBody.get("message") : "No response body");
+            if (user != null) {
+                userDto.setId(Long.parseLong(user.get("id").toString()));
+                userDto.setEmail(user.get("email").toString());
+                userDto.setUsername(user.get("username").toString());
+                userDto.setName(user.get("name").toString());
+                userDto.setRole(user.get("role").toString());
+                userDto.setProfilePicture(user.get("profile_picture") != null ? user.get("profile_picture").toString() : null);
+                userDto.setProfilePictureUrl(user.get("profile_picture") != null ? user.get("profile_picture_url").toString() : null);
             }
 
-            return null;
+            return userDto;
         } catch (FeignException e) {
-            throw new RuntimeException("Failed to parse error response", e);
+            throw new CustomFeignException(e, new ObjectMapper());
         }
     }
 
     @Override
-    public UserDto updateProfile(UpdateProfileRequest updateProfileRequest) {
+    public UserDto updateProfile(UpdateProfileRequest updateProfileRequest, String correlationId) {
         try {
-            logger.info("Profile picture: {}", updateProfileRequest.getProfilePicture());
-            ResponseEntity<Map<String, Object>> updateProfileResponseEntity = authenticationFeignClient.updateUser(updateProfileRequest.getUserId(),
+            ResponseEntity<ResponseDto> authenticationFeignClientUpdateUserResponseEntity = authenticationFeignClient.updateUser(
+                    correlationId,
+                    updateProfileRequest.getUserId(),
                     updateProfileRequest.getProfilePicture(),
                     updateProfileRequest.getName(),
                     updateProfileRequest.getEmail(),
                     updateProfileRequest.getPassword()
-                    );
+            );
+            ResponseDto responseBody = authenticationFeignClientUpdateUserResponseEntity.getBody();
 
-            logger.info("updateProfileResponseEntity: {}", updateProfileResponseEntity);
+            assert responseBody != null;
+            Map<String, Object> data = (Map<String, Object>) responseBody.getData();
+            Map<String, Object> user = data != null ? (Map<String, Object>) data.get("user") : null;
 
-            Map<String, Object> responseBody = updateProfileResponseEntity.getBody();
+            logger.debug("AuthenticationServiceImpl.updateProfile() $user:: {}", user);
 
-            if (responseBody != null && responseBody.get("success") != null && (Boolean) responseBody.get("success")) {
-                Map<String, Object> data = (Map<String, Object>) responseBody.get("data");
+            UserDto userDto = new UserDto();
 
-                if (data != null) {
-                    Map<String, Object> user = (Map<String, Object>) data.get("user");
-
-                    UserDto userDto = new UserDto();
-
-                    userDto.setId(Long.parseLong(user.get("id").toString()));
-                    userDto.setUid(user.get("uid").toString());
-                    userDto.setEmail(user.get("email").toString());
-                    userDto.setUsername(user.get("username").toString());
-                    userDto.setName(user.get("name").toString());
-                    userDto.setRole(user.get("role").toString());
-                    userDto.setProfilePicture(user.get("profile_picture") != null ? user.get("profile_picture").toString() : null);
-                    userDto.setProfilePictureUrl(user.get("profile_picture") != null ? user.get("profile_picture_url").toString() : null);
-                    userDto.setCreatedAt(LocalDateTime.parse(user.get("created_at").toString()));
-                    userDto.setUpdatedAt(LocalDateTime.parse(user.get("updated_at").toString()));
-
-                    return userDto;
-                }
-            } else {
-                logger.warn("update profile failed: {}", responseBody != null ? responseBody.get("message") : "No response body");
+            if (user != null) {
+                userDto.setId(Long.parseLong(user.get("id").toString()));
+                userDto.setEmail(user.get("email").toString());
+                userDto.setUsername(user.get("username").toString());
+                userDto.setName(user.get("name").toString());
+                userDto.setRole(user.get("role").toString());
+                userDto.setProfilePicture(user.get("profile_picture") != null ? user.get("profile_picture").toString() : null);
+                userDto.setProfilePictureUrl(user.get("profile_picture") != null ? user.get("profile_picture_url").toString() : null);
             }
 
-            return null;
+            return userDto;
         } catch (FeignException e) {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new CustomFeignException(e, new ObjectMapper());
         }
     }
 

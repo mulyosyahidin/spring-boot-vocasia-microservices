@@ -5,9 +5,9 @@ import com.vocasia.payment.request.CreateOrderPaymentRequest;
 
 public interface IPaymentService {
 
-    Payment createPayment(String snapToken, CreateOrderPaymentRequest createOrderPaymentRequest);
-    Payment getPaymentByOrderId(Long orderId);
-    Payment getByOrderNumber(String snapToken);
+    Payment save(String snapToken, CreateOrderPaymentRequest createOrderPaymentRequest);
+    Payment findByOrderId(Long orderId);
+    Payment findByOrderNumber(String snapToken);
     void updatePaymentStatus(Payment payment, String status);
 
 }

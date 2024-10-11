@@ -89,4 +89,12 @@ public class GlobalExceptionHandler {
         ResponseDto responseDto = new ResponseDto(false, "Internal server error", data, null);
         return new ResponseEntity<>(responseDto, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(CustomFeignException.class)
+    public ResponseEntity<ResponseDto> handleCustomFeignException(CustomFeignException ex) {
+        ResponseDto responseDto = new ResponseDto(false, ex.getMessage(), null, ex.getErrors());
+
+        return ResponseEntity.unprocessableEntity().body(responseDto);
+    }
+
 }

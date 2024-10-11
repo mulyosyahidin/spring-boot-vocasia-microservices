@@ -6,27 +6,11 @@ import {lessonItems} from "../data/about-course.js";
 import ModalVideoComponent from "../../../../components/commons/ModalVideo.jsx";
 import {getCourseContents} from "../../../../services/courses/public-course.js";
 
-export default function CourseContent({course}) {
+export default function CourseContent({chapters, course}) {
     const [activeItemId, setActiveItemId] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
 
-    const [loading, setLoading] = useState(true);
-    const [chapters, setChapters] = useState({});
-
-    useEffect(() => {
-        const fetchInitialData = async () => {
-            try {
-                const getContents = await getCourseContents(course.slug, course.id);
-                setChapters(getContents);
-            } catch (e) {
-                console.log(e);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        fetchInitialData();
-    }, []);
+    const [loading, setLoading] = useState(false);
 
     return (
         <>
@@ -49,16 +33,16 @@ export default function CourseContent({course}) {
                     {
                         !loading && (
                             <div className="accordion -block-2 text-left js-accordion">
-                                {chapters.map((chapter, i) => (
+                                {chapters.map((item, i) => (
                                     <div
                                         key={i}
                                         className={`accordion__item ${
-                                            activeItemId === chapter.id ? "is-active" : ""
+                                            activeItemId === item.chapter.id ? "is-active" : ""
                                         } `}
                                     >
                                         <div
                                             onClick={() =>
-                                                setActiveItemId((pre) => (pre === chapter.id ? 0 : chapter.id))
+                                                setActiveItemId((pre) => (pre === item.chapter.id ? 0 : item.chapter.id))
                                             }
                                             className="accordion__button py-20 px-30 bg-light-4"
                                         >
@@ -72,22 +56,22 @@ export default function CourseContent({course}) {
                                                     </div>
                                                 </div>
                                                 <span className="text-17 fw-500 text-dark-1">
-                                                    {chapter.title}
+                                                    {item.chapter.title}
                                                 </span>
                                             </div>
 
                                             <div>
-                                                {chapter.lesson_count} pelajaran • {chapter.total_duration} durasi
+                                                {item.chapter.lesson_count} pelajaran • {item.chapter.total_duration} durasi
                                             </div>
                                         </div>
 
                                         <div
                                             className="accordion__content"
-                                            style={activeItemId === chapter.id ? {maxHeight: "700px"} : {}}
+                                            style={activeItemId === item.chapter.id ? {maxHeight: "700px"} : {}}
                                         >
                                             <div className="accordion__content__inner px-30 py-30">
                                                 <div className="y-gap-20">
-                                                    {chapter.lessons.map((lesson, index) => (
+                                                    {item.lessons.map((lesson, index) => (
                                                         <div key={index} className="d-flex justify-between">
                                                             <div className="d-flex items-center">
                                                                 <div

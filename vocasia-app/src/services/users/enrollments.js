@@ -11,6 +11,8 @@ const getUserData = JSON.parse(localStorage.getItem(AUTH_USER));
 export const getAllEnrollments = async () => {
     let endpoint = `${apiBaseUrl}${USER_ENROLLMENT_GET_ALL}`;
 
+    console.log(getUserData)
+
     const response = await axiosGet({
         url: endpoint,
         headers: {
@@ -37,7 +39,7 @@ export const getEnrollmentDataById = async (enrollmentId) => {
     });
 
     if (response.success) {
-        return response.data.enrollment;
+        return response.data;
     } else {
         throw new Error(response.message);
     }

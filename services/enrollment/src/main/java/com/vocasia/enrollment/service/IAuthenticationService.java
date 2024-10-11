@@ -4,6 +4,6 @@ import com.vocasia.enrollment.dto.client.authentication.UserDto;
 
 public interface IAuthenticationService {
 
-    UserDto getUserById(Long userId);
+    UserDto getByUserId(Long userId, String correlationId);
 
 }

@@ -1,8 +1,7 @@
 package com.vocasia.gatewayserver.filters;
 
-import org.springframework.stereotype.Component;
-
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
 import java.util.List;
@@ -11,6 +10,7 @@ import java.util.List;
 public class FilterUtility {
 
     public static final String CORRELATION_ID = "vocasia-correlation-id";
+    public static final String RESPONSE_TIME_HEADER = "X-Response-Time";
 
     public String getCorrelationId(HttpHeaders requestHeaders) {
         if (requestHeaders.get(CORRELATION_ID) != null) {

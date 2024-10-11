@@ -21,18 +21,18 @@ public class RunAfterStartup {
     private final Logger logger = LoggerFactory.getLogger(RunAfterStartup.class);
 
     private final IUserService userService;
-    private final IKeyCloackService iKeyCloackService;
+    private final IKeyCloackService keyCloackService;
     private final DefaultAdminConfig defaultAdminConfig;
 
-    public RunAfterStartup(IUserService userService, IKeyCloackService iKeyCloackService, DefaultAdminConfig defaultAdminConfig) {
-        this.userService = userService;
-        this.iKeyCloackService = iKeyCloackService;
+    public RunAfterStartup(IUserService iUserService, IKeyCloackService iKeyCloackService, DefaultAdminConfig defaultAdminConfig) {
+        this.userService = iUserService;
+        this.keyCloackService = iKeyCloackService;
         this.defaultAdminConfig = defaultAdminConfig;
     }
 
     @EventListener(ApplicationReadyEvent.class)
     public void runAfterStartup() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        System.out.println("Checking admin user...");
+       logger.debug("Checking if admin user exists...");
 
         List<User> users = userService.getByRole("admin");
 
@@ -47,7 +47,7 @@ public class RunAfterStartup {
             registerRequest.setPassword(defaultAdminConfig.getAdmin().getPassword());
             registerRequest.setRole("admin");
 
-            String registeredKeycloackId = iKeyCloackService.registerNewUser(
+            String registeredKeycloackId = keyCloackService.registerNewUser(
                     registerRequest.getEmail(),
                     registerRequest.getUsername(),
                     registerRequest.getPassword(),

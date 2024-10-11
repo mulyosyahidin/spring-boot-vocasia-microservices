@@ -4,6 +4,6 @@ import com.vocasia.enrollment.dto.client.course.CourseDto;
 
 public interface ICourseService {
 
-    CourseDto getCourseById(Long courseId);
+    CourseDto findById(Long courseId, String correlationId);
 
 }

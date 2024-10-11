@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -23,8 +22,6 @@ public class ChapterDto {
 
     @JsonProperty("lesson_count")
     Integer lessonCount = 0;
-
-    List<LessonDto> lessons;
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;

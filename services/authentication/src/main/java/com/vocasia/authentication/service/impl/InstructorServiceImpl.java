@@ -1,10 +1,12 @@
 package com.vocasia.authentication.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocasia.authentication.dto.ResponseDto;
 import com.vocasia.authentication.dto.client.InstructorDto;
 import com.vocasia.authentication.exception.CustomFeignException;
 import com.vocasia.authentication.service.IInstructorService;
 import com.vocasia.authentication.service.client.InstructorFeignClient;
+import feign.FeignException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +40,13 @@ public class InstructorServiceImpl implements IInstructorService {
             if (instructor != null) {
                 instructorDto.setId((Integer) instructor.get("id"));
                 instructorDto.setStatus((String) instructor.get("status"));
-                instructorDto.setStatus((String) instructor.get("summary"));
+                instructorDto.setSummary((String) instructor.get("summary"));
                 instructorDto.setPhoneNumber((String) instructor.get("phone_number"));
             }
 
             return instructorDto;
-        } catch (Exception e) {
-            throw new RuntimeException("InstructorServiceImpl.getInstructorByUserId() Exception:: " + e.getMessage(), e);
+        } catch (FeignException e) {
+            throw new CustomFeignException(e, new ObjectMapper());
         }
     }
 }

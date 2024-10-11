@@ -57,3 +57,6 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 10/10/2024:
 1. Menyelesaikan: Loggin and Monitoring System
 2. Menyelesaikan: Setup Migrasi Database dangan FlyWay
+
+11/10/2024:
+1. Improving Code Quality and Consistency

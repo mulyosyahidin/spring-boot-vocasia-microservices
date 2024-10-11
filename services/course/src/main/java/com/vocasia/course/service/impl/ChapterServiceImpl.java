@@ -19,12 +19,12 @@ public class ChapterServiceImpl implements IChapterService {
     private final ChapterRepository chapterRepository;
 
     @Override
-    public List<Chapter> index(Long courseId) {
-        return chapterRepository.findAllByCourseId(courseId);
+    public List<Chapter> findAllByCourseId(Course course) {
+        return chapterRepository.findAllByCourseId(course.getId());
     }
 
     @Override
-    public Chapter store(Course course, CreateChapterRequest createChapterRequest) {
+    public Chapter save(Course course, CreateChapterRequest createChapterRequest) {
         Chapter chapter = new Chapter();
 
         chapter.setCourse(course);
@@ -35,7 +35,7 @@ public class ChapterServiceImpl implements IChapterService {
     }
 
     @Override
-    public Chapter show(Long chapterId) {
+    public Chapter findById(Long chapterId) {
         return chapterRepository.findById(chapterId)
                 .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
     }
@@ -49,7 +49,7 @@ public class ChapterServiceImpl implements IChapterService {
     }
 
     @Override
-    public void delete(Chapter chapter) {
+    public void deleteById(Chapter chapter) {
         chapterRepository.delete(chapter);
     }
 }

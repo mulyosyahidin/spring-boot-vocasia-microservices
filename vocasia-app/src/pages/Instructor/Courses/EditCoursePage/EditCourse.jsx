@@ -14,6 +14,8 @@ export const EditCourse = () => {
     const {id} = useParams();
 
     const [course, setCourse] = useState();
+    const [instructor, setInstructor] = useState();
+    const [category, setCategory] = useState();
 
     const [categories, setCategories] = useState([]);
     const [levels, setLevels] = useState([]);
@@ -57,25 +59,27 @@ export const EditCourse = () => {
                 };
                 setLanguages(Object.entries(languages).map(([key, value]) => ({value: key, label: value})));
 
-                const getCourse = await findCourseById(id);
-                const course = getCourse.course;
+                const getCourseData = await findCourseById(id);
 
-                setCourse(course);
+                setCourse(getCourseData.course);
+                setInstructor(getCourseData.instructor);
+                setCategory(getCourseData.category);
 
                 setFormData({
-                    title: course.title,
-                    category_id: course.category_id,
-                    short_description: course.short_description,
-                    price: course.price,
-                    discount: course.discount,
-                    level: course.level,
-                    total_duration: course.total_duration,
+                    title: getCourseData.course.title,
+                    category_id: getCourseData.course.category_id,
+                    short_description: getCourseData.course.short_description,
+                    price: getCourseData.course.price,
+                    discount: getCourseData.course.discount,
+                    level: getCourseData.course.level,
+                    language: getCourseData.course.language,
+                    total_duration: getCourseData.course.total_duration,
                 });
 
-                setCategories(organizeCategories(categoriesData, course.category.id));
+                setCategories(organizeCategories(categoriesData, getCourseData.category.id));
 
-                shortDescriptionEditorRef.current.setContent(course.short_description);
-                descriptionEditorRef.current.setContent(course.description);
+                shortDescriptionEditorRef.current.setContent(getCourseData.course.short_description);
+                descriptionEditorRef.current.setContent(getCourseData.course.description);
             } catch (error) {
                 console.error('Error fetching initial data:', error);
             }
@@ -179,7 +183,7 @@ export const EditCourse = () => {
                                         onChange={handleChange}
                                         error={errors.category}
                                         placeholder="Pilih kategori"
-                                        selectedId={course ? course.category.id : null}
+                                        selectedId={course ? category.id : null}
                                         isRequired={true}
                                     />
                                 </div>

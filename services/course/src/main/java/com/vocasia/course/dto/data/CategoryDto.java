@@ -23,11 +23,15 @@ public class CategoryDto {
     @JsonProperty("icon_url")
     private String iconUrl;
 
+    private List<CategoryDto> children;
+
+    @JsonProperty("children_count")
+    private int childrenCount;
+
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
 
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
-    private List<CategoryDto> children;
 
 }

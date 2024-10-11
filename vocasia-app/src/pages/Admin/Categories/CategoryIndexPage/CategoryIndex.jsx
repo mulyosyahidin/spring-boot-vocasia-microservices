@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {deleteCategoryById, getAdminCategories} from "../../../../services/courses/admin-category-service.js";
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../../../states/contexts/AuthContext.jsx";
+import {Pagination} from "./partials/Pagination.jsx";
 
 export const CategoryIndex = () => {
     const {sweetAlert} = useContext(AuthContext);
@@ -70,6 +71,7 @@ export const CategoryIndex = () => {
                                     <tr>
                                         <th scope="col">No</th>
                                         <th scope="col">Nama Kategori</th>
+                                        <th scope="col" className={'text-center'}>Jumlah Child</th>
                                         <th scope="col"></th>
                                     </tr>
                                     </thead>
@@ -79,12 +81,15 @@ export const CategoryIndex = () => {
                                             <tr key={category.id}>
                                                 <td>{index + 1}</td>
                                                 <td>{category.name}</td>
+                                                <td className={'text-center'}>{category.children_count}</td>
                                                 <td>
                                                     <div className="d-flex justify-content-end">
-                                                        <Link to={`/admin/categories/${category.id}/edit`} className="button -sm -purple-1 text-white">
+                                                        <Link to={`/admin/categories/${category.id}/edit`}
+                                                              className="button -sm -purple-1 text-white">
                                                             Edit
                                                         </Link>
-                                                        <a className={'button -sm -purple-1 text-white ml-5'} href={'#'} onClick={() => confirmDelete(category.id)}>
+                                                        <a className={'button -sm -purple-1 text-white ml-5'} href={'#'}
+                                                           onClick={() => confirmDelete(category.id)}>
                                                             Hapus
                                                         </a>
                                                     </div>

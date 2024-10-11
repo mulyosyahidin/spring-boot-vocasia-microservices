@@ -1,5 +1,5 @@
 import axios from "axios";
-import {AUTH_ACCESS_TOKEN, AUTH_REFRESH_TOKEN} from "../config/consts.js";
+import {AUTH_ACCESS_TOKEN} from "../config/consts.js";
 
 export const axiosGet = async ({url, headers = {}, includeAuthentication = true}) => {
     const accessToken = localStorage.getItem(AUTH_ACCESS_TOKEN);

@@ -44,7 +44,7 @@ export const CourseCheckout = () => {
                     text: 'Berhasil membuat order, silahkan lakukan pembayaran dalam 24 jam.',
                     icon: 'success',
                 }).then(() => {
-                   // setCart([]);
+                   setCart([]);
                     navigate(`/users/orders/${order.order.id}`);
                 });
             }

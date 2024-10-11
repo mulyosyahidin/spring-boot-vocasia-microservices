@@ -68,6 +68,9 @@ export const LoginForm = () => {
                 else if (user.role === ADMIN) {
                     navigate('/admin');
                 }
+                else if (user.role === STUDENT) {
+                    navigate('/users');
+                }
             }, 5000);
         }
     };

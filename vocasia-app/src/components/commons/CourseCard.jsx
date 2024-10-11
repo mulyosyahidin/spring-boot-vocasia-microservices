@@ -21,7 +21,7 @@ export const CourseCard = ({data, index}) => {
                             <img
                                 style={{height: "100%", width: "100%"}}
                                 className="w-1/1"
-                                src={data.featured_picture_url}
+                                src={data.course.featured_picture_url}
                                 alt="image"
                             />
                             <div className="coursesCard__image_overlay rounded-8"></div>
@@ -32,19 +32,19 @@ export const CourseCard = ({data, index}) => {
                     <div className="h-100 pt-15">
                         {/*<div className="d-flex items-center">*/}
                         {/*    <div className="text-14 lh-1 text-yellow-1 mr-10">*/}
-                        {/*        {data.rating}*/}
+                        {/*        {data.course.rating}*/}
                         {/*    </div>*/}
                         {/*    <div className="d-flex x-gap-5 items-center">*/}
                         {/*        {rating.map((itm, i) => (*/}
                         {/*            <div key={i} className="icon-star text-9 text-yellow-1"></div>*/}
                         {/*        ))}*/}
                         {/*    </div>*/}
-                        {/*    <div className="text-13 lh-1 ml-10">({data.ratingCount})</div>*/}
+                        {/*    <div className="text-13 lh-1 ml-10">({data.course.rating_count})</div>*/}
                         {/*</div>*/}
 
                         <div className="text-17 lh-15 fw-500 text-dark-1 mt-10" style={{minHeight: "60px"}}>
-                            <Link className="linkCustom" to={`/courses/${data.slug}/${data.id}`}>
-                                {data.title}
+                            <Link className="linkCustom" to={`/courses/${data.course.slug}/${data.course.id}`}>
+                                {data.course.title}
                             </Link>
                         </div>
 
@@ -53,21 +53,21 @@ export const CourseCard = ({data, index}) => {
                                 <div className="mr-8">
                                     <img src="assets/img/coursesCards/icons/1.svg" alt="icon"/>
                                 </div>
-                                <div className="text-14 lh-1">{data.lesson_count} pelajaran</div>
+                                <div className="text-14 lh-1">{data.course.lesson_count} pelajaran</div>
                             </div>
 
                             <div className="d-flex items-center">
                                 <div className="mr-8">
                                     <img src="assets/img/coursesCards/icons/2.svg" alt="icon"/>
                                 </div>
-                                <div className="text-14 lh-1">{data.total_duration}</div>
+                                <div className="text-14 lh-1">{data.course.total_duration}</div>
                             </div>
 
                             <div className="d-flex items-center">
                                 <div className="mr-8">
                                     <img src="assets/img/coursesCards/icons/3.svg" alt="icon"/>
                                 </div>
-                                <div className="text-14 lh-1">{data.level}</div>
+                                <div className="text-14 lh-1">{data.course.level}</div>
                             </div>
                         </div>
 
@@ -78,21 +78,21 @@ export const CourseCard = ({data, index}) => {
                             </div>
 
                             <div className="coursesCard-footer__price">
-                                {data.is_free ? (
+                                {data.course.is_free ? (
                                     <>
                                         <div></div>
                                         <div>Free</div>
                                     </>
                                 ) : (
-                                    data.is_discount ? (
+                                    data.course.is_discount ? (
                                         <>
-                                            <div>{`${rupiahFormatter.format(data.price)}`}</div>
-                                            <div>{`${rupiahFormatter.format(data.price - data.discount)}`}</div>
+                                            <div>{`${rupiahFormatter.format(data.course.price)}`}</div>
+                                            <div>{`${rupiahFormatter.format(data.course.price - data.course.discount)}`}</div>
                                         </>
                                     ) : (
                                         <>
                                             <div></div>
-                                            <div>{`${rupiahFormatter.format(data.price)}`}</div>
+                                            <div>{`${rupiahFormatter.format(data.course.price)}`}</div>
                                         </>
                                     )
                                 )}

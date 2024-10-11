@@ -1,7 +1,6 @@
 package com.vocasia.instructor.dto.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vocasia.instructor.dto.feign.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,8 +14,6 @@ public class InstuctorDto {
 
     @JsonProperty("user_id")
     private Long userId;
-
-    private UserDto user;
 
     private String summary;
 

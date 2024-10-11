@@ -1,12 +1,10 @@
 package com.vocasia.course.dto.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vocasia.course.dto.feign.InstructorDto;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -14,12 +12,12 @@ public class CourseDto {
 
     private Long id;
 
+    @JsonProperty("category_id")
+    private Long categoryId;
+
     @JsonProperty("instructor_id")
     private Long instructorId;
 
-    private InstructorDto instructor;
-
-    private CategoryDto category;
     private String title;
     private String slug;
 
@@ -73,4 +71,5 @@ public class CourseDto {
 
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
+
 }

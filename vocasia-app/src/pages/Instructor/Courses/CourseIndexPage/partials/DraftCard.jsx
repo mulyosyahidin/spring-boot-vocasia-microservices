@@ -17,7 +17,7 @@ export const DraftCard = ({data}) => {
     return (
         <div className="w-1/5 p-4">
             <div className="relative shadow-lg rounded-lg overflow-hidden">
-                <img className="rounded-8 w-1/1" src={data.featured_picture_url ?? 'https://vocasia.s3.ap-southeast-1.amazonaws.com/no-media.png'} alt="image"/>
+                <img className="rounded-8 w-1/1" src={data.course.featured_picture_url ?? 'https://vocasia.s3.ap-southeast-1.amazonaws.com/no-media.png'} alt="image"/>
 
                 <button
                     onClick={() => setActiveShare((pre) => !pre)}
@@ -35,12 +35,12 @@ export const DraftCard = ({data}) => {
                     } `}
                 >
                     <div className="px-25 py-25 bg-white -dark-bg-dark-2 shadow-1 border-light rounded-8">
-                        <Link to={`/instructor/courses/${data.id}/edit`} className="d-flex items-center">
+                        <Link to={`/instructor/courses/${data.course.id}/edit`} className="d-flex items-center">
                             <div className="icon-edit"></div>
                             <div className="text-17 lh-1 fw-500 ml-12">Edit</div>
                         </Link>
 
-                        <Link to={`/instructor/courses/${data.id}/overview`} className="d-flex items-center mt-20">
+                        <Link to={`/instructor/courses/${data.course.id}/overview`} className="d-flex items-center mt-20">
                             <div className="icon icon-book"></div>
                             <div className="text-17 lh-1 fw-500 ml-12">Lihat</div>
                         </Link>
@@ -54,12 +54,12 @@ export const DraftCard = ({data}) => {
 
                     <div className="d-flex items-center">
                         <div className="text-14 lh-1 text-yellow-1 mr-10">
-                            {data.status}
+                            {data.course.status}
                         </div>
                     </div>
                 </div>
 
-                <h3 className="text-16 fw-500 lh-15 mt-10">{data.title}</h3>
+                <h3 className="text-16 fw-500 lh-15 mt-10">{data.course.title}</h3>
 
             </div>
         </div>

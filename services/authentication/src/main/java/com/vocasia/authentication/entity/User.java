@@ -1,7 +1,7 @@
 package com.vocasia.authentication.entity;
 
-import lombok.*;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Getter

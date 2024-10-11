@@ -1,8 +1,6 @@
 package com.vocasia.enrollment.dto.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vocasia.enrollment.dto.client.authentication.UserDto;
-import com.vocasia.enrollment.dto.client.course.CourseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,12 +18,6 @@ public class EnrollmentDto {
 
     @JsonProperty("order_id")
     private Long orderId;
-
-    @JsonProperty("course")
-    private CourseDto course;
-
-    @JsonProperty("user")
-    private UserDto user;
 
     @JsonProperty("course_id")
     private Long courseId;

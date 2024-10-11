@@ -22,7 +22,12 @@ const menuItems = [
 
 export const CourseView = () => {
     const {slug, id} = useParams();
+
     const [course, setCourse] = useState({});
+    const [category, setCategory] = useState({});
+    const [instructor, setInstructor] = useState({});
+    const [chapters, setChapters] = useState({});
+
     const [loading, setLoading] = useState(true);
 
     const [metaData, setMetaData] = useState({
@@ -32,14 +37,16 @@ export const CourseView = () => {
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
-                const getCourse = await getOverview(slug, id);
+                const getCourseOverview = await getOverview(slug, id);
 
-                if (getCourse) {
-                    setCourse(getCourse);
+                if (getCourseOverview) {
+                    setCourse(getCourseOverview.course);
+                    setCategory(getCourseOverview.category);
+                    setInstructor(getCourseOverview.instructor);
+                    setChapters(getCourseOverview.chapters);
                 }
             }
             catch (e) {
-                console.error('error')
                 console.error(e);
             }
             finally {
@@ -83,7 +90,7 @@ export const CourseView = () => {
                                             <div
                                                 className={`breadcrumbs__item ${dark ? "text-dark-3" : ""} `}
                                             >
-                                                <Link to={`/courses/by-category/${course.category.id}`}>{course.category.name}</Link>
+                                                <Link to={`/courses/by-category/${category.id}`}>{category.name}</Link>
                                             </div>
                                         </div>
                                     </div>
@@ -150,11 +157,11 @@ export const CourseView = () => {
                                                     <div
                                                         className="bg-image size-30 rounded-full js-lazy"
                                                         style={{
-                                                            backgroundImage: `url('https://gravatar.com/avatar/000000000000000000000000000000000000000000000000000000')`,
+                                                            backgroundImage: `url('${instructor.user.profile_picture_url}')`,
                                                         }}
                                                     ></div>
                                                     <div className="text-14 lh-1 ml-10">
-                                                        {course.instructor.user.name}
+                                                        {instructor.user.name}
                                                     </div>
                                                 </div>
                                             </div>
@@ -187,14 +194,15 @@ export const CourseView = () => {
                                             </div>
 
                                             <Overview course={course} />
-                                            <CourseContent course={course} />
-                                            <Instructor instructor={course.instructor}/>
+                                            <CourseContent chapters={chapters} course={course} />
+                                            {/*<Instructor instructor={course.instructor}/>*/}
                                             {/*<Reviews/>*/}
 
                                         </div>
                                     </div>
                                 </div>
                             </section>
+
                         </div>
                     </div>
                 )

@@ -11,7 +11,7 @@
 	<groupId>com.vocasia</groupId>
 	<artifactId>configserver</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>configserver</name>
+	<name>Config Server</name>
 	<description>Config Server Service</description>
 	<url/>
 	<licenses>

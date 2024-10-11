@@ -7,7 +7,7 @@ import com.vocasia.order.request.UpdatePaymentStatusRequest;
 public interface IOrderService {
 
     Order placeNewOrder(PlaceNewOrderRequest placeNewOrderRequest);
-    Order getOrderById(Long orderId);
-    Order updatePaymentStatus(Long orderId, UpdatePaymentStatusRequest updatePaymentStatusRequest);
+    Order findById(Long orderId);
+    Order updateOrderPaymentStatus(Order order, UpdatePaymentStatusRequest updatePaymentStatusRequest);
 
 }

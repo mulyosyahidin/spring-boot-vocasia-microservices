@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface IChapterService {
 
-    List<Chapter> index(Long courseId);
-    Chapter store(Course course, CreateChapterRequest createChapterRequest);
-    Chapter show(Long chapterId);
+    List<Chapter> findAllByCourseId(Course course);
+    Chapter save(Course course, CreateChapterRequest createChapterRequest);
+    Chapter findById(Long chapterId);
     Chapter update(Chapter chapter, UpdateChapterRequest createChapterRequest);
-    void delete(Chapter chapter);
+    void deleteById(Chapter chapter);
 
 }

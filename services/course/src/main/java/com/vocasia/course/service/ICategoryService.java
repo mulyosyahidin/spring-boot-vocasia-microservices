@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface ICategoryService {
 
-    List<Category> index();
-    Category show(Long id);
+    List<Category> findAll();
+    Category findById(Long id);
 
     List<Category> getOnlyParentCategories();
 

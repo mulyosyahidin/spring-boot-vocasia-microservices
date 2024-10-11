@@ -86,12 +86,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User updateProfile(Long id, UpdateProfileRequest updateUserRequest) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-        User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-            return null;
-        }
-
+    public User updateProfile(User user, UpdateProfileRequest updateUserRequest) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         if (updateUserRequest.getName() != null) {
             user.setName(updateUserRequest.getName());
         }

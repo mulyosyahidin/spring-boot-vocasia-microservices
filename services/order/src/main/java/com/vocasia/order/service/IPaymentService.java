@@ -5,7 +5,7 @@ import com.vocasia.order.request.client.CreateOrderPaymentRequest;
 
 public interface IPaymentService {
 
-    PaymentDto createOrderPayment(CreateOrderPaymentRequest createOrderPaymentRequest);
-    PaymentDto getPaymentDataByOrderId(Long orderId);
+    PaymentDto createOrderPayment(CreateOrderPaymentRequest createOrderPaymentRequest, String correlationId);
+    PaymentDto getPaymentDataByOrderId(Long orderId, String correlationId);
 
 }

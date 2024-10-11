@@ -10,9 +10,10 @@ import java.util.List;
 
 public interface ICourseService {
 
-    Course store(CreateNewCourseRequest createNewCourseRequest);
-    Course updateThumbnail(Course course, UpdateCourseThumbnailRequest updateCourseThumbnailRequest) throws IOException;
-    Course show(Long courseId);
+    Course save(CreateNewCourseRequest createNewCourseRequest);
+    Course findById(Long courseId);
+    Course update(Course course, UpdateCourseRequest updateCourseRequest);
+    Course updateCourseThumbnail(Course course, UpdateCourseThumbnailRequest updateCourseThumbnailRequest) throws IOException;
 
     List<Course> getDraftCourses();
     List<Course> getDraftCoursesByInstructorId(Long instructorId);
@@ -23,9 +24,7 @@ public interface ICourseService {
     List<Course> getPublishedCourses();
     List<Course> getPublishedCoursesByInstructorId(Long instructorId);
 
-    Course updateCourse(Long courseId, UpdateCourseRequest updateCourseRequest);
-
-    Course publish(Course course);
+    Course publishCourseById(Course course);
 
     List<Course> getEditorsChoices();
 

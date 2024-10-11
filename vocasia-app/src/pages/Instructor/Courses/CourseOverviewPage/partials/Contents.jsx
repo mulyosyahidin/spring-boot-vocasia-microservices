@@ -57,15 +57,15 @@ export const Contents = ({ activeTab,courseId, course, isLoading }) => {
                                             className="accordion__button py-20 px-30 bg-light-4"
                                             onClick={() =>
                                                 setCurrentOpenItem((pre) =>
-                                                    pre == `${index}` ? "" : `${index}`,
+                                                    pre === `${index}` ? "" : `${index}`,
                                                 )
                                             }
                                         >
                                             <div className="d-flex items-center">
                                                 <div className="icon icon-drag mr-10"></div>
                                                 <span className="text-16 lh-14 fw-500 text-dark-1">
-                                                                {chapter.title}
-                                                            </span>
+                                                    {chapter.chapter.title}
+                                                </span>
                                             </div>
 
                                             <div className="d-flex x-gap-10 items-center">
@@ -81,7 +81,7 @@ export const Contents = ({ activeTab,courseId, course, isLoading }) => {
                                         <div
                                             className="accordion__content"
                                             style={
-                                                currentOpenItem == `${index}`
+                                                currentOpenItem === `${index}`
                                                     ? {maxHeight: "none"}
                                                     : {}
                                             }
@@ -93,7 +93,7 @@ export const Contents = ({ activeTab,courseId, course, isLoading }) => {
                                                              className="d-flex x-gap-10 y-gap-10 mb-5 align-items-center">
                                                             {
                                                                 lesson.type === 'video' && (
-                                                                    <div className="icon icon-play cursor-pointer"
+                                                                    <div className="icon icon-play cursor-pointer" style={{cursor: 'pointer'}}
                                                                          onClick={() => handleOpenModal(getYouTubeVideoId(lesson.content_video_url))}></div>
                                                                 )
                                                             }

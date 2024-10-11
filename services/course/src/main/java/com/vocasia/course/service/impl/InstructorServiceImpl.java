@@ -1,7 +1,10 @@
 package com.vocasia.course.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vocasia.course.dto.ResponseDto;
 import com.vocasia.course.dto.feign.InstructorDto;
 import com.vocasia.course.dto.feign.UserDto;
+import com.vocasia.course.exception.CustomFeignException;
 import com.vocasia.course.service.IInstructorService;
 import com.vocasia.course.service.client.InstructorFeignClient;
 import feign.FeignException;
@@ -11,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -23,53 +25,45 @@ public class InstructorServiceImpl implements IInstructorService {
     private final Logger logger = LoggerFactory.getLogger(InstructorServiceImpl.class);
 
     @Override
-    public InstructorDto getInstructorById(Long id) {
+    public InstructorDto getInstructorById(Long id, String correlationId) {
         try {
-            ResponseEntity<Map<String, Object>> instructorProfileResponseEntity = instructorFeignClient.getInstructorById(id);
-            logger.info("Response Entity: {}", instructorProfileResponseEntity);
+            ResponseEntity<ResponseDto> instructorFeignClientGetInstructorByIdResponseEntity = instructorFeignClient.getInstructorById(correlationId, id);
+            ResponseDto responseBody = instructorFeignClientGetInstructorByIdResponseEntity.getBody();
 
-            Map<String, Object> responseBody = instructorProfileResponseEntity.getBody();
+            assert responseBody != null;
+            Map<String, Object> data = (Map<String, Object>) responseBody.getData();
+            Map<String, Object> instructor = data != null ? (Map<String, Object>) data.get("instructor") : null;
+            Map<String, Object> user = data != null ? (Map<String, Object>) data.get("user") : null;
 
-            if (responseBody != null && responseBody.get("success") != null && (Boolean) responseBody.get("success")) {
-                Map<String, Object> data = (Map<String, Object>) responseBody.get("data");
+            logger.debug("InstructorServiceImpl.getInstructorById() $instructor:: {}", instructor);
+            logger.debug("InstructorServiceImpl.getInstructorById() $user:: {}", user);
 
-                if (data != null) {
-                    Map<String, Object> instructor = (Map<String, Object>) data.get("instructor");
+            InstructorDto instructorDto = new InstructorDto();
+            UserDto userDto = new UserDto();
 
-                    InstructorDto instructorDto = new InstructorDto();
-
-                    instructorDto.setId(id);
-                    instructorDto.setStatus((String) instructor.get("status"));
-                    instructorDto.setSummary((String) instructor.get("summary"));
-                    instructorDto.setPhoneNumber((String) instructor.get("phone_number"));
-
-                    Map<String, Object> user = (Map<String, Object>) instructor.get("user");
-
-                    UserDto userDto = new UserDto();
-
-                    userDto.setId((Integer) user.get("id"));
-                    userDto.setUid((String) user.get("uid"));
-                    userDto.setEmail((String) user.get("email"));
-                    userDto.setUsername((String) user.get("username"));
-                    userDto.setName((String) user.get("name"));
-                    userDto.setRole((String) user.get("role"));
-                    userDto.setProfilePicture((String) user.get("profile_picture"));
-                    userDto.setProfilePictureUrl((String) user.get("profile_picture_url"));
-                    userDto.setCreatedAt(LocalDateTime.parse(user.get("created_at").toString()));
-                    userDto.setUpdatedAt(LocalDateTime.parse(user.get("updated_at").toString()));
-
-                    instructorDto.setUser(userDto);
-                    instructorDto.setUserId((Integer) instructor.get("user_id"));
-
-                    return instructorDto;
-                }
-            } else {
-                logger.warn("Feign failed: {}", responseBody != null ? responseBody.get("message") : "No response body");
+            if (instructor != null) {
+                instructorDto.setId(id);
+                instructorDto.setStatus((String) instructor.get("status"));
+                instructorDto.setSummary((String) instructor.get("summary"));
+                instructorDto.setPhoneNumber((String) instructor.get("phone_number"));
             }
 
-            return null;
+            if (user != null) {
+                userDto.setId((Integer) user.get("id"));
+                userDto.setEmail((String) user.get("email"));
+                userDto.setUsername((String) user.get("username"));
+                userDto.setName((String) user.get("name"));
+                userDto.setRole((String) user.get("role"));
+                userDto.setProfilePicture((String) user.get("profile_picture"));
+                userDto.setProfilePictureUrl((String) user.get("profile_picture_url"));
+
+                instructorDto.setUser(userDto);
+                instructorDto.setUserId((Integer) user.get("id"));
+            }
+
+            return instructorDto;
         } catch (FeignException e) {
-            throw new RuntimeException("Failed to parse error response", e);
+            throw new CustomFeignException(e, new ObjectMapper());
         }
     }
 }

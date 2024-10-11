@@ -1,7 +1,7 @@
 package com.vocasia.enrollment.entity.client;
 
 import com.vocasia.enrollment.entity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 import lombok.*;
 
 @Getter

@@ -9,10 +9,11 @@ import java.util.List;
 
 public interface ILessonService {
 
-    List<Lesson> index(Long chapterId);
-    Lesson store(Chapter chapter, StoreLessonRequest storeLessonRequest);
-    Lesson show(Long lessonId);
+    List<Lesson> findAllByChapterId(Long chapterId);
+    Lesson save(Chapter chapter, StoreLessonRequest storeLessonRequest);
+    Lesson findById(Long lessonId);
     Lesson update(Lesson lesson, UpdateLessonRequest updateLessonRequest);
-    void delete(Lesson lesson);
+    void deleteById(Lesson lesson);
+    Lesson findByChapterIdAndId(Long chapterId, Long lessonId);
 
 }

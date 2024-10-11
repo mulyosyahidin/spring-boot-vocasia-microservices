@@ -5,51 +5,47 @@ import com.vocasia.authentication.entity.User;
 import com.vocasia.authentication.mapper.UserMapper;
 import com.vocasia.authentication.request.UpdateProfileRequest;
 import com.vocasia.authentication.service.IUserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api")
 @Validated
-@Tag(name = "Profile Controller", description = "Controller untuk mengelola data profile pengguna")
 public class ProfileController {
 
     private final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
-    private final IUserService iUserService;
+    private final IUserService userService;
+    ;
 
     public ProfileController(IUserService iUserService) {
-        this.iUserService = iUserService;
+        this.userService = iUserService;
     }
 
-    @Operation(
-            summary = "Profil pengguna",
-            description = "Mengambil data profil pengguna berdasarkan ID pengguna"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "Berhasil mengambil data profil pengguna"
-    )
     @GetMapping("/user/{id}")
     public ResponseEntity<ResponseDto> getUserProfile(@PathVariable Long id) {
-        User user = iUserService.findById(id);
+        logger.debug("ProfileController.getUserProfile called");
+
+        User user = userService.findById(id);
 
         Map<String, Object> response = new HashMap<>();
         response.put("user", UserMapper.mapToDto(user));
 
-        return ResponseEntity.ok(new ResponseDto(true, "Berhasil mengambil data pengguna", response, null));
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil mendapatkan data pengguna", response, null));
     }
 
     @PutMapping("/user/{id}/update-user")
@@ -57,7 +53,9 @@ public class ProfileController {
                                                   @RequestParam(value = "profile_picture", required = false) MultipartFile profilePicture,
                                                   @RequestParam("name") String name,
                                                   @RequestParam("email") String email,
-                                                  @RequestParam(value = "password", required = false) String password) {
+                                                  @RequestParam(value = "password", required = false) String password) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+        logger.debug("ProfileController.updateUser called");
+
         UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest();
 
         updateProfileRequest.setName(name);
@@ -65,17 +63,15 @@ public class ProfileController {
         updateProfileRequest.setPassword(password);
         updateProfileRequest.setProfilePicture(profilePicture);
 
+        User user = userService.findById(id);
+        User updatedUser = userService.updateProfile(user, updateProfileRequest);
+
         Map<String, Object> response = new HashMap<>();
+        response.put("user", UserMapper.mapToDto(updatedUser));
 
-        try {
-            User updatedUser = iUserService.updateProfile(id, updateProfileRequest);
-
-            response.put("user", UserMapper.mapToDto(updatedUser));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .body(new ResponseDto(false, "Data yang diberikan tidak valid", null, e.getMessage()));
-        }
-
-        return ResponseEntity.ok(new ResponseDto(true, "Berhasil memperbarui data pengguna", response, null));
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil memperbarui data pengguna", response, null));
     }
+
 }
