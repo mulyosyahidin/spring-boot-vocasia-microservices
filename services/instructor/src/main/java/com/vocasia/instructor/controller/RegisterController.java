@@ -50,10 +50,14 @@ public class RegisterController {
 
             return ResponseEntity.ok(new ResponseDto(true, "Berhasil melakukan pendaftaran", response, null));
         } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(e.getHttpStatus())
                     .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, "Internal server error", null, null));

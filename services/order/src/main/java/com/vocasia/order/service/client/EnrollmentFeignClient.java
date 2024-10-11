@@ -1,7 +1,7 @@
 package com.vocasia.order.service.client;
 
 import com.vocasia.order.dto.ResponseDto;
-import com.vocasia.order.request.client.EnrollNewCourseRequest;
+import com.vocasia.order.request.client.enrollment.EnrollNewCourseRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

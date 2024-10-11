@@ -1,7 +1,7 @@
 package com.vocasia.order.service;
 
-import com.vocasia.order.dto.client.PaymentDto;
-import com.vocasia.order.request.client.CreateOrderPaymentRequest;
+import com.vocasia.order.dto.client.payment.PaymentDto;
+import com.vocasia.order.request.client.order.CreateOrderPaymentRequest;
 
 public interface IPaymentService {
 

@@ -1,7 +1,7 @@
 package com.vocasia.authentication.mapper;
 
 import com.vocasia.authentication.config.AwsConfigProperties;
-import com.vocasia.authentication.dto.UserDto;
+import com.vocasia.authentication.dto.data.UserDto;
 import com.vocasia.authentication.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

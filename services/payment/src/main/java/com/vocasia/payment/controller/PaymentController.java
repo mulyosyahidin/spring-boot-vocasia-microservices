@@ -45,6 +45,8 @@ public class PaymentController {
 
             response.put("payment", PaymentMapper.mapToDto(payment));
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, e.getMessage(), null, e.getMessage()));

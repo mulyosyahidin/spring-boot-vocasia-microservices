@@ -23,6 +23,9 @@ public class OrderItem {
     @Column(name = "course_id", nullable = false)
     private Long courseId;
 
+    @Column(name = "course_instructor_id", nullable = false)
+    private Long courseInstructorId;
+
     @Column(name = "course_title", nullable = false)
     private String courseTitle;
 

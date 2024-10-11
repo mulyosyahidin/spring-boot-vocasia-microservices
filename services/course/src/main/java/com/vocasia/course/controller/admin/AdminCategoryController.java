@@ -67,6 +67,8 @@ public class AdminCategoryController {
 
             response.put("course", CategoryMapper.mapToDto(category));
         } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, "Gagal mengupload icon", null, e.getMessage()));

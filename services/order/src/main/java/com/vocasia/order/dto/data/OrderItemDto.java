@@ -16,6 +16,9 @@ public class OrderItemDto {
     @JsonProperty("course_id")
     private Long courseId;
 
+    @JsonProperty("course_instructor_id")
+    private Long courseInstructorId;
+
     @JsonProperty("course_title")
     private String courseTitle;
 

@@ -1,7 +1,7 @@
 package com.vocasia.course.controller;
 
 import com.vocasia.course.dto.ResponseDto;
-import com.vocasia.course.dto.feign.InstructorDto;
+import com.vocasia.course.dto.client.instructor.InstructorDto;
 import com.vocasia.course.entity.Category;
 import com.vocasia.course.entity.Course;
 import com.vocasia.course.exception.CustomFeignException;
@@ -172,10 +172,14 @@ public class CourseController {
 
             response.put("instructor", getInstructorById);
         } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(e.getHttpStatus())
                     .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, e.getMessage(), null, null));
@@ -217,6 +221,8 @@ public class CourseController {
 
             response.put("course", CourseMapper.mapToDto(updatedCourse));
         } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, e.getMessage(), null, e.getMessage()));

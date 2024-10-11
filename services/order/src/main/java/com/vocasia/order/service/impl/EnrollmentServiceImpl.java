@@ -3,7 +3,7 @@ package com.vocasia.order.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocasia.order.dto.ResponseDto;
 import com.vocasia.order.exception.CustomFeignException;
-import com.vocasia.order.request.client.EnrollNewCourseRequest;
+import com.vocasia.order.request.client.enrollment.EnrollNewCourseRequest;
 import com.vocasia.order.service.IEnrollmentService;
 import com.vocasia.order.service.client.EnrollmentFeignClient;
 import feign.FeignException;

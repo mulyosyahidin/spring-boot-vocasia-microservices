@@ -1,7 +1,7 @@
 package com.vocasia.authentication.controller;
 
 import com.vocasia.authentication.dto.ResponseDto;
-import com.vocasia.authentication.dto.client.InstructorDto;
+import com.vocasia.authentication.dto.client.instructor.InstructorDto;
 import com.vocasia.authentication.entity.User;
 import com.vocasia.authentication.exception.CustomFeignException;
 import com.vocasia.authentication.mapper.UserMapper;
@@ -64,10 +64,14 @@ public class LoginController {
 
                 response.put("instructor", getInstructorProfileByUserId);
             } catch (CustomFeignException e) {
+                logger.error(e.getMessage(), e);
+
                 return ResponseEntity
                         .status(e.getHttpStatus())
                         .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
             } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+
                 return ResponseEntity
                         .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                         .body(new ResponseDto(false, e.getMessage(), null, null));

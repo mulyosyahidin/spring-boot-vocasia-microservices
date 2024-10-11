@@ -416,6 +416,7 @@ services:
       - "14120:14120"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-authentication:3306/authentication_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       KEYCLOACK_SERVER_URL: "http://keycloak:8080"
       KEYCLOACK_CLIENT_ID: "vocasia-users"
       KEYCLOACK_CLIENT_SECRET: "fr8AziJmAQZ8Yi7gL396qticjOHvzxGt"
@@ -444,6 +445,7 @@ services:
       - "14121:14121"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-instructor:3306/instructor_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "instructor"
     healthcheck:
       test: "curl --fail --silent localhost:14121/actuator/health/readiness | grep UP || exit 1"
@@ -467,6 +469,7 @@ services:
       - "14122:14122"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-course:3306/course_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "course"
     healthcheck:
       test: "curl --fail --silent localhost:14122/actuator/health/readiness | grep UP || exit 1"
@@ -490,6 +493,7 @@ services:
       - "14124:14124"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-order:3306/order_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "order"
     healthcheck:
       test: "curl --fail --silent localhost:14124/actuator/health/readiness | grep UP || exit 1"
@@ -513,6 +517,7 @@ services:
       - "14125:14125"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-payment:3306/payment_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       MIDTRANS_MERCHANT_ID: "G831856510"
       MIDTRANS_CLIENT_KEY: "SB-Mid-client-4KbJJQfBaYS9Lplt"
       MIDTRANS_SERVER_KEY: "SB-Mid-server-l-PGFhcZZ-wTh5bebWsEefs0"
@@ -540,6 +545,7 @@ services:
       - "14126:14126"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-enrollment:3306/enrollment_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "enrollment"
     healthcheck:
       test: "curl --fail --silent localhost:14126/actuator/health/readiness | grep UP || exit 1"
@@ -563,7 +569,9 @@ services:
       - "14127:14127"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-finance:3306/finance_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "finance"
+      FINANCE_PERCENT_PLATFORM_FEE: 10
     healthcheck:
       test: "curl --fail --silent localhost:14127/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -615,6 +623,8 @@ services:
       payment_service:
         condition: service_healthy
       enrollment_service:
+        condition: service_healthy
+      finance_service:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "gatewayserver"

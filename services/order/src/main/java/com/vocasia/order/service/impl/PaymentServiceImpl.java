@@ -2,9 +2,9 @@ package com.vocasia.order.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocasia.order.dto.ResponseDto;
-import com.vocasia.order.dto.client.PaymentDto;
+import com.vocasia.order.dto.client.payment.PaymentDto;
 import com.vocasia.order.exception.CustomFeignException;
-import com.vocasia.order.request.client.CreateOrderPaymentRequest;
+import com.vocasia.order.request.client.order.CreateOrderPaymentRequest;
 import com.vocasia.order.service.IPaymentService;
 import com.vocasia.order.service.client.PaymentFeignClient;
 import feign.FeignException;

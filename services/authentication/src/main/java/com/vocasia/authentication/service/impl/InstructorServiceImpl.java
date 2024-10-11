@@ -2,7 +2,7 @@ package com.vocasia.authentication.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocasia.authentication.dto.ResponseDto;
-import com.vocasia.authentication.dto.client.InstructorDto;
+import com.vocasia.authentication.dto.client.instructor.InstructorDto;
 import com.vocasia.authentication.exception.CustomFeignException;
 import com.vocasia.authentication.service.IInstructorService;
 import com.vocasia.authentication.service.client.InstructorFeignClient;
@@ -19,15 +19,15 @@ import java.util.Map;
 @AllArgsConstructor
 public class InstructorServiceImpl implements IInstructorService {
 
-    private InstructorFeignClient instructorFeignClient;
-
     private final Logger logger = LoggerFactory.getLogger(InstructorServiceImpl.class);
+
+    private InstructorFeignClient instructorFeignClient;
 
     @Override
     public InstructorDto getInstructorByUserId(Long userId, String correlationId) {
         try {
-            ResponseEntity<ResponseDto> instructorFeignClientInstructorByUserId = instructorFeignClient.getInstructorByUserId(correlationId, userId);
-            ResponseDto responseBody = instructorFeignClientInstructorByUserId.getBody();
+            ResponseEntity<ResponseDto> instructorFeignClientGetInstructorByUserIdResponseEntity = instructorFeignClient.getInstructorByUserId(correlationId, userId);
+            ResponseDto responseBody = instructorFeignClientGetInstructorByUserIdResponseEntity.getBody();
 
             assert responseBody != null;
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();

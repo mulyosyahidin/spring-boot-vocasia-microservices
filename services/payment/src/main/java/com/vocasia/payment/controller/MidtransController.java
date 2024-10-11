@@ -102,24 +102,32 @@ public class MidtransController {
 
         paymentService.updatePaymentStatus(payment, paymentStatus);
 
-        try {
-            UpdateOrderPaymentStatus updateOrderPaymentStatus = new UpdateOrderPaymentStatus();
+        if (transactionStatus.equals("settlement")) {
+            try {
+                UpdateOrderPaymentStatus updateOrderPaymentStatus = new UpdateOrderPaymentStatus();
 
-            updateOrderPaymentStatus.setStatus(paymentStatus);
-            updateOrderPaymentStatus.setTransactionStatus(transactionStatus);
+                updateOrderPaymentStatus.setStatus(paymentStatus);
+                updateOrderPaymentStatus.setTransactionStatus(transactionStatus);
 
-            orderService.updatePaymentStatus(payment.getOrderId(), updateOrderPaymentStatus, correlationId);
-        } catch (CustomFeignException e) {
-            return ResponseEntity
-                    .status(e.getHttpStatus())
-                    .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDto(false, e.getMessage(), null, null));
+                orderService.updatePaymentStatus(payment.getOrderId(), updateOrderPaymentStatus, correlationId);
+            } catch (CustomFeignException e) {
+                logger.error(e.getMessage(), e);
+
+                return ResponseEntity
+                        .status(e.getHttpStatus())
+                        .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+
+                return ResponseEntity
+                        .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                        .body(new ResponseDto(false, e.getMessage(), null, null));
+            }
         }
 
-        return ResponseEntity.ok(new ResponseDto(true, "Midtrans callback", response, null));
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Midtrans callback", response, null));
     }
 
 }

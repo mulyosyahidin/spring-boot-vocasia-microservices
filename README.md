@@ -55,8 +55,12 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 1. Inisisalisasi Logging and Monitoring System
 
 10/10/2024:
-1. Menyelesaikan: Loggin and Monitoring System
+1. Menyelesaikan: Logging and Monitoring System
 2. Menyelesaikan: Setup Migrasi Database dangan FlyWay
 
 11/10/2024:
 1. Improving Code Quality and Consistency
+2. Inisialisasi Finance Service
+
+12/10/2024:
+1. Menyelesaikan: Mencatat Pendapatan Instruktur dan Platform

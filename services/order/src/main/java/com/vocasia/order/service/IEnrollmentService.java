@@ -1,6 +1,6 @@
 package com.vocasia.order.service;
 
-import com.vocasia.order.request.client.EnrollNewCourseRequest;
+import com.vocasia.order.request.client.enrollment.EnrollNewCourseRequest;
 
 public interface IEnrollmentService {
 

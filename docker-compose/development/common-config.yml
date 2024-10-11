@@ -16,7 +16,6 @@ services:
       service: base-config
     environment:
       SPRING_PROFILES_ACTIVE: "development"
-      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"

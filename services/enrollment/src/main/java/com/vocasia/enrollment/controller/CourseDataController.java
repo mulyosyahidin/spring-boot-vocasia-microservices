@@ -58,10 +58,14 @@ public class CourseDataController {
                 enrollmentData.put("user", findUserById);
                 enrollmentData.put("payment", payment);
             } catch (CustomFeignException e) {
+                logger.error(e.getMessage(), e);
+
                 return ResponseEntity
                         .status(e.getHttpStatus())
                         .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
             } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+
                 return ResponseEntity
                         .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                         .body(new ResponseDto(false, e.getMessage(), null, null));

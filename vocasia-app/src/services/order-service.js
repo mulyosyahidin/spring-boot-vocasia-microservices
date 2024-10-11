@@ -11,9 +11,12 @@ export const placeNewOrder = async (cart) => {
 
     const orderItems = [];
 
+    console.log(getUserData);
+
     for (const item of cart) {
         orderItems.push({
             course_id: item.id,
+            course_instructor_id: item.instructor_id,
             course_title: item.title,
             course_slug: item.slug,
             course_featured_picture_url: item.featured_picture_url,

@@ -2,8 +2,8 @@ package com.vocasia.course.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocasia.course.dto.ResponseDto;
-import com.vocasia.course.dto.feign.InstructorDto;
-import com.vocasia.course.dto.feign.UserDto;
+import com.vocasia.course.dto.client.authentication.UserDto;
+import com.vocasia.course.dto.client.instructor.InstructorDto;
 import com.vocasia.course.exception.CustomFeignException;
 import com.vocasia.course.service.IInstructorService;
 import com.vocasia.course.service.client.InstructorFeignClient;

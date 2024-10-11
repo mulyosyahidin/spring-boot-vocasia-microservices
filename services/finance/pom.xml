@@ -142,11 +142,9 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>6.5.7</version>
 				<configuration>
-					<configFiles>
-						<configFile>
-							src/main/resources/flyway.conf
-						</configFile>
-					</configFiles>
+					<url>jdbc:mysql://localhost:30624/finance_db</url>
+					<user>root</user>
+					<password>password</password>
 				</configuration>
 			</plugin>
 		</plugins>

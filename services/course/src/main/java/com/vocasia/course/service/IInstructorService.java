@@ -1,6 +1,6 @@
 package com.vocasia.course.service;
 
-import com.vocasia.course.dto.feign.InstructorDto;
+import com.vocasia.course.dto.client.instructor.InstructorDto;
 
 public interface IInstructorService {
 

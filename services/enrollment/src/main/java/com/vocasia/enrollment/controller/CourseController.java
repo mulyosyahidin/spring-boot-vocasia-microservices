@@ -52,10 +52,14 @@ public class CourseController {
 
                 enrollmentData.put("course", courseServiceFindById);
             } catch (CustomFeignException e) {
+                logger.error(e.getMessage(), e);
+
                 return ResponseEntity
                         .status(e.getHttpStatus())
                         .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
             } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+
                 return ResponseEntity
                         .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                         .body(new ResponseDto(false, e.getMessage(), null, null));
@@ -84,10 +88,14 @@ public class CourseController {
 
             response.put("course", courseServiceFindById);
         } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(e.getHttpStatus())
                     .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, e.getMessage(), null, null));

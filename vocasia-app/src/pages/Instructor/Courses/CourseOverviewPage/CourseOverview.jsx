@@ -74,7 +74,7 @@ export const CourseOverview = () => {
                             <div className="tabs__content py-30 px-30 js-tabs-content">
                                 <Information activeTab={activeTab} course={course} isLoading={isLoading}/>
                                 <Contents activeTab={activeTab} course={course} courseId={courseId} isLoading={isLoading}/>
-                                <Students activeTab={activeTab} course={course}/>
+                                <Students activeTab={activeTab} course={course} courseId={courseId} />
                                 <QnA activeTab={activeTab} course={course}/>
                                 <Earnings activeTab={activeTab} course={course}/>
                                 <Settings activeTab={activeTab} course={course} courseId={courseId} setCourse={setCourse}/>

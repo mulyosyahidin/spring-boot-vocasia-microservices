@@ -23,6 +23,10 @@ public class PlaceNewOrderRequest {
     public static class OrderItem {
 
         @NotNull(message = "Course ID cannot be null")
+        @JsonProperty("course_instructor_id")
+        private Long courseInstructorId;
+
+        @NotNull(message = "Course ID cannot be null")
         @JsonProperty("course_id")
         private Long courseId;
 

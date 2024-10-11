@@ -41,6 +41,7 @@ public class OrderServiceImpl implements IOrderService {
             OrderItem orderItem = new OrderItem();
 
             orderItem.setCourseId(item.getCourseId());
+            orderItem.setCourseInstructorId(item.getCourseInstructorId());
             orderItem.setCourseTitle(item.getCourseTitle());
             orderItem.setCourseSlug(item.getCourseSlug());
             orderItem.setCourseFeaturedPictureUrl(item.getCourseFeaturedPictureUrl());

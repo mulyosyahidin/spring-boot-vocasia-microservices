@@ -126,6 +126,9 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.GET,"/finance/build-info").permitAll()
                         .pathMatchers(HttpMethod.GET,"/finance/welcome").permitAll()
+
+                        .pathMatchers(HttpMethod.POST, "/finance/instructor-income/store").permitAll()
+                        .pathMatchers(HttpMethod.POST, "/finance/platform-income/store").permitAll()
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));

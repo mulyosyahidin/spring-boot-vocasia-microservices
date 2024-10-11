@@ -50,10 +50,14 @@ public class ProfileController {
 
             response.put("user", userDto);
         } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(e.getHttpStatus())
                     .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, "Internal server error", null, null));
@@ -83,10 +87,14 @@ public class ProfileController {
 
             response.put("user", userDto);
         } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(e.getHttpStatus())
                     .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, "Internal server error", null, null));
@@ -128,10 +136,14 @@ public class ProfileController {
             UserDto updatedUser = authenticationService.updateProfile(updateProfileRequest, correlationId);
             response.put("user", updatedUser);
         } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(e.getHttpStatus())
                     .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
             return ResponseEntity
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, e.getMessage(), null, null));

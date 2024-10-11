@@ -4,7 +4,7 @@ import ModalVideoComponent from "../../../../../components/commons/ModalVideo.js
 import {getYouTubeVideoId} from "../../../../../utils/utils.js";
 import Modal from "react-bootstrap/Modal";
 
-export const Contents = ({ activeTab,courseId, course, isLoading }) => {
+export const Contents = ({ activeTab, courseId, course, isLoading }) => {
     const [isChaptersLoaded, setIsChaptersLoaded] = useState(false);
     const [chapters, setChapters] = useState([]);
     const [currentOpenItem, setCurrentOpenItem] = useState();
