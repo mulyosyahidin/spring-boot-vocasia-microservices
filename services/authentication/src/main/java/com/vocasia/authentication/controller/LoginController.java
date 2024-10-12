@@ -44,7 +44,7 @@ public class LoginController {
     public ResponseEntity<ResponseDto> login(@RequestHeader("vocasia-correlation-id") String correlationId,
                                              @Valid @RequestBody LoginRequest loginRequest)
             throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-        logger.debug("LoginController.login called");
+        logger.info("LoginController.login called");
 
         User loggedUser = userService.loginWithEmailAndPassword(loginRequest);
 
@@ -60,7 +60,7 @@ public class LoginController {
 
         if (loggedUser.getRole().equals("instructor")) {
             try {
-                InstructorDto getInstructorProfileByUserId = instructorService.getInstructorByUserId(loggedUser.getId(), correlationId);
+                InstructorDto getInstructorProfileByUserId = instructorService.findByUserId(loggedUser.getId(), correlationId);
 
                 response.put("instructor", getInstructorProfileByUserId);
             } catch (CustomFeignException e) {

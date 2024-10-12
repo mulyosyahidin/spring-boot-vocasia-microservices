@@ -28,7 +28,7 @@ public class CategoryDto {
 
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
+
     private List<CategoryDto> children;
 
 }
-

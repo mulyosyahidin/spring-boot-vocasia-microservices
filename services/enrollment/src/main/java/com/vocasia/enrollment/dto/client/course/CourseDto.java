@@ -72,4 +72,5 @@ public class CourseDto {
 
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
+
 }

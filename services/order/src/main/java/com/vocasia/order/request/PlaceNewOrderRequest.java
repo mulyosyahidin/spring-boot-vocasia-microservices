@@ -15,8 +15,27 @@ public class PlaceNewOrderRequest {
     @JsonProperty("user_id")
     private Long userId;
 
+    @NotNull(message = "Customer data cannot be null")
+    private Customer customer;
+
     @NotNull(message = "Order items cannot be null")
     private List<OrderItem> items;
+
+    @Getter
+    @Setter
+    public static class Customer {
+
+        @NotNull(message = "Customer ID cannot be null")
+
+        private Long id;
+
+        @NotNull(message = "Customer name cannot be null")
+        private String name;
+
+        @NotNull(message = "Customer email cannot be null")
+        private String email;
+
+    }
 
     @Getter
     @Setter

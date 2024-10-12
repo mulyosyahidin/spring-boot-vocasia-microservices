@@ -25,18 +25,18 @@ public class InstructorServiceImpl implements IInstructorService {
     private final Logger logger = LoggerFactory.getLogger(InstructorServiceImpl.class);
 
     @Override
-    public InstructorDto getInstructorById(Long id, String correlationId) {
+    public InstructorDto findById(Long id, String correlationId) {
         try {
-            ResponseEntity<ResponseDto> instructorFeignClientGetInstructorByIdResponseEntity = instructorFeignClient.getInstructorById(correlationId, id);
-            ResponseDto responseBody = instructorFeignClientGetInstructorByIdResponseEntity.getBody();
+            ResponseEntity<ResponseDto> instructorFeignClientFindByIdResponseEntity = instructorFeignClient.findById(correlationId, id);
+            ResponseDto responseBody = instructorFeignClientFindByIdResponseEntity.getBody();
 
             assert responseBody != null;
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();
             Map<String, Object> instructor = data != null ? (Map<String, Object>) data.get("instructor") : null;
             Map<String, Object> user = data != null ? (Map<String, Object>) data.get("user") : null;
 
-            logger.debug("InstructorServiceImpl.getInstructorById() $instructor:: {}", instructor);
-            logger.debug("InstructorServiceImpl.getInstructorById() $user:: {}", user);
+            logger.debug("InstructorServiceImpl.findById() $instructor:: {}", instructor);
+            logger.debug("InstructorServiceImpl.findById() $user:: {}", user);
 
             InstructorDto instructorDto = new InstructorDto();
             UserDto userDto = new UserDto();
@@ -66,4 +66,5 @@ public class InstructorServiceImpl implements IInstructorService {
             throw new CustomFeignException(e, new ObjectMapper());
         }
     }
+
 }

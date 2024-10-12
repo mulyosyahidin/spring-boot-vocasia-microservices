@@ -62,7 +62,7 @@ export const CourseOverview = () => {
                                         key={i}
                                         onClick={() => setActiveTab(i + 1)}
                                         className={`tabs__button text-light-1 js-tabs-button ${
-                                            activeTab == i + 1 ? "is-active" : ""
+                                            activeTab === i + 1 ? "is-active" : ""
                                         } `}
                                         type="button"
                                     >
@@ -76,7 +76,7 @@ export const CourseOverview = () => {
                                 <Contents activeTab={activeTab} course={course} courseId={courseId} isLoading={isLoading}/>
                                 <Students activeTab={activeTab} course={course} courseId={courseId} />
                                 <QnA activeTab={activeTab} course={course}/>
-                                <Earnings activeTab={activeTab} course={course}/>
+                                <Earnings activeTab={activeTab} course={course} courseId={courseId}/>
                                 <Settings activeTab={activeTab} course={course} courseId={courseId} setCourse={setCourse}/>
                             </div>
                         </div>

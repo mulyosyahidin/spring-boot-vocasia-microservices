@@ -22,12 +22,13 @@ public class PaymentServiceImpl implements IPaymentService {
         Payment payment = new Payment();
 
         LocalDateTime paymentExpireAt = LocalDateTime.now().plusDays(1);
+        Double totalPayment = createOrderPaymentRequest.getTotalPrice() + createOrderPaymentRequest.getAdditionalFee();
 
         payment.setOrderId(createOrderPaymentRequest.getOrderId());
         payment.setOrderNumber(createOrderPaymentRequest.getOrderNumber());
         payment.setTotalPrice(createOrderPaymentRequest.getTotalPrice());
-        payment.setAdditionalFee(0.0);
-        payment.setTotalPayment(createOrderPaymentRequest.getTotalPrice());
+        payment.setAdditionalFee(createOrderPaymentRequest.getAdditionalFee());
+        payment.setTotalPayment(totalPayment);
         payment.setSnapToken(snapToken);
         payment.setPaymentStatus(PaymentStatus.PENDING.name());
         payment.setPaymentExpireAt(paymentExpireAt);

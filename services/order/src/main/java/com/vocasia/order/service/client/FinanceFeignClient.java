@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface FinanceFeignClient {
 
     @PostMapping(value = "/api/instructor-income/store", consumes = "application/json")
-    public ResponseEntity<ResponseDto> storeInstructorIncome(@RequestHeader("vocasia-correlation-id") String correlationId,
-                                                             @RequestBody NewInstructorIncomeRequest newInstructorIncomeRequest);
+    public ResponseEntity<ResponseDto> saveInstructorIncome(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                            @RequestBody NewInstructorIncomeRequest newInstructorIncomeRequest);
 
     @PostMapping(value = "/api/platform-income/store", consumes = "application/json")
-    public ResponseEntity<ResponseDto> storePlatformIncome(@RequestHeader("vocasia-correlation-id") String correlationId,
-                                                           @RequestBody NewPlatformIncomeRequest newPlatformIncomeRequest);
+    public ResponseEntity<ResponseDto> savePlatformIncome(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                          @RequestBody NewPlatformIncomeRequest newPlatformIncomeRequest);
 
 }

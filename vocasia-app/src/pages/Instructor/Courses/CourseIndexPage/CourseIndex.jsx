@@ -42,8 +42,8 @@ export const CourseIndex = () => {
         if (query.length > 0) {
             const searchResults = pageItems.filter((item) => {
                 return (
-                    item.title.toLowerCase().includes(query.toLowerCase()) ||
-                    item.status.toLowerCase().includes(query.toLowerCase())
+                    item.course.title.toLowerCase().includes(query.toLowerCase()) ||
+                    item.course.status.toLowerCase().includes(query.toLowerCase())
                 );
             });
 

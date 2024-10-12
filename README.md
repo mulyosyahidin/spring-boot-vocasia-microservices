@@ -64,3 +64,5 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 
 12/10/2024:
 1. Menyelesaikan: Mencatat Pendapatan Instruktur dan Platform
+2. Menyelesaikan: Manajemen Siswa Instruktur
+3. Menyelesaikan: Data Transaksi Instruktur

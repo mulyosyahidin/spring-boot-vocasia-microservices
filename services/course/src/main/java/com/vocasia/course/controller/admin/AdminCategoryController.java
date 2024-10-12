@@ -36,7 +36,7 @@ public class AdminCategoryController {
 
     @GetMapping("/categories")
     public ResponseEntity<ResponseDto> getAllCategories() {
-        logger.debug("AdminCategoryController.getAllCategories called");
+        logger.info("AdminCategoryController.getAllCategories called");
 
         List<Category> categories = categoryService.getOnlyParentCategories();
 
@@ -52,7 +52,7 @@ public class AdminCategoryController {
     public ResponseEntity<ResponseDto> createCategory(@RequestParam(value = "icon", required = false) @Valid MultipartFile icon,
                                                       @RequestParam("name") String name,
                                                       @RequestParam(value = "parent_id", required = false) Long parentId) {
-        logger.debug("AdminCategoryController.createCategory called");
+        logger.info("AdminCategoryController.createCategory called");
 
         StoreCategoryRequest storeCategoryRequest = new StoreCategoryRequest();
 
@@ -81,7 +81,7 @@ public class AdminCategoryController {
 
     @GetMapping("/categories/{categoryId}")
     public ResponseEntity<ResponseDto> getCategoryById(@PathVariable Long categoryId) {
-        logger.debug("AdminCategoryController.getCategoryById called");
+        logger.info("AdminCategoryController.getCategoryById called");
 
         Category category = categoryService.findById(categoryId);
 
@@ -98,7 +98,7 @@ public class AdminCategoryController {
                                                       @RequestParam(value = "icon", required = false) MultipartFile icon,
                                                       @RequestParam("name") String name,
                                                       @RequestParam(value = "parent_id", required = false) Long parentId) {
-        logger.debug("AdminCategoryController.updateCategory called");
+        logger.info("AdminCategoryController.updateCategory called");
 
         UpdateCategoryRequest updateCategoryRequest = new UpdateCategoryRequest();
 
@@ -129,7 +129,7 @@ public class AdminCategoryController {
 
     @DeleteMapping("/categories/{categoryId}")
     public ResponseEntity<ResponseDto> deleteCategory(@PathVariable Long categoryId) {
-        logger.debug("AdminCategoryController.deleteCategory called");
+        logger.info("AdminCategoryController.deleteCategory called");
 
         categoryService.delete(categoryId);
 

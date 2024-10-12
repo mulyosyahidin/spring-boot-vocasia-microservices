@@ -24,16 +24,16 @@ public class InstructorServiceImpl implements IInstructorService {
     private InstructorFeignClient instructorFeignClient;
 
     @Override
-    public InstructorDto getInstructorByUserId(Long userId, String correlationId) {
+    public InstructorDto findByUserId(Long userId, String correlationId) {
         try {
-            ResponseEntity<ResponseDto> instructorFeignClientGetInstructorByUserIdResponseEntity = instructorFeignClient.getInstructorByUserId(correlationId, userId);
-            ResponseDto responseBody = instructorFeignClientGetInstructorByUserIdResponseEntity.getBody();
+            ResponseEntity<ResponseDto> instructorFeignClientFindByUserIdResponseEntity = instructorFeignClient.findByUserId(correlationId, userId);
+            ResponseDto responseBody = instructorFeignClientFindByUserIdResponseEntity.getBody();
 
             assert responseBody != null;
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();
             Map<String, Object> instructor = data != null ? (Map<String, Object>) data.get("instructor") : null;
 
-            logger.debug("InstructorServiceImpl.getInstructorByUserId() $instructor:: {}", instructor);
+            logger.debug("InstructorServiceImpl.findByUserId() $instructor:: {}", instructor);
 
             InstructorDto instructorDto = new InstructorDto();
 
@@ -49,4 +49,5 @@ public class InstructorServiceImpl implements IInstructorService {
             throw new CustomFeignException(e, new ObjectMapper());
         }
     }
+
 }

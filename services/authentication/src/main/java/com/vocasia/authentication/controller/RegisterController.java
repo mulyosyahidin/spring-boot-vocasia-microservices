@@ -8,6 +8,8 @@ import com.vocasia.authentication.service.IKeyCloackService;
 import com.vocasia.authentication.service.IUserService;
 import jakarta.validation.Valid;
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,8 @@ import java.util.Map;
 @Validated
 public class RegisterController {
 
+    private final Logger logger = LoggerFactory.getLogger(RegisterController.class);
+
     private final IUserService userService;
     private final IKeyCloackService keyCloackService;
 
@@ -35,6 +39,8 @@ public class RegisterController {
     public ResponseEntity<ResponseDto> register(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                 @Valid @RequestBody RegisterRequest registerRequest)
             throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+        logger.info("RegisterController.register called");
+
         String registeredKeycloackId = keyCloackService.registerNewUser(
                 registerRequest.getEmail(),
                 registerRequest.getUsername(),

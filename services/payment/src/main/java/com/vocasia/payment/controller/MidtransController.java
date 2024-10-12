@@ -39,7 +39,7 @@ public class MidtransController {
     @PostMapping("/midtrans-callback")
     public ResponseEntity<ResponseDto> midtransCallback(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                         @RequestBody MidtransCallbackRequest midtransCallbackRequest) {
-        logger.debug("MidtransController.midtransCallback called");
+        logger.info("MidtransController.midtransCallback called");
 
         String serverKey = midtransConfigProperties.getServerKey();
         String orderId = midtransCallbackRequest.getOrderId();
@@ -49,20 +49,14 @@ public class MidtransController {
         String hashedKey = MidtransHashUtil.generateMidtransHash(orderId, statusCode, grossAmount, serverKey);
 
         if (!hashedKey.equals(midtransCallbackRequest.getSignatureKey())) {
-            logger.debug("Hashed key does not match signature key");
+            logger.warn("Hashed key does not match signature key");
 
             return ResponseEntity
                     .status(HttpStatus.SC_UNAUTHORIZED)
                     .body(new ResponseDto(false, "Akses tidak diizinkan", null, "Anda tidak diizinkan mengakses resource ini!"));
         }
 
-        Map<String, Object> response = new HashMap<>();
-
         Payment payment = paymentService.findByOrderNumber(midtransCallbackRequest.getOrderId());
-
-        response.put("hashedKey", hashedKey);
-        response.put("signatureKey", midtransCallbackRequest.getSignatureKey());
-        response.put("key_match", hashedKey.equals(midtransCallbackRequest.getSignatureKey()));
 
         String transactionStatus = midtransCallbackRequest.getTransactionStatus();
         String paymentType = midtransCallbackRequest.getPaymentType();
@@ -127,7 +121,7 @@ public class MidtransController {
 
         return ResponseEntity
                 .status(HttpStatus.SC_OK)
-                .body(new ResponseDto(true, "Midtrans callback", response, null));
+                .body(new ResponseDto(true, "Data berhasil diproses", null, null));
     }
 
 }

@@ -27,6 +27,10 @@ import {CourseCheckoutPage} from "../pages/Public/CourseCheckoutPage/Index.jsx";
 import {OrderDataPage} from "../pages/User/OrderDataPage/Index.jsx";
 import {CoursesPage} from "../pages/User/CoursesPage/Index.jsx";
 import {SingleCoursePage} from "../pages/User/SingleCoursePage/Index.jsx";
+import {StudentIndexPage} from "../pages/Instructor/Students/StudentIndexPage/Index.jsx";
+import {ShowStudentPage} from "../pages/Instructor/Students/ShowStudentPage/Index.jsx";
+import {TransactionIndexPage} from "../pages/Instructor/Transactions/TransactionIndexPage/Index.jsx";
+import {TransactionShowPage} from "../pages/Instructor/Transactions/TransactionShowPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -90,6 +94,22 @@ const routes = createBrowserRouter([
     {
         path: '/instructor/courses/:courseId/overview',
         element: <CourseOverviewPage/>,
+    },
+    {
+        path: '/instructor/students',
+        element: <StudentIndexPage />,
+    },
+    {
+        path: '/instructor/students/:studentId',
+        element: <ShowStudentPage />,
+    },
+    {
+        path: '/instructor/transactions',
+        element: <TransactionIndexPage />,
+    },
+    {
+        path: '/instructor/transactions/:incomeId',
+        element: <TransactionShowPage />,
     },
 
     // admin

@@ -46,17 +46,21 @@ public class HomeCourseController {
 
     @GetMapping("/public/categories")
     public ResponseEntity<ResponseDto> categories() {
+        logger.info("HomeCourseController.categories called");
+
         List<Category> categories = categoryService.getOnlyParentCategories();
 
         Map<String, Object> response = new HashMap<>();
         response.put("categories", categories.stream().map(CategoryMapper::mapToDto));
 
-        return ResponseEntity.ok(new ResponseDto(true, "Berhasil menampilkan data kategori", response, null));
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil menampilkan data kategori", response, null));
     }
 
     @GetMapping("/public/editor-choices")
     public ResponseEntity<ResponseDto> getEditorsChoices(@RequestHeader("vocasia-correlation-id") String correlationId) {
-        logger.debug("HomeCourseController.getEditorsChoices called");
+        logger.info("HomeCourseController.getEditorsChoices called");
 
         List<Course> courses = courseService.getEditorsChoices();
 
@@ -68,7 +72,7 @@ public class HomeCourseController {
 
             courseData.put("course", CourseMapper.mapToDto(course));
             courseData.put("category", CategoryMapper.mapToDto(course.getCategory(), false));
-            courseData.put("instructor", instructorService.getInstructorById(course.getInstructorId(), correlationId));
+            courseData.put("instructor", instructorService.findById(course.getInstructorId(), correlationId));
 
             coursesData.add(courseData);
         }
@@ -83,7 +87,7 @@ public class HomeCourseController {
     @GetMapping("/public/{slug}/{courseId}/overview")
     public ResponseEntity<ResponseDto> getCourseOverview(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                          @PathVariable String slug, @PathVariable Long courseId) {
-        logger.debug("HomeCourseController.getCourseOverview called");
+        logger.info("HomeCourseController.getCourseOverview called");
 
         Course course = courseService.findById(courseId);
         List<Chapter> chapters = chapterService.findAllByCourseId(course);
@@ -106,7 +110,7 @@ public class HomeCourseController {
         response.put("chapters", chaptersData);
 
         try {
-            InstructorDto getInstructorById = instructorService.getInstructorById(course.getInstructorId(), correlationId);
+            InstructorDto getInstructorById = instructorService.findById(course.getInstructorId(), correlationId);
 
             response.put("instructor", getInstructorById);
         } catch (CustomFeignException e) {
@@ -130,7 +134,7 @@ public class HomeCourseController {
 
     @GetMapping("/public/{slug}/{courseId}/chapters")
     public ResponseEntity<ResponseDto> getChapters(@PathVariable String slug, @PathVariable Long courseId) {
-        logger.debug("HomeCourseController.getChapters called");
+        logger.info("HomeCourseController.getChapters called");
 
         Course course = courseService.findById(courseId);
         List<Chapter> chapters = chapterService.findAllByCourseId(course);

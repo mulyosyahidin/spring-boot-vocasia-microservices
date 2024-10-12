@@ -1,4 +1,4 @@
-package com.vocasia.order.request.client.order;
+package com.vocasia.order.request.client.payment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vocasia.order.request.PlaceNewOrderRequest;
@@ -24,6 +24,25 @@ public class CreateOrderPaymentRequest {
     @NotNull(message = "Total price cannot be null")
     @JsonProperty("total_price")
     private Double totalPrice;
+
+    @NotNull(message = "Customer data cannot be null")
+    private PlaceNewOrderRequest.Customer customer;
+
+    @Getter
+    @Setter
+    public static class Customer {
+
+        @NotNull(message = "Customer ID cannot be null")
+
+        private Long id;
+
+        @NotNull(message = "Customer name cannot be null")
+        private String name;
+
+        @NotNull(message = "Customer email cannot be null")
+        private String email;
+
+    }
 
     @NotNull(message = "Order items cannot be null")
     private List<CreateOrderPaymentRequest.Item> items;

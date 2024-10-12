@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {getCourseStudents} from "../../../../../services/instructors/course-service.js";
-import {makeDateReadable} from "../../../../../utils/utils.js";
+import {makeDateReadable, parseLocalDate} from "../../../../../utils/utils.js";
 
 export const Students = ({activeTab, course, courseId}) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -53,7 +53,7 @@ export const Students = ({activeTab, course, courseId}) => {
                                     <tr key={item.enrollment.id}>
                                         <td>{index + 1}</td>
                                         <td>{item.user.name}</td>
-                                        <td>{makeDateReadable(item.enrollment.enrollment_date)}</td>
+                                        <td>{makeDateReadable({date: item.enrollment.enrollment_date})}</td>
                                         <td>{item.enrollment.progress_percentage}%</td>
                                         <td>
                                             {

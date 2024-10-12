@@ -39,7 +39,7 @@ public class CourseDataController {
     @GetMapping("/course-data/{courseId}/students")
     public ResponseEntity<ResponseDto> getStudents(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                    @PathVariable Long courseId) {
-        logger.debug("CourseDataController.getStudents called");
+        logger.info("CourseDataController.getStudents called");
 
         List<Enrollment> enrollments = enrollmentService.getUserEnrolledCourseByCourseId(correlationId, courseId);
 

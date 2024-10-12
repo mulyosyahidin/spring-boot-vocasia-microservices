@@ -45,7 +45,7 @@ public class CourseController {
     @GetMapping("/courses/all")
     public ResponseEntity<ResponseDto> getAllCourses(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                      @RequestHeader(value = "X-INSTRUCTOR-ID", required = false) Long instructorId) {
-        logger.debug("CourseController.getAllCourses called");
+        logger.info("CourseController.getAllCourses called");
 
         List<Course> courses = List.of();
 
@@ -63,7 +63,7 @@ public class CourseController {
 
             courseData.put("course", CourseMapper.mapToDto(course));
             courseData.put("category", CategoryMapper.mapToDto(course.getCategory(), false));
-            courseData.put("instructor", instructorService.getInstructorById(course.getInstructorId(), correlationId));
+            courseData.put("instructor", instructorService.findById(course.getInstructorId(), correlationId));
 
             coursesData.add(courseData);
         }
@@ -78,7 +78,7 @@ public class CourseController {
     @GetMapping("/courses/published")
     public ResponseEntity<ResponseDto> getAllPublishedCourses(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                               @RequestHeader(value = "X-INSTRUCTOR-ID", required = false) Long instructorId) {
-        logger.debug("CourseController.getAllPublishedCourses called");
+        logger.info("CourseController.getAllPublishedCourses called");
 
         List<Course> courses = List.of();
 
@@ -96,7 +96,7 @@ public class CourseController {
 
             courseData.put("course", CourseMapper.mapToDto(course));
             courseData.put("category", CategoryMapper.mapToDto(course.getCategory(), false));
-            courseData.put("instructor", instructorService.getInstructorById(course.getInstructorId(), correlationId));
+            courseData.put("instructor", instructorService.findById(course.getInstructorId(), correlationId));
 
             coursesData.add(courseData);
         }
@@ -111,7 +111,7 @@ public class CourseController {
     @GetMapping("/courses/draft")
     public ResponseEntity<ResponseDto> getAllDraftCourses(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                           @RequestHeader(value = "X-INSTRUCTOR-ID", required = false) Long instructorId) {
-        logger.debug("CourseController.getAllDraftCourses called");
+        logger.info("CourseController.getAllDraftCourses called");
 
         List<Course> courses = List.of();
 
@@ -129,7 +129,7 @@ public class CourseController {
 
             courseData.put("course", CourseMapper.mapToDto(course));
             courseData.put("category", CategoryMapper.mapToDto(course.getCategory(), false));
-            courseData.put("instructor", instructorService.getInstructorById(course.getInstructorId(), correlationId));
+            courseData.put("instructor", instructorService.findById(course.getInstructorId(), correlationId));
 
             coursesData.add(courseData);
         }
@@ -143,7 +143,7 @@ public class CourseController {
 
     @PostMapping("/courses")
     public ResponseEntity<ResponseDto> createCourse(@Valid @RequestBody CreateNewCourseRequest createNewCourseRequest) {
-        logger.debug("CourseController.createCourse called");
+        logger.info("CourseController.createCourse called");
 
         Course course = courseService.save(createNewCourseRequest);
 
@@ -158,7 +158,7 @@ public class CourseController {
     @GetMapping("/courses/{courseId}")
     public ResponseEntity<ResponseDto> getCourseById(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                      @PathVariable Long courseId) {
-        logger.debug("CourseController.getCourseById called");
+        logger.info("CourseController.getCourseById called");
 
         Course course = courseService.findById(courseId);
         Category courseCategory = course.getCategory();
@@ -168,7 +168,7 @@ public class CourseController {
         response.put("category", CategoryMapper.mapToDto(courseCategory, false));
 
         try {
-            InstructorDto getInstructorById = instructorService.getInstructorById(course.getInstructorId(), correlationId);
+            InstructorDto getInstructorById = instructorService.findById(course.getInstructorId(), correlationId);
 
             response.put("instructor", getInstructorById);
         } catch (CustomFeignException e) {
@@ -192,7 +192,7 @@ public class CourseController {
 
     @PutMapping("/courses/{id}")
     public ResponseEntity<ResponseDto> updateCourse(@PathVariable Long id, @Valid @RequestBody UpdateCourseRequest updateCourseRequest) {
-        logger.debug("CourseController.updateCourse called");
+        logger.info("CourseController.updateCourse called");
 
         Course course = courseService.findById(id);
         Course updatedCourse = courseService.update(course, updateCourseRequest);
@@ -208,7 +208,7 @@ public class CourseController {
     @PutMapping("/courses/{courseId}/thumbnail")
     public ResponseEntity<ResponseDto> updateCourseThumbnail(@PathVariable Long courseId,
                                                              @RequestParam("picture") @Valid MultipartFile picture) throws IOException {
-        logger.debug("CourseController.updateCourseThumbnail called");
+        logger.info("CourseController.updateCourseThumbnail called");
 
         Course course = courseService.findById(courseId);
         Map<String, Object> response = new HashMap<>();
@@ -235,7 +235,7 @@ public class CourseController {
 
     @PostMapping("/courses/{courseId}/publish")
     public ResponseEntity<ResponseDto> publishCourse(@PathVariable Long courseId) {
-        logger.debug("CourseController.publishCourse called");
+        logger.info("CourseController.publishCourse called");
 
         Course course = courseService.findById(courseId);
         Course publishedCourse = courseService.publishCourseById(course);
@@ -246,14 +246,6 @@ public class CourseController {
         return ResponseEntity
                 .status(HttpStatus.SC_OK)
                 .body(new ResponseDto(true, "Berhasil menerbitkan kursus", response, null));
-    }
-
-    @PostMapping("/courses/{courseId}/students")
-    public ResponseEntity<ResponseDto> getCourseStudents(@PathVariable Long courseId) {
-
-        Map<String, Object> response = new HashMap<>();
-
-        return ResponseEntity.ok(new ResponseDto(true, "Berhasil mendapatkan data siswa", response, null));
     }
 
 }

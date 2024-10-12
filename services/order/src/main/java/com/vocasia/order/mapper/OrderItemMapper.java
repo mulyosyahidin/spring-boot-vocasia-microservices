@@ -13,6 +13,7 @@ public class OrderItemMapper {
         orderItemDto.setId(orderItem.getId());
         orderItemDto.setOrderId(orderItem.getOrder().getId());
         orderItemDto.setCourseId(orderItem.getCourseId());
+        orderItemDto.setCourseInstructorId(orderItem.getCourseInstructorId());
         orderItemDto.setCourseTitle(orderItem.getCourseTitle());
         orderItemDto.setCourseSlug(orderItem.getCourseSlug());
         orderItemDto.setCourseFeaturedPictureUrl(orderItem.getCourseFeaturedPictureUrl());

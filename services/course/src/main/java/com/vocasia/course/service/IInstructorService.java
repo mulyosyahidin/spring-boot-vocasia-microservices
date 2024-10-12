@@ -4,6 +4,6 @@ import com.vocasia.course.dto.client.instructor.InstructorDto;
 
 public interface IInstructorService {
 
-    InstructorDto getInstructorById(Long id, String correlationId);
+    InstructorDto findById(Long id, String correlationId);
 
 }

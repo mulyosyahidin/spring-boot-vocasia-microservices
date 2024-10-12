@@ -2,7 +2,10 @@ package com.vocasia.course.mapper;
 
 import com.vocasia.course.dto.data.ChapterDto;
 import com.vocasia.course.entity.Chapter;
+import com.vocasia.course.entity.Lesson;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class ChapterMapper {
@@ -14,7 +17,10 @@ public class ChapterMapper {
         chapterDto.setCourseId(chapter.getCourse().getId());
         chapterDto.setTitle(chapter.getTitle());
         chapterDto.setTotalDuration(chapter.getTotalDuration());
-        chapterDto.setLessonCount(chapter.getLessons().size());
+
+        List<Lesson> lessons = chapter.getLessons();
+        chapterDto.setLessonCount(lessons != null ? lessons.size() : 0);
+
         chapterDto.setCreatedAt(chapter.getCreatedAt());
         chapterDto.setUpdatedAt(chapter.getUpdatedAt());
 

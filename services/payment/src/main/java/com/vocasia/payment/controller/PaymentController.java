@@ -1,5 +1,6 @@
 package com.vocasia.payment.controller;
 
+import com.vocasia.payment.config.PaymentConfigProperties;
 import com.vocasia.payment.dto.ResponseDto;
 import com.vocasia.payment.entity.Payment;
 import com.vocasia.payment.mapper.PaymentMapper;
@@ -24,10 +25,12 @@ public class PaymentController {
 
     private final Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
+    private final PaymentConfigProperties paymentConfigProperties;
     private final IPaymentService paymentService;
     private final IMidtransPaymentService midtransPaymentService;
 
-    public PaymentController(IPaymentService iPaymentService, IMidtransPaymentService iMidtransPaymentService) {
+    public PaymentController(PaymentConfigProperties paymentConfigProperties, IPaymentService iPaymentService, IMidtransPaymentService iMidtransPaymentService) {
+        this.paymentConfigProperties = paymentConfigProperties;
         this.paymentService = iPaymentService;
         this.midtransPaymentService = iMidtransPaymentService;
     }
@@ -35,7 +38,9 @@ public class PaymentController {
     @PostMapping("/create-order-payment")
     public ResponseEntity<ResponseDto> createOrderPayment(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                           @Valid @RequestBody CreateOrderPaymentRequest createOrderPaymentRequest) {
-        logger.debug("PaymentController.createOrderPayment called");
+        logger.info("PaymentController.createOrderPayment called");
+
+        createOrderPaymentRequest.setAdditionalFee(paymentConfigProperties.getAdditionalFee());
 
         Map<String, Object> response = new HashMap<>();
 
@@ -60,7 +65,7 @@ public class PaymentController {
     @GetMapping("/payment-data-by-order-id/{orderId}")
     public ResponseEntity<ResponseDto> getPaymentDataByOrderId(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                                @PathVariable Long orderId) {
-        logger.debug("PaymentController.getPaymentDataByOrderId called");
+        logger.info("PaymentController.getPaymentDataByOrderId called");
 
         Payment payment = paymentService.findByOrderId(orderId);
 

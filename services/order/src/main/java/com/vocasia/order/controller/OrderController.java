@@ -3,6 +3,7 @@ package com.vocasia.order.controller;
 import com.vocasia.order.dto.ResponseDto;
 import com.vocasia.order.dto.client.finance.InstructorIncomeDto;
 import com.vocasia.order.dto.client.finance.PlatformIncomeDto;
+import com.vocasia.order.dto.client.instructor.InstructorStudentCourseDto;
 import com.vocasia.order.dto.client.payment.PaymentDto;
 import com.vocasia.order.entity.Order;
 import com.vocasia.order.entity.OrderItem;
@@ -14,11 +15,9 @@ import com.vocasia.order.request.UpdatePaymentStatusRequest;
 import com.vocasia.order.request.client.enrollment.EnrollNewCourseRequest;
 import com.vocasia.order.request.client.finance.NewInstructorIncomeRequest;
 import com.vocasia.order.request.client.finance.NewPlatformIncomeRequest;
-import com.vocasia.order.request.client.order.CreateOrderPaymentRequest;
-import com.vocasia.order.service.IEnrollmentService;
-import com.vocasia.order.service.IFinanceService;
-import com.vocasia.order.service.IOrderService;
-import com.vocasia.order.service.IPaymentService;
+import com.vocasia.order.request.client.instructor.AssignCourseToStudentInstructorRequest;
+import com.vocasia.order.request.client.payment.CreateOrderPaymentRequest;
+import com.vocasia.order.service.*;
 import jakarta.validation.Valid;
 import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
@@ -37,34 +36,35 @@ public class OrderController {
     private final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     private final IOrderService orderService;
+    private final IOrderItemService orderItemService;
     private final IPaymentService paymentService;
     private final IEnrollmentService enrollmentService;
     private final IFinanceService financeService;
+    private final IInstructorService instructorService;
 
-    public OrderController(IOrderService iOrderService, IPaymentService iPaymentService, IEnrollmentService iEnrollmentService, IFinanceService iFinanceService) {
+    public OrderController(IOrderService iOrderService, IOrderItemService iOrderItemService, IPaymentService iPaymentService, IEnrollmentService iEnrollmentService,
+                           IFinanceService iFinanceService, IInstructorService iInstructorService) {
         this.orderService = iOrderService;
+        this.orderItemService = iOrderItemService;
         this.paymentService = iPaymentService;
         this.enrollmentService = iEnrollmentService;
         this.financeService = iFinanceService;
+        this.instructorService = iInstructorService;
     }
 
     @PostMapping("/place-new-order")
     public ResponseEntity<ResponseDto> placeNewOrder(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                      @Valid @RequestBody PlaceNewOrderRequest placeNewOrderRequest) {
-        logger.debug("OrderController.placeNewOrder called");
+        logger.info("OrderController.placeNewOrder called");
 
         Order createdOrder = orderService.placeNewOrder(placeNewOrderRequest);
-
-        CreateOrderPaymentRequest createOrderPaymentRequest = new CreateOrderPaymentRequest();
-        createOrderPaymentRequest.setOrderId(createdOrder.getId());
-        createOrderPaymentRequest.setTotalPrice(createdOrder.getTotalPrice());
-        createOrderPaymentRequest.setOrderNumber(createdOrder.getOrderNumber());
+        CreateOrderPaymentRequest createOrderPaymentRequest = getCreateOrderPaymentRequest(placeNewOrderRequest, createdOrder);
 
         Map<String, Object> response = new HashMap<>();
         response.put("order", OrderMapper.mapToDto(createdOrder));
 
         try {
-            PaymentDto paymentDto = paymentService.createOrderPayment(createOrderPaymentRequest, correlationId);
+            PaymentDto paymentDto = paymentService.saveOrderPayment(createOrderPaymentRequest, correlationId);
 
             response.put("payment", paymentDto);
         } catch (CustomFeignException e) {
@@ -89,7 +89,7 @@ public class OrderController {
     @GetMapping("/get-data/{orderId}")
     public ResponseEntity<ResponseDto> getOrderData(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                     @PathVariable Long orderId) {
-        logger.debug("OrderController.getOrderData called");
+        logger.info("OrderController.getOrderData called");
 
         Order order = orderService.findById(orderId);
 
@@ -98,7 +98,7 @@ public class OrderController {
         response.put("items", order.getOrderItems().stream().map(OrderItemMapper::mapToDto));
 
         try {
-            PaymentDto paymentDto = paymentService.getPaymentDataByOrderId(orderId, correlationId);
+            PaymentDto paymentDto = paymentService.findByOrderId(orderId, correlationId);
 
             response.put("payment", paymentDto);
         } catch (CustomFeignException e) {
@@ -120,10 +120,25 @@ public class OrderController {
                 .body(new ResponseDto(true, "Berhasil mendapatkan data order", response, null));
     }
 
+    @GetMapping("/get-item-data/{orderId}/{courseId}")
+    public ResponseEntity<ResponseDto> getOrderItemData(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                        @PathVariable("orderId") Long orderId, @PathVariable("courseId") Long courseId) {
+        logger.info("OrderController.getOrderItemData called");
+
+        OrderItem orderItem = orderItemService.findByOrderIdAndCourseId(orderId, courseId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("item", OrderItemMapper.mapToDto(orderItem));
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil mendapatkan data item order", response, null));
+    }
+
     @PutMapping("/update-payment-status/{orderId}")
     public ResponseEntity<ResponseDto> updateOrderPaymentStatus(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                                 @PathVariable Long orderId, @RequestBody UpdatePaymentStatusRequest updatePaymentStatusRequest) {
-        logger.debug("OrderController.updateOrderPaymentStatus called");
+        logger.info("OrderController.updateOrderPaymentStatus called");
 
         Order order = orderService.findById(orderId);
 
@@ -145,6 +160,9 @@ public class OrderController {
 
                     NewPlatformIncomeRequest newPlatformIncomeRequest = getNewPlatformIncomeRequest(orderItem, updatedOrder);
                     PlatformIncomeDto platformIncomeDto = financeService.savePlatformIncome(newPlatformIncomeRequest, correlationId);
+
+                    AssignCourseToStudentInstructorRequest assignCourseToStudentInstructorRequest = getAssignCourseToStudentInstructorRequest(orderItem, updatedOrder);
+                    InstructorStudentCourseDto instructorStudentCourseDto = instructorService.assignCourse(assignCourseToStudentInstructorRequest, correlationId);
                 }
             } catch (CustomFeignException e) {
                 logger.error(e.getMessage(), e);
@@ -186,7 +204,7 @@ public class OrderController {
         newInstructorIncomeRequest.setCourseId(orderItem.getCourseId());
         newInstructorIncomeRequest.setTotalUserPayment(orderItem.getCourseSubtotal());
         newInstructorIncomeRequest.setRemarks("New income from order #" + updatedOrder.getOrderNumber());
-        
+
         return newInstructorIncomeRequest;
     }
 
@@ -206,6 +224,48 @@ public class OrderController {
         enrollNewCourseRequest.setCourses(courses);
 
         return enrollNewCourseRequest;
+    }
+
+    private static CreateOrderPaymentRequest getCreateOrderPaymentRequest(PlaceNewOrderRequest placeNewOrderRequest, Order createdOrder) {
+        List<CreateOrderPaymentRequest.Item> orderItems = getItems(createdOrder);
+
+        CreateOrderPaymentRequest createOrderPaymentRequest = new CreateOrderPaymentRequest();
+
+        createOrderPaymentRequest.setOrderId(createdOrder.getId());
+        createOrderPaymentRequest.setTotalPrice(createdOrder.getTotalPrice());
+        createOrderPaymentRequest.setOrderNumber(createdOrder.getOrderNumber());
+        createOrderPaymentRequest.setItems(orderItems);
+        createOrderPaymentRequest.setCustomer(placeNewOrderRequest.getCustomer());
+
+        return createOrderPaymentRequest;
+    }
+
+    private static AssignCourseToStudentInstructorRequest getAssignCourseToStudentInstructorRequest(OrderItem orderItem, Order updatedOrder) {
+        AssignCourseToStudentInstructorRequest assignCourseToStudentInstructorRequest = new AssignCourseToStudentInstructorRequest();
+
+        assignCourseToStudentInstructorRequest.setInstructorId(orderItem.getCourseInstructorId());
+        assignCourseToStudentInstructorRequest.setUserId(updatedOrder.getUserId());
+        assignCourseToStudentInstructorRequest.setCourseId(orderItem.getCourseId());
+        assignCourseToStudentInstructorRequest.setOrderId(updatedOrder.getId());
+
+        return assignCourseToStudentInstructorRequest;
+    }
+
+    private static List<CreateOrderPaymentRequest.Item> getItems(Order createdOrder) {
+        List<CreateOrderPaymentRequest.Item> orderItems = new ArrayList<>(List.of());
+
+        for (OrderItem orderItem : createdOrder.getOrderItems()) {
+            CreateOrderPaymentRequest.Item item = new CreateOrderPaymentRequest.Item();
+
+            item.setCourseId(orderItem.getCourseId());
+            item.setCourseTitle(orderItem.getCourseTitle());
+            item.setCoursePrice(orderItem.getCoursePrice());
+            item.setCourseDiscount(orderItem.getCourseDiscount());
+
+            orderItems.add(item);
+        }
+
+        return orderItems;
     }
 
 }

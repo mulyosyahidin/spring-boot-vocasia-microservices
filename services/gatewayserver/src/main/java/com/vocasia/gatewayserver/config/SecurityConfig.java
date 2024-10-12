@@ -41,10 +41,17 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.GET,"/instructors/build-info").permitAll()
                         .pathMatchers(HttpMethod.GET,"/instructors/welcome").permitAll()
+
                         .pathMatchers(HttpMethod.POST,"/instructors/register").permitAll()
                         .pathMatchers(HttpMethod.GET,"/instructors/profile/{instructorId}").permitAll()
                         .pathMatchers(HttpMethod.GET,"/instructors/profile-by-user-id/{userId}").permitAll()
                         .pathMatchers(HttpMethod.PUT, "/instructors/profile").hasRole("INSTRUCTOR")
+
+                        .pathMatchers(HttpMethod.POST, "/instructors/register-student").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.POST, "/instructors/assign-course").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/instructors/students").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/instructors/students/{instructorStudentId}").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/instructors/{instructorId}/students").hasRole("INSTRUCTOR")
 
                         // course service
                         .pathMatchers("/course/actuator/**").permitAll()
@@ -95,7 +102,8 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET,"/order/welcome").permitAll()
 
                         .pathMatchers(HttpMethod.POST, "/order/place-new-order").hasRole("STUDENT")
-                        .pathMatchers(HttpMethod.GET, "/order/get-data/{orderId}").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.GET, "/order/get-data/{orderId}").hasAnyRole("STUDENT", "INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/order/get-item-data/{orderId}/{courseId}").hasAnyRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.PUT, "/order/update-payment-status/{orderId}").permitAll()
 
                         // payment service
@@ -129,6 +137,10 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.POST, "/finance/instructor-income/store").permitAll()
                         .pathMatchers(HttpMethod.POST, "/finance/platform-income/store").permitAll()
+
+                        .pathMatchers(HttpMethod.GET, "/finance/instructor-income/course-income/{courseId}").hasAnyRole("ADMIN", "INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/finance/instructor-sales").hasAnyRole("ADMIN", "INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/finance/instructor-sales/{incomeId}").hasAnyRole("ADMIN", "INSTRUCTOR")
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));

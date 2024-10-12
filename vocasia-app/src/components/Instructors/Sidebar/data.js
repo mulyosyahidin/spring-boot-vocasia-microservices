@@ -22,10 +22,10 @@ export const sidebarItems = [
     },
     {
         id: 4,
-        href: "/instructor/reports",
+        href: "/instructor/transactions",
         iconClass: "text-20 icon-play-button",
-        text: "Laporan",
-        activeWhen: "/instructor/reports/*",
+        text: "Transaksi",
+        activeWhen: "/instructor/transactions/*",
     },
 
 ];

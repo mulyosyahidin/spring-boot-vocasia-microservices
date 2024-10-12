@@ -1,4 +1,9 @@
 package com.vocasia.finance.service;
 
-public class IAuthenticationService {
+import com.vocasia.finance.dto.client.authentication.UserDto;
+
+public interface IAuthenticationService {
+
+    UserDto findUserById(Long userId, String correlationId);
+
 }

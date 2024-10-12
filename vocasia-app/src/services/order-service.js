@@ -1,5 +1,3 @@
-import {useRecoilValue} from "recoil";
-import {courseCartAtom} from "../states/recoil/Atoms/CourseCart.jsx";
 import {apiBaseUrl, AUTH_USER} from "../config/consts.js";
 import {axiosGet, axiosPost} from "./api.js";
 import {USER_ORDER_GET_DATA, USER_ORDER_PLACE_NEW_ORDER} from "../config/endpoints.js";
@@ -29,6 +27,11 @@ export const placeNewOrder = async (cart) => {
 
     const orderData = {
         user_id: getUserData.id,
+        customer: {
+            id: getUserData.id,
+            name: getUserData.name,
+            email: getUserData.email,
+        },
         items: orderItems,
     };
 

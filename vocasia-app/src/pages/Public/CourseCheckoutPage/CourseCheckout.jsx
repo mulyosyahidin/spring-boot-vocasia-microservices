@@ -1,7 +1,7 @@
 import {Meta} from "../../../components/commons/Meta.jsx";
 import {PreLoader} from "../../../components/commons/PreLoader.jsx";
 import {Header} from "../../../components/Header/Index.jsx";
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useRecoilValue, useSetRecoilState} from "recoil";
 import {courseCartAtom} from "../../../states/recoil/Atoms/CourseCart.jsx";
@@ -34,8 +34,11 @@ export const CourseCheckout = () => {
 
     const navigate = useNavigate();
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const handleSubmit = async () => {
         try {
+            setIsLoading(true);
             const order = await placeNewOrder(cart);
 
             if (order) {
@@ -51,6 +54,9 @@ export const CourseCheckout = () => {
         }
         catch (e) {
             console.log(e);
+        }
+        finally {
+            setIsLoading(false);
         }
     }
 
@@ -151,8 +157,10 @@ export const CourseCheckout = () => {
                                     <div className="mt-30">
                                         {
                                             authStatus.isLoggedIn && (
-                                                <button className="button -md -black col-12 -uppercase text-white" onClick={() => handleSubmit()}>
-                                                    Checkout
+                                                <button className="button -md -black col-12 -uppercase text-white" disabled={isLoading} onClick={() => handleSubmit()}>
+                                                    {
+                                                        isLoading ? 'Mohon Tunggu...' : 'Checkout'
+                                                    }
                                                 </button>
                                             )
                                         }

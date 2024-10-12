@@ -36,7 +36,7 @@ public class ProfileController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<ResponseDto> getUserProfile(@PathVariable Long id) {
-        logger.debug("ProfileController.getUserProfile called");
+        logger.info("ProfileController.getUserProfile called");
 
         User user = userService.findById(id);
 
@@ -54,7 +54,7 @@ public class ProfileController {
                                                   @RequestParam("name") String name,
                                                   @RequestParam("email") String email,
                                                   @RequestParam(value = "password", required = false) String password) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-        logger.debug("ProfileController.updateUser called");
+        logger.info("ProfileController.updateUser called");
 
         UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest();
 

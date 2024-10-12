@@ -25,7 +25,7 @@ public class EnrollController {
     @PostMapping("/enroll")
     public ResponseEntity<ResponseDto> enroll(@RequestHeader("vocasia-correlation-id") String correlationId,
                                               @Valid @RequestBody EnrollNewCourseRequest enrollNewCourseRequest) {
-        logger.debug("EnrollController.enroll called");
+        logger.info("EnrollController.enroll called");
 
         enrollmentService.enrollCourse(enrollNewCourseRequest);
 

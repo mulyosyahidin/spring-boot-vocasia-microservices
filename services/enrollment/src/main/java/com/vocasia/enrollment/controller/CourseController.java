@@ -35,7 +35,7 @@ public class CourseController {
     @GetMapping("/courses")
     public ResponseEntity<ResponseDto> getUserEnrolledCourses(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                               @RequestHeader("X-USER-ID") Long userId) {
-        logger.debug("CourseController.getUserEnrolledCourses called");
+        logger.info("CourseController.getUserEnrolledCourses called");
 
         List<Enrollment> enrollments = enrollmentService.getUserEnrolledCourse(userId);
 
@@ -78,6 +78,8 @@ public class CourseController {
     @GetMapping("/courses/{enrollmentId}")
     public ResponseEntity<ResponseDto> getCourseDetail(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                        @RequestHeader("X-USER-ID") Long userId, @PathVariable Long enrollmentId) {
+        logger.info("CourseController.getCourseDetail called");
+
         Enrollment enrollment = enrollmentService.findById(userId, enrollmentId);
 
         Map<String, Object> response = new HashMap<>();

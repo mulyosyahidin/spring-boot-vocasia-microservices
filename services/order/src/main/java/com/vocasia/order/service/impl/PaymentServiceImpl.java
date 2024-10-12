@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocasia.order.dto.ResponseDto;
 import com.vocasia.order.dto.client.payment.PaymentDto;
 import com.vocasia.order.exception.CustomFeignException;
-import com.vocasia.order.request.client.order.CreateOrderPaymentRequest;
+import com.vocasia.order.request.client.payment.CreateOrderPaymentRequest;
 import com.vocasia.order.service.IPaymentService;
 import com.vocasia.order.service.client.PaymentFeignClient;
 import feign.FeignException;
@@ -26,16 +26,16 @@ public class PaymentServiceImpl implements IPaymentService {
     private final PaymentFeignClient paymentFeignClient;
 
     @Override
-    public PaymentDto createOrderPayment(CreateOrderPaymentRequest createOrderPaymentRequest, String correlationId) {
+    public PaymentDto saveOrderPayment(CreateOrderPaymentRequest createOrderPaymentRequest, String correlationId) {
         try {
-            ResponseEntity<ResponseDto> paymentFeignClientCreateOrderPaymentResponseEntity = paymentFeignClient.createOrderPayment(correlationId, createOrderPaymentRequest);
-            ResponseDto responseBody = paymentFeignClientCreateOrderPaymentResponseEntity.getBody();
+            ResponseEntity<ResponseDto> paymentFeignClientSaveOrderPaymentResponseEntity = paymentFeignClient.saveOrderPayment(correlationId, createOrderPaymentRequest);
+            ResponseDto responseBody = paymentFeignClientSaveOrderPaymentResponseEntity.getBody();
 
             assert responseBody != null;
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();
             Map<String, Object> payment = data != null ? (Map<String, Object>) data.get("payment") : null;
 
-            logger.debug("PaymentServiceImpl.createOrderPayment() $payment:: {}", payment);
+            logger.debug("PaymentServiceImpl.saveOrderPayment() $payment:: {}", payment);
 
             PaymentDto paymentDto = new PaymentDto();
 
@@ -61,16 +61,16 @@ public class PaymentServiceImpl implements IPaymentService {
     }
 
     @Override
-    public PaymentDto getPaymentDataByOrderId(Long orderId, String correlationId) {
+    public PaymentDto findByOrderId(Long orderId, String correlationId) {
         try {
-            ResponseEntity<ResponseDto> paymentFeignClientGetPaymentDataByOrderIdResponseEntity = paymentFeignClient.getPaymentDataByOrderId(correlationId, orderId);
-            ResponseDto responseBody = paymentFeignClientGetPaymentDataByOrderIdResponseEntity.getBody();
+            ResponseEntity<ResponseDto> paymentFeignClientFindByOrderIdResponseEntity = paymentFeignClient.findByOrderId(correlationId, orderId);
+            ResponseDto responseBody = paymentFeignClientFindByOrderIdResponseEntity.getBody();
 
             assert responseBody != null;
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();
             Map<String, Object> payment = data != null ? (Map<String, Object>) data.get("payment") : null;
 
-            logger.debug("PaymentServiceImpl.getPaymentDataByOrderId() $payment:: {}", payment);
+            logger.debug("PaymentServiceImpl.findByOrderId() $payment:: {}", payment);
 
             PaymentDto paymentDto = new PaymentDto();
 

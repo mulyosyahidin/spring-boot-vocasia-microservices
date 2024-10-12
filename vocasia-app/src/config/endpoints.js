@@ -36,6 +36,13 @@ export const PUBLIC_COURSES_SHOW_CHAPTERS = '/course/public/:slug/:courseId/chap
 export const INSTRUCTORS_GET_PROFILE = '/instructors/profile/:instructorId'; // hasRole("INSTRUCTOR")
 export const INSTRUCTORS_UPDATE_PROFILE = '/instructors/profile'; // hasRole("INSTRUCTOR")
 export const INSTRUCTORS_COURSE_GET_STUDENTS = '/enrollment/course-data/:courseId/students';
+export const INSTRUCTORS_COURSE_GET_INCOMES = '/finance/instructor-income/course-income/:courseId';
+
+export const INSTRUCTORS_STUDENTS_GET_ALL = '/instructors/students'; // hasRole("INSTRUCTOR")
+export const INSTRUCTORS_STUDENTS_GET_BY_ID = '/instructors/students/:studentId'; // hasRole("INSTRUCTOR")
+
+export const INSTRUCTORS_TRANSACTIONS_GET_ALL = '/finance/instructor-sales';
+export const INSTRUCTORS_TRANSACTIONS_GET_BY_INCOME_ID = '/finance/instructor-sales/:id';
 
 export const USER_ORDER_PLACE_NEW_ORDER = '/order/place-new-order'; // hasRole("STUDENT")
 export const USER_ORDER_GET_DATA = '/order/get-data/:orderId'; // hasRole("STUDENT")

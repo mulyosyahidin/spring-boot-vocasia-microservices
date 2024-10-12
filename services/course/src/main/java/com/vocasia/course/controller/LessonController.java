@@ -39,7 +39,7 @@ public class LessonController {
 
     @GetMapping("/{courseId}/chapters/{chapterId}/lessons")
     public ResponseEntity<ResponseDto> getAllLessonByChapterId(@PathVariable Long courseId, @PathVariable Long chapterId) {
-        logger.debug("LessonController.getAllLessonByChapterId called");
+        logger.info("LessonController.getAllLessonByChapterId called");
 
         Course course = courseService.findById(courseId);
         Chapter chapter = chapterService.findById(chapterId);
@@ -55,7 +55,7 @@ public class LessonController {
 
     @PostMapping("/{courseId}/chapters/{chapterId}/lessons")
     public ResponseEntity<ResponseDto> createLesson(@PathVariable Long courseId, @PathVariable Long chapterId, @Valid @RequestBody StoreLessonRequest storeLessonRequest) {
-        logger.debug("LessonController.createLesson called");
+        logger.info("LessonController.createLesson called");
 
         Course course = courseService.findById(courseId);
         Chapter chapter = chapterService.findById(chapterId);
@@ -71,7 +71,7 @@ public class LessonController {
 
     @GetMapping("/{courseId}/chapters/{chapterId}/lessons/{lessonId}")
     public ResponseEntity<ResponseDto> getLessonById(@PathVariable Long courseId, @PathVariable Long chapterId, @PathVariable Long lessonId) {
-        logger.debug("LessonController.getLessonById called");
+        logger.info("LessonController.getLessonById called");
 
         Course course = courseService.findById(courseId);
         Chapter chapter = chapterService.findById(chapterId);
@@ -87,7 +87,7 @@ public class LessonController {
 
     @PutMapping("/{courseId}/chapters/{chapterId}/lessons/{lessonId}")
     public ResponseEntity<ResponseDto> updateLesson(@PathVariable Long courseId, @PathVariable Long chapterId, @PathVariable Long lessonId, @Valid @RequestBody UpdateLessonRequest updateLessonRequest) {
-        logger.debug("LessonController.updateLesson called");
+        logger.info("LessonController.updateLesson called");
 
         Course course = courseService.findById(courseId);
         Chapter chapter = chapterService.findById(chapterId);
@@ -105,7 +105,7 @@ public class LessonController {
 
     @DeleteMapping("/{courseId}/chapters/{chapterId}/lessons/{lessonId}")
     public ResponseEntity<ResponseDto> deleteLesson(@PathVariable Long courseId, @PathVariable Long chapterId, @PathVariable Long lessonId) {
-        logger.debug("LessonController.deleteLesson called");
+        logger.info("LessonController.deleteLesson called");
 
         Course course = courseService.findById(courseId);
         Chapter chapter = chapterService.findById(chapterId);

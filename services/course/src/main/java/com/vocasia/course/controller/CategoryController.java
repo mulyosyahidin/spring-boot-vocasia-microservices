@@ -33,7 +33,7 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public ResponseEntity<ResponseDto> getAllCategories() {
-        logger.debug("CategoryController.getAllCategories called");
+        logger.info("CategoryController.getAllCategories called");
 
         List<Category> categories = categoryService.findAll();
 
@@ -47,7 +47,7 @@ public class CategoryController {
 
     @GetMapping("/categories/{categoryId}")
     public ResponseEntity<ResponseDto> getCategoryById(@PathVariable Long categoryId) {
-        logger.debug("CategoryController.getCategoryById called");
+        logger.info("CategoryController.getCategoryById called");
 
         Category category = categoryService.findById(categoryId);
 

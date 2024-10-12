@@ -1,7 +1,7 @@
 import {apiBaseUrl, AUTH_USER, AWS_BUCKET_NAME, AWS_REGION} from "../config/consts.js";
 import moment from "moment";
 
-const _api = ({ endpoint, replaces = [] }) => {
+const _api = ({endpoint, replaces = []}) => {
     let replacedEndpoint = endpoint;
 
     replaces.forEach((replace) => {
@@ -52,6 +52,12 @@ const makeDateReadable = ({date, format = 'DD MMMM YYYY HH:mm'}) => {
     return parseDate.format(format);
 }
 
+const parseLocalDate = (date) => {
+    const parsedDate = moment(date);
+
+    return parsedDate.format('DD MMMM YYYY HH:mm');
+}
+
 const getUserProfilePictureUrl = () => {
     let userData = localStorage.getItem(AUTH_USER);
     userData = JSON.parse(userData);
@@ -59,4 +65,14 @@ const getUserProfilePictureUrl = () => {
     return userData.profile_picture_url ? userData.profile_picture_url : "/assets/img/misc/user-profile.png";
 }
 
-export { _api, getLocalStorageItem, generateAWSObjectUrl, getYouTubeVideoId, rupiahFormatter, getPercentage, makeDateReadable, getUserProfilePictureUrl };
+export {
+    _api,
+    getLocalStorageItem,
+    generateAWSObjectUrl,
+    getYouTubeVideoId,
+    rupiahFormatter,
+    getPercentage,
+    makeDateReadable,
+    parseLocalDate,
+    getUserProfilePictureUrl,
+};

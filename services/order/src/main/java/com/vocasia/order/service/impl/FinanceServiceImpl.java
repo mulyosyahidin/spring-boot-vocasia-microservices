@@ -24,15 +24,15 @@ import java.util.Map;
 @AllArgsConstructor
 public class FinanceServiceImpl implements IFinanceService {
 
-    private final Logger logger = LoggerFactory.getLogger(FinanceServiceImpl.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(FinanceServiceImpl.class);
 
     private FinanceFeignClient financeFeignClient;
 
     @Override
     public InstructorIncomeDto saveInstructorIncome(NewInstructorIncomeRequest newInstructorIncomeRequest, String correlationId) {
         try {
-            ResponseEntity<ResponseDto> financeFeignClientStoreInstructorIncomeResponseEntity = financeFeignClient.storeInstructorIncome(correlationId, newInstructorIncomeRequest);
-            ResponseDto responseBody = financeFeignClientStoreInstructorIncomeResponseEntity.getBody();
+            ResponseEntity<ResponseDto> financeFeignClientSaveInstructorIncomeResponseEntity = financeFeignClient.saveInstructorIncome(correlationId, newInstructorIncomeRequest);
+            ResponseDto responseBody = financeFeignClientSaveInstructorIncomeResponseEntity.getBody();
 
             assert responseBody != null;
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();
@@ -65,8 +65,8 @@ public class FinanceServiceImpl implements IFinanceService {
     @Override
     public PlatformIncomeDto savePlatformIncome(NewPlatformIncomeRequest newPlatformIncomeRequest, String correlationId) {
         try {
-            ResponseEntity<ResponseDto> financeFeignClientStoreInstructorIncomeResponseEntity = financeFeignClient.storePlatformIncome(correlationId, newPlatformIncomeRequest);
-            ResponseDto responseBody = financeFeignClientStoreInstructorIncomeResponseEntity.getBody();
+            ResponseEntity<ResponseDto> financeFeignClientSaveInstructorIncomeResponseEntity = financeFeignClient.savePlatformIncome(correlationId, newPlatformIncomeRequest);
+            ResponseDto responseBody = financeFeignClientSaveInstructorIncomeResponseEntity.getBody();
 
             assert responseBody != null;
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();

@@ -43,7 +43,7 @@ public class ChapterController {
 
     @GetMapping("/{courseId}/chapters")
     public ResponseEntity<ResponseDto> getAllCourseChapters(@PathVariable Long courseId) {
-        logger.debug("ChapterController.getAllCourseChapters called");
+        logger.info("ChapterController.getAllCourseChapters called");
 
         Course course = courseService.findById(courseId);
         List<Chapter> chapters = chapterService.findAllByCourseId(course);
@@ -69,13 +69,18 @@ public class ChapterController {
 
     @PostMapping("/{courseId}/chapters")
     public ResponseEntity<ResponseDto> createChapter(@PathVariable Long courseId, @Valid @RequestBody CreateChapterRequest createChapterRequest) {
-        logger.debug("ChapterController.createChapter called");
+        logger.info("ChapterController.createChapter called");
 
         Course course = courseService.findById(courseId);
         Chapter chapter = chapterService.save(course, createChapterRequest);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("chapter", ChapterMapper.mapToDto(chapter));
+        Map<String, Object> chapterData = new HashMap<>();
+
+        chapterData.put("chapter", ChapterMapper.mapToDto(chapter));
+        chapterData.put("lessons", List.of());
+
+        response.put("chapter", chapterData);
 
         return ResponseEntity
                 .status(HttpStatus.SC_CREATED)
@@ -84,7 +89,7 @@ public class ChapterController {
 
     @GetMapping("/{courseId}/chapters/{chapterId}")
     public ResponseEntity<ResponseDto> getChapterById(@PathVariable Long courseId, @PathVariable Long chapterId) {
-        logger.debug("ChapterController.getChapterById called");
+        logger.info("ChapterController.getChapterById called");
 
         Chapter chapter = chapterService.findById(chapterId);
         List<Lesson> chapterLessons = lessonService.findAllByChapterId(chapterId);
@@ -100,7 +105,7 @@ public class ChapterController {
 
     @PutMapping("/{courseId}/chapters/{chapterId}")
     public ResponseEntity<ResponseDto> updateChapter(@PathVariable Long courseId, @PathVariable Long chapterId, @Valid @RequestBody UpdateChapterRequest updateChapterRequest) {
-        logger.debug("ChapterController.updateChapter called");
+        logger.info("ChapterController.updateChapter called");
 
         Chapter chapter = chapterService.findById(chapterId);
         Chapter updatedChapter = chapterService.update(chapter, updateChapterRequest);
@@ -115,7 +120,7 @@ public class ChapterController {
 
     @DeleteMapping("/{courseId}/chapters/{chapterId}")
     public ResponseEntity<ResponseDto> deleteChapter(@PathVariable Long courseId, @PathVariable Long chapterId) {
-        logger.debug("ChapterController.deleteChapter called");
+        logger.info("ChapterController.deleteChapter called");
 
         Chapter chapter = chapterService.findById(chapterId);
         chapterService.deleteById(chapter);
