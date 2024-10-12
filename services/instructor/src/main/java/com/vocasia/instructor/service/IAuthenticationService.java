@@ -6,8 +6,8 @@ import com.vocasia.instructor.request.UpdateProfileRequest;
 
 public interface IAuthenticationService {
 
-    UserDto registerNewUser(RegisterRequest registerRequest, String correlationId);
-    UserDto getByUserId(Long userId, String correlationId);
-    UserDto updateProfile(UpdateProfileRequest updateProfileRequest, String correlationId);
+    UserDto registerUser(RegisterRequest registerRequest, String correlationId);
+    UserDto findUserById(Long userId, String correlationId);
+    UserDto updateUser(UpdateProfileRequest updateProfileRequest, String correlationId);
 
 }

@@ -38,7 +38,7 @@ public class ProfileController {
     @GetMapping("/profile/{id}")
     public ResponseEntity<ResponseDto> getProfile(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                   @PathVariable Long id) {
-        logger.debug("ProfileController.getProfile called");
+        logger.info("ProfileController.getProfile called");
 
         Instructor instructor = instructorService.getInstructorById(id);
 
@@ -46,7 +46,7 @@ public class ProfileController {
         response.put("instructor", InstructorMapper.mapToDto(instructor));
 
         try {
-            UserDto userDto = authenticationService.getByUserId(instructor.getUserId(), correlationId);
+            UserDto userDto = authenticationService.findUserById(instructor.getUserId(), correlationId);
 
             response.put("user", userDto);
         } catch (CustomFeignException e) {
@@ -71,7 +71,7 @@ public class ProfileController {
     @GetMapping("/profile-by-user-id/{userId}")
     public ResponseEntity<ResponseDto> getProfileByUserId(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                           @PathVariable Long userId) {
-        logger.debug("ProfileController.getProfileByUserId called");
+        logger.info("ProfileController.getProfileByUserId called");
 
         Instructor instructor = instructorService.getInstructorByUserId(userId);
 
@@ -83,7 +83,7 @@ public class ProfileController {
         response.put("instructor", InstructorMapper.mapToDto(instructor));
 
         try {
-            UserDto userDto = authenticationService.getByUserId(instructor.getUserId(), correlationId);
+            UserDto userDto = authenticationService.findUserById(instructor.getUserId(), correlationId);
 
             response.put("user", userDto);
         } catch (CustomFeignException e) {
@@ -114,7 +114,7 @@ public class ProfileController {
                                                      @RequestParam(value = "password", required = false) String password,
                                                      @RequestParam("summary") String summary,
                                                      @RequestParam("phone_number") String phoneNumber) {
-        logger.debug("ProfileController.updateProfile called");
+        logger.info("ProfileController.updateProfile called");
 
         Instructor instructor = instructorService.getInstructorById(instructorId);
         UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest();
@@ -133,7 +133,7 @@ public class ProfileController {
         response.put("instructor", InstructorMapper.mapToDto(updatedInstructor));
 
         try {
-            UserDto updatedUser = authenticationService.updateProfile(updateProfileRequest, correlationId);
+            UserDto updatedUser = authenticationService.updateUser(updateProfileRequest, correlationId);
             response.put("user", updatedUser);
         } catch (CustomFeignException e) {
             logger.error(e.getMessage(), e);

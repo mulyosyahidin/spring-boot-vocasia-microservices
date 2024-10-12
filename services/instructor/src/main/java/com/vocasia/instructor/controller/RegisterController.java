@@ -37,10 +37,10 @@ public class RegisterController {
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> register(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                 @Valid @RequestBody RegisterRequest registerRequest) {
-        logger.debug("RegisterController.register called");
+        logger.info("RegisterController.register called");
 
         try {
-            UserDto registeredUser = authenticationService.registerNewUser(registerRequest, correlationId);
+            UserDto registeredUser = authenticationService.registerUser(registerRequest, correlationId);
             Instructor registeredInstructor = instructorService.registerNewInstructor(registeredUser.getId(), registerRequest);
 
             Map<String, Object> response = new HashMap<>();

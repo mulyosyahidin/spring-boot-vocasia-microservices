@@ -1,4 +1,4 @@
-package com.vocasia.finance.service.client;
+package com.vocasia.order.service.client;
 
 public interface InstructorFeignClient {
 }

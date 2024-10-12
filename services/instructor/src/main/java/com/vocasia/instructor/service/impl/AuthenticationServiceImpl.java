@@ -21,21 +21,21 @@ import java.util.Map;
 @AllArgsConstructor
 public class AuthenticationServiceImpl implements IAuthenticationService {
 
-    private AuthenticationFeignClient authenticationFeignClient;
-
     private final Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
+    private AuthenticationFeignClient authenticationFeignClient;
+
     @Override
-    public UserDto registerNewUser(RegisterRequest registerRequest, String correlationId) {
+    public UserDto registerUser(RegisterRequest registerRequest, String correlationId) {
         try {
-            ResponseEntity<ResponseDto> authenticationFeignClientRegisterResponseEntity = authenticationFeignClient.register(correlationId, registerRequest);
+            ResponseEntity<ResponseDto> authenticationFeignClientRegisterResponseEntity = authenticationFeignClient.registerUser(correlationId, registerRequest);
             ResponseDto responseBody = authenticationFeignClientRegisterResponseEntity.getBody();
 
             assert responseBody != null;
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();
             Map<String, Object> user = data != null ? (Map<String, Object>) data.get("user") : null;
 
-            logger.debug("AuthenticationServiceImpl.registerNewUser() $user:: {}", user);
+            logger.debug("AuthenticationServiceImpl.registerUser() $user:: {}", user);
 
             UserDto userDto = new UserDto();
 
@@ -56,16 +56,16 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     }
 
     @Override
-    public UserDto getByUserId(Long userId, String correlationId) {
+    public UserDto findUserById(Long userId, String correlationId) {
         try {
-            ResponseEntity<ResponseDto> authenticationFeignClientGetUserByIdResponseEntity = authenticationFeignClient.getUserById(correlationId, userId);
-            ResponseDto responseBody = authenticationFeignClientGetUserByIdResponseEntity.getBody();
+            ResponseEntity<ResponseDto> authenticationFeignClientFindUserByIdResponseEntity = authenticationFeignClient.findUserById(correlationId, userId);
+            ResponseDto responseBody = authenticationFeignClientFindUserByIdResponseEntity.getBody();
 
             assert responseBody != null;
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();
             Map<String, Object> user = data != null ? (Map<String, Object>) data.get("user") : null;
 
-            logger.debug("AuthenticationServiceImpl.getByUserId() $user:: {}", user);
+            logger.debug("AuthenticationServiceImpl.findUserById() $user:: {}", user);
 
             UserDto userDto = new UserDto();
 
@@ -86,7 +86,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     }
 
     @Override
-    public UserDto updateProfile(UpdateProfileRequest updateProfileRequest, String correlationId) {
+    public UserDto updateUser(UpdateProfileRequest updateProfileRequest, String correlationId) {
         try {
             ResponseEntity<ResponseDto> authenticationFeignClientUpdateUserResponseEntity = authenticationFeignClient.updateUser(
                     correlationId,
@@ -102,7 +102,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();
             Map<String, Object> user = data != null ? (Map<String, Object>) data.get("user") : null;
 
-            logger.debug("AuthenticationServiceImpl.updateProfile() $user:: {}", user);
+            logger.debug("AuthenticationServiceImpl.updateUser() $user:: {}", user);
 
             UserDto userDto = new UserDto();
 
