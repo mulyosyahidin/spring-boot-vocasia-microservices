@@ -15,6 +15,8 @@ public class StoreCategoryRequest {
     @NotBlank(message = "Nama kategori tidak boleh kosong")
     private String name;
 
+    private String type;
+
     @NotNull(message = "File icon harus diisi")
     private MultipartFile icon;
 

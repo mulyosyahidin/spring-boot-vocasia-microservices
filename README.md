@@ -73,3 +73,4 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 
 14/10/2024:
 1. Menyelesaikan: Manajemen Transaksi Siswa
+2. Menyelesaikan: Restruktur Kategori Admin

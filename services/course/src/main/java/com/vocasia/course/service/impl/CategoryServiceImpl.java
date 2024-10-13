@@ -9,6 +9,8 @@ import com.vocasia.course.request.category.StoreCategoryRequest;
 import com.vocasia.course.request.category.UpdateCategoryRequest;
 import com.vocasia.course.service.ICategoryService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +26,6 @@ import java.util.Objects;
 public class CategoryServiceImpl implements ICategoryService {
 
     private final AwsConfigProperties awsConfigProperties;
-
     private final IAwsService awsService;
 
     private CategoryRepository categoryRepository;
@@ -35,29 +36,31 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
+    public List<Category> findAllByParentId(Long id) {
+        return categoryRepository.findByParentId(id);
+    }
+
+    @Override
     public Category findById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
     }
 
     @Override
-    public List<Category> getOnlyParentCategories() {
-        return categoryRepository.findByParentIsNull();
-    }
-
-    @Override
     public Category store(StoreCategoryRequest storeCategoryRequest) throws IOException {
         Category category = new Category();
 
+        category.setType(storeCategoryRequest.getType());
         category.setName(storeCategoryRequest.getName());
         category.setSlug(storeCategoryRequest.getSlug());
-        category.setParent(storeCategoryRequest.getParentId() != null ? categoryRepository.findById(storeCategoryRequest.getParentId()).orElse(null) : null);
+        category.setParentId(storeCategoryRequest.getParentId());
 
         if (storeCategoryRequest.getIcon() != null) {
             String bucketName = awsConfigProperties.getS3().getBucket();
             MultipartFile icon = storeCategoryRequest.getIcon();
 
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(icon.getOriginalFilename()));
+            String timeInMillis = String.valueOf(System.currentTimeMillis());
+            String fileName = timeInMillis + "-" + StringUtils.cleanPath(Objects.requireNonNull(icon.getOriginalFilename()));
 
             String contentType = icon.getContentType();
             long fileSize = icon.getSize();
@@ -77,8 +80,7 @@ public class CategoryServiceImpl implements ICategoryService {
                 .orElseThrow(() -> new NoSuchElementException("Data tidak ditemukan"));
 
         category.setName(updateCategoryRequest.getName());
-        category.setParent(updateCategoryRequest.getParentId() != null ?
-                categoryRepository.findById(updateCategoryRequest.getParentId()).orElse(null) : null);
+        category.setParentId(updateCategoryRequest.getParentId());
 
         if (updateCategoryRequest.getIcon() != null) {
             // Delete old icon if exists
@@ -110,6 +112,16 @@ public class CategoryServiceImpl implements ICategoryService {
         }
 
         categoryRepository.delete(category);
+    }
+
+    @Override
+    public Page<Category> findAll(Pageable pageable) {
+        return categoryRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Category> findAllByType(String type) {
+        return categoryRepository.findByType(type);
     }
 
 }

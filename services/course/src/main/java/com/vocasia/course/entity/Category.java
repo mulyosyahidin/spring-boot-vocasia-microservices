@@ -1,10 +1,7 @@
 package com.vocasia.course.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @AllArgsConstructor
 @Entity
@@ -19,13 +16,10 @@ public class Category extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    @JsonIgnoreProperties("children")
-    private Category parent;
+    private String type;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Category> children;
+    @Column(name = "parent_id")
+    private Long parentId;
 
     @Column(nullable = false)
     private String name;

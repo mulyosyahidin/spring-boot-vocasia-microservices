@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -18,15 +17,11 @@ public class CategoryDto {
     @JsonProperty("parent_id")
     private Long parentId;
 
+    private String type;
     private String icon;
 
     @JsonProperty("icon_url")
     private String iconUrl;
-
-    private List<CategoryDto> children;
-
-    @JsonProperty("children_count")
-    private int childrenCount;
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;

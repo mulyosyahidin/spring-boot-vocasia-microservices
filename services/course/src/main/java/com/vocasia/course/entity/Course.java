@@ -42,7 +42,6 @@ public class Course extends BaseEntity {
     @Lob
     private String description;
 
-    @Column(nullable = false)
     @Lob
     private String shortDescription;
 

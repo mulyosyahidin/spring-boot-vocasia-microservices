@@ -15,7 +15,7 @@ export const SelectField = ({
             {label && <label className="text-16 lh-1 fw-500 text-dark-1 mb-10">{label}</label>}
             <select name={name} value={value} onChange={onChange} required={isRequired} className="input-box" defaultValue={selectedId}>
                 {
-                    placeholder && <option disabled>{placeholder}</option>
+                    placeholder && <option>{placeholder}</option>
                 }
                 {options.map((option, i) => (
                     <option

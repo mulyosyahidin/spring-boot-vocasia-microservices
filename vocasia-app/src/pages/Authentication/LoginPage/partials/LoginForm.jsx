@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
-import {submitLoginForm} from "../actions/LoginAction.jsx";
+import React, {useContext, useState} from 'react';
 import {InputField} from "../../../../components/commons/Input/InputField.jsx";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {
     ADMIN,
     AUTH_ACCESS_TOKEN, AUTH_DATE,
@@ -12,20 +11,21 @@ import {
 } from "../../../../config/consts.js";
 import {useRecoilState} from "recoil";
 import {authAtom} from "../../../../states/recoil/Atoms/Auth.jsx";
+import {loginWithEmailAndPassword} from "../../../../services/new/authentication/login-service.js";
+import {AuthContext} from "../../../../states/contexts/AuthContext.jsx";
 
 export const LoginForm = () => {
     const [authState, setAuthState] = useRecoilState(authAtom);
+    const {sweetAlert} = useContext(AuthContext);
 
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
 
-    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
-
-    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -36,41 +36,78 @@ export const LoginForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setLoading(true);
+        setIsLoading(true);
         setErrors({});
         setSuccessMessage('');
 
-        const result = await submitLoginForm(formData, setLoading, setErrors, setSuccessMessage);
+        try {
+            const doLoginWithEmailAndPassword = await loginWithEmailAndPassword(formData.email, formData.password);
 
-        if (result) {
-            let {user, token} = result;
-            let {access_token, refresh_token} = token;
+            if (doLoginWithEmailAndPassword.success) {
+                setSuccessMessage(doLoginWithEmailAndPassword.message);
 
-            localStorage.setItem(AUTH_USER, JSON.stringify(user));
-            localStorage.setItem(AUTH_ACCESS_TOKEN, access_token);
-            localStorage.setItem(AUTH_REFRESH_TOKEN, refresh_token);
-            localStorage.setItem(AUTH_DATE, new Date().getTime().toString());
+                const {user, token} = doLoginWithEmailAndPassword.data;
+                const {access_token, refresh_token} = token;
 
-            setAuthState({
-                user,
-                accessToken: access_token,
-                refreshToken: refresh_token,
-            });
+                localStorage.setItem(AUTH_USER, JSON.stringify(user));
+                localStorage.setItem(AUTH_ACCESS_TOKEN, access_token);
+                localStorage.setItem(AUTH_REFRESH_TOKEN, refresh_token);
+                localStorage.setItem(AUTH_DATE, new Date().getTime().toString());
 
-            setTimeout(() => {
-                if (user.role === INSTRUCTOR) {
-                    let {instructor} = result;
-                    localStorage.setItem(INSTRUCTOR_AUTH_DATA, JSON.stringify(instructor));
+                setAuthState({
+                    user,
+                    accessToken: access_token,
+                    refreshToken: refresh_token,
+                });
 
-                    window.location.href = '/instructor';
+                setTimeout(() => {
+                    if (user.role === INSTRUCTOR) {
+                        let {instructor} = doLoginWithEmailAndPassword.data;
+                        localStorage.setItem(INSTRUCTOR_AUTH_DATA, JSON.stringify(instructor));
+
+                        window.location.href = '/instructor';
+                    } else if (user.role === ADMIN) {
+                        window.location.href = '/admin';
+                    } else if (user.role === STUDENT) {
+                        window.location.href = '/users';
+                    }
+                }, 3000);
+            }
+        } catch (error) {
+            console.error(error);
+
+            if (error.errors) {
+                const getErrors = error.errors;
+                const newErrors = {};
+
+                Object.keys(getErrors).forEach((field) => {
+                    newErrors[field] = getErrors[field][0];
+                });
+
+                setErrors(newErrors);
+            } else if (error.data) {
+                let message = error.message;
+
+                if (error.data.error) {
+                    message += `: (${error.data.error})`;
                 }
-                else if (user.role === ADMIN) {
-                    window.location.href = '/admin';
+
+                sweetAlert.fire({
+                    icon: 'error',
+                    title: 'Terjadi Kesalahan!',
+                    text: message,
+                }).then((isConfirmed) => {
+                    if (isConfirmed) {
+                        window.location.reload();
+                    }
+                })
+            } else {
+                if (error.message) {
+                    setErrors({general: error.message});
                 }
-                else if (user.role === STUDENT) {
-                    window.location.href = '/users';
-                }
-            }, 3000);
+            }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -122,10 +159,10 @@ export const LoginForm = () => {
                                 <div className="col-12">
                                     <button
                                         type="submit"
-                                        className={`button -md -green-1 text-dark-1 fw-500 w-1/1 ${loading ? 'disabled' : ''}`}
-                                        disabled={loading}
+                                        className={`button -md -green-1 text-dark-1 fw-500 w-1/1 ${isLoading ? 'disabled' : ''}`}
+                                        disabled={isLoading}
                                     >
-                                        {loading ? 'Login...' : 'Login'}
+                                        {isLoading ? 'Login...' : 'Login'}
                                     </button>
                                 </div>
                             </form>
