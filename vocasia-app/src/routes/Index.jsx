@@ -25,6 +25,8 @@ import {ProfilePage} from "../pages/Instructor/ProfilePage/Index.jsx";
 import CourseCartPage from "../pages/Public/CourseCartPage/Index.jsx";
 import {CourseCheckoutPage} from "../pages/Public/CourseCheckoutPage/Index.jsx";
 import {OrderDataPage} from "../pages/User/OrderDataPage/Index.jsx";
+import {TransactionIndexPage as UserTransactionIndexPage} from "../pages/User/Transactions/TransactionIndexPage/Index.jsx";
+import {TransactionShowPage as UserTransactionShowPage} from "../pages/User/Transactions/TransactionShowPage/Index.jsx";
 import {CoursesPage} from "../pages/User/CoursesPage/Index.jsx";
 import {SingleCoursePage} from "../pages/User/SingleCoursePage/Index.jsx";
 import {StudentIndexPage} from "../pages/Instructor/Students/StudentIndexPage/Index.jsx";
@@ -167,8 +169,12 @@ const routes = createBrowserRouter([
         element: <CoursesPage/>
     },
     {
-        path: '/users/orders',
-        element: <div>Orders</div>,
+        path: '/users/transactions',
+        element: <UserTransactionIndexPage />,
+    },
+    {
+        path: '/users/transactions/:orderId',
+        element: <UserTransactionShowPage />,
     },
     {
         path: '/users/orders/:orderId',

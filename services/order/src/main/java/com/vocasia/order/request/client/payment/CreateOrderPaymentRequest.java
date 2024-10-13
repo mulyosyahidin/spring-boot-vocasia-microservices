@@ -26,7 +26,7 @@ public class CreateOrderPaymentRequest {
     private Double totalPrice;
 
     @NotNull(message = "Customer data cannot be null")
-    private PlaceNewOrderRequest.Customer customer;
+    private Customer customer;
 
     @Getter
     @Setter
@@ -45,7 +45,7 @@ public class CreateOrderPaymentRequest {
     }
 
     @NotNull(message = "Order items cannot be null")
-    private List<CreateOrderPaymentRequest.Item> items;
+    private List<Item> items;
 
     @Getter
     @Setter

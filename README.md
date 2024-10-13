@@ -70,3 +70,6 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 13/10/2024:
 1. Menyelesaikan: Sistem Withdrawal Saldo Instruktur
 2. Menyelesaikan: Sistem Balance dan Riwayat Transaksi Instruktur
+
+14/10/2024:
+1. Menyelesaikan: Manajemen Transaksi Siswa

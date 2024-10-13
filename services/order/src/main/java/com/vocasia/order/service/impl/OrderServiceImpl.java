@@ -79,4 +79,9 @@ public class OrderServiceImpl implements IOrderService {
         return orderRepository.save(order);
     }
 
+    @Override
+    public List<Order> findAllByUserId(Long userId) {
+        return orderRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
+    }
+
 }

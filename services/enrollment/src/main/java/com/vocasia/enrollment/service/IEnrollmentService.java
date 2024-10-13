@@ -12,4 +12,6 @@ public interface IEnrollmentService {
     List<Enrollment> getUserEnrolledCourse(Long userId);
     List<Enrollment> getUserEnrolledCourseByCourseId(String correlationId, Long courseId);
 
+    boolean isUserEnrolled(Long userId, Long courseId);
+
 }

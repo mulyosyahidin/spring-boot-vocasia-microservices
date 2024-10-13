@@ -2,8 +2,9 @@ import {useEffect, useState} from "react";
 import {rupiahFormatter} from "../../../../utils/utils.js";
 import {courseCartAtom} from "../../../../states/recoil/Atoms/CourseCart.jsx";
 import {useRecoilState} from "recoil";
+import {Link} from "react-router-dom";
 
-export default function PinContent({ course }) {
+export default function PinContent({course, isUserEnrolled}) {
     const [isOpen, setIsOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [cart, setCart] = useRecoilState(courseCartAtom);
@@ -42,17 +43,17 @@ export default function PinContent({ course }) {
                 id="js-pin-content"
                 style={
                     screenWidth < 991
-                        ? { height: "fit-content", right: "0%" }
-                        : { height: "100%", right: "7%", paddingTop: "80px" }
+                        ? {height: "fit-content", right: "0%"}
+                        : {height: "100%", right: "7%", paddingTop: "80px"}
                 }
                 className="courses-single-info js-pin-content"
             >
                 <div
-                    style={{ position: "sticky", top: "100px" }}
+                    style={{position: "sticky", top: "100px"}}
                     className="bg-white shadow-2 rounded-8 border-light py-10 px-10"
                 >
                     <div className="relative">
-                        <img className="w-1/1" src={course.featured_picture_url} alt="image" />
+                        <img className="w-1/1" src={course.featured_picture_url} alt="image"/>
                     </div>
 
                     <div className="courses-single-info__content scroll-bar-1 pt-30 pb-20 px-20">
@@ -79,24 +80,32 @@ export default function PinContent({ course }) {
                             )}
                         </div>
 
-                        {isCourseInCart ? (
-                            <button
-                                className="button -md -outline-dark-1 text-dark-1 w-1/1 mt-10"
-                                onClick={handleRemoveFromCart}
-                            >
-                                Hapus dari Keranjang
-                            </button>
-                        ) : (
-                            <button
-                                className="button -md -outline-dark-1 text-dark-1 w-1/1 mt-10"
-                                onClick={handleAddToCart}
-                            >
-                                Tambah ke Keranjang
-                            </button>
-                        )}
+                        {
+                            isUserEnrolled ? (
+                                <Link to={`/users/courses/${course.id}`}
+                                    className="button -md -outline-dark-1 text-dark-1 w-1/1 mt-10"
+                                >
+                                    Sudah Punya
+                                </Link>
+                            ) : isCourseInCart ? (
+                                <button
+                                    className="button -md -outline-dark-1 text-dark-1 w-1/1 mt-10"
+                                    onClick={handleRemoveFromCart}
+                                >
+                                    Hapus dari Keranjang
+                                </button>
+                            ) : (
+                                <button
+                                    className="button -md -outline-dark-1 text-dark-1 w-1/1 mt-10"
+                                    onClick={handleAddToCart}
+                                >
+                                    Tambah ke Keranjang
+                                </button>
+                            )
+                        }
 
                         <div className="text-14 lh-1 text-center mt-30">
-                            Akses seumur hidup
+                            {isUserEnrolled ? 'Anda sudah memiliki kursus ini' : ' Akses seumur hidup'}
                         </div>
 
                         <div className="mt-25">

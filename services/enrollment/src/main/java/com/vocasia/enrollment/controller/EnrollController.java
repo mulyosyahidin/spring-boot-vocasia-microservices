@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class EnrollController {
@@ -32,6 +35,21 @@ public class EnrollController {
         return ResponseEntity
                 .status(HttpStatus.SC_CREATED)
                 .body(new ResponseDto(true, "Berhasil menyimpan data enrollment", null, null));
+    }
+
+    @GetMapping("/courses/{courseId}/is-user-enrolled")
+    public ResponseEntity<ResponseDto> isUserEnrolled(@RequestHeader("X-USER-ID") Long userId,
+                                                      @PathVariable("courseId") Long courseId) {
+        logger.info("EnrollController.isUserEnrolled called");
+
+        boolean isUserEnrolled = enrollmentService.isUserEnrolled(userId, courseId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("is_user_enrolled", isUserEnrolled);
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil melakukan pemeriksaan", response, null));
     }
 
 }

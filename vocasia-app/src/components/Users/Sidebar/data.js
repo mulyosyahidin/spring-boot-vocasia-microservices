@@ -15,7 +15,7 @@ export const sidebarItems = [
     },
     {
         id: 3,
-        href: "/instructor/transactions",
+        href: "/users/transactions",
         iconClass: "text-20 icon-play-button",
         text: "Transaksi",
         activeWhen: "/users/transactions/*",

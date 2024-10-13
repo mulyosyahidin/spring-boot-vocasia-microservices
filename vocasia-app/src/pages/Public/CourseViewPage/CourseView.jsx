@@ -2,15 +2,13 @@ import {PreLoader} from "../../../components/commons/PreLoader.jsx";
 import {Header} from "../../../components/Header/Index.jsx";
 import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {getOverview} from "../../../services/courses/public-course.js";
+import {getOverview, isUserEnrollThisCourse} from "../../../services/courses/public-course.js";
 import {Meta} from "../../../components/commons/Meta.jsx";
 import {makeDateReadable} from "../../../utils/utils.js";
 import PinContent from "./partials/PinContent.jsx";
 import Star from "./partials/Star.jsx";
 import Overview from "./partials/Overview.jsx";
 import CourseContent from "./partials/CourseContent.jsx";
-import Instructor from "./partials/Instructor.jsx";
-import Reviews from "./partials/Reviews.jsx";
 
 const dark = true;
 const menuItems = [
@@ -27,6 +25,7 @@ export const CourseView = () => {
     const [category, setCategory] = useState({});
     const [instructor, setInstructor] = useState({});
     const [chapters, setChapters] = useState({});
+    const [isUserEnrolled, setIsUserEnrolled] = useState(false);
 
     const [loading, setLoading] = useState(true);
 
@@ -45,6 +44,11 @@ export const CourseView = () => {
                     setInstructor(getCourseOverview.instructor);
                     setChapters(getCourseOverview.chapters);
                 }
+
+                const checkIsUserHasEnrollThisCourse = await isUserEnrollThisCourse(id);
+                const {is_user_enrolled} = checkIsUserHasEnrollThisCourse.data;
+
+                setIsUserEnrolled(is_user_enrolled);
             }
             catch (e) {
                 console.error(e);
@@ -170,7 +174,7 @@ export const CourseView = () => {
                                 </div>
                             </section>
 
-                            <PinContent course={course}/>
+                            <PinContent course={course} isUserEnrolled={isUserEnrolled} />
 
                             <section className="layout-pt-md layout-pb-md">
                                 <div className="container">

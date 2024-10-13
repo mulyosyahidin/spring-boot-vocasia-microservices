@@ -249,11 +249,16 @@ public class OrderController {
 
         CreateOrderPaymentRequest createOrderPaymentRequest = new CreateOrderPaymentRequest();
 
+        CreateOrderPaymentRequest.Customer customer = new CreateOrderPaymentRequest.Customer();
+        customer.setId(placeNewOrderRequest.getCustomer().getId());
+        customer.setName(placeNewOrderRequest.getCustomer().getName());
+        customer.setEmail(placeNewOrderRequest.getCustomer().getEmail());
+
         createOrderPaymentRequest.setOrderId(createdOrder.getId());
         createOrderPaymentRequest.setTotalPrice(createdOrder.getTotalPrice());
         createOrderPaymentRequest.setOrderNumber(createdOrder.getOrderNumber());
         createOrderPaymentRequest.setItems(orderItems);
-        createOrderPaymentRequest.setCustomer(placeNewOrderRequest.getCustomer());
+        createOrderPaymentRequest.setCustomer(customer);
 
         return createOrderPaymentRequest;
     }

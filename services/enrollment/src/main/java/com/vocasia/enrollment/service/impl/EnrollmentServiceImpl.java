@@ -67,4 +67,9 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
         return enrollmentRepository.findByCourseId(courseId);
     }
 
+    @Override
+    public boolean isUserEnrolled(Long userId, Long courseId) {
+        return enrollmentRepository.existsByUserIdAndCourseId(userId, courseId);
+    }
+
 }

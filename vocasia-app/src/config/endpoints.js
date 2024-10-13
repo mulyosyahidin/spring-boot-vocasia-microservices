@@ -54,7 +54,11 @@ export const USER_ORDER_GET_DATA = '/order/get-data/:orderId'; // hasRole("STUDE
 export const USER_ENROLLMENT_GET_ALL = '/enrollment/courses'; // hasRole("STUDENT")
 export const USER_ENROLLMENT_GET_BY_ID = '/enrollment/courses/:enrollmentId'; // hasRole("STUDENT")
 
-
 export const FINANCE_ADMIN_WITHDRAWAL_REQUEST = '/finance/admin/withdrawal/request'; // hasRole("ADMIN")
 export const FINANCE_ADMIN_WITHDRAWAL_REQUEST_FIND_BY_ID = '/finance/admin/withdrawal/request/:id'; // hasRole("ADMIN")
 export const FINANCE_ADMIN_WITHDRAWAL_REQUEST_PROCESS = '/finance/admin/withdrawal/request/:id/process'; // hasRole("ADMIN")
+
+export const ENROLLMENT_COURSES_IS_USER_ENROLLED = '/enrollment/courses/:courseId/is-user-enrolled';
+
+export const ORDER_MY_ORDERS = '/order/my-orders'; // hasRole("STUDENT")
+export const ORDER_GET_DATA = '/order/my-orders/:orderId';

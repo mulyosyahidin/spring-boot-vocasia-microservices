@@ -106,6 +106,9 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/order/get-item-data/{orderId}/{courseId}").hasAnyRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.PUT, "/order/update-payment-status/{orderId}").permitAll()
 
+                        .pathMatchers(HttpMethod.GET, "/order/my-orders").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.GET, "/order/my-orders/{orderId}").hasRole("STUDENT")
+
                         // payment service
                         .pathMatchers("/payment/actuator/**").permitAll()
 
@@ -126,6 +129,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.POST,"/enrollment/enroll").hasRole("STUDENT")
                         .pathMatchers(HttpMethod.GET,"/enrollment/courses").hasRole("STUDENT")
                         .pathMatchers(HttpMethod.GET,"/enrollment/courses/{enrollmentId}").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.GET, "/enrollment/courses/{courseId}/is-user-enrolled").hasRole("STUDENT")
 
                         .pathMatchers(HttpMethod.GET,"/enrollment/course-data/{courseId}/students").hasAnyRole("INSTRUCTOR", "ADMIN")
 

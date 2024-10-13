@@ -37,8 +37,9 @@ export const CourseCheckout = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async () => {
+        setIsLoading(true);
+
         try {
-            setIsLoading(true);
             const order = await placeNewOrder(cart);
 
             if (order) {
@@ -47,15 +48,33 @@ export const CourseCheckout = () => {
                     text: 'Berhasil membuat order, silahkan lakukan pembayaran dalam 24 jam.',
                     icon: 'success',
                 }).then(() => {
-                   setCart([]);
+                    setCart([]);
                     navigate(`/users/orders/${order.order.id}`);
                 });
             }
-        }
-        catch (e) {
-            console.log(e);
-        }
-        finally {
+        } catch (error) {
+            console.log(error);
+
+            if (error.message) {
+                let msg = error.message;
+
+                if (error.data) {
+                    if (error.data.error) {
+                        msg += ' : ' + error.data.error;
+                    }
+                }
+
+                sweetAlert.fire({
+                    icon: 'error',
+                    title: 'Terjadi Kesalahan!',
+                    text: msg,
+                }).then((isConfirmed) => {
+                    if (isConfirmed) {
+                        navigate(`/users/transactions`);
+                    }
+                })
+            }
+        } finally {
             setIsLoading(false);
         }
     }
@@ -157,7 +176,8 @@ export const CourseCheckout = () => {
                                     <div className="mt-30">
                                         {
                                             authStatus.isLoggedIn && (
-                                                <button className="button -md -black col-12 -uppercase text-white" disabled={isLoading} onClick={() => handleSubmit()}>
+                                                <button className="button -md -black col-12 -uppercase text-white"
+                                                        disabled={isLoading} onClick={() => handleSubmit()}>
                                                     {
                                                         isLoading ? 'Mohon Tunggu...' : 'Checkout'
                                                     }
@@ -167,7 +187,8 @@ export const CourseCheckout = () => {
 
                                         {
                                             !authStatus.isLoggedIn && (
-                                                <Link to={'/auth/login'} className="button -md -black col-12 -uppercase text-white">
+                                                <Link to={'/auth/login'}
+                                                      className="button -md -black col-12 -uppercase text-white">
                                                     Login untuk Melanjutkan
                                                 </Link>
                                             )
