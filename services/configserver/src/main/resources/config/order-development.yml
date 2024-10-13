@@ -2,3 +2,6 @@ app:
   version: 1.0.0
   name: "Order Service"
   environment: "development"
+
+finance:
+  percent_platform_fee: 5

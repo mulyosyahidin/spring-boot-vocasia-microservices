@@ -1,8 +1,8 @@
 package com.vocasia.instructor.mapper;
 
 import com.vocasia.instructor.dto.data.InstructorStudentCourseDto;
-import com.vocasia.instructor.entity.InstructorStudentCourse;
 import com.vocasia.instructor.entity.InstructorStudent;
+import com.vocasia.instructor.entity.InstructorStudentCourse;
 import lombok.Getter;
 import lombok.Setter;
 

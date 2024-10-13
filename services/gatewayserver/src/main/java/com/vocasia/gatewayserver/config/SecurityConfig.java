@@ -141,6 +141,19 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/finance/instructor-income/course-income/{courseId}").hasAnyRole("ADMIN", "INSTRUCTOR")
                         .pathMatchers(HttpMethod.GET, "/finance/instructor-sales").hasAnyRole("ADMIN", "INSTRUCTOR")
                         .pathMatchers(HttpMethod.GET, "/finance/instructor-sales/{incomeId}").hasAnyRole("ADMIN", "INSTRUCTOR")
+
+                        .pathMatchers(HttpMethod.POST, "/finance/instructor-balance/store").permitAll()
+                        .pathMatchers(HttpMethod.POST, "/finance/platform-balance/store").permitAll()
+
+                        .pathMatchers(HttpMethod.GET, "/finance/instructor-balance/data").hasAnyRole("ADMIN", "INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/finance/instructor-balance/data/{historyId}").hasAnyRole("ADMIN", "INSTRUCTOR")
+
+                        .pathMatchers(HttpMethod.GET, "/finance/withdrawal/history").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.POST, "/finance/withdrawal/request").hasRole("INSTRUCTOR")
+
+                        .pathMatchers(HttpMethod.GET, "/finance/admin/withdrawal/request").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "/finance/admin/withdrawal/request/{id}").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.POST, "/finance/admin/withdrawal/request/{id}/process").hasRole("ADMIN")
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));

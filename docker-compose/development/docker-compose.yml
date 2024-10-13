@@ -495,6 +495,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-order:3306/order_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "order"
+      FINANCE_PERCENT_PLATFORM_FEE: 5
     healthcheck:
       test: "curl --fail --silent localhost:14124/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -571,7 +572,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-finance:3306/finance_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "finance"
-      FINANCE_PERCENT_PLATFORM_FEE: 10
+      FINANCE_PERCENT_PLATFORM_FEE: 5
     healthcheck:
       test: "curl --fail --silent localhost:14127/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -585,7 +586,7 @@ services:
         condition: service_healthy
     extends:
       file: common-config.yml
-      service: service-config
+      service: service-aws-config
 
 #  playground_service:
 #    image: martinms20/playground:v1.0.0

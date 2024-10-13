@@ -1,4 +1,4 @@
-package com.vocasia.finance.controller;
+package com.vocasia.finance.controller.platform;
 
 import com.vocasia.finance.dto.ResponseDto;
 import com.vocasia.finance.entity.PlatformIncome;

@@ -8,7 +8,7 @@ import {
     AUTH_REFRESH_TOKEN,
     AUTH_USER,
     INSTRUCTOR,
-    INSTRUCTOR_AUTH_DATA
+    INSTRUCTOR_AUTH_DATA, STUDENT
 } from "../../../../config/consts.js";
 import {useRecoilState} from "recoil";
 import {authAtom} from "../../../../states/recoil/Atoms/Auth.jsx";
@@ -40,7 +40,6 @@ export const LoginForm = () => {
         setErrors({});
         setSuccessMessage('');
 
-
         const result = await submitLoginForm(formData, setLoading, setErrors, setSuccessMessage);
 
         if (result) {
@@ -63,15 +62,15 @@ export const LoginForm = () => {
                     let {instructor} = result;
                     localStorage.setItem(INSTRUCTOR_AUTH_DATA, JSON.stringify(instructor));
 
-                    navigate('/instructor');
+                    window.location.href = '/instructor';
                 }
                 else if (user.role === ADMIN) {
-                    navigate('/admin');
+                    window.location.href = '/admin';
                 }
                 else if (user.role === STUDENT) {
-                    navigate('/users');
+                    window.location.href = '/users';
                 }
-            }, 5000);
+            }, 3000);
         }
     };
 

@@ -7,10 +7,17 @@ export const sidebarItems = [
         activeWhen: "/admin",
     },
     {
-        id: 1,
+        id: 2,
         href: "/admin/categories",
         iconClass: "text-20 icon-list",
         text: "Kategori Kursus",
-        activeWhen: "/categories",
+        activeWhen: "/admin/categories/*",
+    },
+    {
+        id: 3,
+        href: "/admin/finances/withdrawal",
+        iconClass: "text-20 icon-list",
+        text: "Withdrawal",
+        activeWhen: "/admin/finances/withdrawal/*",
     },
 ];

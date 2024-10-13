@@ -24,16 +24,16 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     private final AuthenticationFeignClient authenticationFeignClient;
 
     @Override
-    public UserDto getByUserId(Long userId, String correlationId) {
+    public UserDto findUserById(Long userId, String correlationId) {
         try {
-            ResponseEntity<ResponseDto> authenticationFeignClientGetUserByIdResponseEntity = authenticationFeignClient.findById(correlationId, userId);
-            ResponseDto responseBody = authenticationFeignClientGetUserByIdResponseEntity.getBody();
+            ResponseEntity<ResponseDto> authenticationFeignClientFindUserByIdResponseEntity = authenticationFeignClient.findUserById(correlationId, userId);
+            ResponseDto responseBody = authenticationFeignClientFindUserByIdResponseEntity.getBody();
 
             assert responseBody != null;
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();
             Map<String, Object> user = data != null ? (Map<String, Object>) data.get("user") : null;
 
-            logger.debug("AuthenticationServiceImpl.getByUserId() $user:: {}", user);
+            logger.debug("AuthenticationServiceImpl.findUserById() $user:: {}", user);
 
             UserDto userDto = new UserDto();
 

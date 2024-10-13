@@ -31,6 +31,13 @@ import {StudentIndexPage} from "../pages/Instructor/Students/StudentIndexPage/In
 import {ShowStudentPage} from "../pages/Instructor/Students/ShowStudentPage/Index.jsx";
 import {TransactionIndexPage} from "../pages/Instructor/Transactions/TransactionIndexPage/Index.jsx";
 import {TransactionShowPage} from "../pages/Instructor/Transactions/TransactionShowPage/Index.jsx";
+import {FinanceIndexPage} from "../pages/Instructor/Finance/FinanceIndexPage/Index.jsx";
+import {WithdrawalRequestPage} from "../pages/Instructor/Finance/Withdrawal/WithdrawalRequestPage/Index.jsx";
+import {WithdrawalIndexPage} from "../pages/Instructor/Finance/Withdrawal/WithdrawalIndexPage/Index.jsx";
+import {
+    WithdrawalRequestIndexPage
+} from "../pages/Admin/Finance/WithdrawalRequest/WithdrawalRequestIndexPage/Index.jsx";
+import {WithdrawalRequestShowPage} from "../pages/Admin/Finance/WithdrawalRequest/WithdrawalRequestShowPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -111,6 +118,18 @@ const routes = createBrowserRouter([
         path: '/instructor/transactions/:incomeId',
         element: <TransactionShowPage />,
     },
+    {
+        path: '/instructor/finances',
+        element: <FinanceIndexPage />,
+    },
+    {
+        path: '/instructor/finances/withdrawal',
+        element: <WithdrawalIndexPage />,
+    },
+    {
+        path: '/instructor/finances/withdrawal/request',
+        element: <WithdrawalRequestPage />,
+    },
 
     // admin
     {
@@ -128,6 +147,14 @@ const routes = createBrowserRouter([
     {
         path: '/admin/categories/:categoryId/edit',
         element: <EditCategoryPage/>,
+    },
+    {
+        path: '/admin/finances/withdrawal',
+        element: <WithdrawalRequestIndexPage />,
+    },
+    {
+        path: '/admin/finances/withdrawal/:id',
+        element: <WithdrawalRequestShowPage />,
     },
 
     // user dashboard

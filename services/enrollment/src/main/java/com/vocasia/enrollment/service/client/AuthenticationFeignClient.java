@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface AuthenticationFeignClient {
 
     @GetMapping(value = "/api/user/{userId}", consumes = "application/json")
-    public ResponseEntity<ResponseDto> findById(@RequestHeader("vocasia-correlation-id") String correlationId,
+    public ResponseEntity<ResponseDto> findUserById(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                 @PathVariable("userId") Long userId);
 
 }

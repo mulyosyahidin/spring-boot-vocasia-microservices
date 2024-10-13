@@ -1,7 +1,10 @@
 package com.vocasia.order.controller;
 
+import com.vocasia.order.config.FinanceConfigProperties;
 import com.vocasia.order.dto.ResponseDto;
+import com.vocasia.order.dto.client.finance.InstructorBalanceDto;
 import com.vocasia.order.dto.client.finance.InstructorIncomeDto;
+import com.vocasia.order.dto.client.finance.PlatformBalanceDto;
 import com.vocasia.order.dto.client.finance.PlatformIncomeDto;
 import com.vocasia.order.dto.client.instructor.InstructorStudentCourseDto;
 import com.vocasia.order.dto.client.payment.PaymentDto;
@@ -13,7 +16,9 @@ import com.vocasia.order.mapper.OrderMapper;
 import com.vocasia.order.request.PlaceNewOrderRequest;
 import com.vocasia.order.request.UpdatePaymentStatusRequest;
 import com.vocasia.order.request.client.enrollment.EnrollNewCourseRequest;
+import com.vocasia.order.request.client.finance.NewInstructorBalanceHistoryRequest;
 import com.vocasia.order.request.client.finance.NewInstructorIncomeRequest;
+import com.vocasia.order.request.client.finance.NewPlatformBalanceHistoryRequest;
 import com.vocasia.order.request.client.finance.NewPlatformIncomeRequest;
 import com.vocasia.order.request.client.instructor.AssignCourseToStudentInstructorRequest;
 import com.vocasia.order.request.client.payment.CreateOrderPaymentRequest;
@@ -26,6 +31,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -35,6 +41,8 @@ public class OrderController {
 
     private final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
+    private final FinanceConfigProperties financeConfigProperties;
+
     private final IOrderService orderService;
     private final IOrderItemService orderItemService;
     private final IPaymentService paymentService;
@@ -42,8 +50,11 @@ public class OrderController {
     private final IFinanceService financeService;
     private final IInstructorService instructorService;
 
-    public OrderController(IOrderService iOrderService, IOrderItemService iOrderItemService, IPaymentService iPaymentService, IEnrollmentService iEnrollmentService,
-                           IFinanceService iFinanceService, IInstructorService iInstructorService) {
+    public OrderController(FinanceConfigProperties financeConfigProperties, IOrderService iOrderService,
+                           IOrderItemService iOrderItemService, IPaymentService iPaymentService,
+                           IEnrollmentService iEnrollmentService, IFinanceService iFinanceService,
+                           IInstructorService iInstructorService) {
+        this.financeConfigProperties = financeConfigProperties;
         this.orderService = iOrderService;
         this.orderItemService = iOrderItemService;
         this.paymentService = iPaymentService;
@@ -143,6 +154,7 @@ public class OrderController {
         Order order = orderService.findById(orderId);
 
         Map<String, Object> response = new HashMap<>();
+        BigDecimal percentPlatformFee = financeConfigProperties.getPercentPlatformFee();
 
         if (Objects.equals(updatePaymentStatusRequest.getTransactionStatus(), "settlement")) {
             try {
@@ -163,6 +175,12 @@ public class OrderController {
 
                     AssignCourseToStudentInstructorRequest assignCourseToStudentInstructorRequest = getAssignCourseToStudentInstructorRequest(orderItem, updatedOrder);
                     InstructorStudentCourseDto instructorStudentCourseDto = instructorService.assignCourse(assignCourseToStudentInstructorRequest, correlationId);
+
+                    NewInstructorBalanceHistoryRequest newInstructorBalanceHistoryRequest = getNewInstructorBalanceHistoryRequest(percentPlatformFee, newInstructorIncomeRequest, order, orderItem);
+                    InstructorBalanceDto instructorBalanceDto = financeService.saveInstructorBalance(newInstructorBalanceHistoryRequest, correlationId);
+
+                    NewPlatformBalanceHistoryRequest newPlatformBalanceHistoryRequest = getNewPlatformBalanceHistoryRequest(percentPlatformFee, newInstructorIncomeRequest, order);
+                    PlatformBalanceDto platformBalanceDto = financeService.savePlatformBalance(newPlatformBalanceHistoryRequest, correlationId);
                 }
             } catch (CustomFeignException e) {
                 logger.error(e.getMessage(), e);
@@ -249,6 +267,40 @@ public class OrderController {
         assignCourseToStudentInstructorRequest.setOrderId(updatedOrder.getId());
 
         return assignCourseToStudentInstructorRequest;
+    }
+
+    private static NewInstructorBalanceHistoryRequest getNewInstructorBalanceHistoryRequest(BigDecimal percentPlatformFee, NewInstructorIncomeRequest newInstructorIncomeRequest, Order order, OrderItem orderItem) {
+        NewInstructorBalanceHistoryRequest newInstructorBalanceHistoryRequest = new NewInstructorBalanceHistoryRequest();
+
+        Double platformFee = newInstructorIncomeRequest.getTotalUserPayment() * (percentPlatformFee.doubleValue() / 100);
+        Double amount = newInstructorIncomeRequest.getTotalUserPayment() - (newInstructorIncomeRequest.getTotalUserPayment() * (percentPlatformFee.doubleValue() / 100));
+
+        newInstructorBalanceHistoryRequest.setInstructorId(orderItem.getCourseInstructorId());
+        newInstructorBalanceHistoryRequest.setType("income");
+        newInstructorBalanceHistoryRequest.setAmount(amount);
+        newInstructorBalanceHistoryRequest.setPlatformFee(platformFee);
+        newInstructorBalanceHistoryRequest.setReferenceId(order.getId());
+        newInstructorBalanceHistoryRequest.setReferenceType("order");
+        newInstructorBalanceHistoryRequest.setTransactionStatus("completed");
+        newInstructorBalanceHistoryRequest.setRemarks("New income from order #" + order.getOrderNumber());
+
+        return newInstructorBalanceHistoryRequest;
+    }
+
+    private static NewPlatformBalanceHistoryRequest getNewPlatformBalanceHistoryRequest(BigDecimal percentPlatformFee, NewInstructorIncomeRequest newInstructorIncomeRequest, Order order) {
+        NewPlatformBalanceHistoryRequest newPlatformBalanceHistoryRequest = new NewPlatformBalanceHistoryRequest();
+
+        Double platformFee = newInstructorIncomeRequest.getTotalUserPayment() * (percentPlatformFee.doubleValue() / 100);
+
+        newPlatformBalanceHistoryRequest.setType("fee");
+        newPlatformBalanceHistoryRequest.setAmount(platformFee);
+        newPlatformBalanceHistoryRequest.setReferenceId(order.getId());
+        newPlatformBalanceHistoryRequest.setReferenceType("order");
+        newPlatformBalanceHistoryRequest.setTransactionStatus("completed");
+        newPlatformBalanceHistoryRequest.setRemarks("New fee income from order #" + order.getOrderNumber());
+        newPlatformBalanceHistoryRequest.setRemarks("New fee income from order #" + order.getOrderNumber());
+
+        return newPlatformBalanceHistoryRequest;
     }
 
     private static List<CreateOrderPaymentRequest.Item> getItems(Order createdOrder) {

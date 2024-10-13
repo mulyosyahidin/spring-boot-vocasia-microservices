@@ -52,7 +52,7 @@ public class CourseDataController {
             enrollmentData.put("enrollment", EnrollmentMapper.mapToDto(enrollment));
 
             try {
-                UserDto findUserById = authenticationService.getByUserId(enrollment.getUserId(), correlationId);
+                UserDto findUserById = authenticationService.findUserById(enrollment.getUserId(), correlationId);
                 PaymentDto payment = paymentService.findPaymentByOrderId(enrollment.getOrderId(), correlationId);
 
                 enrollmentData.put("user", findUserById);

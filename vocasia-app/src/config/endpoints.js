@@ -44,7 +44,17 @@ export const INSTRUCTORS_STUDENTS_GET_BY_ID = '/instructors/students/:studentId'
 export const INSTRUCTORS_TRANSACTIONS_GET_ALL = '/finance/instructor-sales';
 export const INSTRUCTORS_TRANSACTIONS_GET_BY_INCOME_ID = '/finance/instructor-sales/:id';
 
+export const INSTRUCTOR_FINANCE_GET_DATA = '/finance/instructor-balance/data'; // hasRole("INSTRUCTOR")
+
+export const INSTRUCTOR_FINANCE_WITHDRAWAL_GET_ALL = '/finance/withdrawal/history'; // hasRole("INSTRUCTOR")
+export const INSTRUCTOR_FINANCE_WITHDRAWAL_SEND_REQUEST = '/finance/withdrawal/request'; // hasRole("INSTRUCTOR")
+
 export const USER_ORDER_PLACE_NEW_ORDER = '/order/place-new-order'; // hasRole("STUDENT")
 export const USER_ORDER_GET_DATA = '/order/get-data/:orderId'; // hasRole("STUDENT")
 export const USER_ENROLLMENT_GET_ALL = '/enrollment/courses'; // hasRole("STUDENT")
 export const USER_ENROLLMENT_GET_BY_ID = '/enrollment/courses/:enrollmentId'; // hasRole("STUDENT")
+
+
+export const FINANCE_ADMIN_WITHDRAWAL_REQUEST = '/finance/admin/withdrawal/request'; // hasRole("ADMIN")
+export const FINANCE_ADMIN_WITHDRAWAL_REQUEST_FIND_BY_ID = '/finance/admin/withdrawal/request/:id'; // hasRole("ADMIN")
+export const FINANCE_ADMIN_WITHDRAWAL_REQUEST_PROCESS = '/finance/admin/withdrawal/request/:id/process'; // hasRole("ADMIN")

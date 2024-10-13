@@ -1,4 +1,4 @@
-package com.vocasia.finance.controller;
+package com.vocasia.finance.controller.instructor;
 
 import com.vocasia.finance.dto.ResponseDto;
 import com.vocasia.finance.dto.client.order.OrderDto;

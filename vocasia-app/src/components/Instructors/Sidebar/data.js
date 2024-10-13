@@ -27,5 +27,12 @@ export const sidebarItems = [
         text: "Transaksi",
         activeWhen: "/instructor/transactions/*",
     },
+    {
+        id: 5,
+        href: "/instructor/finances",
+        iconClass: "text-20 icon-play-button",
+        text: "Keuangan",
+        activeWhen: "/instructor/finances/*",
+    },
 
 ];
