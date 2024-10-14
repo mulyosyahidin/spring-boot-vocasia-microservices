@@ -2,7 +2,6 @@ import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {Data} from "./partials/Data.jsx";
 import {Actions} from "./partials/Actions.jsx";
-import {findWithdrawalRequestById} from "../../../../../services/admin/withdrawal-service.js";
 
 const buttons = [
     "Data",

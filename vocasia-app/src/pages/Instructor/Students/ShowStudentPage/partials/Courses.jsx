@@ -1,5 +1,5 @@
-import {makeDateReadable, rupiahFormatter} from "../../../../../utils/utils.js";
 import React from "react";
+import {formatRupiah} from "../../../../../utils/new-utils.js";
 
 export const Courses = ({activeTab, courses}) => {
     return (
@@ -24,7 +24,7 @@ export const Courses = ({activeTab, courses}) => {
                                 <td>{index + 1}</td>
                                 <td>{item.course.title}</td>
                                 <td>#{item.order.order_number}</td>
-                                <td>{rupiahFormatter.format(item.order_item.course_subtotal)}</td>
+                                <td>{formatRupiah(item.order_item.course_subtotal)}</td>
                             </tr>
                         ))
                     }

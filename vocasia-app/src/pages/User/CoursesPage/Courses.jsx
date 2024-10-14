@@ -1,8 +1,4 @@
 import {useEffect, useState} from "react";
-import {getAllEnrollments} from "../../../services/users/enrollments.js";
-import {Link} from "react-router-dom";
-import {courseStatuses} from "../../Instructor/Courses/CourseIndexPage/data.js";
-import {DraftCard} from "../../Instructor/Courses/CourseIndexPage/partials/DraftCard.jsx";
 import {Card} from "./partials/Card.jsx";
 
 export const Courses = () => {

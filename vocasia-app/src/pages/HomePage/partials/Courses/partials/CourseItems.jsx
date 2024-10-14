@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {CourseCard} from "../../../../../components/commons/CourseCard.jsx";
-import {coursesData} from "../data.js";
-import {getEditorChoiceCourses} from "../../../../../services/courses/public-course.js";
 
 export const CourseItems = ({category}) => {
     const [courses, setCourses] = useState([]);

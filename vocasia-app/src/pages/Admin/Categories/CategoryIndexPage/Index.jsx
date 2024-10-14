@@ -33,6 +33,8 @@ export const CategoryIndexPage = () => {
                 if (findAllCategories.success) {
                     setData(findAllCategories.data.data);
                     setPagination(findAllCategories.data.pagination);
+
+                    setIsLoading(false);
                 }
             } catch (error) {
                 console.error(error);
@@ -66,8 +68,6 @@ export const CategoryIndexPage = () => {
                         });
                     }
                 }
-            } finally {
-                setIsLoading(false);
             }
         }
 

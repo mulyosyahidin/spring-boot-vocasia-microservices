@@ -54,6 +54,8 @@ export const EditCategoryPage = () => {
                         icon: '',
                         parent_id: findCategoryById.data.category.parent_id || '',
                     });
+
+                    setIsLoading(false);
                 }
             } catch (error) {
                 console.error(error);
@@ -81,8 +83,6 @@ export const EditCategoryPage = () => {
                         });
                     }
                 }
-            } finally {
-                setIsLoading(false);
             }
         }
 

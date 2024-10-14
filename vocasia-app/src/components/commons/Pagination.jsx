@@ -1,5 +1,5 @@
 export const Pagination = ({ pagination, onPageChange }) => {
-    const { per_page, total, current_page } = pagination;
+    const { per_page, total_page, current_page } = pagination;
 
     // Fungsi untuk berpindah ke halaman sebelumnya dan berikutnya
     const handlePrevPage = () => {
@@ -9,14 +9,14 @@ export const Pagination = ({ pagination, onPageChange }) => {
     };
 
     const handleNextPage = () => {
-        if (current_page < total) {
+        if (current_page < total_page) {
             onPageChange(current_page + 1);
         }
     };
 
     const renderPageNumbers = () => {
         let pages = [];
-        for (let i = 1; i <= total; i++) {
+        for (let i = 1; i <= total_page; i++) {
             pages.push(
                 <a
                     key={i}
@@ -48,7 +48,7 @@ export const Pagination = ({ pagination, onPageChange }) => {
             <button
                 className="pagination__button -next"
                 onClick={handleNextPage}
-                disabled={current_page === total}
+                disabled={current_page === total_page}
             >
                 <i className="icon icon-chevron-right"></i>
             </button>

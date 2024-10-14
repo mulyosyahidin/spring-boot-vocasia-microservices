@@ -7,8 +7,8 @@ import com.vocasia.instructor.request.UpdateProfileRequest;
 public interface IInstructorService {
 
     Instructor registerNewInstructor(Long registeredUserId, RegisterRequest registerRequest);
-    Instructor getInstructorById(Long id);
     Instructor getInstructorByUserId(Long userId);
     Instructor updateProfile(Long instructorId, UpdateProfileRequest updateProfileRequest);
+    Instructor findById(Long id);
 
 }

@@ -7,9 +7,6 @@ import {CreateCoursePage} from "../pages/Instructor/Courses/CreateCoursePage/Ind
 import {CourseIndexPage} from "../pages/Instructor/Courses/CourseIndexPage/Index.jsx";
 import {UpdateThumbnailPage} from "../pages/Instructor/Courses/UpdateThumbnailPage/Index.jsx";
 import {EditCoursePage} from "../pages/Instructor/Courses/EditCoursePage/Index.jsx";
-import {ChapterPage} from "../pages/Instructor/Courses/ChapterPage/Index.jsx";
-import {ManageLessonsPage} from "../pages/Instructor/Courses/ManageLessonsPage/Index.jsx";
-import {CreateLessonPage} from "../pages/Instructor/Courses/CreateLessonPage/Index.jsx";
 import {CourseOverviewPage} from "../pages/Instructor/Courses/CourseOverviewPage/Index.jsx";
 import {Logout} from "../pages/Logout/Logout.jsx";
 
@@ -40,6 +37,12 @@ import {
     WithdrawalRequestIndexPage
 } from "../pages/Admin/Finance/WithdrawalRequest/WithdrawalRequestIndexPage/Index.jsx";
 import {WithdrawalRequestShowPage} from "../pages/Admin/Finance/WithdrawalRequest/WithdrawalRequestShowPage/Index.jsx";
+import {ChapterIndexPage} from "../pages/Instructor/Courses/Chapter/ChapterIndexPage/Index.jsx";
+import {ChapterCreatePage} from "../pages/Instructor/Courses/Chapter/ChapterCreatePage/Index.jsx";
+import {ChapterEditPage} from "../pages/Instructor/Courses/Chapter/ChapterEditPage/Index.jsx";
+import {LessonIndexPage} from "../pages/Instructor/Courses/Lessons/LessonIndexPage/Index.jsx";
+import {LessonCreatePage} from "../pages/Instructor/Courses/Lessons/LessonCreatePage/Index.jsx";
+import {LessonEditPage} from "../pages/Instructor/Courses/Lessons/LessonEditPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -90,15 +93,27 @@ const routes = createBrowserRouter([
     },
     {
         path: '/instructor/courses/:id/chapters',
-        element: <ChapterPage/>,
+        element: <ChapterIndexPage/>,
+    },
+    {
+        path: '/instructor/courses/:id/chapters/create',
+        element: <ChapterCreatePage/>,
+    },
+    {
+        path: '/instructor/courses/:id/chapters/:chapterId/edit',
+        element: <ChapterEditPage/>,
     },
     {
         path: '/instructor/courses/:courseId/chapters/:chapterId/lessons',
-        element: <ManageLessonsPage/>,
+        element: <LessonIndexPage/>,
     },
     {
         path: '/instructor/courses/:courseId/chapters/:chapterId/lessons/create',
-        element: <CreateLessonPage/>,
+        element: <LessonCreatePage/>,
+    },
+    {
+        path: '/instructor/courses/:courseId/chapters/:chapterId/lessons/:lessonId/edit',
+        element: <LessonEditPage/>,
     },
     {
         path: '/instructor/courses/:courseId/overview',
@@ -109,7 +124,7 @@ const routes = createBrowserRouter([
         element: <StudentIndexPage />,
     },
     {
-        path: '/instructor/students/:studentId',
+        path: '/instructor/students/:id',
         element: <ShowStudentPage />,
     },
     {
@@ -117,7 +132,7 @@ const routes = createBrowserRouter([
         element: <TransactionIndexPage />,
     },
     {
-        path: '/instructor/transactions/:incomeId',
+        path: '/instructor/transactions/:id',
         element: <TransactionShowPage />,
     },
     {

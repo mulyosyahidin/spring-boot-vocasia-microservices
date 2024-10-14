@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -70,7 +69,7 @@ public class AdminCategoryController {
             return categoryData;
         }).toList();
 
-        pagination.put("total", categories.getTotalPages());
+        pagination.put("total_page", categories.getTotalPages());
         pagination.put("per_page", categories.getSize());
         pagination.put("current_page", categories.getNumber() + 1);
         pagination.put("total_items", categories.getTotalElements());

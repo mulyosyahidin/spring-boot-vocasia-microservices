@@ -18,11 +18,11 @@ public class GatewayServerApplication {
     @Bean
     public RouteLocator routeConfig(RouteLocatorBuilder routeLocatorBuilder) {
         return routeLocatorBuilder.routes()
-                .route(p -> p.path("/auth/**")
-                        .filters(f -> f.rewritePath("/auth/(?<segment>.*)", "/api/${segment}"))
+                .route(p -> p.path("/authentication/**")
+                        .filters(f -> f.rewritePath("/authentication/(?<segment>.*)", "/api/${segment}"))
                         .uri("lb://AUTHENTICATION"))
-                .route(p -> p.path("/instructors/**")
-                        .filters(f -> f.rewritePath("/instructors/(?<segment>.*)", "/api/${segment}"))
+                .route(p -> p.path("/instructor/**")
+                        .filters(f -> f.rewritePath("/instructor/(?<segment>.*)", "/api/${segment}"))
                         .uri("lb://INSTRUCTOR"))
                 .route(p -> p.path("/course/**")
                         .filters(f -> f.rewritePath("/course/(?<segment>.*)", "/api/${segment}"))
@@ -39,9 +39,6 @@ public class GatewayServerApplication {
                 .route(p -> p.path("/finance/**")
                         .filters(f -> f.rewritePath("/finance/(?<segment>.*)", "/api/${segment}"))
                         .uri("lb://FINANCE"))
-                .route(p -> p.path("/playground/**")
-                        .filters(f -> f.rewritePath("/playground/(?<segment>.*)", "/api/${segment}"))
-                        .uri("lb://PLAYGROUND"))
                 .build();
     }
 

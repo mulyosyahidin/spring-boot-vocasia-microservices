@@ -2,9 +2,6 @@ import {Swiper, SwiperSlide} from "swiper/react";
 import {Navigation, Pagination} from "swiper";
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {topCategories} from "../data.js";
-import {getAdminCategories} from "../../../../../services/courses/admin-category-service.js";
-import {getSliderCategories} from "../../../../../services/courses/public-course.js";
 
 export const CategorySlider = () => {
     const [categories, setCategories] = useState([]);

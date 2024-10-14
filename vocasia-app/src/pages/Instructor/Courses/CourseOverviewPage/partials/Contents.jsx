@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {getChaptersByCourseId} from "../../_actions/CourseAction.jsx";
 import ModalVideoComponent from "../../../../../components/commons/ModalVideo.jsx";
-import {getYouTubeVideoId} from "../../../../../utils/utils.js";
-import Modal from "react-bootstrap/Modal";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import {findAll} from "../../../../../services/new/course/instructor/chapter-service.js";
+import {getYouTubeVideoId} from "../../../../../utils/new-utils.js";
 
-export const Contents = ({ activeTab, courseId, course, isLoading }) => {
-    const [isChaptersLoaded, setIsChaptersLoaded] = useState(false);
-    const [chapters, setChapters] = useState([]);
-    const [currentOpenItem, setCurrentOpenItem] = useState();
+export const Contents = ({activeTab, courseId}) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [data, setData] = useState([]);
 
+    const [currentOpenItem, setCurrentOpenItem] = useState('');
     const [selectedVideoId, setSelectedVideoId] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -19,34 +20,67 @@ export const Contents = ({ activeTab, courseId, course, isLoading }) => {
     const handleOpenModal = (videoId) => {
         setSelectedVideoId(videoId);
         setIsModalOpen(true);
-    };
+    }
 
     useEffect(() => {
         const fetchInitialData = async () => {
+            setIsLoading(true);
+
             try {
-                const getAllChapters = await getChaptersByCourseId(courseId);
-                setChapters(getAllChapters);
+                const findAllCourseChapters = await findAll(courseId);
+
+                if (findAllCourseChapters.success) {
+                    setData(findAllCourseChapters.data.data);
+                }
+
+                setIsLoading(false);
             } catch (error) {
-                console.error('Error fetching initial data:', error);
+                console.error(error);
+
+                if (error.message) {
+                    let msg = error.message;
+                    if (error.data.error) {
+                        msg += ' : ' + error.data.error;
+                    }
+
+                    await withReactContent(Swal).fire({
+                        title: 'Terjadi Kesalahan!',
+                        text: msg,
+                        icon: 'error',
+                    })
+                        .then((isConfirmed) => {
+                            if (isConfirmed) {
+                                window.location.reload();
+                            }
+                        })
+                }
             }
-            finally {
-                setIsChaptersLoaded(true);
-            }
-        };
+        }
 
         fetchInitialData();
-    }, [course.id]);
+    }, [courseId]);
 
     return (
         <div
             className={`tabs__pane -tab-item-1 ${activeTab === 2 ? "is-active" : ""} `}
         >
             {
-                !isLoading && isChaptersLoaded && (
+                isLoading && (
+                    <>
+                        <span>
+                            <i className={'fa fa-spinner fa-spin mr-5'}></i>
+                            <strong role="status">Loading...</strong>
+                        </span>
+                    </>
+                )
+            }
+
+            {
+                !isLoading && (
                     <>
                         <div className="accordion -block-2 text-left js-accordion">
                             {
-                                chapters.map((chapter, index) => (
+                                data.map((chapter, index) => (
                                     <div
                                         key={index}
                                         className={`accordion__item -dark-bg-dark-1 mt-10 ${
@@ -137,13 +171,6 @@ export const Contents = ({ activeTab, courseId, course, isLoading }) => {
                 )
             }
 
-            {
-                isLoading || !isChaptersLoaded && (
-                    <div className="text-center">
-                        <div className="spinner spinner-primary mt-50"></div>
-                    </div>
-                )
-            }
         </div>
     )
 }

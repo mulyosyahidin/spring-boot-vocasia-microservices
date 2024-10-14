@@ -1,62 +1,71 @@
 import React, {useContext, useState} from "react";
-import {publishCourseById} from "../../_actions/CourseAction.jsx";
-import {AuthContext} from "../../../../../states/contexts/AuthContext.jsx";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import {publishById} from "../../../../../services/new/course/instructor/course-service.js";
 
-export const Settings = ({activeTab, courseId, course, setCourse}) => {
-    const {sweetAlert} = useContext(AuthContext);
-
-    const [loading, setLoading] = useState(false);
+export const Settings = ({activeTab, course, courseId}) => {
+    const [isLoading, setIsLoading] = useState(false);
 
     const confirmPublish = async () => {
-        setLoading(true);
+        setIsLoading(true);
 
-        const result = await sweetAlert.fire({
-            title: 'Terbitkan Kursus?',
-            text: "Apakah Anda yakin ingin menerbitkan kursus ini?",
+        await withReactContent(Swal).fire({
             icon: 'warning',
+            title: 'Terbitkan Kursus?',
+            text: 'Apakah Anda yakin ingin menerbitkan kursus ini?',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, terbitkan!',
             cancelButtonText: 'Batal'
-        });
+        })
+            .then(async (isConfirmed) => {
+                if (isConfirmed) {
+                   try {
+                       const doPublishCourse = await publishById(courseId);
 
-        if (result.isConfirmed) {
-            try {
-                let publishCourse = await publishCourseById(courseId);
+                      if (doPublishCourse.success) {
+                          await withReactContent(Swal).fire({
+                              title: 'Berhasil!',
+                              text: doPublishCourse.message,
+                              icon: 'success',
+                          })
+                              .then((isConfirmed) => {
+                                  if (isConfirmed) {
+                                      window.location.reload();
+                                  }
+                              })
+                      }
+                   }
+                   catch (error) {
+                       console.error(error);
 
-                if (publishCourse) {
-                    setCourse({
-                        ...course,
-                        status: publishCourse.status,
-                    });
+                       if (error.message) {
+                           let msg = error.message;
+                           if (error.data.error) {
+                               msg += ' : ' + error.data.error;
+                           }
 
-                    sweetAlert.fire(
-                        'Terbit!',
-                        'Kursus berhasil diterbitkan.',
-                        'success'
-                    );
+                           await withReactContent(Swal).fire({
+                               title: 'Terjadi Kesalahan!',
+                               text: msg,
+                               icon: 'error',
+                           })
+                               .then((isConfirmed) => {
+                                   if (isConfirmed) {
+                                       window.location.reload();
+                                   }
+                               })
+                       }
+                   }
+
                 }
-            } catch (error) {
-                console.error('Error publishing course:', error);
-
-                sweetAlert.fire(
-                    'Gagal!',
-                    'Terjadi kesalahan saat menerbitkan kursus.',
-                    'error'
-                );
-            } finally {
-                setLoading(false);
-            }
-        }
-        else {
-            setLoading(false);
-        }
+            });
     }
 
     return (
         <div
-            className={`tabs__pane -tab-item-1 ${activeTab == 6 ? "is-active" : ""} `}
+            className={`tabs__pane -tab-item-1 ${activeTab == 5 ? "is-active" : ""} `}
         >
             {
                 course.status === 'draft' && (
@@ -70,10 +79,10 @@ export const Settings = ({activeTab, courseId, course, setCourse}) => {
                             telah melengkapi konten kursus Anda dengan baik.
                         </p>
 
-                        <button className="button -sm -purple-1 text-white" disabled={loading}
+                        <button className="button -sm -purple-1 text-white" disabled={isLoading}
                                 onClick={() => confirmPublish()}>
                             {
-                                loading ? 'Menerbitkan kursus...' : 'Terbitkan'
+                                isLoading ? 'Menerbitkan kursus...' : 'Terbitkan'
                             }
                         </button>
                     </div>

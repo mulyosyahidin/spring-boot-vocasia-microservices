@@ -1,4 +1,4 @@
-import {makeDateReadable, rupiahFormatter} from "../../../../../utils/utils.js";
+import {formatDate} from "../../../../../utils/new-utils.js";
 
 export const Transaction = ({activeTab, transaction}) => {
     return (
@@ -17,7 +17,7 @@ export const Transaction = ({activeTab, transaction}) => {
                     Tanggal
                 </h4>
                 <p className="mt-2">
-                    {makeDateReadable({date: transaction.income.created_at})}
+                    {formatDate(transaction.income.created_at)}
                 </p>
 
                 <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>

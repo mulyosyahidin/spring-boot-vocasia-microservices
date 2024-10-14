@@ -21,9 +21,8 @@ public class Course extends BaseEntity {
     @Column(nullable = false)
     private Long instructorId;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "fk_category_course"))
-    private Category category;
+    @Column(name = "category_id")
+    private Long categoryId;
 
     @Column(nullable = false)
     private String title;
@@ -31,6 +30,7 @@ public class Course extends BaseEntity {
     @Column(nullable = false)
     private String slug;
 
+    @Column(name = "total_duration")
     private String totalDuration;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'all'")
@@ -43,17 +43,19 @@ public class Course extends BaseEntity {
     private String description;
 
     @Lob
+    @Column(name = "short_description")
     private String shortDescription;
 
+    @Column(name = "featured_picture")
     private String featuredPicture;
 
     @Column(nullable = false)
     private Double price = 0.0;
 
-    @Column(nullable = false)
+    @Column(name = "is_free", nullable = false)
     private Boolean isFree = false;
 
-    @Column(nullable = false)
+    @Column(name = "is_discount", nullable = false)
     private Boolean isDiscount = false;
 
     private Double discount = 0.0;
@@ -61,6 +63,7 @@ public class Course extends BaseEntity {
     @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'draft'")
     private String status = "draft";
 
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
 }

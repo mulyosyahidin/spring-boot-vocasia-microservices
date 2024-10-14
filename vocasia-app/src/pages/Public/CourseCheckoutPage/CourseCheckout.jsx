@@ -10,9 +10,7 @@ import {
     cartTotalPriceSelector,
     cartTotalPriceWithoutDiscountSelector
 } from "../../../states/recoil/Selectors/CourseCartSelector.jsx";
-import {rupiahFormatter} from "../../../utils/utils.js";
 import {authStatusSelector} from "../../../states/recoil/Selectors/AuthStatusSelector.jsx";
-import {placeNewOrder} from "../../../services/order-service.js";
 import {AuthContext} from "../../../states/contexts/AuthContext.jsx";
 
 const metaData = {

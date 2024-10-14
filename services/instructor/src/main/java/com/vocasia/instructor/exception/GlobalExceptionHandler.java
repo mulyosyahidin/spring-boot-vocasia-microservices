@@ -29,11 +29,17 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
-            errors.computeIfAbsent(fieldName, k -> new ArrayList<>()).add(errorMessage);
+
+            String snakeCaseField = toSnakeCase(fieldName);
+            errors.computeIfAbsent(snakeCaseField, k -> new ArrayList<>()).add(errorMessage);
         });
 
         ResponseDto responseDto = new ResponseDto(false, "Validation error", null, errors);
         return new ResponseEntity<>(responseDto, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    private String toSnakeCase(String fieldName) {
+        return fieldName.replaceAll("([a-z])([A-Z]+)", "$1_$2").toLowerCase();
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

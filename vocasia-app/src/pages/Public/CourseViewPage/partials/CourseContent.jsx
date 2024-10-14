@@ -2,9 +2,7 @@ import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 import React, {useEffect, useState} from "react";
-import {lessonItems} from "../data/about-course.js";
 import ModalVideoComponent from "../../../../components/commons/ModalVideo.jsx";
-import {getCourseContents} from "../../../../services/courses/public-course.js";
 
 export default function CourseContent({chapters, course}) {
     const [activeItemId, setActiveItemId] = useState(0);

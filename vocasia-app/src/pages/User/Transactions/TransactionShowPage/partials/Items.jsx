@@ -1,4 +1,3 @@
-import {rupiahFormatter} from "../../../../../utils/utils.js";
 import React from "react";
 
 export const Items = ({activeTab, items, isLoading}) => {

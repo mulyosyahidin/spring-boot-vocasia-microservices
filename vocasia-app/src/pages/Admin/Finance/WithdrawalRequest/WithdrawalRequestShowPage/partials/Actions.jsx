@@ -3,9 +3,7 @@ import {InputField} from "../../../../../../components/commons/Input/InputField.
 import {AuthContext} from "../../../../../../states/contexts/AuthContext.jsx";
 import {TextAreaField} from "../../../../../../components/commons/Input/TextAreaField.jsx";
 import {InputFileField} from "../../../../../../components/commons/Input/InputFileField.jsx";
-import {processWithdrawalRequest} from "../../../../../../services/admin/withdrawal-service.js";
 import {useParams} from "react-router-dom";
-import {makeDateReadable, rupiahFormatter} from "../../../../../../utils/utils.js";
 
 export const Actions = ({request, process, isLoading, activeTab}) => {
     const {sweetAlert} = useContext(AuthContext);

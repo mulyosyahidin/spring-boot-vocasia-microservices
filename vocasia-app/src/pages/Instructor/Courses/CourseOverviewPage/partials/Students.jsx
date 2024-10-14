@@ -1,26 +1,63 @@
 import React, {useEffect, useState} from "react";
-import {getCourseStudents} from "../../../../../services/instructors/course-service.js";
-import {makeDateReadable, parseLocalDate} from "../../../../../utils/utils.js";
+import {findAllCourseStudents} from "../../../../../services/new/enrollment/instructor/course-service.js";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import {formatDate} from "../../../../../utils/new-utils.js";
+import {Pagination} from "../../../../../components/commons/Pagination.jsx";
 
-export const Students = ({activeTab, course, courseId}) => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [students, setStudents] = useState([]);
+export const Students = ({activeTab, courseId}) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [data, setData] = useState([]);
+    const [pagination, setPagination] = useState({});
+
+    const handlePageChange = (newPage) => {
+        setPagination((prev) => ({
+            ...prev,
+            current_page: newPage
+        }));
+
+        setCurrentPage(newPage);
+    };
 
     useEffect(() => {
         const fetchInitialData = async () => {
-            try {
-                const getEnrollmentsData = await getCourseStudents(courseId);
+            setIsLoading(true);
 
-                setStudents(getEnrollmentsData.enrollments);
+            try {
+                const findAllStudents = await findAllCourseStudents(courseId, currentPage);
+
+                if (findAllStudents.success) {
+                    setData(findAllStudents.data.data);
+                    setPagination(findAllStudents.data.pagination);
+                }
+
+                setIsLoading(false);
             } catch (error) {
                 console.error(error);
-            } finally {
-                setIsLoading(false);
+
+                if (error.message) {
+                    let msg = error.message;
+                    if (error.data.error) {
+                        msg += ' : ' + error.data.error;
+                    }
+
+                    await withReactContent(Swal).fire({
+                        title: 'Terjadi Kesalahan!',
+                        text: msg,
+                        icon: 'error',
+                    })
+                        .then((isConfirmed) => {
+                            if (isConfirmed) {
+                                window.location.reload();
+                            }
+                        })
+                }
             }
         }
 
         fetchInitialData();
-    }, []);
+    }, [courseId, currentPage]);
 
     return (
         <div
@@ -28,7 +65,12 @@ export const Students = ({activeTab, course, courseId}) => {
         >
             {
                 isLoading && (
-                    <div className="loading">Loading...</div>
+                    <>
+                        <span>
+                            <i className={'fa fa-spinner fa-spin mr-5'}></i>
+                            <strong role="status">Loading...</strong>
+                        </span>
+                    </>
                 )
             }
 
@@ -49,23 +91,44 @@ export const Students = ({activeTab, course, courseId}) => {
                             </thead>
                             <tbody>
                             {
-                                students.map((item, index) => (
+                                data.map((item, index) => (
                                     <tr key={item.enrollment.id}>
-                                        <td>{index + 1}</td>
+                                        <td>{(currentPage - 1) * pagination.per_page + (index + 1)}</td>
                                         <td>{item.user.name}</td>
-                                        <td>{makeDateReadable({date: item.enrollment.enrollment_date})}</td>
+                                        <td>{formatDate(item.enrollment.enrollment_date)}</td>
                                         <td>{item.enrollment.progress_percentage}%</td>
                                         <td>
                                             {
-                                                item.completion_date != null ? makeDateReadable(item.completion_date) : '-'
+                                                item.completion_date != null ? formatDate(item.completion_date) : '-'
                                             }
                                         </td>
                                         <td></td>
                                     </tr>
                                 ))
                             }
+                            {
+                                data.length === 0 && (
+                                    <tr>
+                                        <td colSpan={6}>
+                                            <div className="text-center">
+                                                <strong>Tidak ada data untuk ditampilkan</strong>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            }
                             </tbody>
                         </table>
+                    </div>
+                )
+            }
+
+            {
+                !isLoading && (
+                    <div className="row justify-center pt-30 pb-30">
+                        <div className="col-auto">
+                            <Pagination pagination={pagination} onPageChange={handlePageChange}/>
+                        </div>
                     </div>
                 )
             }

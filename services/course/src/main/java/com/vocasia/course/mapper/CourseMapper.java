@@ -2,7 +2,6 @@ package com.vocasia.course.mapper;
 
 import com.vocasia.course.config.AwsConfigProperties;
 import com.vocasia.course.dto.data.CourseDto;
-import com.vocasia.course.entity.Category;
 import com.vocasia.course.entity.Course;
 import com.vocasia.course.service.ICourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,6 @@ public class CourseMapper {
     }
 
     public static CourseDto mapToDto(Course course) {
-        Category category = course.getCategory();
-
         CourseDto courseDto = new CourseDto();
 
         Integer chapterCount = courseService.chapterCount(course.getId());
@@ -33,7 +30,7 @@ public class CourseMapper {
         Integer enrollmentCount = courseService.enrollmentCount(course.getId());
 
         courseDto.setId(course.getId());
-        courseDto.setCategoryId(category.getId());
+        courseDto.setCategoryId(course.getCategoryId());
         courseDto.setInstructorId(course.getInstructorId());
 
         courseDto.setTitle(course.getTitle());

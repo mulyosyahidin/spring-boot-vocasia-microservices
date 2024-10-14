@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {submitRegisterForm} from "../actions/RegisterAction.jsx";
 import {InputField} from "../../../../components/commons/Input/InputField.jsx";
 import {Link, useNavigate} from "react-router-dom";
 import {

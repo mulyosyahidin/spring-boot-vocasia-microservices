@@ -27,13 +27,6 @@ public class InstructorServiceImpl implements IInstructorService {
     }
 
     @Override
-    public Instructor getInstructorById(Long id) {
-        return instructorRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Data tidak ditemukan")
-        );
-    }
-
-    @Override
     public Instructor getInstructorByUserId(Long id) {
         return instructorRepository.findByUserId(id);
     }
@@ -51,4 +44,11 @@ public class InstructorServiceImpl implements IInstructorService {
 
         return instructorRepository.save(instructor);
     }
+
+    @Override
+    public Instructor findById(Long id) {
+        return instructorRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
+    }
+
 }

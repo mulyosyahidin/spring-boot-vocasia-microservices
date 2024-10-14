@@ -7,6 +7,8 @@ import com.vocasia.finance.repository.InstructorBalanceHistoryRepository;
 import com.vocasia.finance.request.NewInstructorBalanceHistoryRequest;
 import com.vocasia.finance.service.IInstructorBalanceHistoryService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -52,6 +54,11 @@ public class InstructorBalanceHistoryServiceImpl implements IInstructorBalanceHi
     public InstructorBalanceHistory findById(Long historyId) {
         return instructorBalanceHistoryRepository.findById(historyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
+    }
+
+    @Override
+    public Page<InstructorBalanceHistory> findByInstructorId(Long instructorId, Pageable paging) {
+        return instructorBalanceHistoryRepository.findByInstructorId(instructorId, paging);
     }
 
 }

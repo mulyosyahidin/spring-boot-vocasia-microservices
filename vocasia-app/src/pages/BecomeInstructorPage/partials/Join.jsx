@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import {InputField} from "../../../components/commons/Input/InputField.jsx";
 import {TextAreaField} from "../../../components/commons/Input/TextAreaField.jsx";
-import {submitInstructorForm} from "../actions/RegisterAction.jsx";
 
 export const Join = () => {
     const [showForm, setShowForm] = useState(false);

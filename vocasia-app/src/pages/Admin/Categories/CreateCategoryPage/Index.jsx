@@ -48,6 +48,8 @@ export const CreateCategoryPage = () => {
 
                 if (findOnlyParentCategories.success) {
                     setCategories(organizeCategories(findOnlyParentCategories.data.data));
+
+                    setIsLoading(false);
                 }
             } catch (error) {
                 console.error(error);
@@ -75,8 +77,6 @@ export const CreateCategoryPage = () => {
                         });
                     }
                 }
-            } finally {
-                setIsLoading(false);
             }
         }
 

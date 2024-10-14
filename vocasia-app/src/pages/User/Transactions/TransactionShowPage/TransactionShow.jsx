@@ -1,7 +1,6 @@
 import {useParams} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../../../states/contexts/AuthContext.jsx";
-import {findMyOrderDataById} from "../../../../services/users/order-service.js";
 import {Order} from "./partials/Order.jsx";
 import {Items} from "./partials/Items.jsx";
 import {Payment} from "./partials/Payment.jsx";

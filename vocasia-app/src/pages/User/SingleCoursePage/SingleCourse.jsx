@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {getCourseLessonDataByEnrollment, getEnrollmentDataById} from "../../../services/users/enrollments.js";
 import {Meta} from "../../../components/commons/Meta.jsx";
 import {Header} from "./partials/Header.jsx";
 import {VideoPlayer} from "./partials/VideoPlayer.jsx";

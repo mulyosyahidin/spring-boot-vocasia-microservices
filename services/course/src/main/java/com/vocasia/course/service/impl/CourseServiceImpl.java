@@ -1,7 +1,6 @@
 package com.vocasia.course.service.impl;
 
 import com.vocasia.course.config.AwsConfigProperties;
-import com.vocasia.course.entity.Category;
 import com.vocasia.course.entity.Chapter;
 import com.vocasia.course.entity.Course;
 import com.vocasia.course.exception.ResourceNotFoundException;
@@ -14,6 +13,8 @@ import com.vocasia.course.request.UpdateCourseRequest;
 import com.vocasia.course.request.UpdateCourseThumbnailRequest;
 import com.vocasia.course.service.ICourseService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,11 +37,11 @@ public class CourseServiceImpl implements ICourseService {
     private final ChapterRepository chapterRepository;
 
     @Override
-    public Course save(CreateNewCourseRequest createNewCourseRequest) {
+    public Course save(Long instructorId, CreateNewCourseRequest createNewCourseRequest) {
         Course course = new Course();
 
-        course.setInstructorId(createNewCourseRequest.getInstructorId());
-
+        course.setInstructorId(instructorId);
+        course.setCategoryId(createNewCourseRequest.getCategoryId());
         course.setTitle(createNewCourseRequest.getTitle());
         course.setSlug(createNewCourseRequest.getSlug());
         course.setShortDescription(createNewCourseRequest.getShortDescription());
@@ -48,30 +49,20 @@ public class CourseServiceImpl implements ICourseService {
         course.setLanguage(createNewCourseRequest.getLanguage());
         course.setDescription(createNewCourseRequest.getDescription());
         course.setTotalDuration(createNewCourseRequest.getTotalDuration());
-        course.setStatus("draft");
 
-        if (createNewCourseRequest.getPrice() != null) {
-            course.setPrice(createNewCourseRequest.getPrice());
-            course.setIsFree(false);
-        }
-        else {
+        if (createNewCourseRequest.getPrice() == null) {
             course.setIsFree(true);
+        } else {
+            course.setPrice(createNewCourseRequest.getPrice());
+            course.setIsFree(createNewCourseRequest.getPrice() < 1);
         }
 
         if (createNewCourseRequest.getDiscount() > 0) {
             course.setDiscount(createNewCourseRequest.getDiscount());
             course.setIsDiscount(true);
-        }
-        else {
+        } else {
             course.setDiscount(0.0);
             course.setIsDiscount(false);
-        }
-
-        if (createNewCourseRequest.getCategoryId() != null) {
-            Category category = categoryRepository.findById(Long.parseLong(createNewCourseRequest.getCategoryId()))
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-
-            course.setCategory(category);
         }
 
         return courseRepository.save(course);
@@ -82,7 +73,8 @@ public class CourseServiceImpl implements ICourseService {
         String bucketName = awsConfigProperties.getS3().getBucket();
         MultipartFile picture = updateCourseThumbnailRequest.getPicture();
 
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(picture.getOriginalFilename()));
+        String timeInMillis = String.valueOf(System.currentTimeMillis());
+        String fileName = timeInMillis + "-" + StringUtils.cleanPath(Objects.requireNonNull(picture.getOriginalFilename()));
 
         String contentType = picture.getContentType();
         long fileSize = picture.getSize();
@@ -101,38 +93,9 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
-    public List<Course> getDraftCourses() {
-        return courseRepository.findByStatus("draft");
-    }
-
-    @Override
-    public List<Course> getDraftCoursesByInstructorId(Long instructorId) {
-        return courseRepository.findByInstructorIdAndStatus(instructorId, "draft");
-    }
-
-    @Override
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
-    }
-
-    @Override
-    public List<Course> getAllCoursesByInstructorId(Long instructorId) {
-        return courseRepository.findByInstructorId(instructorId);
-    }
-
-    @Override
-    public List<Course> getPublishedCourses() {
-        return courseRepository.findByStatus("published");
-    }
-
-    @Override
-    public List<Course> getPublishedCoursesByInstructorId(Long instructorId) {
-        return courseRepository.findByInstructorIdAndStatus(instructorId, "published");
-    }
-
-    @Override
     public Course update(Course course, UpdateCourseRequest updateCourseRequest) {
         course.setTitle(updateCourseRequest.getTitle());
+        course.setCategoryId(updateCourseRequest.getCategoryId());
         course.setShortDescription(updateCourseRequest.getShortDescription());
         course.setLevel(updateCourseRequest.getLevel());
         course.setLanguage(updateCourseRequest.getLanguage());
@@ -142,25 +105,16 @@ public class CourseServiceImpl implements ICourseService {
         if (updateCourseRequest.getPrice() != null) {
             course.setPrice(updateCourseRequest.getPrice());
             course.setIsFree(false);
-        }
-        else {
+        } else {
             course.setIsFree(true);
         }
 
         if (updateCourseRequest.getDiscount() > 0) {
             course.setDiscount(updateCourseRequest.getDiscount());
             course.setIsDiscount(true);
-        }
-        else {
+        } else {
             course.setDiscount(0.0);
             course.setIsDiscount(false);
-        }
-
-        if (updateCourseRequest.getCategoryId() != null) {
-            Category category = categoryRepository.findById(Long.parseLong(updateCourseRequest.getCategoryId()))
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-
-            course.setCategory(category);
         }
 
         return courseRepository.save(course);
@@ -208,6 +162,16 @@ public class CourseServiceImpl implements ICourseService {
     @Override
     public Integer enrollmentCount(Long courseId) {
         return 0;
+    }
+
+    @Override
+    public Page<Course> findAllByInstructorId(Long instructorId, Pageable paging) {
+        return courseRepository.findAllByInstructorId(instructorId, paging);
+    }
+
+    @Override
+    public Page<Course> findAllByInstructorIdAndStatus(Long instructorId, String status, Pageable paging) {
+        return courseRepository.findAllByInstructorIdAndStatus(instructorId, status, paging);
     }
 
 }

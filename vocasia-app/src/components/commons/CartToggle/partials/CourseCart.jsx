@@ -3,7 +3,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { Link } from "react-router-dom";
 import {courseCartAtom} from "../../../../states/recoil/Atoms/CourseCart.jsx";
 import {cartTotalPriceSelector} from "../../../../states/recoil/Selectors/CourseCartSelector.jsx";
-import {rupiahFormatter} from "../../../../utils/utils.js";
 
 export const CourseCart = () => {
     const [cartCourses, setCartCourses] = useRecoilState(courseCartAtom);

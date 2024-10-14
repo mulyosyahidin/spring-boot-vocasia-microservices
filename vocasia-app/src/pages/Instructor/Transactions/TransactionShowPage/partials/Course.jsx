@@ -1,4 +1,4 @@
-import {makeDateReadable, rupiahFormatter} from "../../../../../utils/utils.js";
+import {formatRupiah} from "../../../../../utils/new-utils.js";
 
 export const Course = ({activeTab, transaction}) => {
     return (
@@ -19,8 +19,8 @@ export const Course = ({activeTab, transaction}) => {
                 <p className="mt-2">
                     {
                         transaction.order_item.course_is_free ? 'Gratis' : (
-                            transaction.order_item.course_is_discount ? rupiahFormatter.format(transaction.order_item.course_price - transaction.order_item.course_discount) :
-                                rupiahFormatter.format(transaction.order_item.course_price)
+                            transaction.order_item.course_is_discount ? formatRupiah(transaction.order_item.course_price - transaction.order_item.course_discount) :
+                                formatRupiah(transaction.order_item.course_price)
                         )
                     }
                 </p>
@@ -31,8 +31,8 @@ export const Course = ({activeTab, transaction}) => {
                 <p className="mt-2">
                     {
                         transaction.course.is_free ? 'Gratis' : (
-                            transaction.course.is_discount ? rupiahFormatter.format(transaction.course.price - transaction.course.discount) :
-                                rupiahFormatter.format(transaction.course.price)
+                            transaction.course.is_discount ? formatRupiah(transaction.course.price - transaction.course.discount) :
+                                formatRupiah(transaction.course.price)
                         )
                     }
                 </p>

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "course")
 public interface CourseFeignClient {
 
-    @GetMapping("/api/courses/{courseId}")
+    @GetMapping("/api/instructor/courses/{courseId}")
     public ResponseEntity<ResponseDto> findById(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                      @PathVariable Long courseId);
 

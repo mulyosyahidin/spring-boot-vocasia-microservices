@@ -8,6 +8,8 @@ import com.vocasia.enrollment.service.IEnrollmentService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -63,13 +65,13 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     }
 
     @Override
-    public List<Enrollment> getUserEnrolledCourseByCourseId(String correlationId, Long courseId) {
-        return enrollmentRepository.findByCourseId(courseId);
+    public boolean isUserEnrolled(Long userId, Long courseId) {
+        return enrollmentRepository.existsByUserIdAndCourseId(userId, courseId);
     }
 
     @Override
-    public boolean isUserEnrolled(Long userId, Long courseId) {
-        return enrollmentRepository.existsByUserIdAndCourseId(userId, courseId);
+    public Page<Enrollment> findAllByCourseId(Long courseId, Pageable paging) {
+        return enrollmentRepository.findAllByCourseId(courseId, paging);
     }
 
 }

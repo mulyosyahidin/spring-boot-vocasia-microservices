@@ -1,7 +1,4 @@
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {learnList, requirements} from "../data/about-course.js";
 
 export default function Overview({course}) {
     const [showMore, setShowMore] = useState(false);

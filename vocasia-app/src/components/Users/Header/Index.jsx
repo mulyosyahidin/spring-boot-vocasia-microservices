@@ -1,8 +1,5 @@
 import {useEffect, useState} from "react";
-import {CartToggle} from "../../commons/CartToggle/Index.jsx";
 import {Link} from "react-router-dom";
-import {notifications, sidebarItems} from "./data.js";
-import {getUserProfilePictureUrl} from "../../../utils/utils.js";
 
 export const Header = () => {
     const [isfullScreen, setIsfullScreen] = useState(false);

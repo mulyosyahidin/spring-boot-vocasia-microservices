@@ -2,6 +2,7 @@ package com.vocasia.course.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.slugify.Slugify;
+import com.vocasia.course.validation.annotation.CreateValidDiscount;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -9,27 +10,33 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@CreateValidDiscount
 public class CreateNewCourseRequest {
 
     @NotBlank(message = "Judul kursus harus diisi")
     private String title;
 
-    @NotNull(message = "ID Instruktur harus diisi")
-    @JsonProperty("instructor_id")
-    private Long instructorId;
+    @NotNull(message = "Kategori kursus harus diisi")
+    @JsonProperty("category_id")
+    private Long categoryId;
+
+    @NotBlank(message = "Level kursus harus diisi")
+    private String level;
+
+    @NotBlank(message = "Bahasa kursus harus diisi")
+    private String language;
+
+    @NotNull(message = "Harga kursus harus diisi")
+    private Double price;
+
+    private Double discount;
 
     @JsonProperty("short_description")
     private String shortDescription;
 
-    @JsonProperty("category_id")
-    private String categoryId;
-
-    private String level;
-    private String language;
-    private Double price;
-    private Double discount;
     private String description;
 
+    @NotBlank(message = "Total durasi kursus harus diisi")
     @JsonProperty("total_duration")
     private String totalDuration;
 

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import ModalVideoComponent from "../../../../components/commons/ModalVideo.jsx";
-import {getYouTubeVideoId} from "../../../../utils/utils.js";
 
 export const VideoPlayer = ({course, currentLesson}) => {
     const [isOpen, setIsOpen] = useState(false);

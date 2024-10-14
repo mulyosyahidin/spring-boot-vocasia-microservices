@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {makeDateReadable, rupiahFormatter} from "../../../../../utils/utils.js";
 import {Link} from "react-router-dom";
-import {getAllWithdrawalRequests} from "../../../../../services/admin/withdrawal-service.js";
 
 export const WithdrawalRequestIndex = () => {
     const [isLoading, setIsLoading] = useState(false);

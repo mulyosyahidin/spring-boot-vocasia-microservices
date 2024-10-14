@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import {rupiahFormatter} from "../../../../utils/utils.js";
 import {courseCartAtom} from "../../../../states/recoil/Atoms/CourseCart.jsx";
 import {useRecoilState} from "recoil";
 import {Link} from "react-router-dom";

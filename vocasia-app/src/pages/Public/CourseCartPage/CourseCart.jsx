@@ -11,8 +11,7 @@ import {
     cartTotalPriceWithoutDiscountSelector
 } from "../../../states/recoil/Selectors/CourseCartSelector.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMinus, faPlus, faX} from "@fortawesome/free-solid-svg-icons";
-import {rupiahFormatter} from "../../../utils/utils.js";
+import {faX} from "@fortawesome/free-solid-svg-icons";
 
 const metaData = {
     title: "Keranjang Belanja",

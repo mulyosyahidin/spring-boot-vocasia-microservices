@@ -7,6 +7,8 @@ import com.vocasia.finance.repository.InstructorIncomeRepository;
 import com.vocasia.finance.request.NewInstructorIncomeRequest;
 import com.vocasia.finance.service.IInstructorIncomeService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -38,19 +40,24 @@ public class InstructorIncomeServiceImpl implements IInstructorIncomeService {
     }
 
     @Override
-    public List<InstructorIncome> findAllIncomeByCourseId(Long courseId) {
-        return instructorIncomeRepository.findAllByCourseId(courseId);
-    }
-
-    @Override
-    public List<InstructorIncome> getAllInstructorIncome(Long instructorId) {
-        return instructorIncomeRepository.findAllByInstructorId(instructorId);
-    }
-
-    @Override
     public InstructorIncome findById(Long incomeId) {
         return instructorIncomeRepository.findById(incomeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
+    }
+
+    @Override
+    public Page<InstructorIncome> findAllByInstructorId(Long instructorId, Pageable paging) {
+        return instructorIncomeRepository.findAllByInstructorId(instructorId, paging);
+    }
+
+    @Override
+    public Page<InstructorIncome> findAllByCourseId(Long courseId, Pageable paging) {
+        return instructorIncomeRepository.findAllByCourseId(courseId, paging);
+    }
+
+    @Override
+    public List<InstructorIncome> findAllByCourseId(Long courseId) {
+        return instructorIncomeRepository.findAllByCourseId(courseId);
     }
 
 }

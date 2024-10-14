@@ -1,11 +1,9 @@
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../../states/contexts/AuthContext.jsx";
 import {Link, useParams} from "react-router-dom";
-import {getOrderData} from "../../../services/order-service.js";
 import {Meta} from "../../../components/commons/Meta.jsx";
 import {PreLoader} from "../../../components/commons/PreLoader.jsx";
 import {Header} from "../../../components/Header/Index.jsx";
-import {makeDateReadable, rupiahFormatter} from "../../../utils/utils.js";
 
 const metaData = {
     title: 'Order Data'

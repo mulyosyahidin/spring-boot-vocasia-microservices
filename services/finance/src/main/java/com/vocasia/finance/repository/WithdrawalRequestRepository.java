@@ -2,6 +2,8 @@ package com.vocasia.finance.repository;
 
 import com.vocasia.finance.entity.WithdrawalRequest;
 import feign.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,5 +18,7 @@ public interface WithdrawalRequestRepository extends JpaRepository<WithdrawalReq
     Double sumAmountByStatus(@Param("status") String status);
 
     List<WithdrawalRequest> findAllByStatus(String status);
+
+    Page<com.vocasia.finance.entity.WithdrawalRequest> findAllByInstructorId(Long instructorId, Pageable paging);
 
 }

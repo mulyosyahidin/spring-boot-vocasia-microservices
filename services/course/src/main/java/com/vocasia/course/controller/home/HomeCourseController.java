@@ -71,7 +71,7 @@ public class HomeCourseController {
             Map<String, Object> courseData = new HashMap<>();
 
             courseData.put("course", CourseMapper.mapToDto(course));
-            courseData.put("category", CategoryMapper.mapToDto(course.getCategory()));
+            courseData.put("category", null);  // will be back
             courseData.put("instructor", instructorService.findById(course.getInstructorId(), correlationId));
 
             coursesData.add(courseData);
@@ -94,7 +94,7 @@ public class HomeCourseController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("course", CourseMapper.mapToDto(course));
-        response.put("category", CategoryMapper.mapToDto(course.getCategory()));
+        response.put("category", null);  // will be back
 
         List<Map<String, Object>> chaptersData = new ArrayList<>();
 

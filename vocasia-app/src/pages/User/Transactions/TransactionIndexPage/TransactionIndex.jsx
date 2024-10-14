@@ -1,8 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../../../states/contexts/AuthContext.jsx";
-import {makeDateReadable, rupiahFormatter} from "../../../../utils/utils.js";
 import {Link} from "react-router-dom";
-import {getAllMyOrders} from "../../../../services/users/order-service.js";
 
 export const TransactionIndex = () => {
     const {sweetAlert} = useContext(AuthContext);

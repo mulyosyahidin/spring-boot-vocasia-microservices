@@ -1,6 +1,3 @@
-import {makeDateReadable, rupiahFormatter} from "../../../../../utils/utils.js";
-import {Link} from "react-router-dom";
-
 export const Student = ({activeTab, transaction}) => {
     return (
         <div

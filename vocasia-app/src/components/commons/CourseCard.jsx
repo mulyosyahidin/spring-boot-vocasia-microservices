@@ -2,7 +2,6 @@ import React from "react";
 
 import {Link} from "react-router-dom";
 import {useState, useEffect} from "react";
-import {getPercentage, rupiahFormatter} from "../../utils/utils.js";
 
 export const CourseCard = ({data, index}) => {
     const [rating, setRating] = useState([]);

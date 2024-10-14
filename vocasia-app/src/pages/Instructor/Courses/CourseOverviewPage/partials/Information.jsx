@@ -1,5 +1,5 @@
 import React from "react";
-import {getPercentage, makeDateReadable, rupiahFormatter} from "../../../../../utils/utils.js";
+import {formatDate, formatRupiah} from "../../../../../utils/new-utils.js";
 
 export const Information = ({activeTab, course, isLoading}) => {
     return (
@@ -89,14 +89,14 @@ export const Information = ({activeTab, course, isLoading}) => {
                                         course.is_discount ? (
                                             <>
                                                 <strike>
-                                                    <small>{`${rupiahFormatter.format(course.price)}`}</small>
+                                                    <small>{`${formatRupiah(course.price)}`}</small>
                                                 </strike>
 
-                                                {`${rupiahFormatter.format(course.price - course.discount)}`} (Diskon {`${getPercentage(course.price, course.discount)}%`})
+                                                {`${formatRupiah(course.price - course.discount)}`} (Diskon {`${getPercentage(course.price, course.discount)}%`})
                                             </>
                                         ) : (
                                             <>
-                                                {`${rupiahFormatter.format(course.price)}`}
+                                                {`${formatRupiah(course.price)}`}
                                             </>
                                         )
                                     )
@@ -107,7 +107,7 @@ export const Information = ({activeTab, course, isLoading}) => {
                                 Ditambahkan Pada
                             </h4>
                             <p className="mt-2">
-                                {`${makeDateReadable(course.created_at)}`}
+                                {`${formatDate(course.created_at)}`}
                             </p>
                         </div>
                     </div>

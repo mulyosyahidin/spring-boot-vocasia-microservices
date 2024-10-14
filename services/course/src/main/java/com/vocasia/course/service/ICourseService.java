@@ -4,25 +4,18 @@ import com.vocasia.course.entity.Course;
 import com.vocasia.course.request.CreateNewCourseRequest;
 import com.vocasia.course.request.UpdateCourseRequest;
 import com.vocasia.course.request.UpdateCourseThumbnailRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface ICourseService {
 
-    Course save(CreateNewCourseRequest createNewCourseRequest);
+    Course save(Long instructorId, CreateNewCourseRequest createNewCourseRequest);
     Course findById(Long courseId);
     Course update(Course course, UpdateCourseRequest updateCourseRequest);
     Course updateCourseThumbnail(Course course, UpdateCourseThumbnailRequest updateCourseThumbnailRequest) throws IOException;
-
-    List<Course> getDraftCourses();
-    List<Course> getDraftCoursesByInstructorId(Long instructorId);
-
-    List<Course> getAllCourses();
-    List<Course> getAllCoursesByInstructorId(Long instructorId);
-
-    List<Course> getPublishedCourses();
-    List<Course> getPublishedCoursesByInstructorId(Long instructorId);
 
     Course publishCourseById(Course course);
 
@@ -34,5 +27,8 @@ public interface ICourseService {
     Double rating(Long courseId);
     Integer ratingCount(Long courseId);
     Integer enrollmentCount(Long courseId);
+
+    Page<Course> findAllByInstructorId(Long instructorId, Pageable paging);
+    Page<Course> findAllByInstructorIdAndStatus(Long instructorId, String status, Pageable paging);
 
 }
