@@ -2,25 +2,55 @@ import {Swiper, SwiperSlide} from "swiper/react";
 import {Navigation, Pagination} from "swiper";
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import {findAll} from "../../../../../services/new/course/public/category-service.js";
 
 export const CategorySlider = () => {
-    const [categories, setCategories] = useState([]);
-    const [showSlider, setShowSlider] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [data, setData] = useState([]);
 
     useEffect(() => {
         const fetchInitialData = async () => {
-            const getCategories = await getSliderCategories();
+            setIsLoading(true);
 
-            setCategories(getCategories);
+            try {
+                const findAllCategories = await findAll();
+
+                if (findAllCategories.success) {
+                    setData(findAllCategories.data.data);
+
+                    setIsLoading(false);
+                }
+            } catch (error) {
+                console.error(error);
+
+                if (error.message) {
+                    let msg = error.message;
+                    if (error.data.error) {
+                        msg += ' : ' + error.data.error;
+                    }
+
+                    await withReactContent(Swal).fire({
+                        title: 'Terjadi Kesalahan!',
+                        text: msg,
+                        icon: 'error',
+                    })
+                        .then((isConfirmed) => {
+                            if (isConfirmed) {
+                                window.location.reload();
+                            }
+                        })
+                }
+            }
         }
 
         fetchInitialData();
-        setShowSlider(true);
     }, []);
 
     return (
         <div className="overflow-hidden pt-50 js-section-slider">
-            {showSlider && (
+            {!isLoading && (
                 <Swiper
                     modules={[Navigation, Pagination]}
                     pagination={{
@@ -49,7 +79,7 @@ export const CategorySlider = () => {
                     }}
                     loop={true}
                 >
-                    {categories.map((item, i) => (
+                    {data.map((item, i) => (
                         <SwiperSlide key={i}>
                             <Link
                                 to={`/courses/by-category/${item.id}`}
@@ -62,8 +92,7 @@ export const CategorySlider = () => {
                                         <img src={item.icon_url} alt="icon"/>
                                     </div>
                                     <div className="featureCard__title">
-                                        {item.name.split(" ")[0]} <br/>
-                                        {item.name.split(" ")[1] && item.name.split(" ")[1]}
+                                        {item.name}
                                     </div>
                                 </div>
                             </Link>
@@ -71,22 +100,6 @@ export const CategorySlider = () => {
                     ))}
                 </Swiper>
             )}
-
-            <div className="d-flex justify-center x-gap-15 items-center pt-60 lg:pt-40">
-                <div className="col-auto">
-                    <button className="d-flex items-center text-24 arrow-left-hover js-prev">
-                        <i className="icon icon-arrow-left arrow-left-one"></i>
-                    </button>
-                </div>
-                <div className="col-auto">
-                    <div className="swiper-paginationx"></div>
-                </div>
-                <div className="col-auto">
-                    <button className="d-flex items-center text-24 arrow-right-hover js-next">
-                        <i className="icon icon-arrow-right arrow-right-one"></i>
-                    </button>
-                </div>
-            </div>
         </div>
     );
 }

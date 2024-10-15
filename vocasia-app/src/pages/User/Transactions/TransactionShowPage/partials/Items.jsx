@@ -1,4 +1,5 @@
 import React from "react";
+import {formatRupiah} from "../../../../../utils/new-utils.js";
 
 export const Items = ({activeTab, items, isLoading}) => {
     return (
@@ -29,17 +30,17 @@ export const Items = ({activeTab, items, isLoading}) => {
                                                 <td>{item.course_title}</td>
                                                 <td>
                                                     {
-                                                        item.course_is_free ? 'Gratis' : rupiahFormatter.format(item.course_price)
+                                                        item.course_is_free ? 'Gratis' : formatRupiah(item.course_price)
                                                     }
                                                 </td>
                                                 <td>
                                                     {
                                                         item.course_is_free ? '-' : (
-                                                            item.course_is_discount ? rupiahFormatter.format(item.course_discount) : '-'
+                                                            item.course_is_discount ? formatRupiah(item.course_discount) : '-'
                                                         )
                                                     }
                                                 </td>
-                                                <td>{rupiahFormatter.format(item.course_subtotal)}</td>
+                                                <td>{formatRupiah(item.course_subtotal)}</td>
                                             </tr>
                                         )
                                     })

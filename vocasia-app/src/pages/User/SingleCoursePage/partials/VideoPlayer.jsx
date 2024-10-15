@@ -1,13 +1,9 @@
 import React, {useEffect, useState} from "react";
 import ModalVideoComponent from "../../../../components/commons/ModalVideo.jsx";
+import {getYouTubeVideoId} from "../../../../utils/new-utils.js";
 
 export const VideoPlayer = ({course, currentLesson}) => {
     const [isOpen, setIsOpen] = useState(false);
-
-    useEffect(() => {
-        console.log(course);
-        console.log(currentLesson);
-    }, []);
 
     return (
         <>

@@ -1,4 +1,4 @@
-package com.vocasia.payment.controller;
+package com.vocasia.payment.controller.student;
 
 import com.vocasia.payment.config.PaymentConfigProperties;
 import com.vocasia.payment.dto.ResponseDto;
@@ -19,17 +19,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/student")
 @Validated
-public class PaymentController {
+public class StudentPaymentController {
 
-    private final Logger logger = LoggerFactory.getLogger(PaymentController.class);
+    private final Logger logger = LoggerFactory.getLogger(StudentPaymentController.class);
 
     private final PaymentConfigProperties paymentConfigProperties;
     private final IPaymentService paymentService;
     private final IMidtransPaymentService midtransPaymentService;
 
-    public PaymentController(PaymentConfigProperties paymentConfigProperties, IPaymentService iPaymentService, IMidtransPaymentService iMidtransPaymentService) {
+    public StudentPaymentController(PaymentConfigProperties paymentConfigProperties, IPaymentService iPaymentService, IMidtransPaymentService iMidtransPaymentService) {
         this.paymentConfigProperties = paymentConfigProperties;
         this.paymentService = iPaymentService;
         this.midtransPaymentService = iMidtransPaymentService;
@@ -38,7 +38,7 @@ public class PaymentController {
     @PostMapping("/create-order-payment")
     public ResponseEntity<ResponseDto> createOrderPayment(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                           @Valid @RequestBody CreateOrderPaymentRequest createOrderPaymentRequest) {
-        logger.info("PaymentController.createOrderPayment called");
+        logger.info("StudentPaymentController.createOrderPayment called");
 
         createOrderPaymentRequest.setAdditionalFee(paymentConfigProperties.getAdditionalFee());
 
@@ -62,10 +62,10 @@ public class PaymentController {
                 .body(new ResponseDto(true, "Berhasil membuat pembayaran order", response, null));
     }
 
-    @GetMapping("/payment-data-by-order-id/{orderId}")
+    @GetMapping("/orders/{orderId}")
     public ResponseEntity<ResponseDto> getPaymentDataByOrderId(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                                @PathVariable Long orderId) {
-        logger.info("PaymentController.getPaymentDataByOrderId called");
+        logger.info("StudentPaymentController.getPaymentDataByOrderId called");
 
         Payment payment = paymentService.findByOrderId(orderId);
 

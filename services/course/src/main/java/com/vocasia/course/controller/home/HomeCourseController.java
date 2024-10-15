@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public/courses")
 @Validated
 public class HomeCourseController {
 
@@ -44,21 +44,7 @@ public class HomeCourseController {
         this.lessonService = iLessonService;
     }
 
-    @GetMapping("/public/categories")
-    public ResponseEntity<ResponseDto> categories() {
-        logger.info("HomeCourseController.categories called");
-
-        List<Category> categories = categoryService.findAllByType("parent");
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("categories", categories.stream().map(CategoryMapper::mapToDto));
-
-        return ResponseEntity
-                .status(HttpStatus.SC_OK)
-                .body(new ResponseDto(true, "Berhasil menampilkan data kategori", response, null));
-    }
-
-    @GetMapping("/public/editor-choices")
+    @GetMapping("/editor-choices")
     public ResponseEntity<ResponseDto> getEditorsChoices(@RequestHeader("vocasia-correlation-id") String correlationId) {
         logger.info("HomeCourseController.getEditorsChoices called");
 
@@ -84,30 +70,17 @@ public class HomeCourseController {
                 .body(new ResponseDto(true, "Berhasil menampilkan data kursus", response, null));
     }
 
-    @GetMapping("/public/{slug}/{courseId}/overview")
+    @GetMapping("/{slug}/{courseId}")
     public ResponseEntity<ResponseDto> getCourseOverview(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                          @PathVariable String slug, @PathVariable Long courseId) {
         logger.info("HomeCourseController.getCourseOverview called");
 
         Course course = courseService.findById(courseId);
-        List<Chapter> chapters = chapterService.findAllByCourseId(course);
+        Category category = categoryService.findById(course.getCategoryId());
 
         Map<String, Object> response = new HashMap<>();
         response.put("course", CourseMapper.mapToDto(course));
-        response.put("category", null);  // will be back
-
-        List<Map<String, Object>> chaptersData = new ArrayList<>();
-
-        for (Chapter chapter : chapters) {
-            Map<String, Object> chapterData = new HashMap<>();
-
-            chapterData.put("chapter", ChapterMapper.mapToDto(chapter));
-            chapterData.put("lessons", lessonService.findAllByChapterId(chapter.getId()).stream().map(LessonMapper::mapToDto));
-
-            chaptersData.add(chapterData);
-        }
-
-        response.put("chapters", chaptersData);
+        response.put("category", CategoryMapper.mapToDto(category));
 
         try {
             InstructorDto getInstructorById = instructorService.findById(course.getInstructorId(), correlationId);
@@ -123,7 +96,7 @@ public class HomeCourseController {
             logger.error(e.getMessage(), e);
 
             return ResponseEntity
-                    .status(org.apache.hc.core5.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, e.getMessage(), null, null));
         }
 
@@ -132,9 +105,9 @@ public class HomeCourseController {
                 .body(new ResponseDto(true, "Berhasil menampilkan data kursus", response, null));
     }
 
-    @GetMapping("/public/{slug}/{courseId}/chapters")
-    public ResponseEntity<ResponseDto> getChapters(@PathVariable String slug, @PathVariable Long courseId) {
-        logger.info("HomeCourseController.getChapters called");
+    @GetMapping("/{slug}/{courseId}/contents")
+    public ResponseEntity<ResponseDto> getContents(@PathVariable String slug, @PathVariable Long courseId) {
+        logger.info("HomeCourseController.getContents called");
 
         Course course = courseService.findById(courseId);
         List<Chapter> chapters = chapterService.findAllByCourseId(course);

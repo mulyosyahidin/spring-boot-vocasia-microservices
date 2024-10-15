@@ -22,7 +22,7 @@ export const Home = () => {
                 <Hero/>
                 <Categories />
                 <Courses/>
-                <Testimonials/>
+                {/*<Testimonials/>*/}
                 <Featured />
                 <WhyVocasia/>
                 {/*<Instructors/>*/}

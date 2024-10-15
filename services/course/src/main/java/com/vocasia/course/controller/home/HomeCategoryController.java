@@ -1,4 +1,4 @@
-package com.vocasia.course.controller;
+package com.vocasia.course.controller.home;
 
 import com.vocasia.course.dto.ResponseDto;
 import com.vocasia.course.entity.Category;
@@ -19,26 +19,26 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 @Validated
-public class CategoryController {
+public class HomeCategoryController {
 
-    private final Logger logger = LoggerFactory.getLogger(CategoryController.class);
+    private final Logger logger = LoggerFactory.getLogger(HomeCategoryController.class);
 
     private final ICategoryService categoryService;
 
-    public CategoryController(ICategoryService iCategoryService) {
+    public HomeCategoryController(ICategoryService iCategoryService) {
         this.categoryService = iCategoryService;
     }
 
     @GetMapping("/categories")
     public ResponseEntity<ResponseDto> getAllCategories() {
-        logger.info("CategoryController.getAllCategories called");
+        logger.info("HomeCategoryController.getAllCategories called");
 
         List<Category> categories = categoryService.findAll();
 
         Map<String, Object> response = new HashMap<>();
-        response.put("categories", categories.stream().map(CategoryMapper::mapToDto));
+        response.put("data", categories.stream().map(CategoryMapper::mapToDto));
 
         return ResponseEntity
                 .status(HttpStatus.SC_OK)
@@ -47,7 +47,7 @@ public class CategoryController {
 
     @GetMapping("/categories/{categoryId}")
     public ResponseEntity<ResponseDto> getCategoryById(@PathVariable Long categoryId) {
-        logger.info("CategoryController.getCategoryById called");
+        logger.info("HomeCategoryController.getCategoryById called");
 
         Category category = categoryService.findById(categoryId);
 

@@ -7,13 +7,15 @@ import PinContent from "./partials/PinContent.jsx";
 import Star from "./partials/Star.jsx";
 import Overview from "./partials/Overview.jsx";
 import CourseContent from "./partials/CourseContent.jsx";
+import {formatDate} from "../../../utils/new-utils.js";
+import {findByIdAndSlug, findContentsByIdAndSlug} from "../../../services/new/course/public/course-service.js";
+import Instructor from "./partials/Instructor.jsx";
 
 const dark = true;
 const menuItems = [
     { id: 1, href: "#overview", text: "Ringkasan", isActive: true },
     { id: 2, href: "#course-content", text: "Konten", isActive: false },
-    { id: 3, href: "#instructors", text: "Instruktur", isActive: false },
-    { id: 4, href: "#reviews", text: "Review", isActive: false },
+    { id: 3, href: "#instructors", text: "Instruktur", isActive: false }
 ];
 
 export const CourseView = () => {
@@ -25,7 +27,7 @@ export const CourseView = () => {
     const [chapters, setChapters] = useState({});
     const [isUserEnrolled, setIsUserEnrolled] = useState(false);
 
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setisLoading] = useState(false);
 
     const [metaData, setMetaData] = useState({
         title: "Kursus Online Bersertifikasi Terbaik No.1 Di Indonesia",
@@ -33,26 +35,32 @@ export const CourseView = () => {
 
     useEffect(() => {
         const fetchInitialData = async () => {
+            setisLoading(true);
             try {
-                const getCourseOverview = await getOverview(slug, id);
+                const getCourseOverview = await findByIdAndSlug(slug, id);
+                const getCourseContents = await findContentsByIdAndSlug(slug, id);
 
-                if (getCourseOverview) {
-                    setCourse(getCourseOverview.course);
-                    setCategory(getCourseOverview.category);
-                    setInstructor(getCourseOverview.instructor);
-                    setChapters(getCourseOverview.chapters);
+                if (getCourseOverview.success) {
+                    setCourse(getCourseOverview.data.course);
+                    setCategory(getCourseOverview.data.category);
+                    setInstructor(getCourseOverview.data.instructor);
                 }
 
-                const checkIsUserHasEnrollThisCourse = await isUserEnrollThisCourse(id);
-                const {is_user_enrolled} = checkIsUserHasEnrollThisCourse.data;
+                if (getCourseContents.success) {
+                    setChapters(getCourseContents.data.chapters);
+                }
 
-                setIsUserEnrolled(is_user_enrolled);
+                //
+                // const checkIsUserHasEnrollThisCourse = await isUserEnrollThisCourse(id);
+                // const {is_user_enrolled} = checkIsUserHasEnrollThisCourse.data;
+                //
+                // setIsUserEnrolled(is_user_enrolled);
             }
             catch (e) {
                 console.error(e);
             }
             finally {
-                setLoading(false);
+                setisLoading(false);
             }
         }
 
@@ -66,9 +74,9 @@ export const CourseView = () => {
             <Header/>
 
             {
-                loading ? (
+                isLoading ? (
                     <>
-                      Loading...
+                      isLoading...
                     </>
                 ) : (
                     <div className="content-wrapper  js-content-wrapper ">
@@ -148,10 +156,7 @@ export const CourseView = () => {
                                                     <div className="d-flex items-center text-light-1">
                                                         <div className="icon icon-wall-clock text-13"></div>
                                                         <div className="text-14 ml-8">Last
-                                                            updated {`${makeDateReadable({
-                                                                date: course.updated_at,
-                                                                format: 'DD/MM/YYYY'
-                                                            })}`}</div>
+                                                            updated {formatDate(course.updated_at)}</div>
                                                     </div>
                                                 </div>
 
@@ -197,8 +202,7 @@ export const CourseView = () => {
 
                                             <Overview course={course} />
                                             <CourseContent chapters={chapters} course={course} />
-                                            {/*<Instructor instructor={course.instructor}/>*/}
-                                            {/*<Reviews/>*/}
+                                            <Instructor instructor={instructor}/>
 
                                         </div>
                                     </div>

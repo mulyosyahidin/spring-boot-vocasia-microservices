@@ -2,7 +2,7 @@ package com.vocasia.finance.service.impl;
 
 import com.vocasia.finance.exception.ResourceNotFoundException;
 import com.vocasia.finance.repository.WithdrawalRequestRepository;
-import com.vocasia.finance.request.WithdrawalRequest;
+import com.vocasia.finance.entity.WithdrawalRequest;
 import com.vocasia.finance.service.IWithdrawalRequestService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,8 +19,8 @@ public class WithdrawalRequestServiceImpl implements IWithdrawalRequestService {
     private WithdrawalRequestRepository withdrawalRequestRepository;
 
     @Override
-    public com.vocasia.finance.entity.WithdrawalRequest save(Long instructorId, WithdrawalRequest withdrawalRequestRequest) {
-        com.vocasia.finance.entity.WithdrawalRequest withdrawalRequest = new com.vocasia.finance.entity.WithdrawalRequest();
+    public WithdrawalRequest save(Long instructorId, com.vocasia.finance.request.WithdrawalRequest withdrawalRequestRequest) {
+        WithdrawalRequest withdrawalRequest = new WithdrawalRequest();
 
         withdrawalRequest.setInstructorId(instructorId);
         withdrawalRequest.setAmount(withdrawalRequestRequest.getAmount());
@@ -35,22 +35,22 @@ public class WithdrawalRequestServiceImpl implements IWithdrawalRequestService {
     }
 
     @Override
-    public com.vocasia.finance.entity.WithdrawalRequest update(com.vocasia.finance.entity.WithdrawalRequest withdrawalRequest) {
+    public WithdrawalRequest update(WithdrawalRequest withdrawalRequest) {
         return withdrawalRequestRepository.save(withdrawalRequest);
     }
 
     @Override
-    public List<com.vocasia.finance.entity.WithdrawalRequest> findByInstructorId(Long instructorId) {
+    public List<WithdrawalRequest> findByInstructorId(Long instructorId) {
         return withdrawalRequestRepository.findAllByInstructorId(instructorId);
     }
 
     @Override
-    public List<com.vocasia.finance.entity.WithdrawalRequest> findAllByStatus(String status) {
+    public List<WithdrawalRequest> findAllByStatus(String status) {
         return withdrawalRequestRepository.findAllByStatus(status);
     }
 
     @Override
-    public List<com.vocasia.finance.entity.WithdrawalRequest> findAll() {
+    public List<WithdrawalRequest> findAll() {
         return withdrawalRequestRepository.findAll();
     }
 
@@ -67,14 +67,24 @@ public class WithdrawalRequestServiceImpl implements IWithdrawalRequestService {
     }
 
     @Override
-    public com.vocasia.finance.entity.WithdrawalRequest findById(Long id) {
+    public WithdrawalRequest findById(Long id) {
         return withdrawalRequestRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
     }
 
     @Override
-    public Page<com.vocasia.finance.entity.WithdrawalRequest> findAllByInstructorId(Long instructorId, Pageable paging) {
+    public Page<WithdrawalRequest> findAllByInstructorId(Long instructorId, Pageable paging) {
         return withdrawalRequestRepository.findAllByInstructorId(instructorId, paging);
+    }
+
+    @Override
+    public Page<WithdrawalRequest> findAllByStatus(String string, Pageable paging) {
+        return withdrawalRequestRepository.findAllByStatus(string, paging);
+    }
+
+    @Override
+    public Page<com.vocasia.finance.entity.WithdrawalRequest> findAll(Pageable paging) {
+        return withdrawalRequestRepository.findAll(paging);
     }
 
 }

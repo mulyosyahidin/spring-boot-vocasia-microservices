@@ -3,6 +3,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { Link } from "react-router-dom";
 import {courseCartAtom} from "../../../../states/recoil/Atoms/CourseCart.jsx";
 import {cartTotalPriceSelector} from "../../../../states/recoil/Selectors/CourseCartSelector.jsx";
+import {formatRupiah} from "../../../../utils/new-utils.js";
 
 export const CourseCart = () => {
     const [cartCourses, setCartCourses] = useRecoilState(courseCartAtom);
@@ -50,10 +51,10 @@ export const CourseCart = () => {
                                                         <>
                                                             <div
                                                                 className="lh-12 fw-500 line-through text-light-1 mr-10">
-                                                                {rupiahFormatter.format(elm.price)}
+                                                                {formatRupiah(elm.price)}
                                                             </div>
                                                             <div className="text-18 lh-12 fw-500 text-dark-1">
-                                                                {rupiahFormatter.format(elm.price - elm.discount)}
+                                                                {formatRupiah(elm.price - elm.discount)}
                                                             </div>
 
                                                         </>
@@ -61,7 +62,7 @@ export const CourseCart = () => {
                                                         <>
                                                             <div
                                                                 className="lh-12 fw-500 text-light-1 mr-10">
-                                                                {rupiahFormatter.format(elm.price)}
+                                                                {formatRupiah(elm.price)}
                                                             </div>
                                                         </>
                                                     )
@@ -94,7 +95,7 @@ export const CourseCart = () => {
             <div className="px-30 pt-20 pb-30 border-top-light">
                 <div className="d-flex justify-between">
                     <div className="text-18 lh-12 text-dark-1 fw-500">Total:</div>
-                    <div className="text-18 lh-12 text-dark-1 fw-500">{rupiahFormatter.format(totalPrice)}</div>
+                    <div className="text-18 lh-12 text-dark-1 fw-500">{formatRupiah(totalPrice)}</div>
                 </div>
 
                 <div className="row x-gap-20 y-gap-10 pt-30">

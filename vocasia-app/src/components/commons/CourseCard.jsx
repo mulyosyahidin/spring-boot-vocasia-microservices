@@ -2,6 +2,7 @@ import React from "react";
 
 import {Link} from "react-router-dom";
 import {useState, useEffect} from "react";
+import {formatRupiah} from "../../utils/new-utils.js";
 
 export const CourseCard = ({data, index}) => {
     const [rating, setRating] = useState([]);
@@ -42,7 +43,7 @@ export const CourseCard = ({data, index}) => {
                         {/*</div>*/}
 
                         <div className="text-17 lh-15 fw-500 text-dark-1 mt-10" style={{minHeight: "60px"}}>
-                            <Link className="linkCustom" to={`/courses/${data.course.slug}/${data.course.id}`}>
+                            <Link className="linkCustom" to={`/courses/view/${data.course.slug}/${data.course.id}`}>
                                 {data.course.title}
                             </Link>
                         </div>
@@ -85,13 +86,13 @@ export const CourseCard = ({data, index}) => {
                                 ) : (
                                     data.course.is_discount ? (
                                         <>
-                                            <div>{`${rupiahFormatter.format(data.course.price)}`}</div>
-                                            <div>{`${rupiahFormatter.format(data.course.price - data.course.discount)}`}</div>
+                                            <div>{`${formatRupiah(data.course.price)}`}</div>
+                                            <div>{`${formatRupiah(data.course.price - data.course.discount)}`}</div>
                                         </>
                                     ) : (
                                         <>
                                             <div></div>
-                                            <div>{`${rupiahFormatter.format(data.course.price)}`}</div>
+                                            <div>{`${formatRupiah(data.course.price)}`}</div>
                                         </>
                                     )
                                 )}

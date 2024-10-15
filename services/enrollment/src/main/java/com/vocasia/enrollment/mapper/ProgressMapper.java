@@ -14,11 +14,10 @@ public class ProgressMapper {
         progressDto.setEnrollmentId(progress.getEnrollmentId());
         progressDto.setLessonId(progress.getLessonId());
         progressDto.setStatus(progress.getStatus());
-        progressDto.setWatchedDuration(progress.getWatchedDuration());
-        progressDto.setLastAccessed(progress.getLastAccessed());
+        progressDto.setStartedAt(progress.getStartedAt());
+        progressDto.setCompletedAt(progress.getCompletedAt());
         progressDto.setCreatedAt(progress.getCreatedAt());
         progressDto.setUpdatedAt(progress.getUpdatedAt());
-
         return progressDto;
     }
 
@@ -29,8 +28,8 @@ public class ProgressMapper {
         progress.setEnrollmentId(progressDto.getEnrollmentId());
         progress.setLessonId(progressDto.getLessonId());
         progress.setStatus(progressDto.getStatus());
-        progress.setWatchedDuration(progressDto.getWatchedDuration());
-        progress.setLastAccessed(progressDto.getLastAccessed());
+        progress.setStartedAt(progressDto.getStartedAt());
+        progress.setCompletedAt(progressDto.getCompletedAt());
         progress.setCreatedAt(progressDto.getCreatedAt());
         progress.setUpdatedAt(progressDto.getUpdatedAt());
 

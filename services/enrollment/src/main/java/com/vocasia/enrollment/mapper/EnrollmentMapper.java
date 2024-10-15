@@ -18,6 +18,7 @@ public class EnrollmentMapper {
         enrollmentDto.setStatus(enrollment.getStatus());
         enrollmentDto.setProgressPercentage(enrollment.getProgressPercentage());
         enrollmentDto.setCompletionDate(enrollment.getCompletionDate());
+        enrollmentDto.setLastLessonId(enrollment.getLastLessonId());
         enrollmentDto.setCreatedAt(enrollment.getCreatedAt());
         enrollmentDto.setUpdatedAt(enrollment.getUpdatedAt());
 

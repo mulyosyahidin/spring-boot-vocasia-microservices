@@ -1,6 +1,10 @@
 import React, {useState} from "react";
 import {InputField} from "../../../components/commons/Input/InputField.jsx";
 import {TextAreaField} from "../../../components/commons/Input/TextAreaField.jsx";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import {registerInstructor} from "../../../services/new/instructor/register-service.js";
+import {useNavigate} from "react-router-dom";
 
 export const Join = () => {
     const [showForm, setShowForm] = useState(false);
@@ -16,6 +20,7 @@ export const Join = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -26,21 +31,63 @@ export const Join = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-
         setLoading(true);
         setErrors({});
         setSuccessMessage('');
 
-        await submitInstructorForm(formData, setLoading, setErrors, setSuccessMessage, () => {
-            setFormData({
-                name: '',
-                email: '',
-                username: '',
-                phone_number: '',
-                password: '',
-                summary: ''
-            });
-        });
+        try {
+            const doRegister = await registerInstructor(formData);
+
+            if (doRegister.success) {
+                await withReactContent(Swal).fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Berhasil melakukan pendaftaran. Silahkan login ke akun Anda.',
+                })
+                    .then((isConfirmed) => {
+                        if (isConfirmed) {
+                           navigate('/auth/login');
+                        }
+                    });
+            }
+        } catch (error) {
+            console.error(error);
+
+            if (error.errors) {
+                const getErrors = error.errors;
+                const newErrors = {};
+
+                Object.keys(getErrors).forEach((field) => {
+                    newErrors[field] = getErrors[field][0];
+                });
+
+                setErrors(newErrors);
+                setLoading(false);
+            } else if (error.data) {
+                let message = error.message;
+
+                if (error.data.error) {
+                    message += `: (${error.data.error})`;
+                }
+
+                await withReactContent(Swal).fire({
+                    icon: 'error',
+                    title: 'Terjadi Kesalahan!',
+                    text: message,
+                })
+                    .then((isConfirmed) => {
+                        if (isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+            } else {
+                if (error.message) {
+                    setErrors({general: error.message});
+                }
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (

@@ -12,6 +12,7 @@ import {
 } from "../../../states/recoil/Selectors/CourseCartSelector.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faX} from "@fortawesome/free-solid-svg-icons";
+import {formatRupiah} from "../../../utils/new-utils.js";
 
 const metaData = {
     title: "Keranjang Belanja",
@@ -145,8 +146,8 @@ export const CourseCart = () => {
                                                                 {
                                                                     elm.is_free ? 'Gratis' : (
                                                                         elm.is_discount ? (
-                                                                            rupiahFormatter.format(elm.price - elm.discount)
-                                                                        ) : rupiahFormatter.format(elm.price)
+                                                                            formatRupiah(elm.price - elm.discount)
+                                                                        ) : formatRupiah(elm.price)
                                                                     )
                                                                 }
                                                             </p>
@@ -174,21 +175,21 @@ export const CourseCart = () => {
                                             <div className="d-flex justify-between px-30 item mt-25">
                                                 <div className="pt-15 fw-500 text-dark-1">Subtotal</div>
                                                 <div className="pt-15 fw-500 text-dark-1">
-                                                    {rupiahFormatter.format(totalPriceWithoutDiscount)}
+                                                    {formatRupiah(totalPriceWithoutDiscount)}
                                                 </div>
                                             </div>
 
                                             <div className="d-flex justify-between px-30 item">
                                                 <div className="pt-15 fw-500 text-dark-1">Diskon</div>
                                                 <div className="pt-15 fw-500 text-dark-1">
-                                                    {rupiahFormatter.format(totalDiscount)}
+                                                    {formatRupiah(totalDiscount)}
                                                 </div>
                                             </div>
 
                                             <div className="d-flex justify-between px-30 item border-top-dark mt-25">
                                                 <div className="pt-15 fw-500 text-dark-1">Total</div>
                                                 <div className="pt-15 fw-500 text-dark-1">
-                                                    {rupiahFormatter.format(totalPrice)}
+                                                    {formatRupiah(totalPrice)}
                                                 </div>
                                             </div>
                                         </div>

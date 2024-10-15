@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {courseCartAtom} from "../../../../states/recoil/Atoms/CourseCart.jsx";
 import {useRecoilState} from "recoil";
 import {Link} from "react-router-dom";
+import {formatRupiah} from "../../../../utils/new-utils.js";
 
 export default function PinContent({course, isUserEnrolled}) {
     const [isOpen, setIsOpen] = useState(false);
@@ -61,10 +62,10 @@ export default function PinContent({course, isUserEnrolled}) {
                                 course.is_discount ? (
                                     <>
                                         <div className="text-24 lh-1 text-dark-1 fw-500">
-                                            {`${rupiahFormatter.format(course.price - course.discount)}`}
+                                            {`${formatRupiah(course.price - course.discount)}`}
                                         </div>
                                         <div className="lh-1 line-through">
-                                            {`${rupiahFormatter.format(course.price)}`}
+                                            {`${formatRupiah(course.price)}`}
                                         </div>
                                     </>
                                 ) : (

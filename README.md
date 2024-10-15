@@ -77,3 +77,6 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 
 15/10/2024:
 1. Menyelesaikan: Restruktur Fungsionalitas Instruktur
+
+16/10/2024:
+1. Menyelesaikan: Restruktur Fungsionalitas Admin dan Siswa

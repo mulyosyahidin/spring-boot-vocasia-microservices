@@ -49,11 +49,6 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     }
 
     @Override
-    public List<Enrollment> getUserEnrolledCourse(Long userId) {
-        return enrollmentRepository.findByUserId(userId);
-    }
-
-    @Override
     public Enrollment findById(Long userId, Long enrollmentId) {
         Enrollment enrollment = enrollmentRepository.findByUserIdAndId(userId, enrollmentId);
 
@@ -72,6 +67,22 @@ public class EnrollmentServiceImpl implements IEnrollmentService {
     @Override
     public Page<Enrollment> findAllByCourseId(Long courseId, Pageable paging) {
         return enrollmentRepository.findAllByCourseId(courseId, paging);
+    }
+
+    @Override
+    public Page<Enrollment> findAllByUserId(Long userId, Pageable paging) {
+        return enrollmentRepository.findAllByUserId(userId, paging);
+    }
+
+    @Override
+    public Enrollment findById(Long enrollmentId) {
+        return enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
+    }
+
+    @Override
+    public void update(Enrollment enrollment) {
+        enrollmentRepository.save(enrollment);
     }
 
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import {formatDate, formatRupiah} from "../../../../../utils/new-utils.js";
 
 export const Order = ({activeTab, order, isLoading}) => {
     return (
@@ -26,14 +27,14 @@ export const Order = ({activeTab, order, isLoading}) => {
                             Total Harga
                         </h4>
                         <p className="mt-2">
-                            {rupiahFormatter.format(order.total_price)}
+                            {formatRupiah(order.total_price)}
                         </p>
 
                         <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>
                             Tanggal
                         </h4>
                         <p className="mt-2">
-                            {makeDateReadable({date: order.created_at})}
+                            {formatDate(order.created_at)}
                         </p>
 
                         <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>

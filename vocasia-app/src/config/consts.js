@@ -17,3 +17,6 @@ export const STUDENT = 'student';
 // AWS
 export const AWS_BUCKET_NAME = import.meta.env.VITE_AWS_BUCKET_NAME;
 export const AWS_REGION = import.meta.env.VITE_AWS_REGION;
+
+// MIDTRANS
+export const midtransClientKey = import.meta.env.VITE_MIDTRANS_CLIENT_KEY;

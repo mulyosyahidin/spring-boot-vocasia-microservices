@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
+import {getUserProfilePictureUrl} from "../../../utils/new-utils.js";
 
 export const Header = () => {
     const [isfullScreen, setIsfullScreen] = useState(false);
@@ -131,54 +132,6 @@ export const Header = () => {
                                             <i className="text-24 icon icon-maximize"></i>
                                         </button>
                                     </div>
-
-                                    {/*<div*/}
-                                    {/*    className="relative"*/}
-                                    {/*    onClick={() => setIsOnNotification((pre) => !pre)}*/}
-                                    {/*>*/}
-                                    {/*    <a*/}
-                                    {/*        href="#"*/}
-                                    {/*        className="d-flex items-center text-light-1 justify-center size-50 rounded-16 -hover-dshb-header-light"*/}
-                                    {/*        data-el-toggle=".js-notif-toggle"*/}
-                                    {/*    >*/}
-                                    {/*        <i className="text-24 icon icon-notification"></i>*/}
-                                    {/*    </a>*/}
-
-                                    {/*    <div*/}
-                                    {/*        className={`toggle-element js-notif-toggle  ${*/}
-                                    {/*            isOnNotification ? "-is-el-visible" : ""*/}
-                                    {/*        } -`}*/}
-                                    {/*    >*/}
-                                    {/*        <div className="toggle-bottom -notifications bg-white shadow-4 border-light rounded-8 mt-10">*/}
-                                    {/*            <div className="py-30 px-30">*/}
-                                    {/*                <div className="y-gap-40">*/}
-                                    {/*                    {notifications.map((elm, i) => (*/}
-                                    {/*                        <div*/}
-                                    {/*                            key={i}*/}
-                                    {/*                            className={`d-flex items-center  ${*/}
-                                    {/*                                i !== 0*/}
-                                    {/*                                    ? "border-top-light -dark-border-top-light-5"*/}
-                                    {/*                                    : ""*/}
-                                    {/*                            } `}*/}
-                                    {/*                        >*/}
-                                    {/*                            <div className="shrink-0">*/}
-                                    {/*                                <img src={elm.imageSrc} alt="image" />*/}
-                                    {/*                            </div>*/}
-                                    {/*                            <div className="ml-12">*/}
-                                    {/*                                <h4 className="text-15 lh-1 fw-500 -dark-text-dark-1">*/}
-                                    {/*                                    {elm.heading}*/}
-                                    {/*                                </h4>*/}
-                                    {/*                                <div className="text-13 lh-1 mt-10">*/}
-                                    {/*                                    {elm.time} Hours Ago*/}
-                                    {/*                                </div>*/}
-                                    {/*                            </div>*/}
-                                    {/*                        </div>*/}
-                                    {/*                    ))}*/}
-                                    {/*                </div>*/}
-                                    {/*            </div>*/}
-                                    {/*        </div>*/}
-                                    {/*    </div>*/}
-                                    {/*</div>*/}
 
                                 </div>
 

@@ -206,7 +206,7 @@ const routes = createBrowserRouter([
         element: <div>Courses List</div>
     },
     {
-        path: '/courses/:slug/:id',
+        path: '/courses/view/:slug/:id',
         element: <CourseViewPage/>
     },
     {

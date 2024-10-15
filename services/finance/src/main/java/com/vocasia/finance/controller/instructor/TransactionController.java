@@ -47,8 +47,8 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public ResponseEntity<ResponseDto> getAllTransactions(@RequestHeader("vocasia-correlation-id") String correlationId,
-                                                             @RequestHeader("X-INSTRUCTOR-ID") Long instructorId,
-                                                             @RequestParam(defaultValue = "1") int page) {
+                                                          @RequestHeader("X-INSTRUCTOR-ID") Long instructorId,
+                                                          @RequestParam(defaultValue = "1") int page) {
         logger.info("TransactionController.getAllTransactions called");
 
         page = page < 1 ? 1 : page - 1;
@@ -109,7 +109,7 @@ public class TransactionController {
 
     @GetMapping("/transactions/{id}")
     public ResponseEntity<ResponseDto> getTransactionById(@RequestHeader("vocasia-correlation-id") String correlationId,
-                                                             @PathVariable("id") Long id) {
+                                                          @PathVariable("id") Long id) {
         logger.info("TransactionController.getInstructorSaleById called");
 
         InstructorIncome instructorIncome = instructorIncomeService.findById(id);

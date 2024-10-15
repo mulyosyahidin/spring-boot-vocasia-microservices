@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient(name = "payment")
 public interface PaymentFeignClient {
 
-    @PostMapping("/api/create-order-payment")
+    @PostMapping("/api/student/create-order-payment")
     public ResponseEntity<ResponseDto> saveOrderPayment(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                         @RequestBody CreateOrderPaymentRequest createOrderPaymentRequest);
 
-    @GetMapping("/api/payment-data-by-order-id/{orderId}")
+    @GetMapping("/api/student/orders/{orderId}")
     public ResponseEntity<ResponseDto> findByOrderId(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                      @PathVariable Long orderId);
 

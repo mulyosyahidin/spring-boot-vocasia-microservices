@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "instructor")
 public interface InstructorFeignClient {
 
-    @PostMapping("/api/assign-course")
+    @PostMapping("/api/student/assign-courses")
     public ResponseEntity<ResponseDto> assignCourse(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                     AssignCourseToStudentInstructorRequest assignCourseToStudentInstructorRequest);
 

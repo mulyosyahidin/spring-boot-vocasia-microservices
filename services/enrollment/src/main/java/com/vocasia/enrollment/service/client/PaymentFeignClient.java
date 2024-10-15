@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "payment")
 public interface PaymentFeignClient {
 
-    @GetMapping(value = "/api/payment-data-by-order-id/{orderId}", consumes = "application/json")
+    @GetMapping(value = "/api/instructor/orders/{orderId}", consumes = "application/json")
     public ResponseEntity<ResponseDto> findById(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                 @PathVariable("orderId") Long orderId);
 

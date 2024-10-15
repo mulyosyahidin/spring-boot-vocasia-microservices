@@ -1,22 +1,50 @@
 import React, {useEffect, useState} from "react";
 import {CourseCard} from "../../../../../components/commons/CourseCard.jsx";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import {findEditorChoices} from "../../../../../services/new/course/public/course-service.js";
 
-export const CourseItems = ({category}) => {
+export const CourseItems = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [courses, setCourses] = useState([]);
 
     useEffect(() => {
         const fetchInitialData = async () => {
+            setIsLoading(true);
+
             try {
-                const getCourses = await getEditorChoiceCourses();
-                setCourses(getCourses);
-            }
-            catch (e) {
-                console.error(e);
+                const getEditorChoiceCourses = await findEditorChoices();
+
+                if (getEditorChoiceCourses.success) {
+                    setCourses(getEditorChoiceCourses.data.courses);
+
+                    setIsLoading(false);
+                }
+            } catch (error) {
+                console.error(error);
+
+                if (error.message) {
+                    let msg = error.message;
+                    if (error.data.error) {
+                        msg += ' : ' + error.data.error;
+                    }
+
+                    await withReactContent(Swal).fire({
+                        title: 'Terjadi Kesalahan!',
+                        text: msg,
+                        icon: 'error',
+                    })
+                        .then((isConfirmed) => {
+                            if (isConfirmed) {
+                                window.location.reload();
+                            }
+                        })
+                }
             }
         }
 
         fetchInitialData();
-    }, [category]);
+    }, []);
 
     return (
         <div

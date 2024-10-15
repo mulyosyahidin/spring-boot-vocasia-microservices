@@ -1,7 +1,6 @@
 package com.vocasia.order.request.client.payment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vocasia.order.request.PlaceNewOrderRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

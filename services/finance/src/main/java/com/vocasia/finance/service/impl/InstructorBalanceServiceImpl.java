@@ -22,13 +22,7 @@ public class InstructorBalanceServiceImpl implements IInstructorBalanceService {
 
     @Override
     public InstructorBalance findByInstructorId(Long instructorId) {
-        InstructorBalance instructorBalance = instructorBalanceRepository.findByInstructorId(instructorId);
-
-        if (instructorBalance == null) {
-           throw new ResourceNotFoundException("Data tidak ditemukan");
-        }
-
-        return instructorBalance;
+        return instructorBalanceRepository.findByInstructorId(instructorId);
     }
 
     @Override

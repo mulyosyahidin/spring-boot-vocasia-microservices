@@ -1,4 +1,4 @@
-package com.vocasia.finance.controller;
+package com.vocasia.finance.controller.admin;
 
 import com.vocasia.finance.dto.ResponseDto;
 import com.vocasia.finance.dto.client.instructor.InstructorDto;
@@ -17,6 +17,10 @@ import jakarta.validation.Valid;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,15 +56,23 @@ public class AdminWithdrawalController {
 
     @GetMapping("/request")
     public ResponseEntity<ResponseDto> getAllWithdrawalRequest(@RequestHeader("vocasia-correlation-id") String correlationId,
-                                                               @RequestParam(value = "status", required = false, defaultValue = "all") String status) {
+                                                               @RequestParam(value = "status", required = false, defaultValue = "all") String status,
+                                                               @RequestParam(defaultValue = "1") int page) {
         logger.info("AdminWithdrawalController.getAllWithdrawalRequest called");
         logger.debug("$status: {}", status);
 
-        List<WithdrawalRequest> withdrawalRequests = switch (status) {
-            case "pending" -> withdrawalRequestService.findAllByStatus(WithdrawalRequestStatus.PENDING.toString());
-            case "paid" -> withdrawalRequestService.findAllByStatus(WithdrawalRequestStatus.PAID.toString());
-            case "rejected" -> withdrawalRequestService.findAllByStatus(WithdrawalRequestStatus.REJECTED.toString());
-            default -> withdrawalRequestService.findAll();
+        page = page < 1 ? 1 : page - 1;
+        int limit = 10;
+
+        Pageable paging = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        Page<WithdrawalRequest> withdrawalRequests = switch (status) {
+            case "pending" ->
+                    withdrawalRequestService.findAllByStatus(WithdrawalRequestStatus.PENDING.toString(), paging);
+            case "paid" -> withdrawalRequestService.findAllByStatus(WithdrawalRequestStatus.PAID.toString(), paging);
+            case "rejected" ->
+                    withdrawalRequestService.findAllByStatus(WithdrawalRequestStatus.REJECTED.toString(), paging);
+            default -> withdrawalRequestService.findAll(paging);
         };
 
         int totalPendingRequest = withdrawalRequestService.countByStatus(WithdrawalRequestStatus.PENDING.toString());
@@ -76,36 +88,46 @@ public class AdminWithdrawalController {
         withdrawalOverviewData.put("total_paid_amount", totalPaidRequestAmount);
 
         Map<String, Object> response = new HashMap<>();
-        List<Map<String, Object>> withdrawalRequestsData = new ArrayList<>();
+        Map<String, Object> pagination = new HashMap<>();
 
-        for (WithdrawalRequest withdrawalRequest : withdrawalRequests) {
-            Map<String, Object> withdrawalRequestData = new HashMap<>();
+        List<Map<String, Object>> withdrawalRequestsData;
 
-            withdrawalRequestData.put("request", WithdrawalRequestMapper.mapToDto(withdrawalRequest));
+        try {
+            withdrawalRequestsData = withdrawalRequests.getContent().stream().map(withdrawalRequest -> {
+                Map<String, Object> withdrawalRequestData = new HashMap<>();
 
-            try {
                 InstructorDto getInstructorById = instructorService.findById(withdrawalRequest.getInstructorId(), correlationId);
 
+                withdrawalRequestData.put("request", WithdrawalRequestMapper.mapToDto(withdrawalRequest));
                 withdrawalRequestData.put("instructor", getInstructorById);
-            } catch (CustomFeignException e) {
-                logger.error(e.getMessage(), e);
 
-                return ResponseEntity
-                        .status(e.getHttpStatus())
-                        .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                return withdrawalRequestData;
+            }).toList();
+        } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
 
-                return ResponseEntity
-                        .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
-                        .body(new ResponseDto(false, e.getMessage(), null, null));
-            }
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
 
-            withdrawalRequestsData.add(withdrawalRequestData);
+            return ResponseEntity
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, e.getMessage(), null, null));
         }
 
+        pagination.put("total_page", withdrawalRequests.getTotalPages());
+        pagination.put("per_page", withdrawalRequests.getSize());
+        pagination.put("current_page", withdrawalRequests.getNumber() + 1);
+        pagination.put("total_items", withdrawalRequests.getTotalElements());
+
+        Map<String, Object> requestsData = new HashMap<>();
+        requestsData.put("data", withdrawalRequestsData);
+        requestsData.put("pagination", pagination);
+
         response.put("overview", withdrawalOverviewData);
-        response.put("requests", withdrawalRequestsData);
+        response.put("requests", requestsData);
 
         return ResponseEntity
                 .status(HttpStatus.SC_OK)
@@ -113,7 +135,8 @@ public class AdminWithdrawalController {
     }
 
     @GetMapping("/request/{id}")
-    public ResponseEntity<ResponseDto> getWithdrawalRequestById(@RequestHeader("vocasia-correlation-id") String correlationId,
+    public ResponseEntity<ResponseDto> getWithdrawalRequestById(@RequestHeader("vocasia-correlation-id") String
+                                                                        correlationId,
                                                                 @PathVariable("id") Long id) {
         logger.info("AdminWithdrawalController.getWithdrawalRequestById called");
 
@@ -152,7 +175,8 @@ public class AdminWithdrawalController {
     }
 
     @PostMapping("/request/{id}/process")
-    public ResponseEntity<ResponseDto> processWithdrawal(@RequestHeader("vocasia-correlation-id") String correlationId,
+    public ResponseEntity<ResponseDto> processWithdrawal(@RequestHeader("vocasia-correlation-id") String
+                                                                 correlationId,
                                                          @PathVariable("id") Long id,
                                                          @RequestParam(value = "proof_document") @Valid MultipartFile proofDocument,
                                                          @RequestParam(value = "amount") Double amount,
@@ -196,7 +220,8 @@ public class AdminWithdrawalController {
                 .body(new ResponseDto(true, "Berhasil memproses withdrawal", response, null));
     }
 
-    private static NewInstructorBalanceHistoryRequest getNewInstructorBalanceHistoryRequest(WithdrawalRequest withdrawalRequest) {
+    private static NewInstructorBalanceHistoryRequest getNewInstructorBalanceHistoryRequest(WithdrawalRequest
+                                                                                                    withdrawalRequest) {
         NewInstructorBalanceHistoryRequest newInstructorBalanceHistoryRequest = new NewInstructorBalanceHistoryRequest();
 
         newInstructorBalanceHistoryRequest.setInstructorId(withdrawalRequest.getInstructorId());

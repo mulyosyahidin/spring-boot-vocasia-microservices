@@ -20,6 +20,7 @@ public class EnrollNewCourseRequest {
     @JsonProperty("order_id")
     private Long orderId;
 
+    @JsonProperty("enrollment_date")
     private LocalDateTime enrollmentDate;
 
     @NotNull(message = "Courses is required")

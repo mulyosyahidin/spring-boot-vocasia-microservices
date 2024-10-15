@@ -49,34 +49,6 @@ public class StudentController {
         this.orderService = iOrderService;
     }
 
-    @PostMapping("/assign-course")
-    public ResponseEntity<ResponseDto> assignCourse(@RequestHeader("vocasia-correlation-id") String correlationId,
-                                                    @Valid @RequestBody AssignCourseToStudentInstructorRequest assignCourseToStudentInstructorRequest) {
-        logger.info("StudentController.assignCourse called");
-
-        RegisterStudentRequest registerStudentRequest = new RegisterStudentRequest();
-        registerStudentRequest.setInstructorId(assignCourseToStudentInstructorRequest.getInstructorId());
-        registerStudentRequest.setUserId(assignCourseToStudentInstructorRequest.getUserId());
-
-        boolean isUserHasRegisteredAsInstructorStudent = instructorStudentService.isStudentRegistered(registerStudentRequest);
-        InstructorStudent instructorStudent;
-
-        if (!isUserHasRegisteredAsInstructorStudent) {
-            instructorStudent = instructorStudentService.registerStudent(registerStudentRequest);
-        } else {
-            instructorStudent = instructorStudentService.findStudentByUserId(registerStudentRequest.getInstructorId(), registerStudentRequest.getUserId());
-        }
-
-        InstructorStudentCourse assignedCourse = instructorStudentCourseService.assignNewCourse(instructorStudent, assignCourseToStudentInstructorRequest);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("instructor_student_course", InstructorStudentCourseMapper.mapToDto(assignedCourse));
-
-        return ResponseEntity
-                .status(HttpStatus.SC_CREATED)
-                .body(new ResponseDto(true, "Berhasil menambahkan kursus ke riwayat siswa", response, null));
-    }
-
     @GetMapping("/students")
     public ResponseEntity<ResponseDto> getAllMyStudents(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                         @RequestHeader("X-INSTRUCTOR-ID") Long instructorId,

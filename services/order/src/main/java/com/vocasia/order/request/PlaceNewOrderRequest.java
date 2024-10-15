@@ -11,10 +11,6 @@ import java.util.List;
 @Setter
 public class PlaceNewOrderRequest {
 
-    @NotNull(message = "User ID cannot be null")
-    @JsonProperty("user_id")
-    private Long userId;
-
     @NotNull(message = "Customer data cannot be null")
     private Customer customer;
 
@@ -26,7 +22,6 @@ public class PlaceNewOrderRequest {
     public static class Customer {
 
         @NotNull(message = "Customer ID cannot be null")
-
         private Long id;
 
         @NotNull(message = "Customer name cannot be null")

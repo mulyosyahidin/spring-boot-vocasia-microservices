@@ -1,4 +1,5 @@
 import React from "react";
+import {formatDate, formatRupiah} from "../../../../../../utils/new-utils.js";
 
 export const Data = ({request, isLoading, instructor, activeTab}) => {
     return (
@@ -16,7 +17,7 @@ export const Data = ({request, isLoading, instructor, activeTab}) => {
                             Jumlah Withdrawal
                         </h4>
                         <p className="mt-2">
-                            {rupiahFormatter.format(request.amount)}
+                            {formatRupiah(request.amount)}
                         </p>
 
                         <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>
@@ -30,7 +31,7 @@ export const Data = ({request, isLoading, instructor, activeTab}) => {
                             Tanggal Request
                         </h4>
                         <p className="mt-2">
-                            {makeDateReadable({date: request.requested_at})}
+                            {formatDate(request.requested_at)}
                         </p>
 
                         <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>

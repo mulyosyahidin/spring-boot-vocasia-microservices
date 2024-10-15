@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "enrollment")
 public interface EnrollmentFeignClient {
 
-    @PostMapping(value = "/api/enroll", consumes = "application/json")
+    @PostMapping(value = "/api/student/enroll-courses", consumes = "application/json")
     public ResponseEntity<ResponseDto> enrollCourse(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                     @RequestBody EnrollNewCourseRequest enrollNewCourseRequest);
 

@@ -21,11 +21,11 @@ public class ProgressDto {
     @JsonProperty("status")
     private String status;
 
-    @JsonProperty("watched_duration")
-    private String watchedDuration;
+    @JsonProperty("started_at")
+    private LocalDateTime startedAt;
 
-    @JsonProperty("last_accessed")
-    private LocalDateTime lastAccessed;
+    @JsonProperty("completed_at")
+    private LocalDateTime completedAt;
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;

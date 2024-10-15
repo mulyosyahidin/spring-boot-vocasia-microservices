@@ -139,6 +139,16 @@ export const TransactionIndexPage = () => {
                                                             </tr>
                                                         ))
                                                     }
+
+                                                    {
+                                                        data.length === 0 && (
+                                                            <tr>
+                                                                <td colSpan={7} className={'text-center'}>
+                                                                    Tidak ada data untuk ditampilkan
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    }
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -147,7 +157,7 @@ export const TransactionIndexPage = () => {
                                 </div>
 
                                 {
-                                    !isLoading && (
+                                    (!isLoading && data.length > 10) && (
                                         <div className="row justify-center pt-30 pb-30">
                                             <div className="col-auto">
                                                 <Pagination pagination={pagination} onPageChange={handlePageChange}/>

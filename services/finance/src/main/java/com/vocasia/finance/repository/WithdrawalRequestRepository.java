@@ -19,6 +19,7 @@ public interface WithdrawalRequestRepository extends JpaRepository<WithdrawalReq
 
     List<WithdrawalRequest> findAllByStatus(String status);
 
-    Page<com.vocasia.finance.entity.WithdrawalRequest> findAllByInstructorId(Long instructorId, Pageable paging);
+    Page<WithdrawalRequest> findAllByInstructorId(Long instructorId, Pageable paging);
+    Page<WithdrawalRequest> findAllByStatus(String string, Pageable paging);
 
 }

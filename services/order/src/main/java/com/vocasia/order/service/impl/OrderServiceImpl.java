@@ -11,6 +11,8 @@ import com.vocasia.order.service.IOrderService;
 import com.vocasia.order.types.PaymentStatus;
 import com.vocasia.order.util.OrderNumberGenerator;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class OrderServiceImpl implements IOrderService {
     private final OrderItemRepository orderItemRepository;
 
     @Override
-    public Order placeNewOrder(PlaceNewOrderRequest placeNewOrderRequest) {
+    public Order placeNewOrder(Long userId, PlaceNewOrderRequest placeNewOrderRequest) {
         Order order = new Order();
 
         List<PlaceNewOrderRequest.OrderItem> items = placeNewOrderRequest.getItems();
@@ -55,9 +57,9 @@ public class OrderServiceImpl implements IOrderService {
             order.getOrderItems().add(orderItem);
         }
 
-        order.setUserId(placeNewOrderRequest.getUserId());
+        order.setUserId(userId);
         order.setPaymentStatus(PaymentStatus.PENDING.name());
-        order.setOrderNumber(OrderNumberGenerator.generate(placeNewOrderRequest.getUserId()));
+        order.setOrderNumber(OrderNumberGenerator.generate(userId));
         order.setTotalItems(totalItems);
         order.setTotalPrice(totalPrice);
         order.setTotalDiscount(totalDiscount);
@@ -80,8 +82,8 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public List<Order> findAllByUserId(Long userId) {
-        return orderRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
+    public Page<Order> findAllByUserId(Long userId, Pageable paging) {
+        return orderRepository.findAllByUserIdOrderByCreatedAtDesc(userId, paging);
     }
 
 }

@@ -1,12 +1,14 @@
 import React, {useContext, useEffect, useState} from "react";
 import {InputField} from "../../../../../../components/commons/Input/InputField.jsx";
-import {AuthContext} from "../../../../../../states/contexts/AuthContext.jsx";
 import {TextAreaField} from "../../../../../../components/commons/Input/TextAreaField.jsx";
 import {InputFileField} from "../../../../../../components/commons/Input/InputFileField.jsx";
 import {useParams} from "react-router-dom";
+import {formatDate, formatRupiah} from "../../../../../../utils/new-utils.js";
+import {processById} from "../../../../../../services/new/finance/admin/withdrawal-service.js";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 
 export const Actions = ({request, process, isLoading, activeTab}) => {
-    const {sweetAlert} = useContext(AuthContext);
     const {id} = useParams();
 
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -21,6 +23,7 @@ export const Actions = ({request, process, isLoading, activeTab}) => {
     useEffect(() => {
         if (request) {
             setFormData({
+                ...formData,
                 amount: request.amount,
             });
         }
@@ -52,44 +55,63 @@ export const Actions = ({request, process, isLoading, activeTab}) => {
                 formDataToSend.append(key, formData[key]);
             }
 
-            const processWithdrawal = await processWithdrawalRequest(id, formDataToSend);
+            const doProcessWithdrawal = await processById(id, formDataToSend);
 
-            if (processWithdrawal.success) {
-                sweetAlert.fire({
+            if (doProcessWithdrawal.success) {
+                await withReactContent(Swal).fire({
                     icon: 'success',
                     title: 'Berhasil!',
-                    text: processWithdrawal.message,
+                    text: doProcessWithdrawal.message,
                 }).then((isConfirmed) => {
                     if (isConfirmed) {
                         window.location.reload();
                     }
                 })
-            }
-            else {
-                sweetAlert.fire({
+            } else {
+                await withReactContent(Swal).fire({
                     icon: 'error',
                     title: 'Terjadi Kesalahan!',
-                    text: processWithdrawal.message,
+                    text: doProcessWithdrawal.message,
                 });
             }
-        }
-        catch (error) {
-            console.log(error);
+        } catch (error) {
+            console.error(error);
 
-            if (error.message) {
-                let msg = error.message;
+            if (error.errors) {
+                const getErrors = error.errors;
+                const newErrors = {};
+
+                Object.keys(getErrors).forEach((field) => {
+                    newErrors[field] = getErrors[field][0];
+                });
+
+                setErrors(newErrors);
+                setIsSubmitted(false);
+            } else if (error.data) {
+                let message = error.message;
+
                 if (error.data.error) {
-                    msg += ' : ' + error.data.error;
+                    message += `: (${error.data.error})`;
                 }
 
-                sweetAlert.fire({
+                await withReactContent(Swal).fire({
                     icon: 'error',
                     title: 'Terjadi Kesalahan!',
-                    text: msg,
-                });
+                    text: message,
+                })
+                    .then((isConfirmed) => {
+                        if (isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+            } else {
+                if (error.message) {
+                    setErrors({general: error.message});
+                }
             }
-        }
-        finally {
+
+            setIsSubmitted(false);
+        } finally {
             setIsSubmitted(false);
         }
     }
@@ -168,14 +190,14 @@ export const Actions = ({request, process, isLoading, activeTab}) => {
                             Jumlah Pembayaran
                         </h4>
                         <p className="mt-2">
-                            {rupiahFormatter.format(process.amount)}
+                            {formatRupiah(process.amount)}
                         </p>
 
                         <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>
                             Tanggal
                         </h4>
                         <p className="mt-2">
-                            {makeDateReadable({date: process.processed_at})}
+                            {formatDate(process.processed_at)}
                         </p>
 
                         <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>
@@ -189,7 +211,8 @@ export const Actions = ({request, process, isLoading, activeTab}) => {
                             Dokumen Pembayaran
                         </h4>
                         <p className="mt-2">
-                            <a href={process.proof_document_url} className={'text-blue'} target={"_blank"}>{process.proof_document}</a>
+                            <a href={process.proof_document_url} className={'text-blue'}
+                               target={"_blank"}>{process.proof_document}</a>
                         </p>
                     </>
                 )

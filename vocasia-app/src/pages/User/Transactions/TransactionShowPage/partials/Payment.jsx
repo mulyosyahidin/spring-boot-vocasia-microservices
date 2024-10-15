@@ -1,12 +1,14 @@
 import React, {useContext, useEffect} from "react";
 import {AuthContext} from "../../../../../states/contexts/AuthContext.jsx";
+import {formatDate, formatRupiah} from "../../../../../utils/new-utils.js";
+import {midtransClientKey} from "../../../../../config/consts.js";
 
 export const Payment = ({activeTab, payment, isLoading}) => {
     const {sweetAlert} = useContext(AuthContext);
 
     useEffect(() => {
         const snapSrcUrl = 'https://app.sandbox.midtrans.com/snap/snap.js'
-        const myMidtransClientKey = 'SB-Mid-client-4KbJJQfBaYS9Lplt';
+        const myMidtransClientKey = midtransClientKey;
         const script = document.createElement('script')
         script.src = snapSrcUrl
         script.setAttribute('data-client-key', myMidtransClientKey)
@@ -54,21 +56,21 @@ export const Payment = ({activeTab, payment, isLoading}) => {
                             Total Harga
                         </h4>
                         <p className="mt-2">
-                            {rupiahFormatter.format(payment.total_price)}
+                            {formatRupiah(payment.total_price)}
                         </p>
 
                         <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>
                             Biaya Layanan
                         </h4>
                         <p className="mt-2">
-                            {rupiahFormatter.format(payment.additional_fee)}
+                            {formatRupiah(payment.additional_fee)}
                         </p>
 
                         <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>
                             Total Bayar
                         </h4>
                         <p className="mt-2">
-                            {rupiahFormatter.format(payment.total_payment)}
+                            {formatRupiah(payment.total_payment)}
                         </p>
                     </>
                 )
@@ -80,7 +82,7 @@ export const Payment = ({activeTab, payment, isLoading}) => {
                         <div
                             className="d-flex items-center justify-between bg-warning-1 pl-30 pr-20 py-30 rounded-8">
                             <div className="text-warning-2 lh-1 fw-500">
-                                Silahkan lakukan pembayaran sebelum {makeDateReadable({date: payment.payment_expire_at})}
+                                Silahkan lakukan pembayaran sebelum {formatDate(payment.payment_expire_at)}
                             </div>
                         </div>
 
@@ -93,28 +95,28 @@ export const Payment = ({activeTab, payment, isLoading}) => {
                             Total Harga
                         </h4>
                         <p className="mt-2">
-                            {rupiahFormatter.format(payment.total_price)}
+                            {formatRupiah(payment.total_price)}
                         </p>
 
                         <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>
                             Biaya Layanan
                         </h4>
                         <p className="mt-2">
-                            {rupiahFormatter.format(payment.additional_fee)}
+                            {formatRupiah(payment.additional_fee)}
                         </p>
 
                         <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>
                             Total Bayar
                         </h4>
                         <p className="mt-2">
-                            {rupiahFormatter.format(payment.total_payment)}
+                            {formatRupiah(payment.total_payment)}
                         </p>
 
                         <h4 className="text-15 lh-1 fw-400" style={{marginTop: '15px'}}>
                             Batas Waktu Pembayaran
                         </h4>
                         <p className="mt-2">
-                            {makeDateReadable({date: payment.payment_expire_at})}
+                            {formatDate( payment.payment_expire_at)}
                         </p>
 
                     </>

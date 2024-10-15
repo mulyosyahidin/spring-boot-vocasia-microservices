@@ -99,7 +99,7 @@ export const Students = ({activeTab, courseId}) => {
                                         <td>{item.enrollment.progress_percentage}%</td>
                                         <td>
                                             {
-                                                item.completion_date != null ? formatDate(item.completion_date) : '-'
+                                                item.enrollment.completion_date != null ? formatDate(item.enrollment.completion_date) : '-'
                                             }
                                         </td>
                                         <td></td>
@@ -124,7 +124,7 @@ export const Students = ({activeTab, courseId}) => {
             }
 
             {
-                !isLoading && (
+                (!isLoading && data.length > 10) && (
                     <div className="row justify-center pt-30 pb-30">
                         <div className="col-auto">
                             <Pagination pagination={pagination} onPageChange={handlePageChange}/>

@@ -1,4 +1,4 @@
-package com.vocasia.enrollment.controller;
+package com.vocasia.enrollment.controller.student;
 
 import com.vocasia.enrollment.dto.ResponseDto;
 import com.vocasia.enrollment.request.EnrollNewCourseRequest;
@@ -14,21 +14,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
-public class EnrollController {
+@RequestMapping("/api/student")
+public class StudentEnrollmentController {
 
-    private final Logger logger = LoggerFactory.getLogger(EnrollController.class);
+    private final Logger logger = LoggerFactory.getLogger(StudentEnrollmentController.class);
 
     private final IEnrollmentService enrollmentService;
 
-    public EnrollController(IEnrollmentService iEnrollmentService) {
+    public StudentEnrollmentController(IEnrollmentService iEnrollmentService) {
         this.enrollmentService = iEnrollmentService;
     }
 
-    @PostMapping("/enroll")
-    public ResponseEntity<ResponseDto> enroll(@RequestHeader("vocasia-correlation-id") String correlationId,
+    @PostMapping("/enroll-courses")
+    public ResponseEntity<ResponseDto> enrollCourses(@RequestHeader("vocasia-correlation-id") String correlationId,
                                               @Valid @RequestBody EnrollNewCourseRequest enrollNewCourseRequest) {
-        logger.info("EnrollController.enroll called");
+        logger.info("StudentEnrollmentController.enroll called");
 
         enrollmentService.enrollCourse(enrollNewCourseRequest);
 
@@ -38,9 +38,9 @@ public class EnrollController {
     }
 
     @GetMapping("/courses/{courseId}/is-user-enrolled")
-    public ResponseEntity<ResponseDto> isUserEnrolled(@RequestHeader("X-USER-ID") Long userId,
+    public ResponseEntity<ResponseDto> isUserEnrolled(@RequestHeader(value = "X-USER-ID", required = false) Long userId,
                                                       @PathVariable("courseId") Long courseId) {
-        logger.info("EnrollController.isUserEnrolled called");
+        logger.info("StudentEnrollmentController.isUserEnrolled called");
 
         boolean isUserEnrolled = enrollmentService.isUserEnrolled(userId, courseId);
 

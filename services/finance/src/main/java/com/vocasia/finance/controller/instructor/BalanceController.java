@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,37 +38,6 @@ public class BalanceController {
         this.instructorBalanceHistoryService = iInstructorBalanceHistoryService;
     }
 
-    @PostMapping("/store")
-    public ResponseEntity<ResponseDto> createInstructorBalanceHistory(@RequestHeader("vocasia-correlation-id") String correlationId,
-                                                                      @Valid @RequestBody NewInstructorBalanceHistoryRequest request) {
-        logger.info("BalanceController.createInstructorBalanceHistory called");
-
-        InstructorBalance instructorBalance;
-
-        boolean isInstructorHasBalanceRecord = instructorBalanceService.isInstructorHasBalanceRecord(request.getInstructorId());
-        if (isInstructorHasBalanceRecord) {
-            instructorBalance = instructorBalanceService.findByInstructorId(request.getInstructorId());
-        }
-        else {
-            InstructorBalance newInstructorBalance = getInstructorBalance(request);
-            instructorBalance = instructorBalanceService.save(newInstructorBalance);
-        }
-
-        InstructorBalanceHistory instructorBalanceHistory = instructorBalanceHistoryService.save(instructorBalance, request);
-        InstructorBalance updatedInstructorBalance = instructorBalanceService.updateBalance(request, instructorBalance, instructorBalanceHistory);
-
-        List<InstructorBalanceHistory> instructorBalanceHistories = instructorBalanceHistoryService.findByInstructorId(request.getInstructorId());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("instructor_balance", InstructorBalanceMapper.mapToDto(updatedInstructorBalance));
-        response.put("new_history", InstructorBalanceHistoryMapper.mapToDto(instructorBalanceHistory));
-        response.put("histories", instructorBalanceHistories.stream().map(InstructorBalanceHistoryMapper::mapToDto));
-
-        return ResponseEntity
-                .status(HttpStatus.SC_CREATED)
-                .body(new ResponseDto(true, "Berhasil menyimpan data balance instruktur", response, null));
-    }
-
     @GetMapping("/data")
     public ResponseEntity<ResponseDto> getData(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                @RequestHeader("X-INSTRUCTOR-ID") Long instructorId,
@@ -75,6 +45,35 @@ public class BalanceController {
         logger.info("BalanceController.getData called");
 
         InstructorBalance instructorBalance = instructorBalanceService.findByInstructorId(instructorId);
+
+        if (instructorBalance == null) {
+            Map<String, Object> response = new HashMap<>();
+
+            Map<String, Object> emptyInstructorBalance = new HashMap<>();
+
+            emptyInstructorBalance.put("current_balance", 0.0);
+            emptyInstructorBalance.put("total_income", 0.0);
+            emptyInstructorBalance.put("total_pending_withdrawal", 0.00);
+            emptyInstructorBalance.put("total_withdrawn", 0.00);
+
+            Map<String, Object> emptyHistoriesData = new HashMap<>();
+            Map<String, Object> emptyPagination = new HashMap<>();
+
+            emptyPagination.put("total_page", 0);
+            emptyPagination.put("per_page", 10);
+            emptyPagination.put("current_page", page);
+            emptyPagination.put("total_items", 0);
+
+            emptyHistoriesData.put("data", Collections.emptyList());
+            emptyHistoriesData.put("pagination", emptyPagination);
+
+            response.put("instructor_balance", emptyInstructorBalance);
+            response.put("histories", emptyHistoriesData);
+
+            return ResponseEntity
+                    .status(HttpStatus.SC_OK)
+                    .body(new ResponseDto(true, "Data balance instruktur belum tersedia", response, null));
+        }
 
         Map<String, Object> response = new HashMap<>();
 
@@ -122,20 +121,6 @@ public class BalanceController {
         return ResponseEntity
                 .status(HttpStatus.SC_OK)
                 .body(new ResponseDto(true, "Berhasil mendapatkan data balance instruktur", response, null));
-    }
-
-    private static InstructorBalance getInstructorBalance(NewInstructorBalanceHistoryRequest request) {
-        InstructorBalance newInstructorBalance = new InstructorBalance();
-
-        newInstructorBalance.setInstructorId(request.getInstructorId());
-        newInstructorBalance.setCurrentBalance(0.0);
-        newInstructorBalance.setTotalIncome(0.0);
-        newInstructorBalance.setTotalPendingWithdrawal(0.0);
-        newInstructorBalance.setTotalWithdrawn(0.0);
-        newInstructorBalance.setTotalPlatformFee(0.0);
-        newInstructorBalance.setLastHistoryId(0L);
-
-        return newInstructorBalance;
     }
 
 }

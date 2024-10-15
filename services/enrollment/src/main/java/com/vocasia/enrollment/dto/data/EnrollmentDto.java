@@ -34,6 +34,9 @@ public class EnrollmentDto {
     @JsonProperty("completion_date")
     private LocalDateTime completionDate;
 
+    @JsonProperty("last_lesson_id")
+    private Long lastLessonId;
+
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
 

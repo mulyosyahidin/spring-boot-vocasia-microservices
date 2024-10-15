@@ -37,6 +37,9 @@ public class Enrollment extends BaseEntity {
     @Column(name = "progress_percentage")
     private BigDecimal progressPercentage;
 
+    @Column(name = "last_lesson_id")
+    private Long lastLessonId;
+
     @Column(name = "completion_date")
     private LocalDateTime completionDate;
 

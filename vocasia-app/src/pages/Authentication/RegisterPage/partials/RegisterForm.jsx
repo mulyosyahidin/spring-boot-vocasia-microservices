@@ -11,6 +11,9 @@ import {
 } from "../../../../config/consts.js";
 import {useRecoilState} from "recoil";
 import {authAtom} from "../../../../states/recoil/Atoms/Auth.jsx";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import {register} from "../../../../services/new/authentication/register-service.js";
 
 export const RegisterForm = () => {
     const [authState, setAuthState] = useRecoilState(authAtom);
@@ -22,7 +25,7 @@ export const RegisterForm = () => {
         username: '',
     });
 
-    const [loading, setLoading] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
 
@@ -38,31 +41,70 @@ export const RegisterForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setLoading(true);
+        setIsSubmitted(true);
         setErrors({});
         setSuccessMessage('');
 
-        const result = await submitRegisterForm(formData, setLoading, setErrors, setSuccessMessage);
+        try {
+            const doRegister = await register(formData);
 
-        console.log(result);
+            if (doRegister.success) {
+                let {user, token} = doRegister.data;
+                let {access_token, refresh_token} = token;
 
-        if (result) {
-            let {user, token} = result;
-            let {access_token, refresh_token} = token;
+                localStorage.setItem(AUTH_USER, JSON.stringify(user));
+                localStorage.setItem(AUTH_ACCESS_TOKEN, access_token);
+                localStorage.setItem(AUTH_REFRESH_TOKEN, refresh_token);
 
-            localStorage.setItem(AUTH_USER, JSON.stringify(user));
-            localStorage.setItem(AUTH_ACCESS_TOKEN, access_token);
-            localStorage.setItem(AUTH_REFRESH_TOKEN, refresh_token);
+                setAuthState({
+                    user,
+                    accessToken: access_token,
+                    refreshToken: refresh_token,
+                });
 
-            setAuthState({
-                user,
-                accessToken: access_token,
-                refreshToken: refresh_token,
-            });
+                setTimeout(() => {
+                    window.location.href = '/users';
+                }, 3000);
+            }
+        } catch (error) {
+            console.error(error);
 
-            setTimeout(() => {
-                navigate('/user');
-            }, 3000);
+            if (error.errors) {
+                const getErrors = error.errors;
+                const newErrors = {};
+
+                Object.keys(getErrors).forEach((field) => {
+                    newErrors[field] = getErrors[field][0];
+                });
+
+                setErrors(newErrors);
+                setIsSubmitted(false);
+            } else if (error.data) {
+                let message = error.message;
+
+                if (error.data.error) {
+                    message += `: (${error.data.error})`;
+                }
+
+                await withReactContent(Swal).fire({
+                    icon: 'error',
+                    title: 'Terjadi Kesalahan!',
+                    text: message,
+                })
+                    .then((isConfirmed) => {
+                        if (isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+            } else {
+                if (error.message) {
+                    setErrors({general: error.message});
+                }
+            }
+
+            setIsSubmitted(false);
+        } finally {
+            setIsSubmitted(false);
         }
     };
 
@@ -138,10 +180,10 @@ export const RegisterForm = () => {
                                 <div className="col-12">
                                     <button
                                         type="submit"
-                                        className={`button -md -green-1 text-dark-1 fw-500 w-1/1 ${loading ? 'disabled' : ''}`}
-                                        disabled={loading}
+                                        className={`button -md -green-1 text-dark-1 fw-500 w-1/1 ${isSubmitted ? 'disabled' : ''}`}
+                                        disabled={isSubmitted}
                                     >
-                                        {loading ? 'Login...' : 'Login'}
+                                        {isSubmitted ? 'Login...' : 'Login'}
                                     </button>
                                 </div>
                             </form>

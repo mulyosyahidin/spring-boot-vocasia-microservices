@@ -12,8 +12,8 @@ export const Join = () => {
                 <div className="row y-gap-20 justify-between items-center">
                     <div className="col-xl-4 col-lg-5">
                         <h2 className="text-30 lh-15 text-white">
-                            Bergabung
-                            <span className="text-green-1">dengan komunitas hebat</span> kami
+                            Ingin jadi
+                            <span className="text-green-1">instruktur</span> kami?
                         </h2>
                     </div>
 
@@ -34,7 +34,7 @@ export const Join = () => {
                                     </Link>
                                 )
                             ) : (
-                                <Link to="#" className="button -md -green-1 text-dark-1">
+                                <Link to={'/become-instructor'} className="button -md -green-1 text-dark-1">
                                     Ayo Bergabung Sekarang!
                                 </Link>
                             )

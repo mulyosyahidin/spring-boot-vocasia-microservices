@@ -24,14 +24,14 @@ public class Progress extends BaseEntity {
     @Column(name = "lesson_id", nullable = false)
     private Long lessonId;
 
+    @Column(name = "started_at")
+    private LocalDateTime startedAt;
+
+    @Column(name = "completed_at")
+    private LocalDateTime completedAt;
+
     @Column(name = "status", nullable = false)
     private String status;
-
-    @Column(name = "watched_duration", nullable = false)
-    private String watchedDuration;
-
-    @Column(name = "last_accessed", nullable = false)
-    private LocalDateTime lastAccessed;
 
 }
 

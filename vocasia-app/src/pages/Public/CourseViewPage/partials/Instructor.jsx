@@ -1,10 +1,6 @@
 import React, {useEffect} from "react";
 
 export default function Instructor({instructor}) {
-    useEffect(() => {
-        console.log(instructor);
-    }, []);
-
     return (
         <div id="instructors" className="pt-60 lg:pt-40">
             <h2 className="text-20 fw-500">Instruktur</h2>
