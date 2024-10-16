@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -33,6 +34,11 @@ public class PlatformIncomeServiceImpl implements IPlatformIncomeService {
         platformIncome.setRemarks(newPlatformIncomeRequest.getRemarks());
 
         return platformIncomeRepository.save(platformIncome);
+    }
+
+    @Override
+    public List<PlatformIncome> findAllByOrderId(Long orderId) {
+        return platformIncomeRepository.findAllByOrderId(orderId);
     }
 
 }

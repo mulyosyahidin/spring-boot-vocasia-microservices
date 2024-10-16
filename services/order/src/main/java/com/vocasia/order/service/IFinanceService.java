@@ -9,11 +9,17 @@ import com.vocasia.order.request.client.finance.NewInstructorIncomeRequest;
 import com.vocasia.order.request.client.finance.NewPlatformBalanceHistoryRequest;
 import com.vocasia.order.request.client.finance.NewPlatformIncomeRequest;
 
+import java.util.List;
+import java.util.Map;
+
 public interface IFinanceService {
 
     InstructorIncomeDto saveInstructorIncome(NewInstructorIncomeRequest newInstructorIncomeRequest, String correlationId);
     PlatformIncomeDto savePlatformIncome(NewPlatformIncomeRequest newPlatformIncomeRequest, String correlationId);
     InstructorBalanceDto saveInstructorBalance(NewInstructorBalanceHistoryRequest newInstructorBalanceHistoryRequest, String correlationId);
     PlatformBalanceDto savePlatformBalance(NewPlatformBalanceHistoryRequest newPlatformBalanceHistoryRequest, String correlationId);
+
+    List<Map<String, Object>> findInstructorIncomesByOrderId(Long orderId, String correlationId);
+    List<Map<String, Object>> findPlatformIncomesByOrderId(Long orderId, String correlationId);
 
 }

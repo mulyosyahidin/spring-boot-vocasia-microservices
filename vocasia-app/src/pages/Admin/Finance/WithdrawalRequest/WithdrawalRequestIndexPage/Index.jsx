@@ -256,7 +256,7 @@ export const WithdrawalRequestIndexPage = () => {
                                                                 </td>
                                                                 <td>
                                                                     <Link
-                                                                        to={`/admin/finances/withdrawal/${item.request.id}`}>
+                                                                        to={`/admin/withdrawal/${item.request.id}`}>
                                                                         Detail
                                                                     </Link>
                                                                 </td>

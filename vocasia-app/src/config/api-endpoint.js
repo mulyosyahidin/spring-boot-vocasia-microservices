@@ -69,3 +69,6 @@ export const FINANCE_ADMIN_WITHDRAWAL_REQUEST_PROCESS_BY_ID = '/finance/admin/wi
 export const ORDER_STUDENT_ORDERS = '/order/student/orders';
 export const ORDER_STUDENT_PLACE_NEW_ORDER = '/order/student/place-new-order';
 export const ORDER_STUDENT_ORDERS_GET_BY_ID = '/order/student/orders/:id';
+
+export const ORDER_ADMIN_TRANSACTIONS = '/order/admin/transactions';
+export const ORDER_ADMIN_TRANSACTIONS_FIND_BY_ID = '/order/admin/transactions/:id';

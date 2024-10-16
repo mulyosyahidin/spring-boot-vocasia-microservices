@@ -25,21 +25,4 @@ public class InstructorIncomeMapper {
         return instructorIncomeDto;
     }
 
-    public static InstructorIncome mapToEntity(InstructorIncomeDto instructorIncomeDto) {
-        InstructorIncome instructorIncome = new InstructorIncome();
-
-        instructorIncome.setId(instructorIncomeDto.getId());
-        instructorIncome.setInstructorId(instructorIncomeDto.getInstructorId());
-        instructorIncome.setOrderId(instructorIncomeDto.getOrderId());
-        instructorIncome.setCourseId(instructorIncomeDto.getCourseId());
-        instructorIncome.setTotalUserPayment(instructorIncomeDto.getTotalUserPayment());
-        instructorIncome.setPlatformFeeInPercent(instructorIncomeDto.getPlatformFeeInPercent());
-        instructorIncome.setTotalInstructorIncome(instructorIncomeDto.getTotalInstructorIncome());
-        instructorIncome.setRemarks(instructorIncomeDto.getRemarks());
-        instructorIncome.setCreatedAt(instructorIncomeDto.getCreatedAt());
-        instructorIncome.setUpdatedAt(instructorIncomeDto.getUpdatedAt());
-
-        return instructorIncome;
-    }
-
 }

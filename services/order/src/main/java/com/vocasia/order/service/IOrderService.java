@@ -15,5 +15,6 @@ public interface IOrderService {
     Order updateOrderPaymentStatus(Order order, UpdatePaymentStatusRequest updatePaymentStatusRequest);
 
     Page<Order> findAllByUserId(Long userId, Pageable paging);
+    Page<Order> findAll(Pageable paging);
 
 }

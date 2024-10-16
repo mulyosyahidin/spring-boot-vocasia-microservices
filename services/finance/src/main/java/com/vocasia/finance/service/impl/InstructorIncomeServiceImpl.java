@@ -60,4 +60,10 @@ public class InstructorIncomeServiceImpl implements IInstructorIncomeService {
         return instructorIncomeRepository.findAllByCourseId(courseId);
     }
 
+    @Override
+    public List<InstructorIncome> findAllByOrderId(Long orderId) {
+        return instructorIncomeRepository.findAllByOrderId(orderId);
+    }
+
+
 }

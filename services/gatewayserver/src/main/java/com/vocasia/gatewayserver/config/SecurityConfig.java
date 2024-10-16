@@ -114,6 +114,8 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.PUT, "/order/update-payment-status/{orderId}").permitAll()
 
+                        .pathMatchers(HttpMethod.GET, "/order/admin/transactions").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "/order/admin/transactions/{orderId}").hasRole("ADMIN")
 
                         // payment service
                         .pathMatchers(HttpMethod.GET, "/payment/actuator/**").permitAll()
@@ -170,6 +172,9 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/finance/admin/withdrawal/request").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.GET, "/finance/admin/withdrawal/request/{id}").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.POST, "/finance/admin/withdrawal/request/{id}/process").hasRole("ADMIN")
+
+                        .pathMatchers(HttpMethod.GET, "/finance/admin/instructor-income/{orderId}").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "/finance/admin/platform-income/{orderId}").hasRole("ADMIN")
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));

@@ -2,6 +2,7 @@ package com.vocasia.order.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocasia.order.dto.ResponseDto;
+import com.vocasia.order.dto.client.course.CourseDto;
 import com.vocasia.order.dto.client.finance.InstructorBalanceDto;
 import com.vocasia.order.dto.client.finance.InstructorIncomeDto;
 import com.vocasia.order.dto.client.finance.PlatformBalanceDto;
@@ -22,6 +23,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -158,6 +162,151 @@ public class FinanceServiceImpl implements IFinanceService {
             }
 
             return platformBalanceDto;
+        } catch (FeignException e) {
+            throw new CustomFeignException(e, new ObjectMapper());
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> findInstructorIncomesByOrderId(Long orderId, String correlationId) {
+        try {
+            ResponseEntity<ResponseDto> financeFeignClientResponseEntity = financeFeignClient.findInstructorIncomesByOrderId(correlationId, orderId);
+            ResponseDto responseBody = financeFeignClientResponseEntity.getBody();
+
+            assert responseBody != null;
+            Map<String, Object> data = (Map<String, Object>) responseBody.getData();
+            List<Map<String, Object>> instructorIncomesData = data != null ? (List<Map<String, Object>>) data.get("instructor_incomes") : null;
+
+            logger.debug("FinanceServiceImpl.findInstructorIncomesByOrderId() instructorIncomesData:: {}", instructorIncomesData);
+
+            List<Map<String, Object>> instructorIncomeDtos = new ArrayList<>();
+
+            if (instructorIncomesData != null) {
+                for (Map<String, Object> instructorIncomeData : instructorIncomesData) {
+                    Map<String, Object> setData = new HashMap<>();
+                    Map<String, Object> instructorIncome = (Map<String, Object>) instructorIncomeData.get("instructor_income");
+
+                    InstructorIncomeDto instructorIncomeDto = new InstructorIncomeDto();
+                    instructorIncomeDto.setId(Long.valueOf(instructorIncome.get("id").toString()));
+                    instructorIncomeDto.setInstructorId(Long.valueOf(instructorIncome.get("instructor_id").toString()));
+                    instructorIncomeDto.setOrderId(Long.valueOf(instructorIncome.get("order_id").toString()));
+                    instructorIncomeDto.setCourseId(Long.valueOf(instructorIncome.get("course_id").toString()));
+                    instructorIncomeDto.setTotalUserPayment((Double) instructorIncome.get("total_user_payment"));
+                    instructorIncomeDto.setPlatformFeeInPercent(BigDecimal.valueOf((Integer) instructorIncome.get("platform_fee_in_percent")));
+                    instructorIncomeDto.setTotalPlatformFee((Double) instructorIncome.get("total_platform_fee"));
+                    instructorIncomeDto.setTotalInstructorIncome((Double) instructorIncome.get("total_instructor_income"));
+                    instructorIncomeDto.setRemarks((String) instructorIncome.get("remarks"));
+                    instructorIncomeDto.setCreatedAt(LocalDateTime.parse(instructorIncome.get("created_at").toString()));
+                    instructorIncomeDto.setUpdatedAt(LocalDateTime.parse(instructorIncome.get("updated_at").toString()));
+
+                    Map<String, Object> courseData = (Map<String, Object>) instructorIncomeData.get("course");
+
+                    CourseDto courseDto = new CourseDto();
+                    courseDto.setId(Long.valueOf(courseData.get("id").toString()));
+                    courseDto.setInstructorId(Long.valueOf(courseData.get("instructor_id").toString()));
+                    courseDto.setTitle(courseData.get("title").toString());
+                    courseDto.setSlug(courseData.get("slug").toString());
+                    courseDto.setLevel(courseData.get("level").toString());
+                    courseDto.setLanguage(courseData.get("language").toString());
+                    courseDto.setDescription(courseData.get("description").toString());
+                    courseDto.setPrice(Double.valueOf(courseData.get("price").toString()));
+                    courseDto.setDiscount(Double.valueOf(courseData.get("discount").toString()));
+                    courseDto.setStatus(courseData.get("status").toString());
+                    courseDto.setRating(Double.valueOf(courseData.get("rating").toString()));
+                    courseDto.setTotalDuration(courseData.get("total_duration").toString());
+                    courseDto.setShortDescription(courseData.get("short_description").toString());
+                    courseDto.setFeaturedPicture(courseData.get("featured_picture").toString());
+                    courseDto.setFeaturedPictureUrl(courseData.get("featured_picture_url").toString());
+                    courseDto.setIsFree((Boolean) courseData.get("is_free"));
+                    courseDto.setIsDiscount((Boolean) courseData.get("is_discount"));
+                    courseDto.setChapterCount(Integer.valueOf(courseData.get("chapter_count").toString()));
+                    courseDto.setLessonCount(Integer.valueOf(courseData.get("lesson_count").toString()));
+                    courseDto.setRatingCount(Integer.valueOf(courseData.get("rating_count").toString()));
+                    courseDto.setEnrollmentCount(Integer.valueOf(courseData.get("enrollment_count").toString()));
+                    courseDto.setDeletedAt(courseData.get("deleted_at") != null ? LocalDateTime.parse(courseData.get("deleted_at").toString()) : null);
+                    courseDto.setCreatedAt(LocalDateTime.parse(courseData.get("created_at").toString()));
+                    courseDto.setUpdatedAt(LocalDateTime.parse(courseData.get("updated_at").toString()));
+
+                    setData.put("instructor_income", instructorIncomeDto);
+                    setData.put("course", courseDto);
+
+                    instructorIncomeDtos.add(setData);
+                }
+            }
+
+            return instructorIncomeDtos;
+        } catch (FeignException e) {
+            throw new CustomFeignException(e, new ObjectMapper());
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> findPlatformIncomesByOrderId(Long orderId, String correlationId) {
+        try {
+            ResponseEntity<ResponseDto> financeFeignClientResponseEntity = financeFeignClient.findPlatformIncomesByOrderId(correlationId, orderId);
+            ResponseDto responseBody = financeFeignClientResponseEntity.getBody();
+
+            assert responseBody != null;
+            Map<String, Object> data = (Map<String, Object>) responseBody.getData();
+            List<Map<String, Object>> platformIncomesData = data != null ? (List<Map<String, Object>>) data.get("platform_incomes") : null;
+
+            logger.debug("FinanceServiceImpl.findPlatformIncomesByOrderId() platformIncomesData:: {}", platformIncomesData);
+
+            List<Map<String, Object>> platformIncomeDtos = new ArrayList<>();
+
+            if (platformIncomesData != null) {
+                for (Map<String, Object> platformIncomeData : platformIncomesData) {
+                    Map<String, Object> setData = new HashMap<>();
+                    Map<String, Object> platformIncome = (Map<String, Object>) platformIncomeData.get("platform_income");
+
+                    PlatformIncomeDto platformIncomeDto = new PlatformIncomeDto();
+                    platformIncomeDto.setId(Long.valueOf(platformIncome.get("id").toString()));
+                    platformIncomeDto.setInstructorId(Long.valueOf(platformIncome.get("instructor_id").toString()));
+                    platformIncomeDto.setOrderId(Long.valueOf(platformIncome.get("order_id").toString()));
+                    platformIncomeDto.setCourseId(Long.valueOf(platformIncome.get("course_id").toString()));
+                    platformIncomeDto.setTotalUserPayment((Double) platformIncome.get("total_user_payment"));
+                    platformIncomeDto.setPlatformFeeInPercent(BigDecimal.valueOf((Integer) platformIncome.get("platform_fee_in_percent")));
+                    platformIncomeDto.setTotalPlatformIncome((Double) platformIncome.get("total_platform_income"));
+                    platformIncomeDto.setRemarks((String) platformIncome.get("remarks"));
+                    platformIncomeDto.setCreatedAt(LocalDateTime.parse(platformIncome.get("created_at").toString()));
+                    platformIncomeDto.setUpdatedAt(LocalDateTime.parse(platformIncome.get("updated_at").toString()));
+
+                    Map<String, Object> courseData = (Map<String, Object>) platformIncomeData.get("course");
+
+                    CourseDto courseDto = new CourseDto();
+                    courseDto.setId(Long.valueOf(courseData.get("id").toString()));
+                    courseDto.setInstructorId(Long.valueOf(courseData.get("instructor_id").toString()));
+                    courseDto.setTitle(courseData.get("title").toString());
+                    courseDto.setSlug(courseData.get("slug").toString());
+                    courseDto.setLevel(courseData.get("level").toString());
+                    courseDto.setLanguage(courseData.get("language").toString());
+                    courseDto.setDescription(courseData.get("description").toString());
+                    courseDto.setPrice(Double.valueOf(courseData.get("price").toString()));
+                    courseDto.setDiscount(Double.valueOf(courseData.get("discount").toString()));
+                    courseDto.setStatus(courseData.get("status").toString());
+                    courseDto.setRating(Double.valueOf(courseData.get("rating").toString()));
+                    courseDto.setTotalDuration(courseData.get("total_duration").toString());
+                    courseDto.setShortDescription(courseData.get("short_description").toString());
+                    courseDto.setFeaturedPicture(courseData.get("featured_picture").toString());
+                    courseDto.setFeaturedPictureUrl(courseData.get("featured_picture_url").toString());
+                    courseDto.setIsFree((Boolean) courseData.get("is_free"));
+                    courseDto.setIsDiscount((Boolean) courseData.get("is_discount"));
+                    courseDto.setChapterCount(Integer.valueOf(courseData.get("chapter_count").toString()));
+                    courseDto.setLessonCount(Integer.valueOf(courseData.get("lesson_count").toString()));
+                    courseDto.setRatingCount(Integer.valueOf(courseData.get("rating_count").toString()));
+                    courseDto.setEnrollmentCount(Integer.valueOf(courseData.get("enrollment_count").toString()));
+                    courseDto.setDeletedAt(courseData.get("deleted_at") != null ? LocalDateTime.parse(courseData.get("deleted_at").toString()) : null);
+                    courseDto.setCreatedAt(LocalDateTime.parse(courseData.get("created_at").toString()));
+                    courseDto.setUpdatedAt(LocalDateTime.parse(courseData.get("updated_at").toString()));
+
+                    setData.put("platform_income", platformIncomeDto);
+                    setData.put("course", courseDto);
+
+                    platformIncomeDtos.add(setData);
+                }
+            }
+
+            return platformIncomeDtos;
         } catch (FeignException e) {
             throw new CustomFeignException(e, new ObjectMapper());
         }

@@ -16,4 +16,6 @@ public interface IInstructorIncomeService {
     Page<InstructorIncome> findAllByCourseId(Long courseId, Pageable paging);
     List<InstructorIncome> findAllByCourseId(Long courseId);
 
+    List<InstructorIncome> findAllByOrderId(Long orderId);
+
 }

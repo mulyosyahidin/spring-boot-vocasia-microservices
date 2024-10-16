@@ -7,9 +7,7 @@ import com.vocasia.order.request.client.finance.NewPlatformBalanceHistoryRequest
 import com.vocasia.order.request.client.finance.NewPlatformIncomeRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "finance")
 public interface FinanceFeignClient {
@@ -29,5 +27,13 @@ public interface FinanceFeignClient {
     @PostMapping(value = "/api/platform-balance/store", consumes = "application/json")
     public ResponseEntity<ResponseDto> savePlatformBalance(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                            @RequestBody NewPlatformBalanceHistoryRequest newPlatformBalanceHistoryRequest);
+
+    @GetMapping(value = "/api/admin/instructor-income/{orderId}")
+    public ResponseEntity<ResponseDto> findInstructorIncomesByOrderId(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                                     @PathVariable("orderId") Long orderId);
+
+    @GetMapping(value = "/api/admin/platform-income/{orderId}")
+    public ResponseEntity<ResponseDto> findPlatformIncomesByOrderId(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                                     @PathVariable("orderId") Long orderId);
 
 }

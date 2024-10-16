@@ -43,6 +43,8 @@ import {ChapterEditPage} from "../pages/Instructor/Courses/Chapter/ChapterEditPa
 import {LessonIndexPage} from "../pages/Instructor/Courses/Lessons/LessonIndexPage/Index.jsx";
 import {LessonCreatePage} from "../pages/Instructor/Courses/Lessons/LessonCreatePage/Index.jsx";
 import {LessonEditPage} from "../pages/Instructor/Courses/Lessons/LessonEditPage/Index.jsx";
+import {TransactionIndexPage as AdminTransactionIndexPage} from "../pages/Admin/Transactions/TransactionIndexPage/Index.jsx";
+import {TransactionShowPage as AdminTransactionShowPage} from "../pages/Admin/Transactions/TransactionShowPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -166,12 +168,20 @@ const routes = createBrowserRouter([
         element: <EditCategoryPage/>,
     },
     {
-        path: '/admin/finances/withdrawal',
+        path: '/admin/withdrawal',
         element: <WithdrawalRequestIndexPage />,
     },
     {
-        path: '/admin/finances/withdrawal/:id',
+        path: '/admin/withdrawal/:id',
         element: <WithdrawalRequestShowPage />,
+    },
+    {
+        path: '/admin/transactions',
+        element: <AdminTransactionIndexPage />,
+    },
+    {
+        path: '/admin/transactions/:id',
+        element: <AdminTransactionShowPage />,
     },
 
     // user dashboard

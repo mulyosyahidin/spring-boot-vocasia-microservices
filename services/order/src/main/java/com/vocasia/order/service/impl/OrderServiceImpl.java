@@ -86,4 +86,9 @@ public class OrderServiceImpl implements IOrderService {
         return orderRepository.findAllByUserIdOrderByCreatedAtDesc(userId, paging);
     }
 
+    @Override
+    public Page<Order> findAll(Pageable paging) {
+        return orderRepository.findAll(paging);
+    }
+
 }
