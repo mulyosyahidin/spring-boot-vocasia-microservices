@@ -14,5 +14,6 @@ public interface InstructorIncomeRepository extends JpaRepository<InstructorInco
     List<InstructorIncome> findAllByCourseId(Long courseId);
 
     List<InstructorIncome> findAllByOrderId(Long orderId);
+    List<InstructorIncome> findAllByInstructorId(Long instructorId);
 
 }

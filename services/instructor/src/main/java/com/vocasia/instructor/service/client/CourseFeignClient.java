@@ -12,6 +12,10 @@ public interface CourseFeignClient {
 
     @GetMapping("/api/instructor/courses/{courseId}")
     public ResponseEntity<ResponseDto> findById(@RequestHeader("vocasia-correlation-id") String correlationId,
-                                                     @PathVariable Long courseId);
+                                                @PathVariable Long courseId);
+
+    @GetMapping("/api/instructor/overview")
+    public ResponseEntity<ResponseDto> instructorCourseOverview(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                                @RequestHeader("X-INSTRUCTOR-ID") Long instructorId);
 
 }

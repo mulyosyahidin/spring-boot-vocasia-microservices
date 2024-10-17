@@ -2,12 +2,13 @@ package com.vocasia.finance.service.impl;
 
 import com.vocasia.finance.entity.InstructorBalance;
 import com.vocasia.finance.entity.InstructorBalanceHistory;
-import com.vocasia.finance.exception.ResourceNotFoundException;
 import com.vocasia.finance.repository.InstructorBalanceRepository;
 import com.vocasia.finance.request.NewInstructorBalanceHistoryRequest;
 import com.vocasia.finance.service.IInstructorBalanceService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -78,17 +79,10 @@ public class InstructorBalanceServiceImpl implements IInstructorBalanceService {
     }
 
     @Override
-    public void updateTotalWithdrawn(InstructorBalance instructorBalance, Double newCurrentTotalWithdrawn) {
-        instructorBalance.setTotalWithdrawn(newCurrentTotalWithdrawn);
+    public double sumTotalIncomeByInstructorIdAndMonthAndYear(Long instructorId, int monthValue, int year) {
+        Double totalIncome = instructorBalanceRepository.sumTotalIncomeByInstructorIdAndMonthAndYear(instructorId, monthValue, year);
 
-        instructorBalanceRepository.save(instructorBalance);
-    }
-
-    @Override
-    public void updateBalance(InstructorBalance instructorBalance, Double newCurrentBalance) {
-        instructorBalance.setCurrentBalance(newCurrentBalance);
-
-        instructorBalanceRepository.save(instructorBalance);
+        return (totalIncome != null) ? totalIncome : 0.0;
     }
 
 }

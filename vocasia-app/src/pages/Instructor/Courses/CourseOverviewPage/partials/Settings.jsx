@@ -2,6 +2,7 @@ import React, {useContext, useState} from "react";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import {publishById} from "../../../../../services/new/course/instructor/course-service.js";
+import {Link} from "react-router-dom";
 
 export const Settings = ({activeTab, course, courseId}) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -65,7 +66,7 @@ export const Settings = ({activeTab, course, courseId}) => {
 
     return (
         <div
-            className={`tabs__pane -tab-item-1 ${activeTab == 5 ? "is-active" : ""} `}
+            className={`tabs__pane -tab-item-1 ${activeTab === 6 ? "is-active" : ""} `}
         >
             {
                 course.status === 'draft' && (
@@ -96,6 +97,12 @@ export const Settings = ({activeTab, course, courseId}) => {
                     </>
                 )
             }
+
+            <div className="mt-10">
+                <Link to={`/instructor/courses/${courseId}/edit`} className="-sm -purple-1 black">
+                    <i className={`icon-edit`}/> EDIT KURSUS
+                </Link>
+            </div>
         </div>
     )
 }

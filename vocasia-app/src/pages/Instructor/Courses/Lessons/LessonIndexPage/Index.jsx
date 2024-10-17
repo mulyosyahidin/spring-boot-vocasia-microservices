@@ -198,9 +198,17 @@ export const LessonIndexPage = () => {
                                     }
 
                                     {
+                                        (!isLoading && lessons && lessons.length == 0) && (
+                                            <div className="text-16 lh-14 fw-500 text-dark-1 mt-10">
+                                                Tidak ada pelajaran
+                                            </div>
+                                        )
+                                    }
+
+                                    {
                                         !isLoading && (
                                             <div className="accordion -block-2 text-left js-accordion">
-                                                {
+                                            {
                                                     lessons.map((lesson, index) => (
                                                         <div
                                                             key={index}

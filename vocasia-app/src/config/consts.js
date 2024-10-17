@@ -20,3 +20,4 @@ export const AWS_REGION = import.meta.env.VITE_AWS_REGION;
 
 // MIDTRANS
 export const midtransClientKey = import.meta.env.VITE_MIDTRANS_CLIENT_KEY;
+export const serviceFee = import.meta.env.VITE_SERVICE_FEE;

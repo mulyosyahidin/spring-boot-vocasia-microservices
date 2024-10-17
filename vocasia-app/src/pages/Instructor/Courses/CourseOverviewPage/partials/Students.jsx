@@ -18,7 +18,7 @@ export const Students = ({activeTab, courseId}) => {
         }));
 
         setCurrentPage(newPage);
-    };
+    }
 
     useEffect(() => {
         const fetchInitialData = async () => {

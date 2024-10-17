@@ -1,5 +1,5 @@
 import React from "react";
-import {formatDate, formatRupiah} from "../../../../../utils/new-utils.js";
+import {calculatePercentage, formatDate, formatRupiah} from "../../../../../utils/new-utils.js";
 
 export const Information = ({activeTab, course, isLoading}) => {
     return (
@@ -92,7 +92,7 @@ export const Information = ({activeTab, course, isLoading}) => {
                                                     <small>{`${formatRupiah(course.price)}`}</small>
                                                 </strike>
 
-                                                {`${formatRupiah(course.price - course.discount)}`} (Diskon {`${getPercentage(course.price, course.discount)}%`})
+                                                {`${formatRupiah(course.price - course.discount)}`} (Diskon {`${calculatePercentage(course.price, course.discount)}%`})
                                             </>
                                         ) : (
                                             <>

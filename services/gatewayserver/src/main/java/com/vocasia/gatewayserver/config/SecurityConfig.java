@@ -35,6 +35,9 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.PUT, "/authentication/user/{userId}/update-user").permitAll()
                         .pathMatchers(HttpMethod.POST, "/authentication/refresh-token").hasAnyRole("ADMIN", "LECTURER", "STUDENT")
 
+                        .pathMatchers(HttpMethod.GET, "/authentication/admin/students").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "/authentication/admin/students/{userId}").hasRole("ADMIN")
+
                         // instructors service
                         .pathMatchers("/instructor/actuator/**").permitAll()
 
@@ -52,6 +55,12 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.POST, "/instructor/student/assign-courses").permitAll()
 
+                        .pathMatchers(HttpMethod.GET, "/instructor/admin/instructors").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "/instructor/admin/instructors/{instructorId}").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "/instructor/admin/students").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "/instructor/admin/students/{id}").hasRole("ADMIN")
+
+                        .pathMatchers(HttpMethod.GET, "/instructor/overview").hasRole("INSTRUCTOR")
 
                         // course service
                         .pathMatchers("/course/actuator/**").permitAll()
@@ -90,6 +99,9 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/course/instructor/courses/{courseId}/chapters/{chapterId}/lessons/{lessonId}").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.PUT, "/course/instructor/courses/{courseId}/chapters/{chapterId}/lessons/{lessonId}").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.DELETE, "/course/instructor/courses/{courseId}/chapters/{chapterId}/lessons/{lessonId}").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/course/instructor/courses/lessons/{lessonId}").hasRole("INSTRUCTOR")
+
+                        .pathMatchers(HttpMethod.GET, "/course/instructor/overview").hasRole("INSTRUCTOR")
 
                         .pathMatchers(HttpMethod.GET, "/course/public/categories").permitAll()
 
@@ -99,6 +111,9 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.GET, "/course/student/courses/{courseId}").permitAll()
                         .pathMatchers(HttpMethod.GET, "/course/student/courses/{courseId}/contents").permitAll()
+
+                        .pathMatchers(HttpMethod.GET, "/course/admin/instructor-courses").hasRole("ADMIN")
+
 
                         // order service
                         .pathMatchers("/order/actuator/**").permitAll()
@@ -116,6 +131,8 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.GET, "/order/admin/transactions").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.GET, "/order/admin/transactions/{orderId}").hasRole("ADMIN")
+
+                        .pathMatchers(HttpMethod.GET, "/order/admin/student/transactions").hasRole("ADMIN")
 
                         // payment service
                         .pathMatchers(HttpMethod.GET, "/payment/actuator/**").permitAll()
@@ -147,12 +164,15 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.POST, "/enrollment/student/progress/{enrollmentId}/complete-lesson/{lessonId}").hasRole("STUDENT")
                         .pathMatchers(HttpMethod.GET, "/enrollment/student/progress/{enrollmentId}/is-lesson-complete/{lessonId}").hasRole("STUDENT")
 
+                        .pathMatchers(HttpMethod.GET, "/enrollment/admin/student/courses").hasRole("ADMIN")
 
                         // finance service
                         .pathMatchers("/finance/actuator/**").permitAll()
 
                         .pathMatchers(HttpMethod.GET, "/finance/build-info").permitAll()
                         .pathMatchers(HttpMethod.GET, "/finance/welcome").permitAll()
+
+                        .pathMatchers(HttpMethod.GET, "/finance/instructor/overview").hasRole("INSTRUCTOR")
 
                         .pathMatchers(HttpMethod.GET, "/finance/instructor/transactions").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.GET, "/finance/instructor/transactions/{id}").hasRole("INSTRUCTOR")
@@ -175,6 +195,31 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.GET, "/finance/admin/instructor-income/{orderId}").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.GET, "/finance/admin/platform-income/{orderId}").hasRole("ADMIN")
+
+                        .pathMatchers(HttpMethod.GET, "/finance/admin/balance/data").hasRole("ADMIN")
+
+                        .pathMatchers(HttpMethod.GET, "/finance/admin/transactions").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "/finance/admin/transactions/{id}").hasRole("ADMIN")
+
+                        .pathMatchers(HttpMethod.GET, "/finance/admin/instructor/balance/data").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "/finance/admin/instructor/withdrawal/request").hasRole("ADMIN")
+
+
+                        // QNA SERVICE
+                        .pathMatchers("/qna/actuator/**").permitAll()
+
+                        .pathMatchers(HttpMethod.GET, "/qna/build-info").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/qna/welcome").permitAll()
+
+                        .pathMatchers(HttpMethod.GET, "/qna/student/is-i-ask-this-lesson/{lessonId}").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.GET, "/qna/student/questions/{courseId}/{lessonId}").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.POST, "/qna/student/questions/{courseId}/{lessonId}").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.GET, "/qna/student/questions/{lessonId}/qna/{qnaId}").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.POST, "/qna/student/questions/{lessonId}/qna/{qnaId}").hasRole("STUDENT")
+
+                        .pathMatchers(HttpMethod.GET, "/qna/instructor/courses/{courseId}/questions").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/qna/instructor/courses/{courseId}/questions/{qnaId}").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.POST, "/qna/instructor/courses/{courseId}/questions/{qnaId}").hasRole("INSTRUCTOR")
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));

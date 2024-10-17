@@ -1,0 +1,37 @@
+package com.vocasia.qna.service.impl;
+
+import com.vocasia.qna.entity.QnaAnswer;
+import com.vocasia.qna.repository.QnaAnswerRepository;
+import com.vocasia.qna.request.PostQnaAnswerRequest;
+import com.vocasia.qna.service.IQnaAnswerService;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@AllArgsConstructor
+public class QnaAnswerServiceImpl implements IQnaAnswerService {
+
+    private QnaAnswerRepository qnaAnswerRepository;
+
+    @Override
+    public Page<QnaAnswer> findAllByQnaId(Long qnaId, Pageable paging) {
+        return qnaAnswerRepository.findAllByQnaId(qnaId, paging);
+    }
+
+    @Override
+    public QnaAnswer save(Long qnaId, PostQnaAnswerRequest request) {
+        QnaAnswer qnaAnswer = new QnaAnswer();
+
+        qnaAnswer.setQnaId(qnaId);
+        qnaAnswer.setUserId(request.getUserId());
+        qnaAnswer.setAnswer(request.getAnswer());
+        qnaAnswer.setIsInstructor(request.getIsInstructor());
+
+        return qnaAnswerRepository.save(qnaAnswer);
+    }
+
+}

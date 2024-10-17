@@ -4,6 +4,8 @@ import com.vocasia.authentication.entity.User;
 import com.vocasia.authentication.request.LoginRequest;
 import com.vocasia.authentication.request.RegisterRequest;
 import com.vocasia.authentication.request.UpdateProfileRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -21,5 +23,7 @@ public interface IUserService {
     List<User> getByRole(String role);
 
     User updateProfile(User user, UpdateProfileRequest updateUserRequest) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException;
+
+    Page<User> findAllByRole(String role, Pageable paging);
 
 }

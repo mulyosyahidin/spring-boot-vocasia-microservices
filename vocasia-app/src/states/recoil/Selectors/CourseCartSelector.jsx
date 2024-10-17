@@ -1,5 +1,6 @@
-import { selector } from "recoil";
+import {selector} from "recoil";
 import {courseCartAtom} from "../Atoms/CourseCart.jsx";
+import {serviceFee} from "../../../config/consts.js";
 
 const cartTotalPriceSelector = selector({
     key: 'cartTotalPrice',
@@ -19,6 +20,28 @@ const cartTotalPriceSelector = selector({
         }, 0);
     },
 });
+
+const cartTotalPriceWithServiceFeeSelector = selector({
+    key: 'cartTotalPriceWithServiceFee',
+    get: ({ get }) => {
+        const cartCourses = get(courseCartAtom);
+        const getServiceFee = Number.parseInt(serviceFee);
+
+        const subTotal = cartCourses.reduce((total, course) => {
+            if (course.is_free) {
+                return total;
+            }
+
+            if (course.is_discount) {
+                return total + (course.price - course.discount);
+            }
+
+            return total + course.price;
+        }, 0);
+
+        return subTotal + getServiceFee;
+    },
+})
 
 const cartTotalPriceWithoutDiscountSelector = selector({
     key: 'cartTotalPriceWithoutDiscount',
@@ -66,4 +89,4 @@ const coursesByIdSelector = selector({
     },
 });
 
-export { cartTotalPriceSelector, cartItemCountSelector, coursesByIdSelector, cartTotalPriceWithoutDiscountSelector, cartTotalDiscountSelector};
+export { cartTotalPriceSelector, cartItemCountSelector, cartTotalPriceWithServiceFeeSelector, coursesByIdSelector, cartTotalPriceWithoutDiscountSelector, cartTotalDiscountSelector};

@@ -10,13 +10,14 @@ export const VideoPlayer = ({course, currentLesson}) => {
             {
                 currentLesson.type === 'video' && (
                     <>
+                        <h4 className={'mb-10'}>{currentLesson.title}</h4>
+
                         <div className="relative pt-40">
                             <img
                                 className="w-1/1 rounded-16"
                                 src={course.featured_picture_url}
                                 alt="image"
                             />
-                            <h4 className={'mt-5'}>{currentLesson.title}</h4>
 
                             <div className="absolute-full-center d-flex justify-center items-center">
                                 <span
@@ -33,18 +34,12 @@ export const VideoPlayer = ({course, currentLesson}) => {
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
                         />
-
-                        <div className="mt-60 lg:mt-40">
-                            <div
-                                dangerouslySetInnerHTML={{__html: course.description}}
-                            />
-                        </div>
                     </>
                 )
             }
 
             {
-                currentLesson.type === 'text' && (
+            currentLesson.type === 'text' && (
                     <>
                         <div
                             dangerouslySetInnerHTML={{__html: currentLesson.content_text}}

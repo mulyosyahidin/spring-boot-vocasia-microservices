@@ -13,6 +13,7 @@ import {Settings} from "./partials/Settings.jsx";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import {findById} from "../../../../services/new/course/instructor/course-service.js";
+import {Qna} from "./partials/Qna.jsx";
 
 const metaData = {
     title: 'Ringkasan Kursus',
@@ -21,6 +22,7 @@ const buttons = [
     "Informasi",
     "Konten",
     "Siswa",
+    "Tanya Jawab",
     "Penghasilan",
     "Pengaturan",
 ];
@@ -125,6 +127,7 @@ export const CourseOverviewPage = () => {
                                                     <Information activeTab={activeTab} course={course} isLoading={isLoading}/>
                                                     <Contents activeTab={activeTab} courseId={courseId}/>
                                                     <Students activeTab={activeTab} courseId={courseId}/>
+                                                    <Qna activeTab={activeTab} courseId={courseId} />
                                                     <Income activeTab={activeTab} courseId={courseId}/>
                                                     <Settings activeTab={activeTab} courseId={courseId} course={course}/>
                                                 </>

@@ -99,7 +99,7 @@ export const CreateCoursePage = () => {
         const {name, value} = e.target;
 
         setFormData((prevData) => ({...prevData, [name]: value}));
-    };
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -337,6 +337,7 @@ export const CreateCoursePage = () => {
                                                         </button>
                                                     </div>
                                                 </div>
+
                                             </form>
                                         )
                                     }

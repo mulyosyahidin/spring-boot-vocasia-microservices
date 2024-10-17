@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocasia.instructor.dto.ResponseDto;
 import com.vocasia.instructor.dto.client.course.CategoryDto;
 import com.vocasia.instructor.dto.client.course.CourseDto;
+import com.vocasia.instructor.dto.client.course.InstructorOverviewDto;
 import com.vocasia.instructor.exception.CustomFeignException;
 import com.vocasia.instructor.service.ICourseService;
 import com.vocasia.instructor.service.client.CourseFeignClient;
@@ -85,6 +86,34 @@ public class CourseServiceImpl implements ICourseService {
 
             return courseDto;
         } catch (FeignException e) {
+            throw new CustomFeignException(e, new ObjectMapper());
+        }
+    }
+
+    @Override
+    public InstructorOverviewDto getInstructorOverview(Long instructorId, String correlationId) {
+        try {
+            ResponseEntity<ResponseDto> courseFeignClientInstructorCourseOverviewResponseEntity = courseFeignClient.instructorCourseOverview(correlationId, instructorId);
+            ResponseDto responseBody = courseFeignClientInstructorCourseOverviewResponseEntity.getBody();
+
+            assert responseBody != null;
+            Map<String, Object> data = (Map<String, Object>) responseBody.getData();
+
+            Map<String, Object> overview = data != null ? (Map<String, Object>) data.get("overview") : null;
+
+            logger.debug("CourseServiceImpl.getInstructorOverview() $overview:: {}", overview);
+
+            InstructorOverviewDto instructorOverviewDto = new InstructorOverviewDto();
+
+            if (overview != null) {
+                instructorOverviewDto.setDraft(Integer.parseInt(overview.get("draft").toString()));
+                instructorOverviewDto.setPublished(Integer.parseInt(overview.get("published").toString()));
+                instructorOverviewDto.setTotal(Integer.parseInt(overview.get("total").toString()));
+            }
+
+            return instructorOverviewDto;
+        }
+        catch (FeignException e) {
             throw new CustomFeignException(e, new ObjectMapper());
         }
     }

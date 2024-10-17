@@ -82,4 +82,10 @@ public class AwsServiceImpl implements IAwsService {
         s3Client.deleteObject(bucketName, keyName);
         logger.info("File deleted from bucket({}): {}", bucketName, keyName);
     }
+
+    @Override
+    public String getFileUrl(String bucketName, String fileName) {
+        return s3Client.getUrl(bucketName, fileName).toString();
+    }
+
 }

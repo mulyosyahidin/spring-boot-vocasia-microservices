@@ -4,6 +4,9 @@ import com.vocasia.finance.entity.InstructorBalance;
 import com.vocasia.finance.entity.InstructorBalanceHistory;
 import com.vocasia.finance.request.NewInstructorBalanceHistoryRequest;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public interface IInstructorBalanceService {
 
     boolean isInstructorHasBalanceRecord(Long instructorId);
@@ -11,7 +14,6 @@ public interface IInstructorBalanceService {
     InstructorBalance save(InstructorBalance newInstructorBalance);
     InstructorBalance updateBalance(NewInstructorBalanceHistoryRequest request, InstructorBalance instructorBalance, InstructorBalanceHistory instructorBalanceHistory);
     InstructorBalance updateTotalPendingWithdrawal(InstructorBalance instructorBalance, Double newCurrentPendingWithdrawal);
-    void updateTotalWithdrawn(InstructorBalance instructorBalance, Double newCurrentTotalWithdrawn);
-    void updateBalance(InstructorBalance instructorBalance, Double newCurrentBalance);
 
+    double sumTotalIncomeByInstructorIdAndMonthAndYear(Long instructorId, int monthValue, int year);
 }

@@ -142,7 +142,7 @@ export const organizeCategoriesWithChildren = (categories, defaultSelectedId = n
         });
     }
 
-    categories.forEach(({ category, children }) => {
+    categories.forEach(({category, children}) => {
         children.forEach(child => {
             const isChildSelected = child.id === defaultSelectedId;
 
@@ -273,4 +273,69 @@ export const getYouTubeVideoId = (url) => {
     );
 
     return videoIdMatch ? videoIdMatch[1] : null;
+};
+
+/**
+ * Menghitung persentase dari nilai terhadap total.
+ *
+ * @param {number} total - Total nilai yang menjadi acuan.
+ * @param {number} value - Nilai yang ingin dihitung persentasenya.
+ * @returns {string|number} - Mengembalikan persentase. Jika total adalah 0,
+ *                            akan mengembalikan pesan 'Total tidak boleh 0'.
+ *                            Jika hasil adalah bilangan bulat,
+ *                            akan mengembalikan angka tanpa pecahan.
+ *                            Jika ada pecahan, akan mengembalikan angka dengan 2 desimal.
+ *
+ * @example
+ * // Menggunakan fungsi calculatePercentage
+ * const total = 200;
+ * const value = 50;
+ * const percentage = calculatePercentage(total, value);
+ * console.log(percentage); // Output: 25
+ */
+export const calculatePercentage = (total, value) => {
+    if (total === 0) {
+        return 'Total tidak boleh 0';
+    }
+
+    const percentage = (value / total) * 100;
+
+    // Mengembalikan angka bulat jika tidak ada pecahan, atau dengan 2 desimal jika ada
+    return Number.isInteger(percentage) ? percentage : percentage.toFixed(2);
+};
+
+/**
+ * Memformat string angka menjadi format angka Indonesia tanpa simbol Rupiah (IDR).
+ *
+ * @param {string|number} amountString - String atau angka yang ingin diformat.
+ *                                       Input dapat berupa string angka atau angka numerik
+ *                                       (contoh: '50000' atau 50000).
+ * @returns {string} - Mengembalikan angka yang diformat dalam format angka Indonesia tanpa simbol.
+ *                     Jika input tidak valid, akan mengembalikan pesan 'Jumlah tidak valid'.
+ *
+ * @example
+ * // Menggunakan fungsi formatRupiahWithoutSymbol
+ * const amount = '50000';
+ * const formattedNumber = formatRupiahWithoutSymbol(amount);
+ * console.log(formattedNumber); // Output: "50.000"
+ *
+ * @example
+ * const invalidAmount = 'abc';
+ * const formattedNumber = formatRupiahWithoutSymbol(invalidAmount);
+ * console.log(formattedNumber); // Output: "Jumlah tidak valid"
+ */
+export const formatRupiahWithoutSymbol = (amountString) => {
+    // Buat formatter langsung di dalam fungsi
+    const numberFormatter = new Intl.NumberFormat('id-ID', {
+        minimumFractionDigits: 0 // Ubah sesuai kebutuhan
+    });
+
+    const amount = parseFloat(amountString);
+
+    // Pastikan nilai yang diformat valid
+    if (isNaN(amount)) {
+        return 'Jumlah tidak valid';
+    }
+
+    return numberFormatter.format(amount);
 };

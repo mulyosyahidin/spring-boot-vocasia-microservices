@@ -1,6 +1,9 @@
 export const AUTHENTICATION_LOGIN = '/authentication/login';
 export const AUTHENTICATION_REGISTER = '/authentication/register';
 
+export const AUTHENTICATION_ADMIN_STUDENTS = '/authentication/admin/students';
+export const AUTHENTICATION_ADMIN_STUDENTS_GET_BY_ID = '/authentication/admin/students/:userId';
+
 export const COURSE_ADMIN_CATEGORIES = '/course/admin/categories';
 export const COURSE_ADMIN_CATEGORIES_ONLY_PARENTS = '/course/admin/categories/only-parents';
 export const COURSE_ADMIN_CATEGORIES_STORE = '/course/admin/categories';
@@ -36,12 +39,22 @@ export const COURSE_PUBLIC_COURSES_EDITOR_CHOICES = '/course/public/courses/edit
 export const COURSE_PUBLIC_COURSES_GET_BY_SLUG_ID = '/course/public/courses/:slug/:id';
 export const COURSE_PUBLIC_COURSES_GET_CONTENTS_BY_SLUG_ID = '/course/public/courses/:slug/:id/contents';
 
+export const COURSE_ADMIN_INSTRUCTOR_COURSES = '/course/admin/instructor-courses';
+
 export const INSTRUCTOR_REGISTER = '/instructor/register';
 
 export const INSTRUCTOR_INSTRUCTOR_STUDENTS = '/instructor/instructor/students';
 export const INSTRUCTOR_INSTRUCTOR_STUDENTS_GET_BY_ID = '/instructor/instructor/students/:id';
 
 export const INSTRUCTOR_INSTRUCTOR_PROFILE = '/instructor/instructor/profile';
+
+export const INSTRUCTOR_ADMIN_INSTRUCTORS = '/instructor/admin/instructors';
+export const INSTRUCTOR_ADMIN_INSTRUCTORS_GET_BY_ID = '/instructor/admin/instructors/:instructorId';
+
+export const INSTRUCTOR_ADMIN_STUDENTS = '/instructor/admin/students';
+export const INSTRUCTOR_ADMIN_STUDENTS_GET_BY_ID = '/instructor/admin/students/:id';
+
+export const INSTRUCTOR_OVERVIEW = '/instructor/overview';
 
 export const ENROLLMENT_INSTRUCTOR_COURSES_STUDENTS = '/enrollment/instructor/courses/:id/students';
 export const ENROLLMENT_USER_COURSES_IS_USER_ENROLLED = '/enrollment/student/courses/:id/is-user-enrolled';
@@ -53,6 +66,8 @@ export const ENROLLMENT_STUDENT_PROGRESS_SET_LAST_LESSON_ID = '/enrollment/stude
 export const ENROLLMENT_STUDENT_PROGRESS_START_LESSON = '/enrollment/student/progress/:enrollmentId/start-lesson/:lessonId';
 export const ENROLLMENT_STUDENT_PROGRESS_COMPLETE_LESSON = '/enrollment/student/progress/:enrollmentId/complete-lesson/:lessonId';
 export const ENROLLMENT_STUDENT_PROGRESS_IS_LESSON_COMPLETE = '/enrollment/student/progress/:enrollmentId/is-lesson-complete/:lessonId';
+
+export const ENROLLMENT_ADMIN_STUDENT_COURSES = '/enrollment/admin/student/courses';
 
 export const FINANCE_INSTRUCTOR_TRANSACTIONS = '/finance/instructor/transactions';
 export const FINANCE_INSTRUCTOR_TRANSACTIONS_GET_BY_ID = '/finance/instructor/transactions/:id';
@@ -66,9 +81,26 @@ export const FINANCE_ADMIN_WITHDRAWAL_REQUEST = '/finance/admin/withdrawal/reque
 export const FINANCE_ADMIN_WITHDRAWAL_REQUEST_GET_BY_ID = '/finance/admin/withdrawal/request/:id';
 export const FINANCE_ADMIN_WITHDRAWAL_REQUEST_PROCESS_BY_ID = '/finance/admin/withdrawal/request/:id/process';
 
+export const FINANCE_ADMIN_BALANCE_DATA = '/finance/admin/balance/data';
+
+export const FINANCE_ADMIN_TRANSACTIONS = '/finance/admin/transactions';
+export const FINANCE_ADMIN_INSTRUCTOR_BALANCE_DATA = '/finance/admin/instructor/balance/data';
+export const FINANCE_ADMIN_INSTRUCTOR_WITHDRAWAL_REQUEST = '/finance/admin/instructor/withdrawal/request';
+
 export const ORDER_STUDENT_ORDERS = '/order/student/orders';
 export const ORDER_STUDENT_PLACE_NEW_ORDER = '/order/student/place-new-order';
 export const ORDER_STUDENT_ORDERS_GET_BY_ID = '/order/student/orders/:id';
 
 export const ORDER_ADMIN_TRANSACTIONS = '/order/admin/transactions';
 export const ORDER_ADMIN_TRANSACTIONS_FIND_BY_ID = '/order/admin/transactions/:id';
+export const ORDER_ADMIN_STUDENT_TRANSACTIONS = '/order/admin/student/transactions';
+
+export const QNA_STUDENT_IS_I_ASK_THIS_LESSON = '/qna/student/is-i-ask-this-lesson/:lessonId';
+export const QNA_STUDENT_QUESTIONS_GET_ALL = '/qna/student/questions/:courseId/:lessonId';
+export const QNA_STUDENT_QUESTIONS_STORE = '/qna/student/questions/:courseId/:lessonId';
+export const QNA_STUDENT_QUESTIONS_ANSWERS_GET_ALL = '/qna/student/questions/:lessonId/qna/:qnaId';
+export const QNA_STUDENT_QUESTIONS_ANSWERS_STORE = '/qna/student/questions/:lessonId/qna/:qnaId';
+
+export const QNA_INSTRUCTOR_COURSES_QUESTIONS = '/qna/instructor/courses/:courseId/questions';
+export const QNA_INSTRUCTOR_COURSES_QUESTIONS_QNA = '/qna/instructor/courses/:courseId/questions/:qnaId';
+export const QNA_INSTRUCTOR_COURSES_QUESTIONS_QNA_STORE = '/qna/instructor/courses/:courseId/questions/:qnaId';

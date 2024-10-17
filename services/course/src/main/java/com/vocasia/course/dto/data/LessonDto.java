@@ -34,6 +34,24 @@ public class LessonDto {
     @JsonProperty("content_text")
     private String contentText;
 
+    @JsonProperty("has_attachment")
+    private Boolean hasAttachment;
+
+    @JsonProperty("attachment_type")
+    private String attachmentType;
+
+    @JsonProperty("attachment_file_url")
+    private String attachmentFileUrl;
+
+    @JsonProperty("attachment_file_name")
+    private String attachmentFileName;
+
+    @JsonProperty("attachment_link")
+    private String attachmentLink;
+
+    @JsonProperty("attachment_link_name")
+    private String attachmentLinkName;
+
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
 
@@ -41,4 +59,3 @@ public class LessonDto {
     private LocalDateTime updatedAt;
 
 }
-

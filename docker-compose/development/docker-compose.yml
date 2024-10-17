@@ -363,6 +363,26 @@ services:
       file: common-config.yml
       service: base-config
 
+  db_qna:
+    image: mysql:8.0
+    container_name: db-qna
+    ports:
+      - "30625:3306"
+    environment:
+      MYSQL_DATABASE: qna_db
+      MYSQL_ROOT_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    volumes:
+      - qna_db_data:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: base-config
+
   configserver:
     image: martinms20/configserver:v1.0.0
     container_name: config-server
@@ -588,6 +608,30 @@ services:
       file: common-config.yml
       service: service-aws-config
 
+  qna_service:
+    image: martinms20/qna:v1.0.0
+    container_name: service-qna
+    ports:
+      - "14128:14128"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-qna:3306/qna_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      OTEL_SERVICE_NAME: "qna"
+    healthcheck:
+      test: "curl --fail --silent localhost:14128/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_qna:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-config
+
 #  playground_service:
 #    image: martinms20/playground:v1.0.0
 #    container_name: service-playground
@@ -659,5 +703,5 @@ volumes:
     driver: local
   finance_db_data:
     driver: local
-  vocasia_db_data:
+  qna_db_data:
     driver: local

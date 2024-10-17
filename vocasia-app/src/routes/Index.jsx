@@ -45,6 +45,14 @@ import {LessonCreatePage} from "../pages/Instructor/Courses/Lessons/LessonCreate
 import {LessonEditPage} from "../pages/Instructor/Courses/Lessons/LessonEditPage/Index.jsx";
 import {TransactionIndexPage as AdminTransactionIndexPage} from "../pages/Admin/Transactions/TransactionIndexPage/Index.jsx";
 import {TransactionShowPage as AdminTransactionShowPage} from "../pages/Admin/Transactions/TransactionShowPage/Index.jsx";
+import {FinanceIndexPage as AdminFinanceIndexPage} from "../pages/Admin/Finance/FinanceIndexPage/Index.jsx";
+import {InstructorIndexPage} from "../pages/Admin/Instructors/InstructorIndexPage/Index.jsx";
+import {InstructorShowPage} from "../pages/Admin/Instructors/InstructorShowPage/Index.jsx";
+import {StudentIndexPage as AdminStudentIndexPage} from "../pages/Admin/Students/StudentIndexPage/Index.jsx";
+import {InstructorStudentPage} from "../pages/Admin/Instructors/InstructorShowPage/InstructorStudentPage/Index.jsx";
+import {StudentShowPage} from "../pages/Admin/Students/StudentShowPage/Index.jsx";
+import {CourseQnaPage} from "../pages/User/CourseQnaPage/Index.jsx";
+import {CourseQnaPage as InstructorCourseQnaPage} from "../pages/Instructor/Courses/CourseQnaPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -122,6 +130,10 @@ const routes = createBrowserRouter([
         element: <CourseOverviewPage/>,
     },
     {
+        path: '/instructor/courses/:courseId/qna/:lessonId/:qnaId',
+        element: <InstructorCourseQnaPage/>,
+    },
+    {
         path: '/instructor/students',
         element: <StudentIndexPage />,
     },
@@ -183,6 +195,30 @@ const routes = createBrowserRouter([
         path: '/admin/transactions/:id',
         element: <AdminTransactionShowPage />,
     },
+    {
+        path: '/admin/finances',
+        element: <AdminFinanceIndexPage />
+    },
+    {
+        path: '/admin/instructors',
+        element: <InstructorIndexPage />
+    },
+    {
+        path: '/admin/instructors/:instructorId',
+        element: <InstructorShowPage />
+    },
+    {
+        path: '/admin/instructors/:instructorId/students/:id',
+        element: <InstructorStudentPage />
+    },
+    {
+        path: '/admin/students',
+        element: <AdminStudentIndexPage/>,
+    },
+    {
+        path: '/admin/students/:userId',
+        element: <StudentShowPage/>,
+    },
 
     // user dashboard
     {
@@ -208,6 +244,10 @@ const routes = createBrowserRouter([
     {
         path: '/users/courses/:enrollmentId',
         element: <SingleCoursePage/>
+    },
+    {
+        path: '/users/courses/:enrollmentId/qna/:lessonId/:questionId',
+        element: <CourseQnaPage/>
     },
 
     // public

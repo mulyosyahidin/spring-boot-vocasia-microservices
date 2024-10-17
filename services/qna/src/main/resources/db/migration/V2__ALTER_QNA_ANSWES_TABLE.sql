@@ -1,0 +1,1 @@
+ALTER TABLE `qna_answers` ADD `is_instructor` BOOLEAN DEFAULT FALSE AFTER `answer`;

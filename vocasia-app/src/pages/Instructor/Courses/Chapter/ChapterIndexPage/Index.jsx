@@ -126,114 +126,6 @@ export const ChapterIndexPage = () => {
                         </div>
                     </div>
 
-                    {/*<div className={`row y-gap-60 ${currentEditedChapterId != null ? '' : 'd-none'}`}>*/}
-                    {/*    <div className="col-12">*/}
-                    {/*        <div className="rounded-16 bg-white -dark-bg-dark-1 shadow-4 h-100">*/}
-                    {/*            <div*/}
-                    {/*                className="d-flex items-center py-20 px-30 border-bottom-light justify-content-between">*/}
-                    {/*                <h2 className="text-17 lh-1 fw-500">Edit Bab</h2>*/}
-
-                    {/*                <button className="button -sm -purple-1 text-white"*/}
-                    {/*                        onClick={() => setCurrentEditedChapterId(null)}>*/}
-                    {/*                    Tutup*/}
-                    {/*                </button>*/}
-                    {/*            </div>*/}
-
-                    {/*            <div className="py-30 px-30">*/}
-                    {/*                <form onSubmit={handleEditChapterSubmit} className="contact-form row y-gap-30">*/}
-                    {/*                    <div className={'row'}>*/}
-                    {/*                        <div className="col-12 col-md-6">*/}
-                    {/*                            <InputField*/}
-                    {/*                                label="Judul Bab"*/}
-                    {/*                                name="title"*/}
-                    {/*                                placeholder="Judul bab"*/}
-                    {/*                                onChange={handleEditChapterChange}*/}
-                    {/*                                value={editChapterFormData.title}*/}
-                    {/*                            />*/}
-                    {/*                        </div>*/}
-                    {/*                        <div className="col-12 col-md-6">*/}
-                    {/*                            <InputField*/}
-                    {/*                                label="Total Durasi"*/}
-                    {/*                                name="total_duration"*/}
-                    {/*                                placeholder="Total durasi bab"*/}
-                    {/*                                onChange={handleEditChapterChange}*/}
-                    {/*                                value={editChapterFormData.total_duration}*/}
-                    {/*                            />*/}
-                    {/*                        </div>*/}
-                    {/*                    </div>*/}
-
-                    {/*                    <div className="row y-gap-20 justify-end pt-15">*/}
-                    {/*                        <div className="col-auto">*/}
-                    {/*                            <button className="button -sm -purple-1 text-white"*/}
-                    {/*                                    disabled={isAddChapterLoading}>*/}
-                    {/*                                {*/}
-                    {/*                                    isAddChapterLoading ? (*/}
-                    {/*                                        'Menyimpan...'*/}
-                    {/*                                    ) : 'Simpan'*/}
-                    {/*                                }*/}
-                    {/*                            </button>*/}
-                    {/*                        </div>*/}
-                    {/*                    </div>*/}
-                    {/*                </form>*/}
-                    {/*            </div>*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-
-                    {/*<div className={`row y-gap-60 ${isAddChapterSectionOpen ? '' : 'd-none'}`}>*/}
-                    {/*    <div className="col-12">*/}
-                    {/*        <div className="rounded-16 bg-white -dark-bg-dark-1 shadow-4 h-100">*/}
-                    {/*            <div*/}
-                    {/*                className="d-flex items-center py-20 px-30 border-bottom-light justify-content-between">*/}
-                    {/*                <h2 className="text-17 lh-1 fw-500">Tambah Bab Baru</h2>*/}
-
-                    {/*                <button className="button -sm -purple-1 text-white"*/}
-                    {/*                        onClick={() => setIsAddChapterSectionOpen(false)}>*/}
-                    {/*                    Tutup*/}
-                    {/*                </button>*/}
-                    {/*            </div>*/}
-
-                    {/*            <div className="py-30 px-30">*/}
-                    {/*                <form onSubmit={handleAddChapterSubmit} className="contact-form row y-gap-30">*/}
-                    {/*                    <div className={'row'}>*/}
-                    {/*                        <div className="col-12 col-md-6">*/}
-                    {/*                            <InputField*/}
-                    {/*                                label="Judul Bab"*/}
-                    {/*                                name="title"*/}
-                    {/*                                placeholder="Judul bab"*/}
-                    {/*                                onChange={handleAddChapterChange}*/}
-                    {/*                                value={addChapterFormData.title}*/}
-                    {/*                            />*/}
-                    {/*                        </div>*/}
-                    {/*                        <div className="col-12 col-md-6">*/}
-                    {/*                            <InputField*/}
-                    {/*                                label="Total Durasi"*/}
-                    {/*                                name="total_duration"*/}
-                    {/*                                placeholder="Total durasi bab"*/}
-                    {/*                                onChange={handleAddChapterChange}*/}
-                    {/*                                value={addChapterFormData.total_duration}*/}
-                    {/*                            />*/}
-                    {/*                        </div>*/}
-                    {/*                    </div>*/}
-
-                    {/*                    <div className="row y-gap-20 justify-end pt-15">*/}
-                    {/*                        <div className="col-auto">*/}
-                    {/*                            <button className="button -sm -purple-1 text-white"*/}
-                    {/*                                    disabled={isAddChapterLoading}>*/}
-                    {/*                                {*/}
-                    {/*                                    isAddChapterLoading ? (*/}
-                    {/*                                        'Menyimpan...'*/}
-                    {/*                                    ) : 'Simpan'*/}
-                    {/*                                }*/}
-                    {/*                            </button>*/}
-                    {/*                        </div>*/}
-                    {/*                    </div>*/}
-                    {/*                </form>*/}
-                    {/*            </div>*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-
                     <div className="row y-gap-60">
                         <div className="col-12">
                             <div className="rounded-16 bg-white -dark-bg-dark-1 shadow-4 h-100">
@@ -339,6 +231,13 @@ export const ChapterIndexPage = () => {
                                                                         </div>
                                                                     </div>
 
+                                                                    {
+                                                                        (item.lessons && item.lessons.length == 0) && (
+                                                                            <div className="text-16 lh-14 fw-500 text-dark-1 mt-10">
+                                                                                Tidak ada pelajaran
+                                                                            </div>
+                                                                        )
+                                                                    }
                                                                     {
                                                                         item.lessons && item.lessons.map((lesson, index) => (
                                                                             <div key={index}

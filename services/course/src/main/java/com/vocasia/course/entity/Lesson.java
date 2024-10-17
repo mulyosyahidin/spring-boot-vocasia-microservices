@@ -43,5 +43,20 @@ public class Lesson extends BaseEntity {
     @Column(name = "content_text", columnDefinition = "TEXT")
     private String contentText;
 
+    @Column(name = "attachment_type")
+    private String attachmentType;
+
+    @Column(name = "attachment_file_url")
+    private String attachmentFileUrl;
+
+    @Column(name = "attachment_file_name")
+    private String attachmentFileName;
+
+    @Column(name = "attachment_link")
+    private String attachmentLink;
+
+    @Column(name = "attachment_link_name")
+    private String attachmentLinkName;
+
 }
 

@@ -19,6 +19,15 @@ public class LessonMapper {
         lessonDto.setContentVideoDuration(lesson.getContentVideoDuration());
         lessonDto.setContentVideoUrl(lesson.getContentVideoUrl());
         lessonDto.setContentText(lesson.getContentText());
+        lessonDto.setAttachmentType(lesson.getAttachmentType());
+        lessonDto.setAttachmentFileUrl(lesson.getAttachmentFileUrl());
+        lessonDto.setAttachmentFileName(lesson.getAttachmentFileName());
+        lessonDto.setAttachmentLink(lesson.getAttachmentLink());
+        lessonDto.setAttachmentLinkName(lesson.getAttachmentLinkName());
+
+        boolean hasAttachment = lesson.getAttachmentType() != null && !lesson.getAttachmentType().isEmpty();
+        lessonDto.setHasAttachment(hasAttachment);
+
         lessonDto.setCreatedAt(lesson.getCreatedAt());
         lessonDto.setUpdatedAt(lesson.getUpdatedAt());
 

@@ -8,6 +8,8 @@ import com.vocasia.finance.service.IPlatformBalanceService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class PlatformBalanceServiceImpl implements IPlatformBalanceService {
@@ -21,7 +23,12 @@ public class PlatformBalanceServiceImpl implements IPlatformBalanceService {
 
     @Override
     public PlatformBalance findPlatformBalance() {
-        return platformBalanceRepository.findAll().get(0);
+        List<PlatformBalance> balances = platformBalanceRepository.findAll();
+        if (balances.isEmpty()) {
+            return null;
+        }
+
+        return balances.get(0);
     }
 
     @Override

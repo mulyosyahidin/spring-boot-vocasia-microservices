@@ -6,6 +6,8 @@ import com.vocasia.finance.repository.PlatformBalanceHistoryRepository;
 import com.vocasia.finance.request.NewPlatformBalanceHistoryRequest;
 import com.vocasia.finance.service.IPlatformBalanceHistoryService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -37,6 +39,11 @@ public class PlatformBalanceHistoryServiceImpl implements IPlatformBalanceHistor
     @Override
     public List<PlatformBalanceHistory> findAll() {
         return platformBalanceHistoryRepository.findAll();
+    }
+
+    @Override
+    public Page<PlatformBalanceHistory> findAll(Pageable paging) {
+        return platformBalanceHistoryRepository.findAll(paging);
     }
 
 }

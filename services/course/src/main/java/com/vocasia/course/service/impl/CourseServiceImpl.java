@@ -174,4 +174,19 @@ public class CourseServiceImpl implements ICourseService {
         return courseRepository.findAllByInstructorIdAndStatus(instructorId, status, paging);
     }
 
+    @Override
+    public Page<Course> findAllPublishedByInstructorId(Long instructorId, Pageable paging) {
+        return courseRepository.findAllPublishedByInstructorId(instructorId, paging);
+    }
+
+    @Override
+    public Page<Course> findAllDraftByInstructorId(Long instructorId, Pageable paging) {
+        return courseRepository.findAllDraftByInstructorId(instructorId, paging);
+    }
+
+    @Override
+    public int countByStatusAndInstructorId(String status, Long instructorId) {
+        return courseRepository.countByStatusAndInstructorId(status, instructorId);
+    }
+
 }

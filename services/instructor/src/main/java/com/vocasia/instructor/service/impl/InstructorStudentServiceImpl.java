@@ -57,4 +57,9 @@ public class InstructorStudentServiceImpl implements IInstructorStudentService {
         return instructorStudentRepository.findAllByInstructorId(instructorId, paging);
     }
 
+    @Override
+    public int countByInstructorId(Long instructorId) {
+        return instructorStudentRepository.countByInstructorId(instructorId);
+    }
+
 }

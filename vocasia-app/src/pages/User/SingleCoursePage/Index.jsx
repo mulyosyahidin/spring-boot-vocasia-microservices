@@ -18,6 +18,7 @@ import {
 } from "../../../services/new/enrollment/user/course-service.js";
 import {findById, findCourseContents} from "../../../services/new/course/student/course-service.js";
 import {formatDate} from "../../../utils/new-utils.js";
+import {QnA} from "./partials/QnA.jsx";
 
 export const SingleCoursePage = () => {
     const {enrollmentId} = useParams();
@@ -73,8 +74,7 @@ export const SingleCoursePage = () => {
                                     await startLesson(enrollmentId, findCourseContentsById.data.chapters[0].lessons[0].id);
                                     await setLastAccesLesson(enrollmentId, findCourseContentsById.data.chapters[0].lessons[0].id);
                                 }
-                            }
-                            else {
+                            } else {
                                 // jika last lesson id tidak null, artinya kursus ini sudah pernah dibuka sebelumnya
                                 // jika begitu, cari chapter dan lesson yang sesuai dengan last lesson id tersebut
 
@@ -90,14 +90,12 @@ export const SingleCoursePage = () => {
                             }
 
                             setIsLoading(false);
-                        }
-                        else {
+                        } else {
                             console.log('findCourseContentsById.success not success')
                         }
                     }
                 }
-            }
-            catch (error) {
+            } catch (error) {
                 console.error(error);
 
                 if (error.message) {
@@ -146,7 +144,7 @@ export const SingleCoursePage = () => {
                     })
                         .then((isConfirmed) => {
                             if (isConfirmed) {
-                               window.location.reload();
+                                window.location.reload();
                             }
                         });
                 }
@@ -249,7 +247,10 @@ export const SingleCoursePage = () => {
                             <div className="col-xxl-8 col-xl-7 col-lg-8">
                                 {
                                     !isLoading && (
-                                        <VideoPlayer course={course} currentLesson={currentLesson}/>
+                                        <>
+                                            <VideoPlayer course={course} currentLesson={currentLesson}/>
+                                            <QnA course={course} currentLesson={currentLesson} />
+                                        </>
                                     )
                                 }
                             </div>
@@ -340,11 +341,29 @@ export const SingleCoursePage = () => {
                                                                                                 onClick={() => handleLessonChange(lesson)}
                                                                                                 style={{cursor: "pointer"}}>{lesson.title}</div>
                                                                                             <div
-                                                                                                className="d-flex x-gap-20 items-center pt-5">
+                                                                                                className="d-flex justify-content-between x-gap-20 items-center pt-5">
                                                                                                         <span
                                                                                                             className="text-14 lh-1 text-purple-1 underline">
                                                                                                             {lesson.content_video_duration}
                                                                                                         </span>
+
+                                                                                                <span>
+                                                                                                    {lesson.has_attachment && (
+                                                                                                        <a href={lesson.attachment_type === 'file' ? lesson.attachment_file_url : lesson.attachment_link}
+                                                                                                           target="_blank"
+                                                                                                           className="text-14 lh-1 text-purple-1 underline">
+                                                                                                            {lesson.attachment_type === 'file' ? (
+                                                                                                                <>
+                                                                                                                    {lesson.attachment_file_name} <i className="fa fa-download"></i>
+                                                                                                                </>
+                                                                                                            ) : (
+                                                                                                                <>
+                                                                                                                    {lesson.attachment_link_name} <i className="fa fa-external-link"></i>
+                                                                                                                </>
+                                                                                                            )}
+                                                                                                        </a>
+                                                                                                    )}
+                                                                                                </span>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>

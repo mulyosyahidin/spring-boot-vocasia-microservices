@@ -34,7 +34,8 @@ export const createLesson = async (courseId, chapterId, data) => {
         });
         const response = await axios.post(endpoint, data, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'multipart/form-data',
             }
         });
 
@@ -91,7 +92,8 @@ export const updateLesson = async (courseId, chapterId, lessonId, data) => {
         });
         const response = await axios.put(endpoint, data, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'multipart/form-data',
             }
         });
 

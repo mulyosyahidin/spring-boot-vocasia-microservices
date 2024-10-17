@@ -17,5 +17,6 @@ public interface IInstructorIncomeService {
     List<InstructorIncome> findAllByCourseId(Long courseId);
 
     List<InstructorIncome> findAllByOrderId(Long orderId);
+    List<InstructorIncome> findAllByInstructorId(Long instructorId);
 
 }

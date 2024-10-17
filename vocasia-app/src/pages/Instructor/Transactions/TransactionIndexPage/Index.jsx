@@ -67,7 +67,7 @@ export const TransactionIndexPage = () => {
         }));
 
         setCurrentPage(newPage);
-    };
+    }
 
     return (
         <Wrapper needAuth role={INSTRUCTOR}>

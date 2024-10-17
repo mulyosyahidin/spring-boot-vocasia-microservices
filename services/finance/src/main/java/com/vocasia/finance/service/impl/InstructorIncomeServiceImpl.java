@@ -65,5 +65,9 @@ public class InstructorIncomeServiceImpl implements IInstructorIncomeService {
         return instructorIncomeRepository.findAllByOrderId(orderId);
     }
 
+    @Override
+    public List<InstructorIncome> findAllByInstructorId(Long instructorId) {
+        return instructorIncomeRepository.findAllByInstructorId(instructorId);
+    }
 
 }

@@ -14,6 +14,7 @@ import {InputField} from "../../../../../components/commons/Input/InputField.jsx
 import {SelectField} from "../../../../../components/commons/Input/SelectField.jsx";
 import {TinyMCEField} from "../../../../../components/commons/Input/TinyMCEField.jsx";
 import {updateLesson} from "../../../../../services/new/course/instructor/lesson-service.js";
+import {InputFileField} from "../../../../../components/commons/Input/InputFileField.jsx";
 
 const metaData = {
     title: 'Edit Pelajaran',
@@ -41,6 +42,11 @@ export const LessonEditPage = () => {
         {value: 'video', label: 'Video'},
         {value: 'text', label: 'Teks'},
     ]);
+    const [attachmentTypes, setAttachmentTypes] = useState([
+        {value: 'file', label: 'File'},
+        {value: 'link', label: 'Tautan'},
+    ]);
+    const [hasAttachment, setHasAttachment] = useState(false);
     const contentTextRef = useRef(null);
 
     const [formData, setFormData] = useState({
@@ -51,6 +57,12 @@ export const LessonEditPage = () => {
         content_video_duration: '',
         content_video_url: '',
         content_text: '',
+        attachment_type: 'file',
+        attachment_file_name: '',
+        attachment_file: '',
+        attachment_link: '',
+        attachment_link_name: '',
+        remove_attachment: false,
     });
 
     const [errors, setErrors] = useState({
@@ -61,6 +73,12 @@ export const LessonEditPage = () => {
         content_video_duration: '',
         content_video_url: '',
         content_text: '',
+        attachment_type: '',
+        attachment_file_name: '',
+        attachment_file: '',
+        attachment_link: '',
+        attachment_link_name: '',
+        remove_attachment: '',
     });
 
     useEffect(() => {
@@ -92,7 +110,21 @@ export const LessonEditPage = () => {
                         content_video_duration: getLessonById.data.lesson.content_video_duration,
                         content_video_url: getLessonById.data.lesson.content_video_url,
                         content_text: getLessonById.data.lesson.content_text,
+                        attachment_type: getLessonById.data.lesson.attachment_type,
+                        attachment_file_name: getLessonById.data.lesson.attachment_file_name,
+                        attachment_link: getLessonById.data.lesson.attachment_link,
+                        attachment_link_name: getLessonById.data.lesson.attachment_link_name,
                     });
+
+                    if (getLessonById.data.lesson.attachment_type === 'file') {
+                        if (getLessonById.data.lesson.attachment_file_name) {
+                            setHasAttachment(true);
+                        }
+                    } else if (getLessonById.data.lesson.attachment_type === 'link') {
+                        if (getLessonById.data.lesson.attachment_link) {
+                            setHasAttachment(true);
+                        }
+                    }
                 }
 
                 setIsLoading(false);
@@ -123,11 +155,25 @@ export const LessonEditPage = () => {
     }, [courseId, chapterId, lessonId]);
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+        if (e.target.type === 'file') {
+            setFormData({
+                ...formData,
+                [e.target.name]: e.target.files[0],
+            });
+        }
+        else if (e.target.type === 'checkbox') {
+            setFormData({
+                ...formData,
+                [e.target.name]: e.target.checked,
+            });
+        }
+        else {
+            setFormData({
+                ...formData,
+                [e.target.name]: e.target.value,
+            });
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -141,17 +187,34 @@ export const LessonEditPage = () => {
             content_video_duration: '',
             content_video_url: '',
             content_text: '',
+            attachment_type: '',
+            attachment_file_name: '',
+            attachment_file: '',
+            attachment_link: '',
+            attachment_link_name: '',
+            remove_attachment: '',
         });
 
         try {
             const contentTextData = contentTextRef.current ? contentTextRef.current.getContent() : '';
 
-            const finalFormData = {
-                ...formData,
-                content_text: contentTextData,
-            };
+            const finalFormData = new FormData();
 
-            const doUpdateLesson = await updateLesson(courseId, chapterId, lessonId, finalFormData); // Update lesson
+            finalFormData.append('title', formData.title);
+            finalFormData.append('type', formData.type);
+            finalFormData.append('need_previous_lesson', formData.need_previous_lesson);
+            finalFormData.append('is_free', formData.is_free);
+            finalFormData.append('content_video_duration', formData.content_video_duration);
+            finalFormData.append('content_video_url', formData.content_video_url);
+            finalFormData.append('content_text', contentTextData);
+            finalFormData.append('attachment_type', formData.attachment_type);
+            finalFormData.append('attachment_file_name', formData.attachment_file_name);
+            finalFormData.append('attachment_file', formData.attachment_file);
+            finalFormData.append('attachment_link', formData.attachment_link);
+            finalFormData.append('attachment_link_name', formData.attachment_link_name);
+            finalFormData.append('remove_attachment', formData.remove_attachment ? 1 : 0);
+
+            const doUpdateLesson = await updateLesson(courseId, chapterId, lessonId, finalFormData);
             if (doUpdateLesson.success) {
                 await withReactContent(Swal).fire({
                     title: 'Berhasil!',
@@ -159,7 +222,7 @@ export const LessonEditPage = () => {
                     icon: 'success',
                 }).then((isConfirmed) => {
                     if (isConfirmed) {
-                        setIsSubmitted(false);
+                        window.location.reload();
                     }
                 });
             }
@@ -220,7 +283,8 @@ export const LessonEditPage = () => {
                     <div className="row y-gap-60">
                         <div className="col-12">
                             <div className="rounded-16 bg-white -dark-bg-dark-1 shadow-4 h-100">
-                                <div className="d-flex items-center py-20 px-30 border-bottom-light justify-content-between">
+                                <div
+                                    className="d-flex items-center py-20 px-30 border-bottom-light justify-content-between">
                                     <h2 className="text-17 lh-1 fw-500">{course.title}: {chapter.title}</h2>
 
                                     <div className={'d-flex justify-content-between gap-2'}>
@@ -338,6 +402,91 @@ export const LessonEditPage = () => {
                                                                     defaultValue={formData.content_text}
                                                                     error={errors.content_text}
                                                                     isRequired={true}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
+
+                                                <div className="col-12">
+                                                    <SelectField
+                                                        label="Jenis Lampiran"
+                                                        name="attachment_type"
+                                                        options={attachmentTypes}
+                                                        value={formData.attachment_type}
+                                                        onChange={handleChange}
+                                                        error={errors.attachment_type}
+                                                    />
+                                                </div>
+
+                                                {
+                                                    hasAttachment && (
+                                                        <div className="col-12">
+                                                            <div className="row y-gap-10">
+                                                                <div className="col-auto">
+                                                                    <input type="checkbox"
+                                                                           name="remove_attachment"
+                                                                           id="remove_attachment"
+                                                                           checked={formData.remove_attachment}
+                                                                           onChange={handleChange}
+                                                                    />
+                                                                    <label htmlFor="remove_attachment" className="ml-5">Hapus
+                                                                        lampiran</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
+
+                                                {
+                                                    formData.attachment_type === 'file' && (
+                                                        <div className="row">
+                                                            <div className="col-12 col-md-6">
+                                                                <InputFileField
+                                                                    label="File Lampiran"
+                                                                    name="attachment_file"
+                                                                    placeholder="File lampiran"
+                                                                    value={formData.attachment_file}
+                                                                    onChange={handleChange}
+                                                                    error={errors.attachment_file}
+                                                                />
+                                                            </div>
+
+                                                            <div className="col-12 col-md-6">
+                                                                <InputField
+                                                                    label="Nama File Lampiran"
+                                                                    name="attachment_file_name"
+                                                                    placeholder="Nama file lampiran"
+                                                                    value={formData.attachment_file_name}
+                                                                    onChange={handleChange}
+                                                                    error={errors.attachment_file_name}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
+
+                                                {
+                                                    formData.attachment_type === 'link' && (
+                                                        <div className="row">
+                                                            <div className="col-12 col-md-6">
+                                                                <InputField
+                                                                    label="Tautan"
+                                                                    name="attachment_link"
+                                                                    placeholder="Tautan"
+                                                                    value={formData.attachment_link}
+                                                                    onChange={handleChange}
+                                                                    error={errors.attachment_link}
+                                                                />
+                                                            </div>
+                                                            <div className="col-12 col-md-6">
+                                                                <InputField
+                                                                    label="Nama Tautan"
+                                                                    name="attachment_link_name"
+                                                                    placeholder="Nama tautan lampiran"
+                                                                    value={formData.attachment_link_name}
+                                                                    onChange={handleChange}
+                                                                    error={errors.attachment_link_name}
                                                                 />
                                                             </div>
                                                         </div>

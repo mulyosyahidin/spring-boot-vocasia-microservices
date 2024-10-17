@@ -8,11 +8,12 @@ import {courseCartAtom} from "../../../states/recoil/Atoms/CourseCart.jsx";
 import {
     cartTotalDiscountSelector,
     cartTotalPriceSelector,
-    cartTotalPriceWithoutDiscountSelector
+    cartTotalPriceWithoutDiscountSelector, cartTotalPriceWithServiceFeeSelector
 } from "../../../states/recoil/Selectors/CourseCartSelector.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faX} from "@fortawesome/free-solid-svg-icons";
 import {formatRupiah} from "../../../utils/new-utils.js";
+import {serviceFee} from "../../../config/consts.js";
 
 const metaData = {
     title: "Keranjang Belanja",
@@ -24,7 +25,7 @@ export const CourseCart = () => {
     const cart = useRecoilValue(courseCartAtom);
     const setCart = useSetRecoilState(courseCartAtom);
 
-    const totalPrice = useRecoilValue(cartTotalPriceSelector);
+    const totalPrice = useRecoilValue(cartTotalPriceWithServiceFeeSelector);
     const totalPriceWithoutDiscount = useRecoilValue(cartTotalPriceWithoutDiscountSelector);
     const totalDiscount = useRecoilValue(cartTotalDiscountSelector);
 
@@ -32,10 +33,6 @@ export const CourseCart = () => {
         const item = cart[index];
 
         setCart((prev) => prev.filter((elm) => elm !== item));
-    };
-
-    const handleSubmit = (e) => {
-
     }
 
     return (
@@ -185,6 +182,17 @@ export const CourseCart = () => {
                                                     {formatRupiah(totalDiscount)}
                                                 </div>
                                             </div>
+
+                                            {
+                                                serviceFee && (
+                                                    <div className="d-flex justify-between px-30 item">
+                                                        <div className="pt-15 fw-500 text-dark-1">Biaya Layanan</div>
+                                                        <div className="pt-15 fw-500 text-dark-1">
+                                                            {formatRupiah(serviceFee)}
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
 
                                             <div className="d-flex justify-between px-30 item border-top-dark mt-25">
                                                 <div className="pt-15 fw-500 text-dark-1">Total</div>

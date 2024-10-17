@@ -1,7 +1,6 @@
 package com.vocasia.finance.dto.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 

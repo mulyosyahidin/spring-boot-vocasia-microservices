@@ -28,4 +28,7 @@ public interface IAwsService {
             final String bucketName,
             final String keyName
     ) throws AmazonClientException;
+
+    String getFileUrl(String bucketName, String fileName);
+
 }

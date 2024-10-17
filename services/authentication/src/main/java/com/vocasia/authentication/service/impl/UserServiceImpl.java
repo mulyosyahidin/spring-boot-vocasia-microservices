@@ -11,6 +11,8 @@ import com.vocasia.authentication.request.UpdateProfileRequest;
 import com.vocasia.authentication.service.IUserService;
 import com.vocasia.authentication.util.PasswordHashUtil;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -121,6 +123,11 @@ public class UserServiceImpl implements IUserService {
         userRepository.save(user);
 
         return user;
+    }
+
+    @Override
+    public Page<User> findAllByRole(String role, Pageable paging) {
+        return userRepository.findAllByRole(role, paging);
     }
 
 }

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -34,6 +35,21 @@ public class StoreLessonRequest {
 
     @JsonProperty("content_text")
     private String contentText;
+
+    @JsonProperty("attachment_type")
+    private String attachmentType;
+
+    @JsonProperty("attachment_file_name")
+    private String attachmentFileName;
+
+    @JsonProperty("attachment_file")
+    private MultipartFile attachmentFile;
+
+    @JsonProperty("attachment_link")
+    private String attachmentLink;
+
+    @JsonProperty("attachment_link_name")
+    private String attachmentLinkName;
 
 }
 

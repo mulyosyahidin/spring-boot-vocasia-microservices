@@ -7,7 +7,7 @@ import {formatRupiah} from "../../../../utils/new-utils.js";
 
 export const CourseCart = () => {
     const [cartCourses, setCartCourses] = useRecoilState(courseCartAtom);
-    const totalPrice = useRecoilValue(cartTotalPriceSelector);
+    const cartTotalPrice = useRecoilValue(cartTotalPriceSelector);
 
     const handleRemoveCart = (index) => {
         const item = cartCourses[index];
@@ -95,7 +95,7 @@ export const CourseCart = () => {
             <div className="px-30 pt-20 pb-30 border-top-light">
                 <div className="d-flex justify-between">
                     <div className="text-18 lh-12 text-dark-1 fw-500">Total:</div>
-                    <div className="text-18 lh-12 text-dark-1 fw-500">{formatRupiah(totalPrice)}</div>
+                    <div className="text-18 lh-12 text-dark-1 fw-500">{formatRupiah(cartTotalPrice)}</div>
                 </div>
 
                 <div className="row x-gap-20 y-gap-10 pt-30">

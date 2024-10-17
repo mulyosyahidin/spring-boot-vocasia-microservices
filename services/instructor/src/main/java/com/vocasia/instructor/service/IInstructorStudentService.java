@@ -17,4 +17,6 @@ public interface IInstructorStudentService {
 
     Page<InstructorStudent> findAllByInstructorId(Long instructorId, Pageable paging);
 
+    int countByInstructorId(Long instructorId);
+
 }

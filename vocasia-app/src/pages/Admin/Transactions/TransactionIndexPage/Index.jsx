@@ -67,7 +67,7 @@ export const TransactionIndexPage = () => {
         }));
 
         setCurrentPage(newPage);
-    };
+    }
 
     return (
         <Wrapper needAuth role={ADMIN}>
@@ -171,5 +171,5 @@ export const TransactionIndexPage = () => {
                 </div>
             </AdminWrapper>
         </Wrapper>
-    );
+    )
 }

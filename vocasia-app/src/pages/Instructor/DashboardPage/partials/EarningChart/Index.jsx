@@ -1,5 +1,4 @@
 import {Charts} from "./Partials/Charts.jsx";
-import {Filter} from "./Filter.jsx";
 
 export const EarningChart = () => {
     return (
@@ -8,8 +7,6 @@ export const EarningChart = () => {
                 <div className="rounded-16 bg-white -dark-bg-dark-1 shadow-4 h-100">
                     <div className="d-flex justify-between items-center py-20 px-30 border-bottom-light">
                         <h2 className="text-17 lh-1 fw-500">Statistik Pendapatan</h2>
-
-                        <Filter />
                     </div>
                     <div className="py-40 px-30">
                         <Charts/>

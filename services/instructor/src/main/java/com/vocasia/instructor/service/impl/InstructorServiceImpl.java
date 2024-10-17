@@ -7,6 +7,8 @@ import com.vocasia.instructor.request.RegisterRequest;
 import com.vocasia.instructor.request.UpdateProfileRequest;
 import com.vocasia.instructor.service.IInstructorService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,6 +51,11 @@ public class InstructorServiceImpl implements IInstructorService {
     public Instructor findById(Long id) {
         return instructorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Data tidak ditemukan"));
+    }
+
+    @Override
+    public Page<Instructor> findAll(Pageable paging) {
+        return instructorRepository.findAll(paging);
     }
 
 }

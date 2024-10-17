@@ -13,6 +13,7 @@ import {InputField} from "../../../../../components/commons/Input/InputField.jsx
 import {SelectField} from "../../../../../components/commons/Input/SelectField.jsx";
 import {TinyMCEField} from "../../../../../components/commons/Input/TinyMCEField.jsx";
 import {createLesson} from "../../../../../services/new/course/instructor/lesson-service.js";
+import {InputFileField} from "../../../../../components/commons/Input/InputFileField.jsx";
 
 const metaData = {
     title: 'Tambah Pelajaran',
@@ -39,6 +40,10 @@ export const LessonCreatePage = () => {
         {value: 'video', label: 'Video'},
         {value: 'text', label: 'Teks'},
     ]);
+    const [attachmentTypes, setAttachmentTypes] = useState([
+        {value: 'file', label: 'File'},
+        {value: 'link', label: 'Tautan'},
+    ]);
     const contentTextRef = useRef(null);
 
     const [formData, setFormData] = useState({
@@ -49,6 +54,11 @@ export const LessonCreatePage = () => {
         content_video_duration: '',
         content_video_url: '',
         content_text: '',
+        attachment_type: 'file',
+        attachment_file_name: '',
+        attachment_file: '',
+        attachment_link: '',
+        attachment_link_name: '',
     });
 
     const [errors, setErrors] = useState({
@@ -59,6 +69,11 @@ export const LessonCreatePage = () => {
         content_video_duration: '',
         content_video_url: '',
         content_text: '',
+        attachment_type: '',
+        attachment_file_name: '',
+        attachment_file: '',
+        attachment_link: '',
+        attachment_link_name: '',
     });
 
     useEffect(() => {
@@ -104,14 +119,21 @@ export const LessonCreatePage = () => {
         }
 
         fetchInitialData();
-    }, []);
+    }, [])
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+        if (e.target.type === 'file') {
+            setFormData({
+                ...formData,
+                [e.target.name]: e.target.files[0],
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [e.target.name]: e.target.value,
+            });
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -125,80 +147,99 @@ export const LessonCreatePage = () => {
             content_video_duration: '',
             content_video_url: '',
             content_text: '',
+            attachment_type: '',
+            attachment_file_name: '',
+            attachment_file: '',
+            attachment_link: '',
+            attachment_link_name: '',
         });
 
-       try {
-           const contentTextData = contentTextRef.current ? contentTextRef.current.getContent() : '';
+        try {
+            const contentTextData = contentTextRef.current ? contentTextRef.current.getContent() : '';
 
-           const finalFormData = {
-               ...formData,
-               content_text: contentTextData,
-           };
+            const finalFormData = new FormData();
 
-           const doCreateLesson = await createLesson(courseId, chapterId, finalFormData);
-           if (doCreateLesson.success) {
-               await withReactContent(Swal).fire({
-                   title: 'Berhasil!',
-                   text: doCreateLesson.message,
-                   icon: 'success',
-               }).then((isConfirmed) => {
-                   if (isConfirmed) {
-                       setFormData({
-                           title: '',
-                           type: 'video',
-                           need_previous_lesson: false,
-                           is_free: false,
-                           content_video_duration: '',
-                           content_video_url: '',
-                           content_text: '',
-                       });
+            finalFormData.append('title', formData.title);
+            finalFormData.append('type', formData.type);
+            finalFormData.append('need_previous_lesson', formData.need_previous_lesson);
+            finalFormData.append('is_free', formData.is_free);
+            finalFormData.append('content_video_duration', formData.content_video_duration);
+            finalFormData.append('content_video_url', formData.content_video_url);
+            finalFormData.append('content_text', contentTextData);
+            finalFormData.append('attachment_type', formData.attachment_type);
+            finalFormData.append('attachment_file_name', formData.attachment_file_name);
+            finalFormData.append('attachment_file', formData.attachment_file);
+            finalFormData.append('attachment_link', formData.attachment_link);
+            finalFormData.append('attachment_link_name', formData.attachment_link_name);
 
-                       setErrors({});
-                       contentTextRef.current && contentTextRef.current.setContent('');
+            const doCreateLesson = await createLesson(courseId, chapterId, finalFormData);
+            if (doCreateLesson.success) {
+                await withReactContent(Swal).fire({
+                    title: 'Berhasil!',
+                    text: doCreateLesson.message,
+                    icon: 'success',
+                }).then((isConfirmed) => {
+                    if (isConfirmed) {
+                        setFormData({
+                            title: '',
+                            type: 'video',
+                            need_previous_lesson: false,
+                            is_free: false,
+                            content_video_duration: '',
+                            content_video_url: '',
+                            content_text: '',
+                            attachment_type: formData.attachment_type,
+                            attachment_file_name: '',
+                            attachment_file: '',
+                            attachment_link: '',
+                            attachment_link_name: '',
+                        });
 
-                       setIsSubmitted(false);
-                   }
-               });
-           }
-       }
-       catch (error) {
-           console.error(error);
+                        setErrors({});
+                        contentTextRef.current && contentTextRef.current.setContent('');
 
-           if (error.errors) {
-               const getErrors = error.errors;
-               const newErrors = {};
+                        setIsSubmitted(false);
+                    }
+                });
+            }
+        } catch (error) {
+            console.error(error);
 
-               Object.keys(getErrors).forEach((field) => {
-                   newErrors[field] = getErrors[field][0];
-               });
+            if (error.errors) {
+                const getErrors = error.errors;
+                const newErrors = {};
 
-               setErrors(newErrors);
-               setIsSubmitted(false);
-           } else if (error.data) {
-               let message = error.message;
+                Object.keys(getErrors).forEach((field) => {
+                    newErrors[field] = getErrors[field][0];
+                });
 
-               if (error.data.error) {
-                   message += `: (${error.data.error})`;
-               }
+                setErrors(newErrors);
+                setIsSubmitted(false);
+            } else if (error.data) {
+                let message = error.message;
 
-               await withReactContent(Swal).fire({
-                   icon: 'error',
-                   title: 'Terjadi Kesalahan!',
-                   text: message,
-               })
-                   .then((isConfirmed) => {
-                       if (isConfirmed) {
-                           window.location.reload();
-                       }
-                   });
-           } else {
-               if (error.message) {
-                   setErrors({general: error.message});
-               }
-           }
+                if (error.data.error) {
+                    message += `: (${error.data.error})`;
+                }
 
-           setIsSubmitted(false);
-       }
+                await withReactContent(Swal).fire({
+                    icon: 'error',
+                    title: 'Terjadi Kesalahan!',
+                    text: message,
+                })
+                    .then((isConfirmed) => {
+                        if (isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+            } else {
+                if (error.message) {
+                    setErrors({general: error.message});
+                }
+            }
+
+            setIsSubmitted(false);
+        }
     }
 
     return (
@@ -331,6 +372,72 @@ export const LessonCreatePage = () => {
                                                                 label="Isi Konten"
                                                                 error={errors.content_text}
                                                             />
+                                                        </div>
+                                                    )
+                                                }
+
+                                                <div className="col-12">
+                                                    <SelectField
+                                                        label="Jenis Lampiran"
+                                                        name="attachment_type"
+                                                        options={attachmentTypes}
+                                                        value={formData.attachment_type}
+                                                        onChange={handleChange}
+                                                        error={errors.attachment_type}
+                                                    />
+                                                </div>
+
+                                                {
+                                                    formData.attachment_type === 'file' && (
+                                                        <div className="row">
+                                                            <div className="col-12 col-md-6">
+                                                                <InputFileField
+                                                                    label="File Lampiran"
+                                                                    name="attachment_file"
+                                                                    placeholder="File lampiran"
+                                                                    value={formData.attachment_file}
+                                                                    onChange={handleChange}
+                                                                    error={errors.attachment_file}
+                                                                />
+                                                            </div>
+
+                                                            <div className="col-12 col-md-6">
+                                                                <InputField
+                                                                    label="Nama File Lampiran"
+                                                                    name="attachment_file_name"
+                                                                    placeholder="Nama file lampiran"
+                                                                    value={formData.attachment_file_name}
+                                                                    onChange={handleChange}
+                                                                    error={errors.attachment_file_name}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
+
+                                                {
+                                                    formData.attachment_type === 'link' && (
+                                                        <div className="row">
+                                                            <div className="col-12 col-md-6">
+                                                                <InputField
+                                                                    label="Tautan"
+                                                                    name="attachment_link"
+                                                                    placeholder="Tautan"
+                                                                    value={formData.attachment_link}
+                                                                    onChange={handleChange}
+                                                                    error={errors.attachment_link}
+                                                                />
+                                                            </div>
+                                                            <div className="col-12 col-md-6">
+                                                                <InputField
+                                                                    label="Nama Tautan"
+                                                                    name="attachment_link_name"
+                                                                    placeholder="Nama tautan lampiran"
+                                                                    value={formData.attachment_link_name}
+                                                                    onChange={handleChange}
+                                                                    error={errors.attachment_link_name}
+                                                                />
+                                                            </div>
                                                         </div>
                                                     )
                                                 }

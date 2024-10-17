@@ -4,7 +4,7 @@ import {courseCartAtom} from "../../../states/recoil/Atoms/CourseCart.jsx";
 import {
     cartTotalDiscountSelector,
     cartTotalPriceSelector,
-    cartTotalPriceWithoutDiscountSelector
+    cartTotalPriceWithoutDiscountSelector, cartTotalPriceWithServiceFeeSelector
 } from "../../../states/recoil/Selectors/CourseCartSelector.jsx";
 import {authStatusSelector} from "../../../states/recoil/Selectors/AuthStatusSelector.jsx";
 import {Link, useNavigate} from "react-router-dom";
@@ -16,6 +16,7 @@ import {PreLoader} from "../../../components/commons/PreLoader.jsx";
 import {Header} from "../../../components/Header/Index.jsx";
 import {formatRupiah} from "../../../utils/new-utils.js";
 import {placeNewOrder} from "../../../services/new/order/student/order-service.js";
+import {serviceFee} from "../../../config/consts.js";
 
 const metaData = {
     title: "Checkout"
@@ -26,7 +27,7 @@ export const CourseCheckoutPage = () => {
     const cart = useRecoilValue(courseCartAtom);
     const setCart = useSetRecoilState(courseCartAtom);
 
-    const totalPrice = useRecoilValue(cartTotalPriceSelector);
+    const totalPrice = useRecoilValue(cartTotalPriceWithServiceFeeSelector);
     const totalPriceWithoutDiscount = useRecoilValue(cartTotalPriceWithoutDiscountSelector);
     const totalDiscount = useRecoilValue(cartTotalDiscountSelector);
 
@@ -168,7 +169,16 @@ export const CourseCheckoutPage = () => {
                                             </div>
                                         ))}
 
-
+                                        {
+                                            serviceFee && (
+                                                <div className="d-flex justify-between border-top-dark px-30">
+                                                    <div className="py-15 fw-500 text-dark-1">Biaya Layanan</div>
+                                                    <div className="py-15 fw-500 text-dark-1">
+                                                        {formatRupiah(serviceFee)}
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
                                         <div className="d-flex justify-between border-top-dark px-30">
                                             <div className="py-15 fw-500 text-dark-1">Total</div>
                                             <div className="py-15 fw-500 text-dark-1">
@@ -182,7 +192,7 @@ export const CourseCheckoutPage = () => {
                                             authStatus.isLoggedIn && (
                                                 <button className="button -md -black col-12 -uppercase text-white"
                                                         disabled={isSubmitted} onClick={() => handleSubmit()}>
-                                                    {
+                                                {
                                                         isSubmitted ? 'Mohon Tunggu...' : 'Checkout'
                                                     }
                                                 </button>
