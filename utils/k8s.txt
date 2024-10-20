@@ -1,0 +1,4 @@
+START K8s
+(1) kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
+(2) akses https://localhost:8443/ [harus https]
+(3) buat akses token:

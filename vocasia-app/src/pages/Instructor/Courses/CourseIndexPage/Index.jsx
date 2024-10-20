@@ -74,7 +74,7 @@ export const CourseIndexPage = () => {
         }));
 
         setCurrentPage(newPage);
-    };
+    }
 
     const handleTabChange = (tabName) => {
         setCurrentPage(1);

@@ -69,7 +69,7 @@ export const LoginForm = () => {
                     } else if (user.role === ADMIN) {
                         window.location.href = '/admin';
                     } else if (user.role === STUDENT) {
-                        window.location.href = '/users';
+                        window.location.href = '/users/courses';
                     }
                 }, 3000);
             }

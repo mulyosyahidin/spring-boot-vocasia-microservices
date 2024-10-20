@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enrollment-deployment
+  labels:
+    app: enrollment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: enrollment
+  template:
+    metadata:
+      labels:
+        app: enrollment
+    spec:
+      containers:
+        - name: enrollment
+          image: martinms20/enrollment:v1.0.0
+          ports:
+            - containerPort: 14126
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: enrollment
+            - name: SPRING_PROFILES_ACTIVE
+              value: development
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: "http://eurekaserver:14118/eureka/"
+            #            - name: JAVA_TOOL_OPTIONS
+            #              value: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+            #            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            #              value: http://tempo:4317
+            #            - name: OTEL_METRICS_EXPORTER
+            #              value: none
+            #            - name: OTEL_SERVICE_NAME
+            #              value: "enrollment"
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://db-enrollment:30623/enrollment_db
+            - name: SPRING_CONFIG_IMPORT
+              value: "configserver:http://configserver:14117/"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: enrollment
+spec:
+  selector:
+    app: enrollment
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 14126
+      targetPort: 14126

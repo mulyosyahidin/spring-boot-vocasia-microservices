@@ -53,6 +53,8 @@ import {InstructorStudentPage} from "../pages/Admin/Instructors/InstructorShowPa
 import {StudentShowPage} from "../pages/Admin/Students/StudentShowPage/Index.jsx";
 import {CourseQnaPage} from "../pages/User/CourseQnaPage/Index.jsx";
 import {CourseQnaPage as InstructorCourseQnaPage} from "../pages/Instructor/Courses/CourseQnaPage/Index.jsx";
+import {CourseIndexPage as AdminCourseIndexPage} from "../pages/Admin/Courses/CourseIndexPage/Index.jsx";
+import {CourseShowPage as AdminCourseShowPage} from "../pages/Admin/Courses/CourseShowPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -219,12 +221,16 @@ const routes = createBrowserRouter([
         path: '/admin/students/:userId',
         element: <StudentShowPage/>,
     },
+    {
+        path: '/admin/courses',
+        element: <AdminCourseIndexPage />
+    },
+    {
+        path: '/admin/courses/:courseId/overview',
+        element: <AdminCourseShowPage />
+    },
 
     // user dashboard
-    {
-        path: '/users',
-        element: <UserDashboardPage/>,
-    },
     {
         path: '/users/courses',
         element: <CoursesPage/>

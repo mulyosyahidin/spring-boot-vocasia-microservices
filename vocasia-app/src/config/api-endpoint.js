@@ -41,6 +41,9 @@ export const COURSE_PUBLIC_COURSES_GET_CONTENTS_BY_SLUG_ID = '/course/public/cou
 
 export const COURSE_ADMIN_INSTRUCTOR_COURSES = '/course/admin/instructor-courses';
 
+export const COURSE_ADMIN_COURSES = '/course/admin/courses';
+export const COURSE_ADMIN_COURSES_GET_BY_ID = '/course/admin/courses/:courseId';
+
 export const INSTRUCTOR_REGISTER = '/instructor/register';
 
 export const INSTRUCTOR_INSTRUCTOR_STUDENTS = '/instructor/instructor/students';

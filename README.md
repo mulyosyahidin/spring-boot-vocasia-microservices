@@ -87,3 +87,6 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 2. Menyelesaikan: Lesson Attachment
 3. Inisialisasi QnA Service
 4. Menyelesaikan: QnA [CRUD]
+
+18/10/2024:
+1. Inisialisasi Kubernetes

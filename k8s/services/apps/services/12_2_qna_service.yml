@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qna-deployment
+  labels:
+    app: qna
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qna
+  template:
+    metadata:
+      labels:
+        app: qna
+    spec:
+      containers:
+        - name: qna
+          image: martinms20/qna:v1.0.0
+          ports:
+            - containerPort: 14128
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: qna
+            - name: SPRING_PROFILES_ACTIVE
+              value: development
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: "http://eurekaserver:14118/eureka/"
+            #            - name: JAVA_TOOL_OPTIONS
+            #              value: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+            #            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            #              value: http://tempo:4317
+            #            - name: OTEL_METRICS_EXPORTER
+            #              value: none
+            #            - name: OTEL_SERVICE_NAME
+            #              value: "qna"
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://db-qna:30625/qna_db
+            - name: SPRING_CONFIG_IMPORT
+              value: "configserver:http://configserver:14117/"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qna
+spec:
+  selector:
+    app: qna
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 14128
+      targetPort: 14128

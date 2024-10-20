@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gatewayserver-deployment
+  labels:
+    app: gatewayserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gatewayserver
+  template:
+    metadata:
+      labels:
+        app: gatewayserver
+    spec:
+      containers:
+        - name: gatewayserver
+          image: martinms20/gatewayserver:v1.0.0
+          ports:
+            - containerPort: 14119
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: gatewayserver
+            - name: SPRING_PROFILES_ACTIVE
+              value: development
+            - name: SPRING_CONFIG_IMPORT
+              value: "configserver:http://configserver:14117/"
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: "http://eurekaserver:14118/eureka/"
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
+              value: "http://keycloak:7080/realms/Vocasia/protocol/openid-connect/certs"
+            #            - name: JAVA_TOOL_OPTIONS
+            #              value: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+            #            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            #              value: http://tempo:4317
+            #            - name: OTEL_METRICS_EXPORTER
+            #              value: none
+            #            - name: OTEL_SERVICE_NAME
+            #              value: "gatewayserver"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gatewayserver
+spec:
+  selector:
+    app: gatewayserver
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 14119
+      targetPort: 14119

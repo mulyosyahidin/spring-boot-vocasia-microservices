@@ -189,4 +189,9 @@ public class CourseServiceImpl implements ICourseService {
         return courseRepository.countByStatusAndInstructorId(status, instructorId);
     }
 
+    @Override
+    public Page<Course> findAll(Pageable paging) {
+        return courseRepository.findAll(paging);
+    }
+
 }

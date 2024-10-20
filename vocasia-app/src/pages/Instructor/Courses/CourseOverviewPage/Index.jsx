@@ -17,7 +17,7 @@ import {Qna} from "./partials/Qna.jsx";
 
 const metaData = {
     title: 'Ringkasan Kursus',
-};
+}
 const buttons = [
     "Informasi",
     "Konten",
@@ -25,7 +25,7 @@ const buttons = [
     "Tanya Jawab",
     "Penghasilan",
     "Pengaturan",
-];
+]
 
 export const CourseOverviewPage = () => {
     const {courseId} = useParams();

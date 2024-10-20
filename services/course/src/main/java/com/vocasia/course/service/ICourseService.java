@@ -36,4 +36,6 @@ public interface ICourseService {
 
     int countByStatusAndInstructorId(String status, Long instructorId);
 
+    Page<Course> findAll(Pageable paging);
+
 }

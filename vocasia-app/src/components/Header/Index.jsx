@@ -83,7 +83,7 @@ export const Header = () => {
                                                             </Link>
                                                         ) : (
                                                             <Link
-                                                                to={'/users'}
+                                                                to={'/users/courses'}
                                                                 className="button -sm -white text-dark-1 ml-30"
                                                             >
                                                                 Dashboard

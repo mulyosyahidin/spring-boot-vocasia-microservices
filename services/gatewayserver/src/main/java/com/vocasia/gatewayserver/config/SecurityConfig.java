@@ -77,6 +77,9 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.PUT, "/course/admin/categories/{categoryId}").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.DELETE, "/course/admin/categories/{categoryId}").hasRole("ADMIN")
 
+                        .pathMatchers(HttpMethod.GET, "/course/admin/courses").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.GET, "/course/admin/courses/{courseId}").hasRole("ADMIN")
+
                         .pathMatchers(HttpMethod.GET, "/course/instructor/categories").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.POST, "/course/instructor/courses").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.PUT, "/course/instructor/courses/{courseId}/thumbnail").hasRole("INSTRUCTOR")
