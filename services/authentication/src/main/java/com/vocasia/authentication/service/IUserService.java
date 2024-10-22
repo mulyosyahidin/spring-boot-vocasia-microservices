@@ -26,4 +26,6 @@ public interface IUserService {
 
     Page<User> findAllByRole(String role, Pageable paging);
 
+    User updateUid(Long id, String registeredKeycloakId);
+
 }

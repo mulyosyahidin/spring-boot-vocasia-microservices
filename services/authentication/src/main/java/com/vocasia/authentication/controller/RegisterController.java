@@ -41,7 +41,7 @@ public class RegisterController {
             throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         logger.info("RegisterController.register called");
 
-        String registeredKeycloackId = keyCloackService.registerNewUser(
+        String registeredKeycloakId = keyCloackService.registerNewUser(
                 registerRequest.getEmail(),
                 registerRequest.getUsername(),
                 registerRequest.getPassword(),
@@ -49,7 +49,7 @@ public class RegisterController {
                 registerRequest.getRole()
         );
 
-        User registeredUser = userService.registerNewUser(registeredKeycloackId, registerRequest);
+        User registeredUser = userService.registerNewUser(registeredKeycloakId, registerRequest);
 
         Map<String, Object> response = new HashMap<>();
         response.put("user", UserMapper.mapToDto(registeredUser));

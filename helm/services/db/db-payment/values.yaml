@@ -1,0 +1,18 @@
+deploymentName: db-payment
+serviceName: db-payment
+appLabel: db-payment
+appName: db-payment
+
+replicaCount: 1
+
+image:
+  repository: mysql
+  tag: 8.0
+
+containerPort: 30622
+
+service:
+  port: 30622
+
+pvc:
+  name: payment-pvc

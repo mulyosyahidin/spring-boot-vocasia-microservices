@@ -3,10 +3,10 @@ app:
   name: "Authentication Service"
   environment: "default"
 
-keycloack:
+keycloak:
   server_url: "http://localhost:7080"
   client_id: "vocasia-users"
-  client_secret: "fr8AziJmAQZ8Yi7gL396qticjOHvzxGt"
+  client_secret: "GiJjDK1ZPtC6tt2xvM1ONBZFi9MKiWNf"
   realm: "Vocasia"
   auth_client_id: "vocasia-auth"
 

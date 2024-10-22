@@ -24,7 +24,7 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 3. Setup Authentication Service (Skeleton)
 
 28/09/2024
-1. Setup Keycloack Authorization Server
+1. Setup Keycloak Authorization Server
 2. Menyelesaikan: Registrasi, Login, Refresh Access Token
 3. Inisialisasi Vocasia App [React JS]
 4. Inisialisasi Instructor Service
@@ -90,3 +90,12 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 
 18/10/2024:
 1. Inisialisasi Kubernetes
+
+20/10/2024:
+1. Menyelesaikan: Setup Kubernetes Cluster
+
+22/10/2024:
+1. Inisialiasi Helm Chart
+
+23/10/2024:
+1. Menyelesaikan: Setup Helm Chart

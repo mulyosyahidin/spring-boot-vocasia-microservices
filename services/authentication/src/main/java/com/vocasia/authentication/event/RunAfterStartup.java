@@ -32,37 +32,91 @@ public class RunAfterStartup {
 
     @EventListener(ApplicationReadyEvent.class)
     public void runAfterStartup() throws NoSuchAlgorithmException, InvalidKeySpecException {
-       logger.debug("Checking if admin user exists...");
+        logger.debug("Checking for existing admin user in the local database...");
 
-        List<User> users = userService.getByRole("admin");
+        List<User> adminUsers = userService.getByRole("admin");
 
-        if (users.isEmpty()) {
-            logger.debug("Admin user not found, creating default admin user...");
+        if (adminUsers.isEmpty()) {
+            logger.info("No admin user found in the local database. Creating default admin user...");
 
-            RegisterRequest registerRequest = new RegisterRequest();
-
-            registerRequest.setName(defaultAdminConfig.getAdmin().getUsername());
-            registerRequest.setEmail(defaultAdminConfig.getAdmin().getEmail());
-            registerRequest.setUsername(defaultAdminConfig.getAdmin().getUsername());
-            registerRequest.setPassword(defaultAdminConfig.getAdmin().getPassword());
-            registerRequest.setRole("admin");
-
-            String registeredKeycloackId = keyCloackService.registerNewUser(
-                    registerRequest.getEmail(),
-                    registerRequest.getUsername(),
-                    registerRequest.getPassword(),
-                    registerRequest.getName(),
-                    registerRequest.getRole()
-            );
-
-            logger.debug("Admin user created at Keycloack Authorization Server with ID: " + registeredKeycloackId);
-
-            User registeredUser = userService.registerNewUser(registeredKeycloackId, registerRequest);
-
-            logger.debug("Admin user created at local database with ID: " + registeredUser.getId());
+            createAndRegisterAdmin(defaultAdminConfig.getAdmin());
         } else {
-            logger.debug("Found " + users.size() + " admin user(s) in local database.");
+            logger.info(adminUsers.size() + " admin user(s) found in the local database. Checking Keycloak...");
+            User adminUser = adminUsers.get(0);
+
+            if (adminUser.getUid() == null || !keyCloackService.isUserExists(adminUser.getUid())) {
+                logger.warn("Admin user not found in Keycloak or UID is missing. Re-registering admin user to Keycloak...");
+
+                String newKeycloakId = createAndRegisterAdmin(adminUser);
+                if (!adminUser.getUid().equals(newKeycloakId)) {
+                    User updatedUser = userService.updateUid(adminUser.getId(), newKeycloakId);
+                    logger.info("Admin user updated in the local database with new Keycloak ID: " + updatedUser.getUid());
+                } else {
+                    logger.info("Admin user UID is consistent after re-registration.");
+                }
+            } else {
+                logger.info("Admin user is present in both the local database and Keycloak.");
+            }
         }
     }
 
+    private void createAndRegisterAdmin(DefaultAdminConfig.AdminUser adminConfig) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        RegisterRequest registerRequest = buildRegisterRequest(adminConfig);
+
+        String keycloakId = keyCloackService.registerNewUser(
+                registerRequest.getEmail(),
+                registerRequest.getUsername(),
+                registerRequest.getPassword(),
+                registerRequest.getName(),
+                registerRequest.getRole()
+        );
+
+        logger.debug("Admin user successfully registered in Keycloak with ID: " + keycloakId);
+
+        User registeredUser = userService.registerNewUser(keycloakId, registerRequest);
+
+        logger.info("Admin user successfully created in the local database with ID: " + registeredUser.getId());
+    }
+
+    private String createAndRegisterAdmin(User existingAdminUser) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        RegisterRequest registerRequest = buildRegisterRequest(existingAdminUser);
+
+        String keycloakId = keyCloackService.registerNewUser(
+                registerRequest.getEmail(),
+                registerRequest.getUsername(),
+                registerRequest.getPassword(),
+                registerRequest.getName(),
+                registerRequest.getRole()
+        );
+
+        logger.debug("Admin user successfully re-registered in Keycloak with ID: " + keycloakId);
+
+        return keycloakId;
+    }
+
+    private RegisterRequest buildRegisterRequest(DefaultAdminConfig.AdminUser adminConfig) {
+        RegisterRequest registerRequest = new RegisterRequest();
+
+        registerRequest.setName(adminConfig.getUsername());
+        registerRequest.setEmail(adminConfig.getEmail());
+        registerRequest.setUsername(adminConfig.getUsername());
+        registerRequest.setPassword(adminConfig.getPassword());
+        registerRequest.setRole("admin");
+
+        return registerRequest;
+    }
+
+    private RegisterRequest buildRegisterRequest(User adminUser) {
+        RegisterRequest registerRequest = new RegisterRequest();
+
+        registerRequest.setName(adminUser.getName());
+        registerRequest.setEmail(adminUser.getEmail());
+        registerRequest.setUsername(adminUser.getUsername());
+        registerRequest.setPassword(adminUser.getPassword());
+        registerRequest.setRole("admin");
+
+        return registerRequest;
+    }
+
 }
+

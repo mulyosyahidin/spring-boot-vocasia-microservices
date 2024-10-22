@@ -1,0 +1,18 @@
+deploymentName: db-instructor
+serviceName: db-instructor
+appLabel: db-instructor
+appName: db-instructor
+
+replicaCount: 1
+
+image:
+  repository: mysql
+  tag: 8.0
+
+containerPort: 30619
+
+service:
+  port: 30619
+
+pvc:
+  name: instructor-pvc

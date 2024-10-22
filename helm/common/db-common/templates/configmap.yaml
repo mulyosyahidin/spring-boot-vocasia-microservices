@@ -1,0 +1,9 @@
+{{- define "db.common.configmap" -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.global.configMapName }}
+data:
+  AUTHENTICATION_MYSQL_ROOT_PASSWORD: "{{ .Values.mysql.rootPassword }}"
+  AUTHENTICATION_MYSQL_DATABASE: "{{ .Values.mysql.database }}"
+{{- end -}}

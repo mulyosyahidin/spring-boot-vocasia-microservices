@@ -1,0 +1,42 @@
+deploymentName: qna-deployment
+serviceName: qna
+appLabel: qna
+appName: qna
+
+replicaCount: 1
+
+image:
+  repository: martinms20/qna
+  tag: v1.0.0
+
+containerPort: 14128
+
+service:
+  type: ClusterIP
+  port: 14128
+  targetPort: 14128
+
+appname_enabled: true
+profile_enabled: true
+config_enabled: true
+eureka_enabled: true
+resouceserver_enabled: false
+otel_enabled: true
+kafka_enabled: false
+
+customEnvs:
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: QNA_SPRING_DATASOURCE_USERNAME
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: QNA_SPRING_DATASOURCE_PASSWORD
+  - name: SPRING_DATASOURCE_URL
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: QNA_SPRING_DATASOURCE_URL

@@ -4,6 +4,7 @@ import com.vocasia.authentication.dto.ResponseDto;
 import com.vocasia.authentication.dto.client.instructor.InstructorDto;
 import com.vocasia.authentication.entity.User;
 import com.vocasia.authentication.exception.CustomFeignException;
+import com.vocasia.authentication.mapper.AccessTokenMapper;
 import com.vocasia.authentication.mapper.UserMapper;
 import com.vocasia.authentication.request.LoginRequest;
 import com.vocasia.authentication.service.IInstructorService;
@@ -56,22 +57,36 @@ public class LoginController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("user", UserMapper.mapToDto(loggedUser));
+
+        if (loggedUser.getUid() == null || !keyCloackService.isUserExists(loggedUser.getUid())) {
+            logger.info("User not found in Keycloak, registering user in Keycloak...");
+
+            String keycloakId = keyCloackService.registerNewUser(
+                    loggedUser.getEmail(),
+                    loggedUser.getUsername(),
+                    loginRequest.getPassword(),
+                    loggedUser.getName(),
+                    loggedUser.getRole()
+            );
+
+            loggedUser = userService.updateUid(loggedUser.getId(), keycloakId);
+
+            logger.info("User registered in Keycloak with ID: " + keycloakId);
+        }
+
         response.put("token", keyCloackService.getAccessToken(loggedUser.getUsername(), loginRequest.getPassword()));
 
-        if (loggedUser.getRole().equals("instructor")) {
+        if ("instructor".equals(loggedUser.getRole())) {
             try {
                 InstructorDto getInstructorProfileByUserId = instructorService.findByUserId(loggedUser.getId(), correlationId);
-
                 response.put("instructor", getInstructorProfileByUserId);
             } catch (CustomFeignException e) {
                 logger.error(e.getMessage(), e);
-
                 return ResponseEntity
                         .status(e.getHttpStatus())
                         .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-
                 return ResponseEntity
                         .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                         .body(new ResponseDto(false, e.getMessage(), null, null));

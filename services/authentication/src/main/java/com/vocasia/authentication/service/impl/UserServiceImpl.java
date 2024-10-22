@@ -130,4 +130,17 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findAllByRole(role, paging);
     }
 
+    @Override
+    public User updateUid(Long id, String registeredKeycloakId) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Data tidak ditemukan")
+        );
+
+        user.setUid(registeredKeycloakId);
+
+        userRepository.save(user);
+
+        return user;
+    }
+
 }

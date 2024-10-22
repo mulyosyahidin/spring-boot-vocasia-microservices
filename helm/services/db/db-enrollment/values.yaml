@@ -1,0 +1,18 @@
+deploymentName: db-enrollment
+serviceName: db-enrollment
+appLabel: db-enrollment
+appName: db-enrollment
+
+replicaCount: 1
+
+image:
+  repository: mysql
+  tag: 8.0
+
+containerPort: 30623
+
+service:
+  port: 30623
+
+pvc:
+  name: enrollment-pvc

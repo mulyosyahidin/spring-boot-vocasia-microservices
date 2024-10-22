@@ -437,11 +437,11 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-authentication:3306/authentication_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
-      KEYCLOACK_SERVER_URL: "http://keycloak:8080"
-      KEYCLOACK_CLIENT_ID: "vocasia-users"
-      KEYCLOACK_CLIENT_SECRET: "fr8AziJmAQZ8Yi7gL396qticjOHvzxGt"
-      KEYCLOACK_REALM: "Vocasia"
-      KEYCLOACK_AUTH_CLIENT_ID: "vocasia-auth"
+      KEYCLOAK_SERVER_URL: "http://keycloak:8080"
+      KEYCLOAK_CLIENT_ID: "vocasia-users"
+      KEYCLOAK_CLIENT_SECRET: "GiJjDK1ZPtC6tt2xvM1ONBZFi9MKiWNf"
+      KEYCLOAK_REALM: "Vocasia"
+      KEYCLOAK_AUTH_CLIENT_ID: "vocasia-auth"
       OTEL_SERVICE_NAME: "authentication"
     healthcheck:
       test: "curl --fail --silent localhost:14120/actuator/health/readiness | grep UP || exit 1"
@@ -641,7 +641,7 @@ services:
 #      SPRING_PROFILES_ACTIVE: "development"
 #      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
 #      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:14118/eureka/"
-#      KEYCLOACK_SERVER: "INI DOCKER COMPOSE"
+#      KEYCLOAK_SERVER: "INI DOCKER COMPOSE"
 #    depends_on:
 #      eurekaserver:
 #        condition: service_healthy

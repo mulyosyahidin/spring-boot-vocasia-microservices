@@ -1,7 +1,7 @@
 package com.vocasia.authentication.service.impl;
 
 import com.vocasia.authentication.mapper.AccessTokenMapper;
-import com.vocasia.authentication.packages.keycloack.KeyCloackClient;
+import com.vocasia.authentication.packages.keycloak.KeyCloakClient;
 import com.vocasia.authentication.service.IKeyCloackService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.io.IOException;
 @AllArgsConstructor
 public class KeyCloackServiceImpl implements IKeyCloackService  {
 
-    private KeyCloackClient keyCloackClient;
+    private KeyCloakClient keyCloackClient;
 
     @Override
     public String registerNewUser(String email, String username, String password, String name, String roleName) {
@@ -27,6 +27,11 @@ public class KeyCloackServiceImpl implements IKeyCloackService  {
     @Override
     public AccessTokenMapper refreshAccessToken(String refreshToken) throws IOException {
         return keyCloackClient.refreshAccessToken(refreshToken);
+    }
+
+    @Override
+    public boolean isUserExists(String uid) {
+        return keyCloackClient.isUserExists(uid);
     }
 
 }

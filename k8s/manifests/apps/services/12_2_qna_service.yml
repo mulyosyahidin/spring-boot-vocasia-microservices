@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qna-deployment
+  labels:
+    app: qna
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qna
+  template:
+    metadata:
+      labels:
+        app: qna
+    spec:
+      containers:
+        - name: qna
+          image: martinms20/qna:v1.0.0
+          ports:
+            - containerPort: 14128
+          env:
+            - name: SPRING_APPLICATION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: QNA_APPLICATION_NAME
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: SPRING_PROFILES_ACTIVE
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: QNA_SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: QNA_SPRING_DATASOURCE_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: QNA_SPRING_DATASOURCE_URL
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#            - name: JAVA_TOOL_OPTIONS
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: JAVA_TOOL_OPTIONS
+#            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: OTEL_EXPORTER_OTLP_ENDPOINT
+#            - name: OTEL_METRICS_EXPORTER
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: OTEL_METRICS_EXPORTER
+#            - name: OTEL_SERVICE_NAME
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: QNA_OTEL_SERVICE_NAME
+            - name: SPRING_CONFIG_IMPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: SPRING_CONFIG_IMPORT
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qna
+spec:
+  selector:
+    app: qna
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 14128
+      targetPort: 14128
