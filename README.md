@@ -99,3 +99,5 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 
 23/10/2024:
 1. Menyelesaikan: Setup Helm Chart
+2. Inisisalisasi Server-side Service Discovery and Load Balancing
+3. Menyelesaikan: Implementasi Server-side Service Discovery and Load Balancing

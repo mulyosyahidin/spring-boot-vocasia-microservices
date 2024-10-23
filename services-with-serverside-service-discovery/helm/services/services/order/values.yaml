@@ -1,0 +1,47 @@
+deploymentName: order-deployment
+serviceName: order
+appLabel: order
+appName: order
+
+replicaCount: 2
+
+image:
+  repository: martinms20/order
+  tag: v1.1.0
+
+containerPort: 14124
+
+service:
+  type: ClusterIP
+  port: 14124
+  targetPort: 14124
+
+appname_enabled: true
+profile_enabled: true
+config_enabled: true
+discovery_enabled: true
+resouceserver_enabled: false
+otel_enabled: true
+kafka_enabled: false
+
+customEnvs:
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: ORDER_SPRING_DATASOURCE_USERNAME
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: ORDER_SPRING_DATASOURCE_PASSWORD
+  - name: SPRING_DATASOURCE_URL
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: ORDER_SPRING_DATASOURCE_URL
+  - name: FINANCE_PERCENT_PLATFORM_FEE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: FINANCE_PERCENT_PLATFORM_FEE

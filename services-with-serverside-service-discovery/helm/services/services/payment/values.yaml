@@ -1,0 +1,62 @@
+deploymentName: payment-deployment
+serviceName: payment
+appLabel: payment
+appName: payment
+
+replicaCount: 2
+
+image:
+  repository: martinms20/payment
+  tag: v1.1.0
+
+containerPort: 14125
+
+service:
+  type: ClusterIP
+  port: 14125
+  targetPort: 14125
+
+appname_enabled: true
+profile_enabled: true
+config_enabled: true
+discovery_enabled: true
+resouceserver_enabled: false
+otel_enabled: true
+kafka_enabled: false
+
+customEnvs:
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: PAYMENT_SPRING_DATASOURCE_USERNAME
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: PAYMENT_SPRING_DATASOURCE_PASSWORD
+  - name: SPRING_DATASOURCE_URL
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: PAYMENT_SPRING_DATASOURCE_URL
+  - name: MIDTRANS_MERCHANT_ID
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: MIDTRANS_MERCHANT_ID
+  - name: MIDTRANS_CLIENT_KEY
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: MIDTRANS_CLIENT_KEY
+  - name: MIDTRANS_SERVER_KEY
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: MIDTRANS_SERVER_KEY
+  - name: MIDTRANS_IS_PRODUCTION
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: MIDTRANS_IS_PRODUCTION

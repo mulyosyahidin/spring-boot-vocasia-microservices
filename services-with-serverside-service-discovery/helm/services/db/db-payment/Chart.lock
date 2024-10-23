@@ -1,0 +1,6 @@
+dependencies:
+- name: vocasia-db-common
+  repository: file://../../../common/db-common
+  version: 0.1.0
+digest: sha256:ad27aa43d8ecbb514184a42850142b34861c85759b76e5814af0fb5a50ec2302
+generated: "2024-10-23T03:18:08.1082821+07:00"

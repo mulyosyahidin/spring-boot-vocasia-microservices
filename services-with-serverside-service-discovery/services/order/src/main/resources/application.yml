@@ -1,0 +1,66 @@
+server:
+  port: 14124
+
+spring:
+  application:
+    name: "order"
+  profiles:
+    active: "development"
+  config:
+    import: "optional:configserver:http://localhost:14117/"
+  datasource:
+    url: "jdbc:mysql://localhost:30621/order_db"
+    username: "root"
+    password: "password"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  cloud:
+    kubernetes:
+      discovery:
+        all-namespaces: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+endpoints:
+  shutdown:
+    enabled: true
+
+info:
+  app:
+    name: "order"
+    description: "Order Service"
+    version: "1.0.0"
+
+logging:
+  level:
+    com:
+      vocasia:
+        order: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

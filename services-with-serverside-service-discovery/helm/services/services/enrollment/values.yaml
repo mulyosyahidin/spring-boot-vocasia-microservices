@@ -1,0 +1,42 @@
+deploymentName: enrollment-deployment
+serviceName: enrollment
+appLabel: enrollment
+appName: enrollment
+
+replicaCount: 2
+
+image:
+  repository: martinms20/enrollment
+  tag: v1.1.0
+
+containerPort: 14126
+
+service:
+  type: ClusterIP
+  port: 14126
+  targetPort: 14126
+
+appname_enabled: true
+profile_enabled: true
+config_enabled: true
+discovery_enabled: true
+resouceserver_enabled: false
+otel_enabled: true
+kafka_enabled: false # nanti ubah ke true
+
+customEnvs:
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: ENROLLMENT_SPRING_DATASOURCE_USERNAME
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: ENROLLMENT_SPRING_DATASOURCE_PASSWORD
+  - name: SPRING_DATASOURCE_URL
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: ENROLLMENT_SPRING_DATASOURCE_URL

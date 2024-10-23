@@ -1,4 +1,24 @@
 START K8s
+(0) membuat kubernetes-dashboard:
+helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+
 (1) kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
 (2) akses https://localhost:8443/ [harus https]
 (3) buat akses token:
+- membuat service account di file /k8s/dashboard-adminuser.yaml
+-- apply konfigurasi: kubectl apply -f dashboard-adminuser.yaml
+- membuat role binding di file /k8s/dashboard-rolebinding.yaml
+-- apply konfigurasi: kubectl apply -f dashboard-rolebinding.yaml
+
+tahap-tahap tersebut cukup sekali diawal.
+
+membuat akses token:
+kubectl -n kubernetes-dashboard create token admin-user
+
+membuat long lived token:
+kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath='{.data.token}' | base64 -d
+
+paste hasilnya di halaman login
+
+(4) hapus semua deployments
+kubectl delete --all deployments --namespace=default

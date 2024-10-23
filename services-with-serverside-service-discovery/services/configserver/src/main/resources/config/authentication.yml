@@ -1,0 +1,27 @@
+app:
+  version: 1.0.0
+  name: "Authentication Service"
+  environment: "default"
+
+keycloak:
+  server_url: "http://localhost:7080"
+  client_id: "vocasia-users"
+  client_secret: "GiJjDK1ZPtC6tt2xvM1ONBZFi9MKiWNf"
+  realm: "Vocasia"
+  auth_client_id: "vocasia-auth"
+
+security:
+  salt: "salt"
+
+default:
+  admin:
+    username: "admin"
+    password: "password"
+    email: "admin@local.test"
+
+aws:
+  access_key_id: "AKIA6GBMGQU2WPGRSEWD"
+  secret_access_key: "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"
+  s3:
+    region: "ap-southeast-1"
+    bucket: "vocasia"

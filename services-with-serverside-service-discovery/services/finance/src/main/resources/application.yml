@@ -1,0 +1,65 @@
+server:
+  port: 14127
+
+spring:
+  application:
+    name: "finance"
+  profiles:
+    active: "development"
+  config:
+    import: "optional:configserver:http://localhost:14117/"
+  datasource:
+    url: "jdbc:mysql://localhost:30624/finance_db"
+    username: "root"
+    password: "password"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    kubernetes:
+      discovery:
+        all-namespaces: true
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+endpoints:
+  shutdown:
+    enabled: true
+
+info:
+  app:
+    name: "finance"
+    description: "Finance Service"
+    version: "1.0.0"
+
+logging:
+  level:
+    com:
+      vocasia:
+        finance: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

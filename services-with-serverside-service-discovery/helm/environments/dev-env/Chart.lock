@@ -1,0 +1,18 @@
+dependencies:
+- name: vocasia-service-common
+  repository: file://../../common/service-common
+  version: 0.1.0
+- name: configserver
+  repository: file://../../services/services/configserver
+  version: 0.1.0
+- name: authentication
+  repository: file://../../services/services/authentication
+  version: 0.1.0
+- name: db-authentication
+  repository: file://../../services/db/db-authentication
+  version: 0.1.0
+- name: gatewayserver
+  repository: file://../../services/services/gatewayserver
+  version: 0.1.0
+digest: sha256:d26de310a159a36eabca67319d87e5d24a4f3fb4fce1be5bc3825f42898ba4a5
+generated: "2024-10-23T06:39:50.3429526+07:00"
