@@ -2,7 +2,7 @@ import {apiEndpoint} from "../../../../utils/new-utils.js";
 import {
     COURSE_ADMIN_CATEGORIES, COURSE_ADMIN_CATEGORIES_GET_BY_ID,
     COURSE_ADMIN_CATEGORIES_ONLY_PARENTS,
-    COURSE_ADMIN_CATEGORIES_STORE
+    COURSE_ADMIN_CATEGORIES_STORE, COURSE_ADMIN_CATEGORIES_SYNC
 } from "../../../../config/api-endpoint.js";
 import axios from "axios";
 import {accessToken} from "../../../../config/auth.js";
@@ -90,6 +90,21 @@ export const deleteById = async (id) => {
         const response = await axios.delete(endpoint, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        throw error.response ? error.response.data : new Error('An error occurred');
+    }
+}
+
+export const syncCategories = async () => {
+    try {
+        const endpoint = apiEndpoint(COURSE_ADMIN_CATEGORIES_SYNC);
+        const response = await axios.post(endpoint, {}, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
             }
         });
 

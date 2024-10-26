@@ -14,4 +14,3 @@ public class AppConfigProperties {
     private String environment;
 
 }
-

@@ -72,6 +72,7 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.GET, "/course/admin/categories").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.GET, "/course/admin/categories/only-parents").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.POST, "/course/admin/categories/sync").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.POST, "/course/admin/categories").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.GET, "/course/admin/categories/{categoryId}").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.PUT, "/course/admin/categories/{categoryId}").hasRole("ADMIN")
@@ -223,6 +224,19 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/qna/instructor/courses/{courseId}/questions").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.GET, "/qna/instructor/courses/{courseId}/questions/{qnaId}").hasRole("INSTRUCTOR")
                         .pathMatchers(HttpMethod.POST, "/qna/instructor/courses/{courseId}/questions/{qnaId}").hasRole("INSTRUCTOR")
+
+
+                        // QNA SERVICE
+                        .pathMatchers("/catalog/actuator/**").permitAll()
+
+                        .pathMatchers(HttpMethod.GET, "/catalog/build-info").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/catalog/welcome").permitAll()
+
+                        .pathMatchers(HttpMethod.GET, "/catalog/admin/categories").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.POST, "/catalog/admin/categories").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.POST, "/catalog/admin/categories/sync").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.PUT, "/catalog/admin/categories/{categoryId}").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.DELETE, "/catalog/admin/categories/{categoryId}").hasRole("ADMIN")
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));

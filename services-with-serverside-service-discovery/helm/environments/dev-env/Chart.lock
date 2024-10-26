@@ -5,14 +5,17 @@ dependencies:
 - name: configserver
   repository: file://../../services/services/configserver
   version: 0.1.0
+- name: db-vocasia
+  repository: file://../../services/db/db-vocasia
+  version: 0.1.0
 - name: authentication
   repository: file://../../services/services/authentication
   version: 0.1.0
-- name: db-authentication
-  repository: file://../../services/db/db-authentication
+- name: course
+  repository: file://../../services/services/course
   version: 0.1.0
 - name: gatewayserver
   repository: file://../../services/services/gatewayserver
   version: 0.1.0
-digest: sha256:d26de310a159a36eabca67319d87e5d24a4f3fb4fce1be5bc3825f42898ba4a5
-generated: "2024-10-23T06:39:50.3429526+07:00"
+digest: sha256:0af6a6eb634fe3f519fc5b633d5a07e67a92afbe307fb431ea51e6a84bd6a3df
+generated: "2024-10-25T23:31:32.3113821+07:00"

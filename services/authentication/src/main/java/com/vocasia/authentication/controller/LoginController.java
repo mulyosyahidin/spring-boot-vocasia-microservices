@@ -58,23 +58,28 @@ public class LoginController {
         Map<String, Object> response = new HashMap<>();
         response.put("user", UserMapper.mapToDto(loggedUser));
 
-        if (loggedUser.getUid() == null || !keyCloackService.isUserExists(loggedUser.getUid())) {
-            logger.info("User not found in Keycloak, registering user in Keycloak...");
+        try {
+            if (loggedUser.getUid() == null || !keyCloackService.isUserExists(loggedUser.getUid())) {
+                logger.info("User not found in Keycloak, registering user in Keycloak...");
 
-            String keycloakId = keyCloackService.registerNewUser(
-                    loggedUser.getEmail(),
-                    loggedUser.getUsername(),
-                    loginRequest.getPassword(),
-                    loggedUser.getName(),
-                    loggedUser.getRole()
-            );
+                String keycloakId = keyCloackService.registerNewUser(
+                        loggedUser.getEmail(),
+                        loggedUser.getUsername(),
+                        loginRequest.getPassword(),
+                        loggedUser.getName(),
+                        loggedUser.getRole()
+                );
 
-            loggedUser = userService.updateUid(loggedUser.getId(), keycloakId);
+                loggedUser = userService.updateUid(loggedUser.getId(), keycloakId);
 
-            logger.info("User registered in Keycloak with ID: " + keycloakId);
+                logger.info("User registered in Keycloak with ID: " + keycloakId);
+            }
+
+            response.put("token", keyCloackService.getAccessToken(loggedUser.getUsername(), loginRequest.getPassword()));
         }
-
-        response.put("token", keyCloackService.getAccessToken(loggedUser.getUsername(), loginRequest.getPassword()));
+        catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
 
         if ("instructor".equals(loggedUser.getRole())) {
             try {

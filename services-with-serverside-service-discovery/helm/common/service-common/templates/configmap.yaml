@@ -88,6 +88,9 @@ data:
   QNA_MYSQL_ROOT_PASSWORD: "{{ .Values.global.qnaMysqlRootPassword }}"
   QNA_MYSQL_DATABASE: "{{ .Values.global.qnaMysqlDatabase }}"
 
+  VOCASIA_MYSQL_ROOT_PASSWORD: "{{ .Values.global.vocasiaMysqlRootPassword }}"
+  VOCASIA_MYSQL_DATABASE: "{{ .Values.global.vocasiaMysqlDatabase }}"
+
   GATEWAYSERVER_APPLICATION_NAME: "{{ .Values.global.gatewayserverApplicationName }}"
   GATEWAYSERVER_OTEL_SERVICE_NAME: "{{ .Values.global.gatewayserverOtelServiceName }}"
 

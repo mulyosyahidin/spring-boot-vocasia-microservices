@@ -1,10 +1,14 @@
 package com.vocasia.course.controller.admin;
 
 import com.vocasia.course.dto.ResponseDto;
+import com.vocasia.course.dto.client.instructor.InstructorDto;
 import com.vocasia.course.entity.Category;
+import com.vocasia.course.exception.CustomFeignException;
 import com.vocasia.course.mapper.CategoryMapper;
 import com.vocasia.course.request.category.StoreCategoryRequest;
 import com.vocasia.course.request.category.UpdateCategoryRequest;
+import com.vocasia.course.request.client.catalog.SyncCategoryRequest;
+import com.vocasia.course.service.ICatalogService;
 import com.vocasia.course.service.ICategoryService;
 import jakarta.validation.Valid;
 import org.apache.hc.core5.http.HttpStatus;
@@ -31,9 +35,11 @@ public class AdminCategoryController {
     private final Logger logger = LoggerFactory.getLogger(AdminCategoryController.class);
 
     private final ICategoryService categoryService;
+    private final ICatalogService catalogService;
 
-    public AdminCategoryController(ICategoryService iCategoryService) {
+    public AdminCategoryController(ICategoryService iCategoryService, ICatalogService catalogService) {
         this.categoryService = iCategoryService;
+        this.catalogService = catalogService;
     }
 
     @GetMapping("/categories")
@@ -59,8 +65,7 @@ public class AdminCategoryController {
                 Category parentCategory = categoryService.findById(category.getParentId());
 
                 categoryData.put("parent", CategoryMapper.mapToDto(parentCategory));
-            }
-            else if (category.getType().equals("parent")) {
+            } else if (category.getType().equals("parent")) {
                 List<Category> childCategories = categoryService.findAllByParentId(category.getId());
 
                 categoryData.put("children", childCategories.stream().map(CategoryMapper::mapToDto));
@@ -96,8 +101,39 @@ public class AdminCategoryController {
                 .body(new ResponseDto(true, "Berhasil mendapatkan data kategori", response, null));
     }
 
+    @PostMapping("/categories/sync")
+    public ResponseEntity<ResponseDto> syncCategories(@RequestHeader("vocasia-correlation-id") String correlationId) {
+        logger.info("AdminCategoryController.syncCategories called");
+
+        List<Category> allCategories = categoryService.findAll();
+
+        SyncCategoryRequest syncCategoryRequest = new SyncCategoryRequest();
+        syncCategoryRequest.setCategories(allCategories.stream().map(CategoryMapper::mapToDto).toList());
+
+        try {
+            catalogService.syncCategories(syncCategoryRequest, correlationId);
+        } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, e.getMessage(), null, null));
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil melakukan sinkronisasi kategori ke catalog service", null, null));
+    }
+
     @PostMapping("/categories")
-    public ResponseEntity<ResponseDto> createCategory(@RequestParam(value = "icon", required = false) @Valid MultipartFile icon,
+    public ResponseEntity<ResponseDto> createCategory(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                      @RequestParam(value = "icon", required = false) @Valid MultipartFile icon,
                                                       @RequestParam("name") String name,
                                                       @RequestParam(value = "parent_id", required = false) Long parentId) {
         logger.info("AdminCategoryController.createCategory called");
@@ -115,17 +151,47 @@ public class AdminCategoryController {
             Category category = categoryService.store(storeCategoryRequest);
 
             response.put("category", CategoryMapper.mapToDto(category));
+
+            com.vocasia.course.request.client.catalog.StoreCategoryRequest storeCategoryRequestToCatalog = getStoreCategoryRequest(category);
+            catalogService.save(storeCategoryRequestToCatalog, correlationId);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
 
             return ResponseEntity
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, "Gagal mengupload icon", null, e.getMessage()));
+        } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, e.getMessage(), null, null));
         }
 
         return ResponseEntity
                 .status(HttpStatus.SC_CREATED)
                 .body(new ResponseDto(true, "Berhasil menambahkan kategori", response, null));
+    }
+
+    private static com.vocasia.course.request.client.catalog.StoreCategoryRequest getStoreCategoryRequest(Category category) {
+        com.vocasia.course.request.client.catalog.StoreCategoryRequest storeCategoryRequestToCatalog = new com.vocasia.course.request.client.catalog.StoreCategoryRequest();
+
+        storeCategoryRequestToCatalog.setId(category.getId());
+        storeCategoryRequestToCatalog.setType(category.getType());
+        storeCategoryRequestToCatalog.setParentId(category.getParentId());
+        storeCategoryRequestToCatalog.setName(category.getName());
+        storeCategoryRequestToCatalog.setSlug(category.getSlug());
+        storeCategoryRequestToCatalog.setIcon(category.getIcon());
+        storeCategoryRequestToCatalog.setCreatedAt(category.getCreatedAt());
+        storeCategoryRequestToCatalog.setUpdatedAt(category.getUpdatedAt());
+
+        return storeCategoryRequestToCatalog;
     }
 
     @GetMapping("/categories/{categoryId}")
@@ -141,8 +207,7 @@ public class AdminCategoryController {
             List<Category> childCategories = categoryService.findAllByParentId(category.getId());
 
             response.put("children", childCategories.stream().map(CategoryMapper::mapToDto));
-        }
-        else if (category.getType().equals("child")) {
+        } else if (category.getType().equals("child")) {
             Category parentCategory = categoryService.findById(category.getParentId());
 
             response.put("parent", CategoryMapper.mapToDto(parentCategory));
@@ -154,7 +219,8 @@ public class AdminCategoryController {
     }
 
     @PutMapping("/categories/{categoryId}")
-    public ResponseEntity<ResponseDto> updateCategory(@PathVariable Long categoryId,
+    public ResponseEntity<ResponseDto> updateCategory(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                      @PathVariable Long categoryId,
                                                       @RequestParam(value = "icon", required = false) MultipartFile icon,
                                                       @RequestParam("name") String name,
                                                       @RequestParam(value = "parent_id", required = false) Long parentId) {
@@ -172,12 +238,27 @@ public class AdminCategoryController {
             Category updatedCategory = categoryService.update(categoryId, updateCategoryRequest);
 
             response.put("category", CategoryMapper.mapToDto(updatedCategory));
+
+            com.vocasia.course.request.client.catalog.UpdateCategoryRequest updateCategoryRequestToCatalog = getUpdateCategoryRequest(updatedCategory);
+            catalogService.updateCategory(categoryId, updateCategoryRequestToCatalog, correlationId);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
 
             return ResponseEntity
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, "Gagal mengupload icon", null, e.getMessage()));
+        } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, e.getMessage(), null, null));
         }
 
         return ResponseEntity
@@ -185,11 +266,42 @@ public class AdminCategoryController {
                 .body(new ResponseDto(true, "Berhasil memperbarui kategori", response, null));
     }
 
+    private static com.vocasia.course.request.client.catalog.UpdateCategoryRequest getUpdateCategoryRequest(Category updatedCategory) {
+        com.vocasia.course.request.client.catalog.UpdateCategoryRequest updateCategoryRequestToCatalog = new com.vocasia.course.request.client.catalog.UpdateCategoryRequest();
+
+        updateCategoryRequestToCatalog.setType(updatedCategory.getType());
+        updateCategoryRequestToCatalog.setParentId(updatedCategory.getParentId());
+        updateCategoryRequestToCatalog.setName(updatedCategory.getName());
+        updateCategoryRequestToCatalog.setSlug(updatedCategory.getSlug());
+        updateCategoryRequestToCatalog.setIcon(updatedCategory.getIcon());
+        updateCategoryRequestToCatalog.setCreatedAt(updatedCategory.getCreatedAt());
+        updateCategoryRequestToCatalog.setUpdatedAt(updatedCategory.getUpdatedAt());
+
+        return updateCategoryRequestToCatalog;
+    }
+
     @DeleteMapping("/categories/{categoryId}")
-    public ResponseEntity<ResponseDto> deleteCategory(@PathVariable Long categoryId) {
+    public ResponseEntity<ResponseDto> deleteCategory(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                      @PathVariable Long categoryId) {
         logger.info("AdminCategoryController.deleteCategory called");
 
         categoryService.delete(categoryId);
+
+        try {
+            catalogService.deleteCategory(categoryId, correlationId);
+        } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, e.getMessage(), null, null));
+        }
 
         return ResponseEntity
                 .status(HttpStatus.SC_OK)

@@ -3,7 +3,17 @@ serviceName: enrollment
 appLabel: enrollment
 appName: enrollment
 
+hpaLabel: enrollment-hpa
+hpaCpuUtilization: 50
+
+memoryRequest: 512Mi
+cpuRequest: 256m
+
+memoryLimit: 1024Mi
+cpuLimit: 512m
+
 replicaCount: 2
+maxReplicas: 5
 
 image:
   repository: martinms20/enrollment
@@ -21,7 +31,7 @@ profile_enabled: true
 config_enabled: true
 discovery_enabled: true
 resouceserver_enabled: false
-otel_enabled: true
+otel_enabled: false
 kafka_enabled: false # nanti ubah ke true
 
 customEnvs:

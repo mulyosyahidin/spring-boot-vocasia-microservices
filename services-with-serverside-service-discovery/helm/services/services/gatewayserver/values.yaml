@@ -3,7 +3,17 @@ serviceName: gatewayserver
 appLabel: gatewayserver
 appName: gatewayserver
 
-replicaCount: 1
+hpaLabel: gatewayserver-hpa
+hpaCpuUtilization: 50
+
+memoryRequest: 128Mi
+cpuRequest: 256m
+
+memoryLimit: 256Mi
+cpuLimit: 512m
+
+replicaCount: 2
+maxReplicas: 5
 
 image:
   repository: martinms20/gatewayserver
@@ -21,5 +31,5 @@ profile_enabled: true
 config_enabled: true
 discovery_enabled: true
 resouceserver_enabled: true
-otel_enabled: true
+otel_enabled: false
 kafka_enabled: false

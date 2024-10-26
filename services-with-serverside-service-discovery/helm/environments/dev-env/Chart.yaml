@@ -32,18 +32,22 @@ dependencies:
     version: 0.1.0
     repository: file://../../services/services/configserver
 
+  - name: db-vocasia
+    version: 0.1.0
+    repository: file://../../services/db/db-vocasia
+
   - name: authentication
     version: 0.1.0
     repository: file://../../services/services/authentication
 
-  - name: db-authentication
-    version: 0.1.0
-    repository: file://../../services/db/db-authentication
-
-#  - name: course
+#  - name: db-authentication
 #    version: 0.1.0
-#    repository: file://../../services/services/course
-#
+#    repository: file://../../services/db/db-authentication
+
+  - name: course
+    version: 0.1.0
+    repository: file://../../services/services/course
+
 #  - name: db-course
 #    version: 0.1.0
 #    repository: file://../../services/db/db-course

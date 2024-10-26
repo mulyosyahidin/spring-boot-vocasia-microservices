@@ -43,3 +43,7 @@ scrape_configs:
     metrics_path: "/actuator/prometheus"
     static_configs:
       - targets: [ "service-payment:14125" ]
+  - job_name: "qna"
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: [ "service-qna:14128" ]

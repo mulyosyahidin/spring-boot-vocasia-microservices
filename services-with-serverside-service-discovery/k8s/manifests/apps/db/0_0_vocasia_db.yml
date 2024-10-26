@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vocasia-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-vocasia
+  labels:
+    app: db-vocasia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-vocasia
+  template:
+    metadata:
+      labels:
+        app: db-vocasia
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: VOCASIA_MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: VOCASIA_MYSQL_DATABASE
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: vocasia-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-vocasia
+spec:
+  selector:
+    app: db-vocasia
+  ports:
+    - protocol: TCP
+      port: 30626
+      targetPort: 3306
+  type: LoadBalancer

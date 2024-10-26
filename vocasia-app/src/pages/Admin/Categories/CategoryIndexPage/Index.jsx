@@ -5,7 +5,7 @@ import {PreLoader} from "../../../../components/commons/PreLoader.jsx";
 import {AdminWrapper} from "../../../../components/Admin/AdminWrapper/Index.jsx";
 import {Link} from "react-router-dom";
 import React, {useContext, useEffect, useState} from "react";
-import {deleteById, findAll} from "../../../../services/new/course/admin/category-service.js";
+import {deleteById, findAll, syncCategories} from "../../../../services/new/course/admin/category-service.js";
 import {AuthContext} from "../../../../states/contexts/AuthContext.jsx";
 import {Pagination} from "../../../../components/commons/Pagination.jsx";
 import withReactContent from "sweetalert2-react-content";
@@ -115,7 +115,42 @@ export const CategoryIndexPage = () => {
                 });
             }
         }
-    };
+    }
+
+    const confirmSync = async () => {
+        const isConfirm = await withReactContent(Swal).fire({
+            title: 'Apakah Anda yakin?',
+            text: 'Menyinkronkan kategori akan memperbarui data kategori di catalog service',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, sinkronkan!',
+            cancelButtonText: 'Batal',
+        });
+
+        if (isConfirm.isConfirmed) {
+            try {
+                const syncCategoriesData = await syncCategories();
+
+                if (syncCategoriesData.success) {
+                    await withReactContent(Swal).fire({
+                        title: 'Berhasil',
+                        text: syncCategoriesData.message,
+                        icon: 'success',
+                    });
+
+                    window.location.reload();
+                } else {
+                    throw new Error(syncCategoriesData.message);
+                }
+            } catch (error) {
+                await withReactContent(Swal).fire({
+                    title: 'Terjadi Kesalahan!',
+                    text: error.message || 'Kategori gagal disinkronkan',
+                    icon: 'error',
+                });
+            }
+        }
+    }
 
     return (
         <Wrapper needAuth role={ADMIN}>
@@ -139,9 +174,15 @@ export const CategoryIndexPage = () => {
                                     className="d-flex items-center py-20 px-30 border-bottom-light justify-content-between">
                                     <h2 className="text-17 lh-1 fw-500">Kategori Kursus</h2>
 
-                                    <Link to={'/admin/categories/create'} className="button -sm -purple-1 text-white">
-                                        Tambah
-                                    </Link>
+                                    <div className={'d-flex'}>
+                                        <a className="button -sm -purple-1 text-white mr-10" href={'#'} onClick={() => confirmSync()}>
+                                            Sinkronkan
+                                        </a>
+                                        <Link to={'/admin/categories/create'}
+                                              className="button -sm -purple-1 text-white">
+                                            Tambah
+                                        </Link>
+                                    </div>
                                 </div>
 
                                 <div className="py-30 px-30">
@@ -227,7 +268,7 @@ export const CategoryIndexPage = () => {
                                 </div>
 
                                 {
-                                    (!isLoading && data.length > 10) && (
+                                    (!isLoading && pagination.total_items > 10) && (
                                         <div className="row justify-center pt-30 pb-30">
                                             <div className="col-auto">
                                                 <Pagination pagination={pagination} onPageChange={handlePageChange}/>

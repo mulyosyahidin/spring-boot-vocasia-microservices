@@ -34,4 +34,3 @@ public class Chapter extends BaseEntity {
     List<Lesson> lessons;
 
 }
-

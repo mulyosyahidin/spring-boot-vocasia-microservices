@@ -3,7 +3,17 @@ serviceName: course
 appLabel: course
 appName: course
 
+hpaLabel: course-hpa
+hpaCpuUtilization: 50
+
+memoryRequest: 512Mi
+cpuRequest: 256m
+
+memoryLimit: 2048Mi
+cpuLimit: 1024m
+
 replicaCount: 2
+maxReplicas: 5
 
 image:
   repository: martinms20/course
@@ -21,7 +31,7 @@ profile_enabled: true
 config_enabled: true
 discovery_enabled: true
 resouceserver_enabled: false
-otel_enabled: true
+otel_enabled: false
 kafka_enabled: false # nanti ubah ke true
 
 customEnvs:

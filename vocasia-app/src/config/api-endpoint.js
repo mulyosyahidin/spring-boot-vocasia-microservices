@@ -8,6 +8,7 @@ export const COURSE_ADMIN_CATEGORIES = '/course/admin/categories';
 export const COURSE_ADMIN_CATEGORIES_ONLY_PARENTS = '/course/admin/categories/only-parents';
 export const COURSE_ADMIN_CATEGORIES_STORE = '/course/admin/categories';
 export const COURSE_ADMIN_CATEGORIES_GET_BY_ID = '/course/admin/categories/:id';
+export const COURSE_ADMIN_CATEGORIES_SYNC = '/course/admin/categories/sync';
 
 export const COURSE_INSTRUCTOR_CATEGORIES = '/course/instructor/categories';
 export const COURSE_INSTRUCTOR_COURSES = '/course/instructor/courses';

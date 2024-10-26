@@ -48,14 +48,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-mysql</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.flywaydb</groupId>-->
+<!--			<artifactId>flyway-core</artifactId>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.flywaydb</groupId>-->
+<!--			<artifactId>flyway-mysql</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
@@ -134,22 +134,22 @@
 				<version>3.3.2</version>
 				<configuration>
 					<to>
-						<image>martinms20/${project.artifactId}:v1.0.0</image>
+						<image>martinms20/${project.artifactId}:v1.0.1</image>
 					</to>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.flywaydb</groupId>
-				<artifactId>flyway-maven-plugin</artifactId>
-				<version>6.5.7</version>
-				<configuration>
-					<configFiles>
-						<configFile>
-							src/main/resources/flyway.conf
-						</configFile>
-					</configFiles>
-				</configuration>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.flywaydb</groupId>-->
+<!--				<artifactId>flyway-maven-plugin</artifactId>-->
+<!--				<version>6.5.7</version>-->
+<!--				<configuration>-->
+<!--					<configFiles>-->
+<!--						<configFile>-->
+<!--							src/main/resources/flyway.conf-->
+<!--						</configFile>-->
+<!--					</configFiles>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 

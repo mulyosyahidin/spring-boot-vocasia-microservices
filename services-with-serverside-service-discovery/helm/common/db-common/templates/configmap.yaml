@@ -27,4 +27,7 @@ data:
 
   QNA_MYSQL_ROOT_PASSWORD: "{{ .Values.global.qnaMysqlRootPassword }}"
   QNA_MYSQL_DATABASE: "{{ .Values.global.qnaMysqlRootPassword }}"
+
+  VOCASIA_MYSQL_ROOT_PASSWORD: "{{ .Values.global.vocasiaMysqlRootPassword }}"
+  VOCASIA_MYSQL_DATABASE: "{{ .Values.global.vocasiaMysqlDatabase }}"
 {{- end -}}

@@ -21,6 +21,13 @@ spec:
           ports:
             - containerPort: {{ .Values.containerPort }}
               protocol: TCP
+          resources:
+            requests:
+              memory: {{ .Values.memoryRequest }}
+              cpu: {{ .Values.cpuRequest }}
+            limits:
+              memory: {{ .Values.memoryLimit }}
+              cpu: {{ .Values.cpuLimit }}
           env:
         {{- if .Values.appname_enabled }}
             - name: SPRING_APPLICATION_NAME

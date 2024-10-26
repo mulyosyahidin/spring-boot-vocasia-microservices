@@ -42,6 +42,9 @@ public class GatewayServerApplication {
                 .route(p -> p.path("/qna/**")
                         .filters(f -> f.rewritePath("/qna/(?<segment>.*)", "/api/${segment}"))
                         .uri("lb://QNA"))
+                .route(p -> p.path("/catalog/**")
+                        .filters(f -> f.rewritePath("/catalog/(?<segment>.*)", "/api/${segment}"))
+                        .uri("lb://CATALOG"))
                 .build();
     }
 

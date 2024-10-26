@@ -9,7 +9,7 @@ spring:
   config:
     import: "optional:configserver:http://localhost:14117/"
   datasource:
-    url: "jdbc:mysql://localhost:30621/order_db"
+    url: "jdbc:mysql://localhost:30617/vocasia_db"
     username: "root"
     password: "password"
     driver-class-name: com.mysql.cj.jdbc.Driver
