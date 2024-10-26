@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class CategoryMapper {
 
@@ -51,6 +54,38 @@ public class CategoryMapper {
         storeCategoryRequest.setIcon(categoryDto.getIcon());
         storeCategoryRequest.setCreatedAt(categoryDto.getCreatedAt());
         storeCategoryRequest.setUpdatedAt(categoryDto.getUpdatedAt());
+
+        if (categoryDto.getType().equals("child")) {
+            StoreCategoryRequest.Parent parent = new StoreCategoryRequest.Parent();
+
+            parent.setId(categoryDto.getParent().getId());
+            parent.setName(categoryDto.getParent().getName());
+            parent.setSlug(categoryDto.getParent().getSlug());
+            parent.setIcon(categoryDto.getParent().getIcon());
+            parent.setCreatedAt(categoryDto.getParent().getCreatedAt());
+            parent.setUpdatedAt(categoryDto.getParent().getUpdatedAt());
+
+            storeCategoryRequest.setParent(parent);
+        }
+        else if (categoryDto.getType().equals("parent")) {
+            List<StoreCategoryRequest.Children> childrens = new ArrayList<>();
+
+            for (CategoryDto.Children children : categoryDto.getChildren()) {
+                StoreCategoryRequest.Children child = new StoreCategoryRequest.Children();
+
+                child.setId(children.getId());
+                child.setType(children.getType());
+                child.setName(children.getName());
+                child.setSlug(children.getSlug());
+                child.setIcon(children.getIcon());
+                child.setCreatedAt(children.getCreatedAt());
+                child.setUpdatedAt(children.getUpdatedAt());
+
+                childrens.add(child);
+            }
+
+            storeCategoryRequest.setChildren(childrens);
+        }
 
         return storeCategoryRequest;
     }

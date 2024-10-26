@@ -1,13 +1,12 @@
 package com.vocasia.course.controller.admin;
 
 import com.vocasia.course.dto.ResponseDto;
-import com.vocasia.course.dto.client.instructor.InstructorDto;
 import com.vocasia.course.entity.Category;
 import com.vocasia.course.exception.CustomFeignException;
 import com.vocasia.course.mapper.CategoryMapper;
 import com.vocasia.course.request.category.StoreCategoryRequest;
 import com.vocasia.course.request.category.UpdateCategoryRequest;
-import com.vocasia.course.request.client.catalog.SyncCategoryRequest;
+import com.vocasia.course.request.client.catalog.category.SyncCategoryRequest;
 import com.vocasia.course.service.ICatalogService;
 import com.vocasia.course.service.ICategoryService;
 import jakarta.validation.Valid;
@@ -107,10 +106,23 @@ public class AdminCategoryController {
 
         List<Category> allCategories = categoryService.findAll();
 
-        SyncCategoryRequest syncCategoryRequest = new SyncCategoryRequest();
-        syncCategoryRequest.setCategories(allCategories.stream().map(CategoryMapper::mapToDto).toList());
-
         try {
+            SyncCategoryRequest syncCategoryRequest = new SyncCategoryRequest();
+            syncCategoryRequest.setCategories(allCategories.stream().map(category -> {
+                Category parentCategory = null;
+                List<Category> childCategories = null;
+
+               if (category.getType().equals("child")) {
+                   parentCategory = categoryService.findById(category.getParentId());
+
+               }
+               else if (category.getType().equals("parent")) {
+                   childCategories = categoryService.findAllByParentId(category.getId());
+               }
+
+                return CategoryMapper.mapToDto(category, parentCategory, childCategories);
+            }).toList());
+
             catalogService.syncCategories(syncCategoryRequest, correlationId);
         } catch (CustomFeignException e) {
             logger.error(e.getMessage(), e);
@@ -152,8 +164,29 @@ public class AdminCategoryController {
 
             response.put("category", CategoryMapper.mapToDto(category));
 
-            com.vocasia.course.request.client.catalog.StoreCategoryRequest storeCategoryRequestToCatalog = getStoreCategoryRequest(category);
-            catalogService.save(storeCategoryRequestToCatalog, correlationId);
+            com.vocasia.course.request.client.catalog.category.StoreCategoryRequest storeCategoryRequestToCatalog = new com.vocasia.course.request.client.catalog.category.StoreCategoryRequest();
+
+            storeCategoryRequestToCatalog.setId(category.getId());
+            storeCategoryRequestToCatalog.setType(category.getType());
+            storeCategoryRequestToCatalog.setParentId(category.getParentId());
+            storeCategoryRequestToCatalog.setName(category.getName());
+            storeCategoryRequestToCatalog.setSlug(category.getSlug());
+            storeCategoryRequestToCatalog.setIcon(category.getIcon());
+            storeCategoryRequestToCatalog.setCreatedAt(category.getCreatedAt());
+            storeCategoryRequestToCatalog.setUpdatedAt(category.getUpdatedAt());
+
+            if (category.getType().equals("child")) {
+                Category parentCategory = categoryService.findById(category.getParentId());
+
+                storeCategoryRequestToCatalog.setParent(getStoreParent(parentCategory));
+            }
+            else {
+                List<Category> childCategories = categoryService.findAllByParentId(category.getId());
+
+                storeCategoryRequestToCatalog.setChildren(childCategories.stream().map(AdminCategoryController::getStoreChildren).toList());
+            }
+
+            catalogService.saveCategory(storeCategoryRequestToCatalog, correlationId);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
 
@@ -179,19 +212,64 @@ public class AdminCategoryController {
                 .body(new ResponseDto(true, "Berhasil menambahkan kategori", response, null));
     }
 
-    private static com.vocasia.course.request.client.catalog.StoreCategoryRequest getStoreCategoryRequest(Category category) {
-        com.vocasia.course.request.client.catalog.StoreCategoryRequest storeCategoryRequestToCatalog = new com.vocasia.course.request.client.catalog.StoreCategoryRequest();
+    private static com.vocasia.course.request.client.catalog.category.StoreCategoryRequest.Parent getStoreParent(Category parentCategory) {
+        com.vocasia.course.request.client.catalog.category.StoreCategoryRequest.Parent parent = new com.vocasia.course.request.client.catalog.category.StoreCategoryRequest.Parent();
 
-        storeCategoryRequestToCatalog.setId(category.getId());
-        storeCategoryRequestToCatalog.setType(category.getType());
-        storeCategoryRequestToCatalog.setParentId(category.getParentId());
-        storeCategoryRequestToCatalog.setName(category.getName());
-        storeCategoryRequestToCatalog.setSlug(category.getSlug());
-        storeCategoryRequestToCatalog.setIcon(category.getIcon());
-        storeCategoryRequestToCatalog.setCreatedAt(category.getCreatedAt());
-        storeCategoryRequestToCatalog.setUpdatedAt(category.getUpdatedAt());
+        parent.setId(parentCategory.getId());
+        parent.setType(parentCategory.getType());
+        parent.setParentId(parentCategory.getParentId());
+        parent.setName(parentCategory.getName());
+        parent.setSlug(parentCategory.getSlug());
+        parent.setIcon(parentCategory.getIcon());
+        parent.setCreatedAt(parentCategory.getCreatedAt());
+        parent.setUpdatedAt(parentCategory.getUpdatedAt());
 
-        return storeCategoryRequestToCatalog;
+        return parent;
+    }
+
+    private static com.vocasia.course.request.client.catalog.category.UpdateCategoryRequest.Parent getUpdateParent(Category parentCategory) {
+        com.vocasia.course.request.client.catalog.category.UpdateCategoryRequest.Parent parent = new com.vocasia.course.request.client.catalog.category.UpdateCategoryRequest.Parent();
+
+        parent.setId(parentCategory.getId());
+        parent.setType(parentCategory.getType());
+        parent.setParentId(parentCategory.getParentId());
+        parent.setName(parentCategory.getName());
+        parent.setSlug(parentCategory.getSlug());
+        parent.setIcon(parentCategory.getIcon());
+        parent.setCreatedAt(parentCategory.getCreatedAt());
+        parent.setUpdatedAt(parentCategory.getUpdatedAt());
+
+        return parent;
+    }
+
+    private static com.vocasia.course.request.client.catalog.category.UpdateCategoryRequest.Children getUpdateChildren(Category parentCategory) {
+        com.vocasia.course.request.client.catalog.category.UpdateCategoryRequest.Children children = new com.vocasia.course.request.client.catalog.category.UpdateCategoryRequest.Children();
+
+        children.setId(parentCategory.getId());
+        children.setType(parentCategory.getType());
+        children.setParentId(parentCategory.getParentId());
+        children.setName(parentCategory.getName());
+        children.setSlug(parentCategory.getSlug());
+        children.setIcon(parentCategory.getIcon());
+        children.setCreatedAt(parentCategory.getCreatedAt());
+        children.setUpdatedAt(parentCategory.getUpdatedAt());
+
+        return children;
+    }
+
+    private static com.vocasia.course.request.client.catalog.category.StoreCategoryRequest.Children getStoreChildren(Category parentCategory) {
+        com.vocasia.course.request.client.catalog.category.StoreCategoryRequest.Children children = new com.vocasia.course.request.client.catalog.category.StoreCategoryRequest.Children();
+
+        children.setId(parentCategory.getId());
+        children.setType(parentCategory.getType());
+        children.setParentId(parentCategory.getParentId());
+        children.setName(parentCategory.getName());
+        children.setSlug(parentCategory.getSlug());
+        children.setIcon(parentCategory.getIcon());
+        children.setCreatedAt(parentCategory.getCreatedAt());
+        children.setUpdatedAt(parentCategory.getUpdatedAt());
+
+        return children;
     }
 
     @GetMapping("/categories/{categoryId}")
@@ -239,7 +317,19 @@ public class AdminCategoryController {
 
             response.put("category", CategoryMapper.mapToDto(updatedCategory));
 
-            com.vocasia.course.request.client.catalog.UpdateCategoryRequest updateCategoryRequestToCatalog = getUpdateCategoryRequest(updatedCategory);
+            com.vocasia.course.request.client.catalog.category.UpdateCategoryRequest updateCategoryRequestToCatalog = getUpdateCategoryRequest(updatedCategory);
+
+            if (updatedCategory.getType().equals("child")) {
+                Category parentCategory = categoryService.findById(updatedCategory.getParentId());
+
+                updateCategoryRequestToCatalog.setParent(getUpdateParent(parentCategory));
+            }
+            else if (updatedCategory.getType().equals("parent")) {
+                List<Category> childCategories = categoryService.findAllByParentId(updatedCategory.getId());
+
+                updateCategoryRequestToCatalog.setChildren(childCategories.stream().map(AdminCategoryController::getUpdateChildren).toList());
+            }
+
             catalogService.updateCategory(categoryId, updateCategoryRequestToCatalog, correlationId);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -266,8 +356,8 @@ public class AdminCategoryController {
                 .body(new ResponseDto(true, "Berhasil memperbarui kategori", response, null));
     }
 
-    private static com.vocasia.course.request.client.catalog.UpdateCategoryRequest getUpdateCategoryRequest(Category updatedCategory) {
-        com.vocasia.course.request.client.catalog.UpdateCategoryRequest updateCategoryRequestToCatalog = new com.vocasia.course.request.client.catalog.UpdateCategoryRequest();
+    private static com.vocasia.course.request.client.catalog.category.UpdateCategoryRequest getUpdateCategoryRequest(Category updatedCategory) {
+        com.vocasia.course.request.client.catalog.category.UpdateCategoryRequest updateCategoryRequestToCatalog = new com.vocasia.course.request.client.catalog.category.UpdateCategoryRequest();
 
         updateCategoryRequestToCatalog.setType(updatedCategory.getType());
         updateCategoryRequestToCatalog.setParentId(updatedCategory.getParentId());

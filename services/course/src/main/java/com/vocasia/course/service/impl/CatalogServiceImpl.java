@@ -3,9 +3,10 @@ package com.vocasia.course.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocasia.course.dto.ResponseDto;
 import com.vocasia.course.exception.CustomFeignException;
-import com.vocasia.course.request.client.catalog.StoreCategoryRequest;
-import com.vocasia.course.request.client.catalog.SyncCategoryRequest;
-import com.vocasia.course.request.client.catalog.UpdateCategoryRequest;
+import com.vocasia.course.request.client.catalog.category.StoreCategoryRequest;
+import com.vocasia.course.request.client.catalog.category.SyncCategoryRequest;
+import com.vocasia.course.request.client.catalog.category.UpdateCategoryRequest;
+import com.vocasia.course.request.client.catalog.course.StoreCourseRequest;
 import com.vocasia.course.service.ICatalogService;
 import com.vocasia.course.service.client.CatalogFeignClient;
 import feign.FeignException;
@@ -43,7 +44,7 @@ public class CatalogServiceImpl implements ICatalogService {
     }
 
     @Override
-    public void save(StoreCategoryRequest storeCategoryRequest, String correlationId) {
+    public void saveCategory(StoreCategoryRequest storeCategoryRequest, String correlationId) {
         try {
             ResponseEntity<ResponseDto> catalogFeignClientsaveCategoryResponseEntity = catalogFeignClient.saveCategory(correlationId, storeCategoryRequest);
             ResponseDto responseBody = catalogFeignClientsaveCategoryResponseEntity.getBody();
@@ -82,6 +83,21 @@ public class CatalogServiceImpl implements ICatalogService {
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();
 
             logger.info("CatalogServiceImpl.delete:: $data: {}", data);
+        } catch (FeignException e) {
+            throw new CustomFeignException(e, new ObjectMapper());
+        }
+    }
+
+    @Override
+    public void saveCourse(StoreCourseRequest storeCourseRequest, String correlationId) {
+        try {
+            ResponseEntity<ResponseDto> catalogFeignClientSaveCourseResponseEntity = catalogFeignClient.saveCourse(correlationId, storeCourseRequest);
+            ResponseDto responseBody = catalogFeignClientSaveCourseResponseEntity.getBody();
+
+            assert responseBody != null;
+            Map<String, Object> data = (Map<String, Object>) responseBody.getData();
+
+            logger.info("CatalogServiceImpl.saveCourse:: $data: {}", data);
         } catch (FeignException e) {
             throw new CustomFeignException(e, new ObjectMapper());
         }

@@ -11,9 +11,9 @@ public interface ICategoryService {
 
     List<Category> findAll();
     Category save(StoreCategoryRequest storeCategoryRequest);
+    Category save(UpdateCategoryRequest updateCategoryRequest);
     Category findById(Long id);
     Category update(Category category, UpdateCategoryRequest updateCategoryRequest);
     void delete(Category category);
     void deleteAll();
-
 }

@@ -75,10 +75,19 @@ public class AdminCategoryController {
 
         categoryService.deleteAll();
 
-        for (CategoryDto categoryDto : syncCategoryRequest.getCategories()) {
-            StoreCategoryRequest storeCategoryRequest = CategoryMapper.mapToStoreRequest(categoryDto);
+        try {
+            for (CategoryDto categoryDto : syncCategoryRequest.getCategories()) {
+                StoreCategoryRequest storeCategoryRequest = CategoryMapper.mapToStoreRequest(categoryDto);
 
-            categoryService.save(storeCategoryRequest);
+                categoryService.save(storeCategoryRequest);
+            }
+        }
+        catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, "Gagal menyinkronkan data kategori", null, null));
         }
 
         return ResponseEntity
@@ -92,12 +101,18 @@ public class AdminCategoryController {
                                                       @Valid @RequestBody UpdateCategoryRequest updateCategoryRequest) {
         logger.info("AdminCategoryController.updateCategory called");
 
+        updateCategoryRequest.setId(categoryId);
+
         Category category = categoryService.findById(categoryId);
 
         if (category == null) {
+            category = categoryService.save(updateCategoryRequest);
+            Map<String, Object> response = new HashMap<>();
+            response.put("category", CategoryMapper.mapToDto(category));
+
             return ResponseEntity
-                    .status(HttpStatus.SC_NOT_FOUND)
-                    .body(new ResponseDto(false, "Data kategori tidak ditemukan", null, null));
+                    .status(HttpStatus.SC_CREATED)
+                    .body(new ResponseDto(true, "Berhasil menyimpan data kategori", response, null));
         }
 
         Category updatedCategory = categoryService.update(category, updateCategoryRequest);

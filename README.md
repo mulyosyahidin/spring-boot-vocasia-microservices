@@ -105,3 +105,6 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 26/10/2024:
 1. Inisialisasi Catalog Service
 2. Menyelesaikan: Sinkronisasi Kategori dari Course Service ke Catalog Service
+
+27/10/2024:
+1. Menyelesaikan: Sinkronisasi Kursus dari Course Service ke Catalog Service Saat Publish Course

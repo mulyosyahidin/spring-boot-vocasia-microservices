@@ -1,4 +1,4 @@
-package com.vocasia.course.request.client.catalog;
+package com.vocasia.course.request.client.catalog.category;
 
 import com.vocasia.course.dto.data.CategoryDto;
 import lombok.Getter;

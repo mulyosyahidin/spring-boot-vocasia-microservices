@@ -237,6 +237,11 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.POST, "/catalog/admin/categories/sync").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.PUT, "/catalog/admin/categories/{categoryId}").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.DELETE, "/catalog/admin/categories/{categoryId}").hasRole("ADMIN")
+
+                        .pathMatchers(HttpMethod.GET, "/catalog/instructor/courses").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.POST, "/catalog/instructor/courses").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.PUT, "/catalog/instructor/courses/{courseId}").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.DELETE, "/catalog/instructor/courses/{courseId}").hasRole("INSTRUCTOR")
                 )
                 .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec
                         .jwt(jwtSpec -> jwtSpec.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));
