@@ -1,0 +1,30 @@
+deploymentName: db-course
+serviceName: db-course
+appLabel: db-course
+appName: db-course
+
+replicaCount: 1
+
+image:
+  repository: mysql
+  tag: 8.0
+
+containerPort: 30620
+
+service:
+  port: 30620
+
+pvc:
+  name: course-db-pvc
+
+customEnvs:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: COURSE_MYSQL_ROOT_PASSWORD
+  - name: MYSQL_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: COURSE_MYSQL_DATABASE

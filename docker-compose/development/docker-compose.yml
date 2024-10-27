@@ -224,171 +224,11 @@ services:
       file: common-config.yml
       service: network-deploy-service
 
-#  db_authentication:
-#    image: mysql:8.0
-#    container_name: db-authentication
-#    ports:
-#      - "30618:3306"
-#    environment:
-#      MYSQL_DATABASE: authentication_db
-#      MYSQL_ROOT_PASSWORD: password
-#    healthcheck:
-#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-#      interval: 20s
-#      timeout: 5s
-#      retries: 20
-#      start_period: 20s
-#    volumes:
-#      - authentication_db_data:/var/lib/mysql
-#    extends:
-#      file: common-config.yml
-#      service: base-config
-#
-#  db_instructor:
-#    image: mysql:8.0
-#    container_name: db-instructor
-#    ports:
-#      - "30619:3306"
-#    environment:
-#      MYSQL_DATABASE: instructor_db
-#      MYSQL_ROOT_PASSWORD: password
-#    healthcheck:
-#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-#      interval: 20s
-#      timeout: 5s
-#      retries: 20
-#      start_period: 20s
-#    volumes:
-#      - instructor_db_data:/var/lib/mysql
-#    extends:
-#      file: common-config.yml
-#      service: base-config
-#
-#  db_course:
-#    image: mysql:8.0
-#    container_name: db-course
-#    ports:
-#      - "30620:3306"
-#    environment:
-#      MYSQL_DATABASE: course_db
-#      MYSQL_ROOT_PASSWORD: password
-#    healthcheck:
-#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-#      interval: 20s
-#      timeout: 5s
-#      retries: 20
-#      start_period: 20s
-#    volumes:
-#      - course_db_data:/var/lib/mysql
-#    extends:
-#      file: common-config.yml
-#      service: base-config
-#
-#  db_order:
-#    image: mysql:8.0
-#    container_name: db-order
-#    ports:
-#      - "30621:3306"
-#    environment:
-#      MYSQL_DATABASE: order_db
-#      MYSQL_ROOT_PASSWORD: password
-#    healthcheck:
-#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-#      interval: 20s
-#      timeout: 5s
-#      retries: 20
-#      start_period: 20s
-#    volumes:
-#      - order_db_data:/var/lib/mysql
-#    extends:
-#      file: common-config.yml
-#      service: base-config
-#
-#  db_payment:
-#    image: mysql:8.0
-#    container_name: db-payment
-#    ports:
-#      - "30622:3306"
-#    environment:
-#      MYSQL_DATABASE: payment_db
-#      MYSQL_ROOT_PASSWORD: password
-#    healthcheck:
-#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-#      interval: 20s
-#      timeout: 5s
-#      retries: 20
-#      start_period: 20s
-#    volumes:
-#      - payment_db_data:/var/lib/mysql
-#    extends:
-#      file: common-config.yml
-#      service: base-config
-#
-#  db_enrollment:
-#    image: mysql:8.0
-#    container_name: db-enrollment
-#    ports:
-#      - "30623:3306"
-#    environment:
-#      MYSQL_DATABASE: enrollment_db
-#      MYSQL_ROOT_PASSWORD: password
-#    healthcheck:
-#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-#      interval: 20s
-#      timeout: 5s
-#      retries: 20
-#      start_period: 20s
-#    volumes:
-#      - enrollment_db_data:/var/lib/mysql
-#    extends:
-#      file: common-config.yml
-#      service: base-config
-#
-#  db_finance:
-#    image: mysql:8.0
-#    container_name: db-finance
-#    ports:
-#      - "30624:3306"
-#    environment:
-#      MYSQL_DATABASE: finance_db
-#      MYSQL_ROOT_PASSWORD: password
-#    healthcheck:
-#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-#      interval: 20s
-#      timeout: 5s
-#      retries: 20
-#      start_period: 20s
-#    volumes:
-#      - finance_db_data:/var/lib/mysql
-#    extends:
-#      file: common-config.yml
-#      service: base-config
-#
-#  db_qna:
-#    image: mysql:8.0
-#    container_name: db-qna
-#    ports:
-#      - "30625:3306"
-#    environment:
-#      MYSQL_DATABASE: qna_db
-#      MYSQL_ROOT_PASSWORD: password
-#    healthcheck:
-#      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-#      interval: 20s
-#      timeout: 5s
-#      retries: 20
-#      start_period: 20s
-#    volumes:
-#      - qna_db_data:/var/lib/mysql
-#    extends:
-#      file: common-config.yml
-#      service: base-config
-
-  db_vocasia:
+  db_mysql:
     image: mysql:8.0
-    container_name: db-vocasia
+    container_name: db-mysql
     ports:
-      - "30617:3306"
+      - "30626:3306"
     environment:
       MYSQL_DATABASE: vocasia_db
       MYSQL_ROOT_PASSWORD: password
@@ -399,24 +239,24 @@ services:
       retries: 20
       start_period: 20s
     volumes:
-      - vocasia_db_data:/var/lib/mysql
+      - mysql_db_data:/var/lib/mysql
     extends:
       file: common-config.yml
       service: base-config
 
-  db_catalog:
+  db_mongo:
     image: mongo:6.0
-    container_name: db-catalog
+    container_name: db-mongo
     ports:
       - "30627:27017"
     environment:
-      MONGO_INITDB_DATABASE: catalog_db
+      MONGO_INITDB_DATABASE: vocasia_db
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
-      - catalog_db_data:/data/db
+      - mongo_db_data:/data/db
     healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      test: [ "CMD", "mongosh", "--quiet", "127.0.0.1/test", "--eval", "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)'", ]
       interval: 20s
       timeout: 5s
       retries: 20
@@ -426,7 +266,7 @@ services:
       service: base-config
 
   configserver:
-    image: martinms20/configserver:v1.0.1
+    image: martinms20/configserver:local
     container_name: config-server
     ports:
       - "14117:14117"
@@ -446,7 +286,7 @@ services:
       OTEL_SERVICE_NAME: "configserver"
 
   eurekaserver:
-    image: "martinms20/eurekaserver:v1.0.1"
+    image: "martinms20/eurekaserver:local"
     container_name: eureka-server
     ports:
       - "14118:14118"
@@ -472,17 +312,16 @@ services:
       service: base-config
 
   authentication_service:
-    image: martinms20/authentication:v1.0.1
+    image: martinms20/authentication:local
     container_name: service-authentication
     ports:
       - "14120:14120"
     environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db-authentication:3306/authentication_db
-      SPRING_DATASOURCE_URL: jdbc:mysql://db-vocasia:3306/vocasia_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       KEYCLOAK_SERVER_URL: "http://keycloak:8080"
       KEYCLOAK_CLIENT_ID: "vocasia-users"
-      KEYCLOAK_CLIENT_SECRET: "GiJjDK1ZPtC6tt2xvM1ONBZFi9MKiWNf"
+      KEYCLOAK_CLIENT_SECRET: "gy8FsFmVZUEfOsDGhIl63NNtCKyZJ5uo"
       KEYCLOAK_REALM: "Vocasia"
       KEYCLOAK_AUTH_CLIENT_ID: "vocasia-auth"
       OTEL_SERVICE_NAME: "authentication"
@@ -493,8 +332,7 @@ services:
       retries: 20
       start_period: 20s
     depends_on:
-#      db_authentication:
-      db_vocasia:
+      db_mysql:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
@@ -503,13 +341,12 @@ services:
       service: service-aws-config
 
   instructor_service:
-    image: martinms20/instructor:v1.0.1
+    image: martinms20/instructor:local
     container_name: service-instructor
     ports:
       - "14121:14121"
     environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db-instructor:3306/instructor_db
-      SPRING_DATASOURCE_URL: jdbc:mysql://db-vocasia:3306/vocasia_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "instructor"
     healthcheck:
@@ -519,8 +356,7 @@ services:
       retries: 20
       start_period: 20s
     depends_on:
-#      db_instructor:
-      db_vocasia:
+      db_mysql:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
@@ -529,13 +365,12 @@ services:
       service: service-config
 
   course_service:
-    image: martinms20/course:v1.0.1
+    image: martinms20/course:local
     container_name: service-course
     ports:
       - "14122:14122"
     environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db-course:3306/course_db
-      SPRING_DATASOURCE_URL: jdbc:mysql://db-vocasia:3306/vocasia_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "course"
     healthcheck:
@@ -545,8 +380,7 @@ services:
       retries: 20
       start_period: 20s
     depends_on:
-#      db_course:
-      db_vocasia:
+      db_mysql:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
@@ -555,13 +389,12 @@ services:
       service: service-aws-config
 
   order_service:
-    image: martinms20/order:v1.0.1
+    image: martinms20/order:local
     container_name: service-order
     ports:
       - "14124:14124"
     environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db-order:3306/order_db
-      SPRING_DATASOURCE_URL: jdbc:mysql://db-vocasia:3306/vocasia_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "order"
       FINANCE_PERCENT_PLATFORM_FEE: 5
@@ -572,8 +405,7 @@ services:
       retries: 20
       start_period: 20s
     depends_on:
-#      db_order:
-      db_vocasia:
+      db_mysql:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
@@ -582,13 +414,12 @@ services:
       service: service-config
 
   payment_service:
-    image: martinms20/payment:v1.0.1
+    image: martinms20/payment:local
     container_name: service-payment
     ports:
       - "14125:14125"
     environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db-payment:3306/payment_db
-      SPRING_DATASOURCE_URL: jdbc:mysql://db-vocasia:3306/vocasia_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       MIDTRANS_MERCHANT_ID: "G831856510"
       MIDTRANS_CLIENT_KEY: "SB-Mid-client-4KbJJQfBaYS9Lplt"
@@ -602,8 +433,7 @@ services:
       retries: 20
       start_period: 20s
     depends_on:
-#      db_payment:
-      db_vocasia:
+      db_mysql:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
@@ -612,13 +442,12 @@ services:
       service: service-config
 
   enrollment_service:
-    image: martinms20/enrollment:v1.0.1
+    image: martinms20/enrollment:local
     container_name: service-enrollment
     ports:
       - "14126:14126"
     environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db-enrollment:3306/enrollment_db
-      SPRING_DATASOURCE_URL: jdbc:mysql://db-vocasia:3306/vocasia_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "enrollment"
     healthcheck:
@@ -628,8 +457,7 @@ services:
       retries: 20
       start_period: 20s
     depends_on:
-#      db_enrollment:
-      db_vocasia:
+      db_mysql:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
@@ -638,13 +466,12 @@ services:
       service: service-config
 
   finance_service:
-    image: martinms20/finance:v1.0.1
+    image: martinms20/finance:local
     container_name: service-finance
     ports:
       - "14127:14127"
     environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db-finance:3306/finance_db
-      SPRING_DATASOURCE_URL: jdbc:mysql://db-vocasia:3306/vocasia_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "finance"
       FINANCE_PERCENT_PLATFORM_FEE: 5
@@ -655,8 +482,7 @@ services:
       retries: 20
       start_period: 20s
     depends_on:
-#      db_finance:
-      db_vocasia:
+      db_mysql:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
@@ -665,13 +491,12 @@ services:
       service: service-aws-config
 
   qna_service:
-    image: martinms20/qna:v1.0.1
+    image: martinms20/qna:local
     container_name: service-qna
     ports:
       - "14128:14128"
     environment:
-#      SPRING_DATASOURCE_URL: jdbc:mysql://db-qna:3306/qna_db
-      SPRING_DATASOURCE_URL: jdbc:mysql://db-vocasia:3306/vocasia_db
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "qna"
     healthcheck:
@@ -681,8 +506,32 @@ services:
       retries: 20
       start_period: 20s
     depends_on:
-#      db_qna:
-      db_vocasia:
+      db_mysql:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-config
+
+  catalog_service:
+    image: martinms20/catalog:local
+    container_name: service-catalog
+    ports:
+      - "14129:14129"
+    environment:
+      SPRING_DATA_MONGODB_URI: "mongodb://root:password@db-mongo:27017/vocasia_db"
+      SPRING_DATA_MONGODB_DATABASE: "vocasia_db"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      OTEL_SERVICE_NAME: "catalog"
+    healthcheck:
+      test: "curl --fail --silent localhost:14129/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_mongo:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
@@ -691,7 +540,7 @@ services:
       service: service-config
 
   gatewayserver:
-    image: "martinms20/gatewayserver:v1.0.1"
+    image: "martinms20/gatewayserver:local"
     container_name: gateway-server
     ports:
       - "14119:14119"
@@ -714,6 +563,8 @@ services:
         condition: service_healthy
       qna_service:
         condition: service_healthy
+      catalog_service:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "gatewayserver"
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
@@ -732,23 +583,7 @@ networks:
     driver: bridge
 
 volumes:
-  authentication_db_data:
+  mysql_db_data:
     driver: local
-  instructor_db_data:
-    driver: local
-  course_db_data:
-    driver: local
-  order_db_data:
-    driver: local
-  payment_db_data:
-    driver: local
-  enrollment_db_data:
-    driver: local
-  finance_db_data:
-    driver: local
-  qna_db_data:
-    driver: local
-  vocasia_db_data:
-    driver: local
-  catalog_db_data:
+  mongo_db_data:
     driver: local

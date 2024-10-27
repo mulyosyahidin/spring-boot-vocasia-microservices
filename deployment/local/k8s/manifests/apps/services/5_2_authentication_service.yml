@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentication-deployment
+  labels:
+    app: authentication
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authentication
+  template:
+    metadata:
+      labels:
+        app: authentication
+    spec:
+      containers:
+        - name: authentication
+          image: martinms20/authentication:v1.0.1
+          ports:
+            - containerPort: 14120
+          env:
+            - name: SPRING_APPLICATION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: AUTHENTICATION_APPLICATION_NAME
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: SPRING_PROFILES_ACTIVE
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: AUTHENTICATION_SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: AUTHENTICATION_SPRING_DATASOURCE_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+#                  key: AUTHENTICATION_SPRING_DATASOURCE_URL
+                  key:
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+            #            - name: JAVA_TOOL_OPTIONS
+            #              valueFrom:
+            #                configMapKeyRef:
+            #                  name: vocasia-configmap
+            #                  key: JAVA_TOOL_OPTIONS
+            #            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            #              valueFrom:
+            #                configMapKeyRef:
+            #                  name: vocasia-configmap
+            #                  key: OTEL_EXPORTER_OTLP_ENDPOINT
+            #            - name: OTEL_METRICS_EXPORTER
+            #              valueFrom:
+            #                configMapKeyRef:
+            #                  name: vocasia-configmap
+            #                  key: OTEL_METRICS_EXPORTER
+            #            - name: OTEL_SERVICE_NAME
+            #              valueFrom:
+            #                configMapKeyRef:
+            #                  name: vocasia-configmap
+            #                  key: AUTHENTICATION_OTEL_SERVICE_NAME
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: AWS_S3_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: AWS_S3_REGION
+            - name: AWS_S3_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: AWS_S3_BUCKET
+            - name: SPRING_CONFIG_IMPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: SPRING_CONFIG_IMPORT
+            - name: KEYCLOAK_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: KEYCLOAK_SERVER_URL
+            - name: KEYCLOAK_CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: KEYCLOAK_CLIENT_ID
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: KEYCLOAK_CLIENT_SECRET
+            - name: KEYCLOAK_REALM
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: KEYCLOAK_REALM
+            - name: KEYCLOAK_AUTH_CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: KEYCLOAK_AUTH_CLIENT_ID
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authentication
+spec:
+  selector:
+    app: authentication
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 14120
+      targetPort: 14120

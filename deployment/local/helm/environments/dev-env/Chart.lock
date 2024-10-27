@@ -1,0 +1,45 @@
+dependencies:
+- name: vocasia-service-common
+  repository: file://../../common/service-common
+  version: 0.1.0
+- name: db-mysql
+  repository: file://../../services/db/db-mongo
+  version: 0.1.0
+- name: db-mongo
+  repository: file://../../services/db/db-mysql
+  version: 0.1.0
+- name: configserver
+  repository: file://../../services/microservices/configserver
+  version: 0.1.0
+- name: eurekaserver
+  repository: file://../../services/microservices/eurekaserver
+  version: 0.1.0
+- name: authentication
+  repository: file://../../services/microservices/authentication
+  version: 0.1.0
+- name: course
+  repository: file://../../services/microservices/course
+  version: 0.1.0
+- name: enrollment
+  repository: file://../../services/microservices/enrollment
+  version: 0.1.0
+- name: finance
+  repository: file://../../services/microservices/finance
+  version: 0.1.0
+- name: instructor
+  repository: file://../../services/microservices/instructor
+  version: 0.1.0
+- name: order
+  repository: file://../../services/microservices/order
+  version: 0.1.0
+- name: payment
+  repository: file://../../services/microservices/payment
+  version: 0.1.0
+- name: qna
+  repository: file://../../services/microservices/qna
+  version: 0.1.0
+- name: gatewayserver
+  repository: file://../../services/microservices/gatewayserver
+  version: 0.1.0
+digest: sha256:aae91da4195b75f149e00c0c558a802df9c370aa1f298dc98cda6b18b98f5ce2
+generated: "2024-10-27T06:01:37.4433589+07:00"

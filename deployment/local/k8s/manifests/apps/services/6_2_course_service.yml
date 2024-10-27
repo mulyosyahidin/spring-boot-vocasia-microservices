@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: course-deployment
+  labels:
+    app: course
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: course
+  template:
+    metadata:
+      labels:
+        app: course
+    spec:
+      containers:
+        - name: course
+          image: martinms20/course:v1.0.1
+          ports:
+            - containerPort: 14120
+          env:
+            - name: SPRING_APPLICATION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: COURSE_APPLICATION_NAME
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: SPRING_PROFILES_ACTIVE
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: COURSE_SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: COURSE_SPRING_DATASOURCE_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: COURSE_SPRING_DATASOURCE_URL
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#            - name: JAVA_TOOL_OPTIONS
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: JAVA_TOOL_OPTIONS
+#            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: OTEL_EXPORTER_OTLP_ENDPOINT
+#            - name: OTEL_METRICS_EXPORTER
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: OTEL_METRICS_EXPORTER
+#            - name: OTEL_SERVICE_NAME
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: COURSE_OTEL_SERVICE_NAME
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: AWS_S3_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: AWS_S3_REGION
+            - name: AWS_S3_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: AWS_S3_BUCKET
+            - name: SPRING_CONFIG_IMPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: SPRING_CONFIG_IMPORT
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: course
+spec:
+  selector:
+    app: course
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 14122
+      targetPort: 14122

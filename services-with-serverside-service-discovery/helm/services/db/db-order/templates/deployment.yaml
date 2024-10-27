@@ -1,1 +1,0 @@
-{{- template "db.common.deployment" . -}}

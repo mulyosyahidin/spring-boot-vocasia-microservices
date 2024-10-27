@@ -1,0 +1,30 @@
+deploymentName: db-finance
+serviceName: db-finance
+appLabel: db-finance
+appName: db-finance
+
+replicaCount: 1
+
+image:
+  repository: mysql
+  tag: 8.0
+
+containerPort: 30624
+
+service:
+  port: 30624
+
+pvc:
+  name: finance-db-pvc
+
+customEnvs:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: FINANCE_MYSQL_ROOT_PASSWORD
+  - name: MYSQL_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: FINANCE_MYSQL_DATABASE

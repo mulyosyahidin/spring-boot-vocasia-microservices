@@ -1,0 +1,73 @@
+global:
+  configMapName: vocasia-configmap
+  mysqlConfigMapName: mysql-configmap
+  mongoConfigMapName: mongo-configmap
+
+  activeProfile: development
+  configServerURL: configserver:http://configserver:14117/
+  eurekaServerURL: http://eurekaserver:14118/eureka/
+  keyCloakURL: http://keycloak.default.svc.cluster.local:80/realms/Vocasia/protocol/openid-connect/certs
+  openTelemetryJavaAgent: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+  otelExporterEndPoint: http://tempo-grafana-tempo-distributor:4317
+  otelMetricsExporter: none
+  kafkaBrokerURL: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
+
+  awsAccessKeyId: AKIA6GBMGQU2WPGRSEWD
+  awsSecretAccessKey: 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
+  awsS3Region: ap-southeast-1
+  awsS3Bucket: vocasia
+
+  midtransMerchantId: G831856510
+  midtransClientKey: SB-Mid-client-4KbJJQfBaYS9Lplt
+  midtransServerKey: SB-Mid-server-l-PGFhcZZ-wTh5bebWsEefs0
+  midtransIsProduction: "false"
+
+  authenticationApplicationName: authentication
+  authenticationOtelServiceName: authentication
+
+  courseApplicationName: course
+  courseOtelServiceName: course
+
+  enrollmentApplicationName: enrollment
+  enrollmentOtelServiceName: enrollment
+
+  financeApplicationName: finance
+  financeOtelServiceName: finance
+  financePercentPlatformFee: 5
+
+  instructorApplicationName: instructor
+  instructorOtelServiceName: instructor
+
+  orderApplicationName: order
+  orderOtelServiceName: order
+
+  paymentApplicationName: payment
+  paymentOtelServiceName: payment
+
+  qnaApplicationName: qna
+  qnaOtelServiceName: qna
+
+  vocasiaSpringDatasourceUsername: root
+  vocasiaSpringDatasourcePassword: password
+  vocasiaSpringDatasourceUrl: jdbc:mysql://db-vocasia:30626/vocasia_db
+
+  vocasiaSpringDataMongodbUri: mongodb://db-mongodb:27017/vocasia_db
+  vocasiaSpringDataMongodbDatabase: vocasia_db
+
+  vocasiaMongoInitdbRootUsername: root
+  vocasiaMongoInitdbRootPassword: password
+
+  gatewayserverApplicationName: gatewayserver
+  gatewayserverOtelServiceName: gatewayserver
+
+  vocasiaMysqlRootPassword: password
+  vocasiaMysqlDatabase: vocasia_db
+
+  keycloakAdmin: admin
+  keycloakAdminPassword: admin
+  keycloakLogLevel: DEBUG
+  keycloakServerUrl: http://keycloak.default.svc.cluster.local:80
+  keycloakClientId: vocasia-users
+  keycloakClientSecret: "hI2hCzri0WdN2ycVxxZ7vNp7hFemnl6w"
+  keycloakRealm: Vocasia
+  keycloakAuthClientId: vocasia-auth

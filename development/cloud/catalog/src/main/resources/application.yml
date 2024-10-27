@@ -1,0 +1,59 @@
+server:
+  port: 14129
+
+spring:
+  application:
+    name: "catalog"
+  profiles:
+    active: "development"
+  config:
+    import: "optional:configserver:http://localhost:14117/"
+  data:
+    mongodb:
+      uri: "mongodb://root:password@localhost:30627"
+      database: "vocasia_db"
+  cloud:
+    kubernetes:
+      discovery:
+        all-namespaces: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+endpoints:
+  shutdown:
+    enabled: true
+
+info:
+  app:
+    name: "catalog"
+    description: "Catalog Service"
+    version: "1.0.0"
+
+logging:
+  level:
+    com:
+      vocasia:
+        catalog: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

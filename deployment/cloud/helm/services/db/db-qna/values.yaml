@@ -1,0 +1,30 @@
+deploymentName: db-qna
+serviceName: db-qna
+appLabel: db-qna
+appName: db-qna
+
+replicaCount: 1
+
+image:
+  repository: mysql
+  tag: 8.0
+
+containerPort: 30625
+
+service:
+  port: 30625
+
+pvc:
+  name: qna-db-pvc
+
+customEnvs:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: QNA_MYSQL_ROOT_PASSWORD
+  - name: MYSQL_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: QNA_MYSQL_DATABASE

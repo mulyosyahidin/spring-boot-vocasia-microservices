@@ -1,0 +1,30 @@
+deploymentName: db-instructor
+serviceName: db-instructor
+appLabel: db-instructor
+appName: db-instructor
+
+replicaCount: 1
+
+image:
+  repository: mysql
+  tag: 8.0
+
+containerPort: 30819
+
+service:
+  port: 30819
+
+pvc:
+  name: instructor-db-pvc
+
+customEnvs:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: INSTRUCTOR_MYSQL_ROOT_PASSWORD
+  - name: MYSQL_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: INSTRUCTOR_MYSQL_DATABASE

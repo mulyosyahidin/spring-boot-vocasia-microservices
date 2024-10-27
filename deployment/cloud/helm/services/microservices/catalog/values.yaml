@@ -1,0 +1,57 @@
+deploymentName: catalog-deployment
+serviceName: catalog
+appLabel: catalog
+appName: catalog
+
+replicaCount: 1
+
+image:
+  repository: martinms20/catalog
+  tag: cloud
+
+containerPort: 14129
+
+service:
+  type: ClusterIP
+  port: 14129
+  targetPort: 14129
+
+appname_enabled: true
+profile_enabled: true
+config_enabled: true
+eureka_enabled: true
+resouceserver_enabled: false
+otel_enabled: true
+kafka_enabled: false # nanti ubah ke true
+
+customEnvs:
+  - name: SPRING_DATA_MONGODB_URI
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: CATALOG_SPRING_DATA_MONGODB_URI
+  - name: SPRING_DATA_MONGODB_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: CATALOG_SPRING_DATA_MONGODB_DATABASE
+  - name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_ACCESS_KEY_ID
+  - name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_SECRET_ACCESS_KEY
+  - name: AWS_S3_REGION
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_S3_REGION
+  - name: AWS_S3_BUCKET
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_S3_BUCKET

@@ -1,0 +1,30 @@
+deploymentName: db-catalog
+serviceName: db-catalog
+appLabel: db-catalog
+appName: db-catalog
+
+replicaCount: 1
+
+image:
+  repository: mongo
+  tag: 6.0
+
+containerPort: 30627
+
+service:
+  port: 30627
+
+pvc:
+  name: catalog-db-pvc
+
+customEnvs:
+  - name: MONGO_INITDB_ROOT_USERNAME
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: CATALOG_MONGO_INITDB_ROOT_USERNAME
+  - name: MONGO_INITDB_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: CATALOG_MONGO_INITDB_ROOT_PASSWORD
