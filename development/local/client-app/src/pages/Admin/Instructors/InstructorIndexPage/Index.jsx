@@ -90,8 +90,13 @@ export const InstructorIndexPage = () => {
                     <div className="row y-gap-30">
                         <div className="col-12">
                             <div className="rounded-16 bg-white -dark-bg-dark-1 shadow-4 h-100">
-                                <div className="d-flex items-center py-20 px-30 border-bottom-light">
+                                <div className="d-flex items-center py-20 px-30 border-bottom-light justify-content-between">
                                     <h2 className="text-17 lh-1 fw-500">Data Instruktur</h2>
+
+                                    <Link to={'/admin/instructors/submissions'}
+                                          className="button -sm -purple-1 text-white">
+                                        Pengajuan
+                                    </Link>
                                 </div>
                                 <div className="py-30 px-30">
                                     {
@@ -153,7 +158,7 @@ export const InstructorIndexPage = () => {
                                 </div>
 
                                 {
-                                    (!isLoading && data.length > 10) && (
+                                    (!isLoading && pagination.total_items > 10) && (
                                         <div className="row justify-center pt-30 pb-30">
                                             <div className="col-auto">
                                                 <Pagination pagination={pagination} onPageChange={handlePageChange}/>

@@ -1,6 +1,5 @@
 package com.vocasia.instructor.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 

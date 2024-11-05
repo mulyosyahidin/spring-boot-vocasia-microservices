@@ -28,6 +28,14 @@ dependencies:
     version: 0.1.0
     repository: file://../../common/service-common
 
+  - name: vocasia-mysql-common
+    version: 0.1.0
+    repository: file://../../common/mysql-common
+
+  - name: vocasia-mongodb-common
+    version: 0.1.0
+    repository: file://../../common/mongodb-common
+
   - name: configserver
     version: 0.1.0
     repository: file://../../services/microservices/configserver
@@ -103,6 +111,10 @@ dependencies:
   - name: catalog
     version: 0.1.0
     repository: file://../../services/microservices/catalog
+
+  - name: email
+    version: 0.1.0
+    repository: file://../../services/microservices/email
 
   - name: gatewayserver
     version: 0.1.0

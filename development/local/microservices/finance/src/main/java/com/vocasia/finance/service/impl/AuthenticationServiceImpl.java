@@ -10,6 +10,7 @@ import feign.FeignException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 
     private final Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
+    @Cacheable(value = "users", key = "#userId")
     @Override
     public UserDto findUserById(Long userId, String correlationId) {
         try {

@@ -7,13 +7,12 @@ import com.vocasia.instructor.exception.CustomFeignException;
 import com.vocasia.instructor.mapper.InstructorMapper;
 import com.vocasia.instructor.service.IAuthenticationService;
 import com.vocasia.instructor.service.IInstructorService;
-import org.apache.http.HttpStatus;
+import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +44,7 @@ public class InstructorController {
 
         Pageable paging = PageRequest.of(page, limit);
 
-        Page<Instructor> instructors = instructorService.findAll(paging);
+        Page<Instructor> instructors = instructorService.findAllByStatus("approved", paging);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> pagination = new HashMap<>();

@@ -5,6 +5,21 @@ appName: catalog
 
 replicaCount: 1
 
+hpa:
+  name: catalog-hpa
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 75
+
+resources:
+  cpu:
+    request: "256m"
+    limit: "512m"
+  memory:
+    request: "256Mi"
+    limit: "512Mi"
+
 image:
   repository: martinms20/catalog
   tag: cloud
@@ -22,7 +37,8 @@ config_enabled: true
 eureka_enabled: true
 resouceserver_enabled: false
 otel_enabled: true
-kafka_enabled: false # nanti ubah ke true
+kafka_enabled: false
+redis_enabled: false
 
 customEnvs:
   - name: SPRING_DATA_MONGODB_URI

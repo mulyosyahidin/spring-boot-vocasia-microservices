@@ -58,13 +58,24 @@ public class AdminCategoryController {
                     .body(new ResponseDto(false, "Data kategori sudah ada", null, null));
         }
 
-        Category category = categoryService.save(storeCategoryRequest);
+        Category category = null;
+
+        try {
+            category = categoryService.save(storeCategoryRequest);
+        }
+        catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, "Gagal menyimpan data kategori", null, e.getMessage()));
+        }
 
         Map<String, Object> response = new HashMap<>();
         response.put("category", CategoryMapper.mapToDto(category));
 
         return ResponseEntity
-                .status(HttpStatus.SC_CREATED)
+                .status(HttpStatus.SC_OK)
                 .body(new ResponseDto(true, "Berhasil menyimpan data kategori", response, null));
     }
 

@@ -12,10 +12,6 @@ spring:
     mongodb:
       uri: "mongodb://root:password@localhost:30627"
       database: "vocasia_db"
-  cloud:
-    kubernetes:
-      discovery:
-        all-namespaces: true
 
 management:
   endpoints:

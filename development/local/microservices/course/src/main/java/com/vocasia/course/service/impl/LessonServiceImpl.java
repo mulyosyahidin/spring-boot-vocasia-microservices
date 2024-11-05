@@ -156,4 +156,9 @@ public class LessonServiceImpl implements ILessonService {
         return lesson;
     }
 
+    @Override
+    public void save(Lesson lesson) {
+        lessonRepository.save(lesson);
+    }
+
 }

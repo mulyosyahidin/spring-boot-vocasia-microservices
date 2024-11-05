@@ -11,6 +11,7 @@ import feign.FeignException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class OrderServiceImpl implements IOrderService {
 
     private OrderFeignClient orderFeignClient;
 
+    @Cacheable(value = "orders", key = "#orderId")
     @Override
     public OrderDto findById(Long orderId, String correlationId) {
         try {
@@ -56,6 +58,7 @@ public class OrderServiceImpl implements IOrderService {
         }
     }
 
+    @Cacheable(value = "orderItems", key = "#orderId")
     @Override
     public OrderItemDto findOrderItemById(Long orderId, Long courseId, String correlationId) {
         try {

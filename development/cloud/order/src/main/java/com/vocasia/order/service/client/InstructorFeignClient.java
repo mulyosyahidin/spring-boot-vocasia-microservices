@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "instructor", url = "http://instructor:14121")
+@FeignClient(name = "instructor")
 public interface InstructorFeignClient {
 
     @PostMapping("/api/student/assign-courses")

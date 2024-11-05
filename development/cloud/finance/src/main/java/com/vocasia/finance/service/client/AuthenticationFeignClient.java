@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "authentication", url = "http://authentication:14120")
+@FeignClient(name = "authentication")
 public interface AuthenticationFeignClient {
 
     @GetMapping(value = "/api/user/{id}", consumes = "application/json")

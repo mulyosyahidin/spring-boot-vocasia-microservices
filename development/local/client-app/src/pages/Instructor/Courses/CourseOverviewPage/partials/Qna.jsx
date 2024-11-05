@@ -116,7 +116,7 @@ export const Qna = ({activeTab, courseId}) => {
             }
 
             {
-                (!isLoading && data.length > 10) && (
+                (!isLoading && pagination.total_items > 10) && (
                     <div className="row justify-center pt-30 pb-30">
                         <div className="col-auto">
                             <Pagination pagination={pagination} onPageChange={handlePageChange}/>

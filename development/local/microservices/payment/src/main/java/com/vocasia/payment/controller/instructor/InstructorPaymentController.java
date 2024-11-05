@@ -1,10 +1,8 @@
 package com.vocasia.payment.controller.instructor;
 
-import com.vocasia.payment.config.PaymentConfigProperties;
 import com.vocasia.payment.dto.ResponseDto;
 import com.vocasia.payment.entity.Payment;
 import com.vocasia.payment.mapper.PaymentMapper;
-import com.vocasia.payment.service.IMidtransPaymentService;
 import com.vocasia.payment.service.IPaymentService;
 import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;

@@ -2,8 +2,8 @@ package com.vocasia.order.controller.admin;
 
 import com.vocasia.order.dto.ResponseDto;
 import com.vocasia.order.dto.client.authentication.UserDto;
-import com.vocasia.order.dto.client.finance.InstructorIncomeDto;
-import com.vocasia.order.dto.client.finance.PlatformIncomeDto;
+import com.vocasia.order.dto.client.finance.InstructorIncomeDetailDto;
+import com.vocasia.order.dto.client.finance.PlatformIncomeDetailDto;
 import com.vocasia.order.dto.client.payment.PaymentDto;
 import com.vocasia.order.entity.Order;
 import com.vocasia.order.entity.OrderItem;
@@ -82,7 +82,7 @@ public class AdminTransactionController {
             logger.error(e.getMessage(), e);
 
             return ResponseEntity
-                    .status(org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, e.getMessage(), null, null));
         }
 
@@ -121,8 +121,8 @@ public class AdminTransactionController {
             response.put("user", userDto);
             response.put("payment", paymentDto);
 
-            List<Map<String, Object>> instructorIncomesDto = financeService.findInstructorIncomesByOrderId(order.getId(), correlationId);
-            List<Map<String, Object>> platformIncomesDto = financeService.findPlatformIncomesByOrderId(order.getId(), correlationId);
+            List<InstructorIncomeDetailDto> instructorIncomesDto = financeService.findInstructorIncomesByOrderId(order.getId(), correlationId);
+            List<PlatformIncomeDetailDto> platformIncomesDto = financeService.findPlatformIncomesByOrderId(order.getId(), correlationId);
 
             response.put("instructor_incomes", instructorIncomesDto);
             response.put("platform_incomes", platformIncomesDto);
@@ -136,12 +136,12 @@ public class AdminTransactionController {
             logger.error(e.getMessage(), e);
 
             return ResponseEntity
-                    .status(org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, e.getMessage(), null, null));
         }
 
         return ResponseEntity
-                .status(org.apache.http.HttpStatus.SC_OK)
+                .status(HttpStatus.SC_OK)
                 .body(new ResponseDto(true, "Berhasil mendapatkan data transaksi", response, null));
     }
 

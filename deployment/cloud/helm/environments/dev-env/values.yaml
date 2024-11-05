@@ -29,6 +29,8 @@ global:
   authenticationSpringDatasourceUsername: root
   authenticationSpringDatasourcePassword: password
   authenticationSpringDatasourceUrl: jdbc:mysql://db-authentication:3306/authentication_db
+  authenticationEmailInDestination: send-communication
+  authenticationEmailInGroup: authentication
 
   courseApplicationName: course
   courseOtelServiceName: course
@@ -100,6 +102,18 @@ global:
   keycloakLogLevel: DEBUG
   keycloakServerUrl: http://keycloak.default.svc.cluster.local:80
   keycloakClientId: vocasia-users
-  keycloakClientSecret: "NW5Azu7Rk7Tjxps3SDuAMvBKrhKe7rkF"
+  keycloakClientSecret: "NanKgi5gD2LIvOxDTkoykNBGpBAHsxxM"
   keycloakRealm: Vocasia
   keycloakAuthClientId: vocasia-auth
+
+  rabbitmqHost: rabbitmq.default.svc.cluster.local
+  rabbitmqPort: 5672
+  rabbitmqUsername: guest
+  rabbitmqPassword: guest
+
+  emailFunctionDefinition: email
+  emailInDestination: send-communication
+  emailInGroup: email
+
+  defaultBinder: kafka
+  redisHost: redis.default.svc.cluster.local

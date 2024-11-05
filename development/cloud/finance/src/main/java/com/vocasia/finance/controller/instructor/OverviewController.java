@@ -37,33 +37,39 @@ public class OverviewController {
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> overview = new HashMap<>();
 
-        InstructorBalance instructorBalance = instructorBalanceService.findByInstructorId(instructorId);
-
-        double totalIncome = instructorBalance.getTotalIncome();
-        double totalWithdrawn = instructorBalance.getTotalWithdrawn();
-        double totalPlatformFee = instructorBalance.getTotalPlatformFee();
-
-        overview.put("total_income", totalIncome);
-        overview.put("total_withdrawn", totalWithdrawn);
-        overview.put("total_platform_fee", totalPlatformFee);
-
         LocalDateTime now = LocalDateTime.now();
         List<MonthlyIncomeDto> monthlyIncomes = new ArrayList<>();
 
-        for (int i = 0; i < 12; i++) {
-            LocalDateTime date = now.minusMonths(i);
-            String monthName = date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("id"));
+        InstructorBalance instructorBalance = instructorBalanceService.findByInstructorId(instructorId);
 
-            double monthlyIncome = instructorBalanceService.sumTotalIncomeByInstructorIdAndMonthAndYear(
-                    instructorId,
-                    date.getMonthValue(),
-                    date.getYear()
-            );
+        if (instructorBalance == null) {
+            overview.put("total_income", 0);
+            overview.put("total_withdrawn", 0);
+            overview.put("total_platform_fee", 0);
+        } else {
+            double totalIncome = instructorBalance.getTotalIncome();
+            double totalWithdrawn = instructorBalance.getTotalWithdrawn();
+            double totalPlatformFee = instructorBalance.getTotalPlatformFee();
 
-            monthlyIncomes.add(new MonthlyIncomeDto(date.getMonthValue(), date.getYear(), monthName, monthlyIncome));
+            overview.put("total_income", totalIncome);
+            overview.put("total_withdrawn", totalWithdrawn);
+            overview.put("total_platform_fee", totalPlatformFee);
+
+            for (int i = 0; i < 12; i++) {
+                LocalDateTime date = now.minusMonths(i);
+                String monthName = date.getMonth().getDisplayName(TextStyle.FULL, Locale.forLanguageTag("id"));
+
+                double monthlyIncome = instructorBalanceService.sumTotalIncomeByInstructorIdAndMonthAndYear(
+                        instructorId,
+                        date.getMonthValue(),
+                        date.getYear()
+                );
+
+                monthlyIncomes.add(new MonthlyIncomeDto(date.getMonthValue(), date.getYear(), monthName, monthlyIncome));
+            }
+
+            Collections.reverse(monthlyIncomes);
         }
-
-        Collections.reverse(monthlyIncomes);
 
         response.put("monthly_incomes", monthlyIncomes);
         response.put("overview", overview);

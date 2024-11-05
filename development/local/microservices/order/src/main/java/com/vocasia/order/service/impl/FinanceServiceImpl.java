@@ -3,10 +3,7 @@ package com.vocasia.order.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vocasia.order.dto.ResponseDto;
 import com.vocasia.order.dto.client.course.CourseDto;
-import com.vocasia.order.dto.client.finance.InstructorBalanceDto;
-import com.vocasia.order.dto.client.finance.InstructorIncomeDto;
-import com.vocasia.order.dto.client.finance.PlatformBalanceDto;
-import com.vocasia.order.dto.client.finance.PlatformIncomeDto;
+import com.vocasia.order.dto.client.finance.*;
 import com.vocasia.order.exception.CustomFeignException;
 import com.vocasia.order.request.client.finance.NewInstructorBalanceHistoryRequest;
 import com.vocasia.order.request.client.finance.NewInstructorIncomeRequest;
@@ -18,13 +15,13 @@ import feign.FeignException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -167,8 +164,9 @@ public class FinanceServiceImpl implements IFinanceService {
         }
     }
 
+    @Cacheable(value = "instructorIncomeDetail", key = "#orderId")
     @Override
-    public List<Map<String, Object>> findInstructorIncomesByOrderId(Long orderId, String correlationId) {
+    public List<InstructorIncomeDetailDto> findInstructorIncomesByOrderId(Long orderId, String correlationId) {
         try {
             ResponseEntity<ResponseDto> financeFeignClientResponseEntity = financeFeignClient.findInstructorIncomesByOrderId(correlationId, orderId);
             ResponseDto responseBody = financeFeignClientResponseEntity.getBody();
@@ -179,11 +177,11 @@ public class FinanceServiceImpl implements IFinanceService {
 
             logger.debug("FinanceServiceImpl.findInstructorIncomesByOrderId() instructorIncomesData:: {}", instructorIncomesData);
 
-            List<Map<String, Object>> instructorIncomeDtos = new ArrayList<>();
+            List<InstructorIncomeDetailDto> instructorIncomeDtos = new ArrayList<>();
 
             if (instructorIncomesData != null) {
                 for (Map<String, Object> instructorIncomeData : instructorIncomesData) {
-                    Map<String, Object> setData = new HashMap<>();
+                    InstructorIncomeDetailDto instructorIncomeDetailDto = new InstructorIncomeDetailDto();
                     Map<String, Object> instructorIncome = (Map<String, Object>) instructorIncomeData.get("instructor_income");
 
                     InstructorIncomeDto instructorIncomeDto = new InstructorIncomeDto();
@@ -227,10 +225,10 @@ public class FinanceServiceImpl implements IFinanceService {
                     courseDto.setCreatedAt(LocalDateTime.parse(courseData.get("created_at").toString()));
                     courseDto.setUpdatedAt(LocalDateTime.parse(courseData.get("updated_at").toString()));
 
-                    setData.put("instructor_income", instructorIncomeDto);
-                    setData.put("course", courseDto);
+                    instructorIncomeDetailDto.setCourse(courseDto);
+                    instructorIncomeDetailDto.setInstructorIncome(instructorIncomeDto);
 
-                    instructorIncomeDtos.add(setData);
+                    instructorIncomeDtos.add(instructorIncomeDetailDto);
                 }
             }
 
@@ -240,8 +238,9 @@ public class FinanceServiceImpl implements IFinanceService {
         }
     }
 
+    @Cacheable(value = "platformIncomeDetail", key = "#orderId")
     @Override
-    public List<Map<String, Object>> findPlatformIncomesByOrderId(Long orderId, String correlationId) {
+    public List<PlatformIncomeDetailDto> findPlatformIncomesByOrderId(Long orderId, String correlationId) {
         try {
             ResponseEntity<ResponseDto> financeFeignClientResponseEntity = financeFeignClient.findPlatformIncomesByOrderId(correlationId, orderId);
             ResponseDto responseBody = financeFeignClientResponseEntity.getBody();
@@ -252,11 +251,11 @@ public class FinanceServiceImpl implements IFinanceService {
 
             logger.debug("FinanceServiceImpl.findPlatformIncomesByOrderId() platformIncomesData:: {}", platformIncomesData);
 
-            List<Map<String, Object>> platformIncomeDtos = new ArrayList<>();
+            List<PlatformIncomeDetailDto> platformIncomeDtos = new ArrayList<>();
 
             if (platformIncomesData != null) {
                 for (Map<String, Object> platformIncomeData : platformIncomesData) {
-                    Map<String, Object> setData = new HashMap<>();
+                    PlatformIncomeDetailDto platformIncomeDetailDto = new PlatformIncomeDetailDto();
                     Map<String, Object> platformIncome = (Map<String, Object>) platformIncomeData.get("platform_income");
 
                     PlatformIncomeDto platformIncomeDto = new PlatformIncomeDto();
@@ -299,10 +298,10 @@ public class FinanceServiceImpl implements IFinanceService {
                     courseDto.setCreatedAt(LocalDateTime.parse(courseData.get("created_at").toString()));
                     courseDto.setUpdatedAt(LocalDateTime.parse(courseData.get("updated_at").toString()));
 
-                    setData.put("platform_income", platformIncomeDto);
-                    setData.put("course", courseDto);
+                    platformIncomeDetailDto.setPlatformIncome(platformIncomeDto);
+                    platformIncomeDetailDto.setCourse(courseDto);
 
-                    platformIncomeDtos.add(setData);
+                    platformIncomeDtos.add(platformIncomeDetailDto);
                 }
             }
 

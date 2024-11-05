@@ -1,9 +1,6 @@
 package com.vocasia.course.request.client.catalog.course;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vocasia.course.entity.Chapter;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 

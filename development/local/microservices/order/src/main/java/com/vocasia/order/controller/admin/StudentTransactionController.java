@@ -1,9 +1,7 @@
 package com.vocasia.order.controller.admin;
 
 import com.vocasia.order.dto.ResponseDto;
-import com.vocasia.order.dto.client.authentication.UserDto;
 import com.vocasia.order.entity.Order;
-import com.vocasia.order.exception.CustomFeignException;
 import com.vocasia.order.mapper.OrderMapper;
 import com.vocasia.order.service.IOrderService;
 import org.apache.hc.core5.http.HttpStatus;
@@ -17,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController

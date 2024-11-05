@@ -2,6 +2,12 @@ dependencies:
 - name: vocasia-service-common
   repository: file://../../common/service-common
   version: 0.1.0
+- name: vocasia-mysql-common
+  repository: file://../../common/mysql-common
+  version: 0.1.0
+- name: vocasia-mongodb-common
+  repository: file://../../common/mongodb-common
+  version: 0.1.0
 - name: configserver
   repository: file://../../services/microservices/configserver
   version: 0.1.0
@@ -59,8 +65,11 @@ dependencies:
 - name: catalog
   repository: file://../../services/microservices/catalog
   version: 0.1.0
+- name: email
+  repository: file://../../services/microservices/email
+  version: 0.1.0
 - name: gatewayserver
   repository: file://../../services/microservices/gatewayserver
   version: 0.1.0
-digest: sha256:cf1a02f7ba1f8f027aeae86057b7258139f5bf22c52a1c083074df9453bbd8e7
-generated: "2024-10-27T21:11:30.6866376+07:00"
+digest: sha256:6d52622579c6e654b13e4bc6e27a6d660261fc0bfa582f88c557adb72e41b30b
+generated: "2024-10-31T19:04:31.0528561+07:00"

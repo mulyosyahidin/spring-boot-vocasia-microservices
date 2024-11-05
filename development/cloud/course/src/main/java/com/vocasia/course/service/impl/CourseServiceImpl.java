@@ -1,5 +1,6 @@
 package com.vocasia.course.service.impl;
 
+import com.amazonaws.AmazonClientException;
 import com.vocasia.course.config.AwsConfigProperties;
 import com.vocasia.course.entity.Chapter;
 import com.vocasia.course.entity.Course;
@@ -13,6 +14,8 @@ import com.vocasia.course.request.UpdateCourseRequest;
 import com.vocasia.course.request.UpdateCourseThumbnailRequest;
 import com.vocasia.course.service.ICourseService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,8 @@ import java.util.Objects;
 @Service
 @AllArgsConstructor
 public class CourseServiceImpl implements ICourseService {
+
+    private final Logger logger = LoggerFactory.getLogger(CourseServiceImpl.class);
 
     private final AwsConfigProperties awsConfigProperties;
 
@@ -80,7 +85,15 @@ public class CourseServiceImpl implements ICourseService {
         long fileSize = picture.getSize();
         InputStream inputStream = picture.getInputStream();
 
-        awsService.uploadFile(bucketName, fileName, fileSize, contentType, inputStream);
+        try {
+            awsService.uploadFile(bucketName, fileName, fileSize, contentType, inputStream);
+        }
+        catch (AmazonClientException e) {
+            logger.error(e.getMessage(), e);
+
+            throw new IOException("Gagal mengunggah gambar");
+        }
+
         course.setFeaturedPicture(fileName);
 
         return courseRepository.save(course);

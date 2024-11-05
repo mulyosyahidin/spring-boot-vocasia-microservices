@@ -1,8 +1,12 @@
 import {Header} from "../Header/Index.jsx";
 import {Sidebar} from "../Sidebar/Index.jsx";
 import {Footer} from "../Footer/Index.jsx";
+import {INSTRUCTOR_AUTH_DATA} from "../../../config/consts.js";
+import {DefaultSidebar} from "../DefaultSidebar/Index.jsx";
 
 export const InstructorWrapper = ({children}) => {
+    const instructorData = JSON.parse(localStorage.getItem(INSTRUCTOR_AUTH_DATA));
+
     return (
         <div className="barba-container" data-barba="container">
             <main className="main-content">
@@ -14,7 +18,9 @@ export const InstructorWrapper = ({children}) => {
                         className="dashboard -home-9 js-dashboard-home-9"
                     >
                         <div className="dashboard__sidebar scroll-bar-1">
-                            <Sidebar/>
+                            {
+                                instructorData.status === 'approved' ? <Sidebar /> : <DefaultSidebar />
+                            }
                         </div>
 
                         <div className="dashboard__main">

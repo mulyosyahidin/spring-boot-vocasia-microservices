@@ -17,4 +17,5 @@ public interface ILessonService {
     void deleteById(Lesson lesson);
     Lesson findByChapterIdAndId(Long chapterId, Long lessonId);
 
+    void save(Lesson lesson);
 }

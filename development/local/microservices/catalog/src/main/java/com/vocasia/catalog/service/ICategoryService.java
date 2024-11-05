@@ -3,7 +3,6 @@ package com.vocasia.catalog.service;
 import com.vocasia.catalog.entity.Category;
 import com.vocasia.catalog.request.category.StoreCategoryRequest;
 import com.vocasia.catalog.request.category.UpdateCategoryRequest;
-import jakarta.validation.Valid;
 
 import java.util.List;
 

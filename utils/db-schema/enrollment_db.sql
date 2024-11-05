@@ -76,6 +76,17 @@ CREATE TABLE IF NOT EXISTS `progress` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE course_reviews (
+id BIGINT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+enrollment_id BIGINT(20) NULL,
+course_id BIGINT(20) NULL,
+user_id BIGINT(20) NULL,
+rating TINYINT NOT NULL,
+review TEXT NOT NULL,
+created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+updated_at TIMESTAMP NULL
+);
+
 -- Membuang data untuk tabel enrollment_db.progress: ~2 rows (lebih kurang)
 INSERT INTO `progress` (`id`, `enrollment_id`, `lesson_id`, `status`, `created_at`, `updated_at`, `completed_at`, `started_at`) VALUES
 	(25, 43, 15, 'IN_PROGRESS', '2024-10-17 16:14:07', NULL, NULL, '2024-10-17 16:14:07'),

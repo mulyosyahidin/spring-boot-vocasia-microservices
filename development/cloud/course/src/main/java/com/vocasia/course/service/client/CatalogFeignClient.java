@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "catalog", url = "http://catalog:14129")
+@FeignClient(name = "catalog")
 public interface CatalogFeignClient {
 
     @PostMapping("/api/admin/categories/sync")

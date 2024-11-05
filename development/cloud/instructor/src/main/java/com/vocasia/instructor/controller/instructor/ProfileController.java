@@ -71,7 +71,7 @@ public class ProfileController {
     @GetMapping("/profile/{id}")
     public ResponseEntity<ResponseDto> getProfileById(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                   @PathVariable("id") Long id) {
-        logger.info("ProfileController.getProfile called");
+        logger.info("ProfileController.getProfileById called");
 
         Instructor instructor = instructorService.findById(id);
 
@@ -95,6 +95,25 @@ public class ProfileController {
                     .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, "Internal server error", null, null));
         }
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil mendapatkan data instruktur", response, null));
+    }
+
+    @GetMapping("/profile-id/{userId}")
+    public ResponseEntity<ResponseDto> getProfileOnlyByUserId(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                          @PathVariable Long userId) {
+        logger.info("ProfileController.getProfileOnlyByUserId called");
+
+        Instructor instructor = instructorService.getInstructorByUserId(userId);
+
+        if (instructor == null) {
+            throw new ResourceNotFoundException("Data tidak ditemukan");
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("instructor", InstructorMapper.mapToDto(instructor));
 
         return ResponseEntity
                 .status(HttpStatus.SC_OK)

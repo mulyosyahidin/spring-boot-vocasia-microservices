@@ -13,6 +13,16 @@ spring:
     username: "root"
     password: "password"
     driver-class-name: com.mysql.cj.jdbc.Driver
+  cache:
+    redis:
+      use-key-prefix: true
+      key-prefix: "course:"
+      cache-null-values: false
+      time-to-live: 600000
+  data:
+    redis:
+      host: localhost
+      port: 6379
   jpa:
     properties:
       hibernate:
@@ -50,15 +60,6 @@ management:
 endpoints:
   shutdown:
     enabled: true
-
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    fetch-registry: true
-    register-with-eureka: true
-    service-url:
-      defaultZone: http://localhost:14118/eureka/
 
 info:
   app:

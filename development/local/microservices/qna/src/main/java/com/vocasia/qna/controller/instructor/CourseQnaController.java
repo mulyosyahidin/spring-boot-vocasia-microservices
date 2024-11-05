@@ -14,7 +14,7 @@ import com.vocasia.qna.service.ICourseService;
 import com.vocasia.qna.service.IQnaAnswerService;
 import com.vocasia.qna.service.IQnaService;
 import jakarta.validation.Valid;
-import org.apache.http.HttpStatus;
+import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

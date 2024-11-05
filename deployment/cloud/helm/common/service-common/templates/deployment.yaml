@@ -21,6 +21,13 @@ spec:
           ports:
             - containerPort: {{ .Values.containerPort }}
               protocol: TCP
+          resources:
+            requests:
+              memory: {{ .Values.resources.memory.request }}
+              cpu: {{ .Values.resources.cpu.request }}
+            limits:
+              memory: {{ .Values.resources.memory.limit }}
+              cpu: {{ .Values.resources.cpu.limit }}
           env:
         {{- if .Values.appname_enabled }}
             - name: SPRING_APPLICATION_NAME
@@ -79,6 +86,13 @@ spec:
                 configMapKeyRef:
                   name: {{ .Values.global.configMapName }}
                   key: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+        {{- end }}
+        {{- if .Values.redis_enabled }}
+            - name: SPRING_DATA_REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.global.configMapName }}
+                  key: SPRING_DATA_REDIS_HOST
         {{- end }}
         {{- if .Values.customEnvs }}
             {{- toYaml .Values.customEnvs | nindent 12 }}

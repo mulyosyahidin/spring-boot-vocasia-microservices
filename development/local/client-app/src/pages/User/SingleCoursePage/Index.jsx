@@ -1,7 +1,7 @@
 import {Wrapper} from "../../../components/commons/Wrapper.jsx";
 import {STUDENT} from "../../../config/consts.js";
 import {PreLoader} from "../../../components/commons/PreLoader.jsx";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {Meta} from "../../../components/commons/Meta.jsx";
 import {Header} from "./partials/Header.jsx";
@@ -262,17 +262,32 @@ export const SingleCoursePage = () => {
                     <div className="px-30 sm:px-20">
                         {
                             (!isLoading && enrollment.completion_date != null) && (
-                                <div
-                                    className="d-flex items-center justify-between bg-success-1 pl-30 pr-20 py-30 rounded-8">
-                                    <div className="text-success-2 lh-1 fw-500">
-                                        Selamat, Anda telah menyelesaikan kursus ini!
+                                <>
+                                    <div
+                                        className="d-flex items-center justify-between bg-success-1 pl-30 pr-20 py-30 rounded-8">
+                                        <div className="text-success-2 lh-1 fw-500">
+                                            Selamat, Anda telah menyelesaikan kursus ini!
+                                        </div>
                                     </div>
-                                </div>
+
+                                    <div className="bg-light-4 p-30 rounded-8 mt-30">
+                                        <div className="text-14 lh-1 text-dark-1 p-5">
+                                            <div className="text-17 fw-500 mb-10">
+                                                Review
+                                            </div>
+                                            <div className="mb-30">
+                                                <small>Anda belum memberikan review.</small>
+                                            </div>
+
+                                            <Link  to={`/users/courses/${enrollmentId}/review`} className="btn btn-primary">Beri Review</Link>
+                                        </div>
+                                    </div>
+                                </>
                             )
                         }
 
                         {
-                            !isLoading && (
+                        !isLoading && (
                                 <>
                                     <div className="accordion -block-2 text-left js-accordion mt-30">
                                         {

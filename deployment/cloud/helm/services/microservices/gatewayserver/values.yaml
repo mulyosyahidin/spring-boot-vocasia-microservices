@@ -5,6 +5,21 @@ appName: gatewayserver
 
 replicaCount: 1
 
+hpa:
+  name: gatewayserver-hpa
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
+  targetMemoryUtilizationPercentage: 50
+
+resources:
+  cpu:
+    request: "256m"
+    limit: "512m"
+  memory:
+    request: "256Mi"
+    limit: "512Mi"
+
 image:
   repository: martinms20/gatewayserver
   tag: cloud

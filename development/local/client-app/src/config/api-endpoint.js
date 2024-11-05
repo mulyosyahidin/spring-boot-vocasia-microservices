@@ -1,5 +1,7 @@
 export const AUTHENTICATION_LOGIN = '/authentication/login';
 export const AUTHENTICATION_REGISTER = '/authentication/register';
+export const AUTHENTICATION_FORGOT_PASSWORD = '/authentication/forgot-password/request';
+export const AUTHENTICATION_FORGOT_PASSWORD_CREATE = '/authentication/forgot-password/create-password';
 
 export const AUTHENTICATION_ADMIN_STUDENTS = '/authentication/admin/students';
 export const AUTHENTICATION_ADMIN_STUDENTS_GET_BY_ID = '/authentication/admin/students/:userId';
@@ -59,6 +61,10 @@ export const INSTRUCTOR_ADMIN_INSTRUCTORS_GET_BY_ID = '/instructor/admin/instruc
 export const INSTRUCTOR_ADMIN_STUDENTS = '/instructor/admin/students';
 export const INSTRUCTOR_ADMIN_STUDENTS_GET_BY_ID = '/instructor/admin/students/:id';
 
+export const INSTRUCTOR_ADMIN_SUBMISSIONS_GET_ALL = '/instructor/admin/submissions';
+export const INSTRUCTOR_ADMIN_SUBMISSIONS_APPROVE = '/instructor/admin/submissions/:id/approve';
+export const INSTRUCTOR_ADMIN_SUBMISSIONS_REJECT = '/instructor/admin/submissions/:id/reject';
+
 export const INSTRUCTOR_OVERVIEW = '/instructor/overview';
 
 export const ENROLLMENT_INSTRUCTOR_COURSES_STUDENTS = '/enrollment/instructor/courses/:id/students';
@@ -71,6 +77,9 @@ export const ENROLLMENT_STUDENT_PROGRESS_SET_LAST_LESSON_ID = '/enrollment/stude
 export const ENROLLMENT_STUDENT_PROGRESS_START_LESSON = '/enrollment/student/progress/:enrollmentId/start-lesson/:lessonId';
 export const ENROLLMENT_STUDENT_PROGRESS_COMPLETE_LESSON = '/enrollment/student/progress/:enrollmentId/complete-lesson/:lessonId';
 export const ENROLLMENT_STUDENT_PROGRESS_IS_LESSON_COMPLETE = '/enrollment/student/progress/:enrollmentId/is-lesson-complete/:lessonId';
+
+export const ENROLLMENT_STUDENT_COURSE_REVIEW_POST = '/enrollment/student/courses/:id/review';
+export const ENROLLMENT_STUDENT_COURSE_REVIEW_GET_MY_REVIEW = '/enrollment/student/courses/:id/my-review';
 
 export const ENROLLMENT_ADMIN_STUDENT_COURSES = '/enrollment/admin/student/courses';
 

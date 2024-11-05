@@ -14,5 +14,6 @@ public interface IChapterService {
     Chapter findById(Long chapterId);
     Chapter update(Chapter chapter, UpdateChapterRequest createChapterRequest);
     void deleteById(Chapter chapter);
+    Chapter save(Chapter chapter);
 
 }

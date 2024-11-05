@@ -1,0 +1,93 @@
+deploymentName: email-deployment
+serviceName: email
+appLabel: email
+appName: email
+
+replicaCount: 1
+
+hpa:
+  name: email-hpa
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 75
+
+resources:
+  cpu:
+    request: "256m"
+    limit: "512m"
+  memory:
+    request: "256Mi"
+    limit: "512Mi"
+
+image:
+  repository: martinms20/email
+  tag: cloud
+
+containerPort: 14130
+
+service:
+  type: ClusterIP
+  port: 14130
+  targetPort: 14130
+
+appname_enabled: true
+profile_enabled: true
+config_enabled: true
+eureka_enabled: true
+resouceserver_enabled: false
+otel_enabled: true
+kafka_enabled: true
+redis_enabled: false
+
+customEnvs:
+  - name: SPRING_CLOUD_FUNCTION_DEFINITION
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: EMAIL_SPRING_CLOUD_FUNCTION_DEFINITION
+  - name: SPRING_RABBITMQ_HOST
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: SPRING_RABBITMQ_HOST
+  - name: SPRING_RABBITMQ_PORT
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: SPRING_RABBITMQ_PORT
+  - name: SPRING_RABBITMQ_USERNAME
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: SPRING_RABBITMQ_USERNAME
+  - name: SPRING_RABBITMQ_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: SPRING_RABBITMQ_PASSWORD
+  - name: SPRING_RABBITMQ_CONNECTION_TIMEOUT
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: SPRING_RABBITMQ_CONNECTION_TIMEOUT
+  - name: SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_DESTINATION
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: EMAIL_SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_DESTINATION
+  - name: SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_GROUP
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: EMAIL_SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_GROUP
+  - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+  - name: SPRING_CLOUD_STREAM_DEFAULT_BINDER
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: SPRING_CLOUD_STREAM_DEFAULT_BINDER

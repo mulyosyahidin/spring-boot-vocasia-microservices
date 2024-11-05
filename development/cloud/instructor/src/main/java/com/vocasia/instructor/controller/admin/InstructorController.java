@@ -44,7 +44,7 @@ public class InstructorController {
 
         Pageable paging = PageRequest.of(page, limit);
 
-        Page<Instructor> instructors = instructorService.findAll(paging);
+        Page<Instructor> instructors = instructorService.findAllByStatus("approved", paging);
 
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> pagination = new HashMap<>();

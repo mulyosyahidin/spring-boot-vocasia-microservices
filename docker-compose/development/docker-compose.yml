@@ -1,4 +1,32 @@
 services:
+  rabbit:
+    image: rabbitmq:3.13-management
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      timeout: 10s
+      retries: 10
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+      
   read:
     image: grafana/loki:3.1.0
     command: "-config.file=/etc/loki/config.yaml -target=read"
@@ -256,7 +284,7 @@ services:
     volumes:
       - mongo_db_data:/data/db
     healthcheck:
-      test: [ "CMD", "mongosh", "--quiet", "127.0.0.1/test", "--eval", "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)'", ]
+      test: ["CMD", "mongosh", "--quiet", "127.0.0.1/test", "-u", "root", "-p", "password", "--authenticationDatabase", "admin", "--eval", "quit(db.runCommand({ serverStatus: 1 }).ok ? 0 : 2)"]
       interval: 20s
       timeout: 5s
       retries: 20
@@ -318,7 +346,13 @@ services:
       - "14120:14120"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
+      SPRING_CLOUD_STREAM_DEFAULT_BINDER: rabbit
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: localhost:9092
+      SPRING_RABBITMQ_HOST: rabbit
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
       KEYCLOAK_SERVER_URL: "http://keycloak:8080"
       KEYCLOAK_CLIENT_ID: "vocasia-users"
       KEYCLOAK_CLIENT_SECRET: "gy8FsFmVZUEfOsDGhIl63NNtCKyZJ5uo"
@@ -520,7 +554,7 @@ services:
     ports:
       - "14129:14129"
     environment:
-      SPRING_DATA_MONGODB_URI: "mongodb://root:password@db-mongo:27017/vocasia_db"
+      SPRING_DATA_MONGODB_URI: "mongodb://root:password@db-mongo:27017"
       SPRING_DATA_MONGODB_DATABASE: "vocasia_db"
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
       OTEL_SERVICE_NAME: "catalog"
@@ -532,6 +566,35 @@ services:
       start_period: 20s
     depends_on:
       db_mongo:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-config
+
+  email_service:
+    image: martinms20/email:local
+    container_name: service-email
+    ports:
+      - "14130:14130"
+    environment:
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:14117/"
+      SPRING_CLOUD_STREAM_DEFAULT_BINDER: rabbit
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: localhost:9092
+      SPRING_RABBITMQ_HOST: rabbit
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      OTEL_SERVICE_NAME: "catalog"
+    healthcheck:
+      test: "curl --fail --silent localhost:14130/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      rabbit:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy

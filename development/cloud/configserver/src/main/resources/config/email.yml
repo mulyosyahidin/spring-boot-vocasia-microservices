@@ -1,0 +1,9 @@
+app:
+  version: 1.0.0
+  name: "Email Service"
+  environment: "default"
+
+brevo:
+  api_key: "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"
+  sender_name: "Vocasia Mailer"
+  sender_email: "mailer@vocasia.id"

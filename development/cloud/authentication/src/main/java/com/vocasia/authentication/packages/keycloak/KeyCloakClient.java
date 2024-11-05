@@ -142,6 +142,10 @@ public class KeyCloakClient {
             JSONObject jsonResponse = new JSONObject(responseString);
             return new AccessTokenMapper(jsonResponse.toMap());
         }
+        catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            throw e;
+        }
     }
 
     public boolean isUserExists(String uid) {

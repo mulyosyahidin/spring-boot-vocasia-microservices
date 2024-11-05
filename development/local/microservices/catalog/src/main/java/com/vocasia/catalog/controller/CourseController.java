@@ -5,7 +5,6 @@ import com.vocasia.catalog.entity.Course;
 import com.vocasia.catalog.mapper.CourseMapper;
 import com.vocasia.catalog.service.ICategoryService;
 import com.vocasia.catalog.service.ICourseService;
-import jakarta.ws.rs.Path;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

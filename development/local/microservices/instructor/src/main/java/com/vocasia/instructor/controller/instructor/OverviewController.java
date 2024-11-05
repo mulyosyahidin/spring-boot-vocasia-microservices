@@ -1,12 +1,11 @@
 package com.vocasia.instructor.controller.instructor;
 
 import com.vocasia.instructor.dto.ResponseDto;
-import com.vocasia.instructor.dto.client.course.InstructorOverviewDto;
 import com.vocasia.instructor.exception.CustomFeignException;
 import com.vocasia.instructor.service.ICourseService;
 import com.vocasia.instructor.service.IFinanceService;
 import com.vocasia.instructor.service.IInstructorStudentService;
-import org.apache.http.HttpStatus;
+import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

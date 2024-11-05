@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface CourseFeignClient {
 
     @GetMapping(value = "/api/student/courses/{courseId}", consumes = "application/json")
-    public ResponseEntity<ResponseDto> findById(@RequestHeader("vocasia-correlation-id") String correlationId,
-                                                     @PathVariable("courseId") Long courseId);
+    ResponseEntity<ResponseDto> findById(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                         @PathVariable("courseId") Long courseId);
 
 }

@@ -5,9 +5,11 @@ import com.vocasia.course.dto.client.authentication.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Setter
 @Getter
-public class InstructorDto {
+public class InstructorDto implements Serializable {
 
     private Long id;
 

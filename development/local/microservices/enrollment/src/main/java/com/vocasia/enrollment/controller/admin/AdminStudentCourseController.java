@@ -7,7 +7,7 @@ import com.vocasia.enrollment.exception.CustomFeignException;
 import com.vocasia.enrollment.mapper.EnrollmentMapper;
 import com.vocasia.enrollment.service.ICourseService;
 import com.vocasia.enrollment.service.IEnrollmentService;
-import org.apache.http.HttpStatus;
+import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -39,7 +39,7 @@ public class AdminStudentCourseController {
     public ResponseEntity<ResponseDto> getAllStudentEnrolledCourses(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                               @RequestHeader("X-USER-ID") Long userId,
                                                               @RequestParam(defaultValue = "1") int page) {
-        logger.info("StudentCourseController.getUserEnrolledCourses called");
+        logger.info("AdminStudentCourseController.getUserEnrolledCourses called");
 
         page = page < 1 ? 1 : page - 1;
         int limit = 10;

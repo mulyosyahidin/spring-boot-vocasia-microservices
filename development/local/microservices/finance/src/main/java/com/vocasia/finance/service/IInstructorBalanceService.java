@@ -4,9 +4,6 @@ import com.vocasia.finance.entity.InstructorBalance;
 import com.vocasia.finance.entity.InstructorBalanceHistory;
 import com.vocasia.finance.request.NewInstructorBalanceHistoryRequest;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 public interface IInstructorBalanceService {
 
     boolean isInstructorHasBalanceRecord(Long instructorId);

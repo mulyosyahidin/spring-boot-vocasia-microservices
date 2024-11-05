@@ -11,7 +11,7 @@ import com.vocasia.instructor.exception.CustomFeignException;
 import com.vocasia.instructor.mapper.InstructorStudentCourseMapper;
 import com.vocasia.instructor.mapper.InstructorStudentMapper;
 import com.vocasia.instructor.service.*;
-import org.apache.http.HttpStatus;
+import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

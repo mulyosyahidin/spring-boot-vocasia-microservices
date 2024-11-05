@@ -47,8 +47,12 @@ public class CourseServiceImpl implements ICourseService {
         Course.Category category = getCategory(storeCourseRequest);
         course.setCategory(category);
 
-        Course.Instructor instructor = getInstructor(storeCourseRequest);
-        course.setInstructor(instructor);
+        if (storeCourseRequest.getInstructor().getId() != null) {
+            Course.Instructor instructor = getInstructor(storeCourseRequest);
+            course.setInstructor(instructor);
+        } else {
+            course.setInstructor(null);
+        }
 
         List<Course.Chapter> chapters = getChapters(storeCourseRequest);
         course.setChapters(chapters);

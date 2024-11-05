@@ -15,7 +15,7 @@ import com.vocasia.order.service.IOrderItemService;
 import com.vocasia.order.service.IOrderService;
 import com.vocasia.order.service.IPaymentService;
 import jakarta.validation.Valid;
-import org.apache.http.HttpStatus;
+import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

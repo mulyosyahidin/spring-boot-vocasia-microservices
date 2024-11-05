@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class InstructorServiceImpl implements IInstructorService {
@@ -56,6 +58,21 @@ public class InstructorServiceImpl implements IInstructorService {
     @Override
     public Page<Instructor> findAll(Pageable paging) {
         return instructorRepository.findAll(paging);
+    }
+
+    @Override
+    public Page<Instructor> findAllByStatus(String status, Pageable paging) {
+        return instructorRepository.findAllByStatus(status, paging);
+    }
+
+    @Override
+    public List<Instructor> findAllByStatus(String status) {
+        return instructorRepository.findAllByStatus(status);
+    }
+
+    @Override
+    public void save(Instructor instructor) {
+        instructorRepository.save(instructor);
     }
 
 }

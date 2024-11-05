@@ -2,11 +2,12 @@ app:
   version: 1.0.0
   name: "Authentication Service"
   environment: "development"
+  client_app_url: "http://localhost:5173"
 
 keycloak:
   server_url: "http://localhost:7080"
   client_id: "vocasia-users"
-  client_secret: "vq95lrEHlnUA03JFdQ46h6ePMx7UrhGo"
+  client_secret: "gy8FsFmVZUEfOsDGhIl63NNtCKyZJ5uo"
   realm: "Vocasia"
   auth_client_id: "vocasia-auth"
 

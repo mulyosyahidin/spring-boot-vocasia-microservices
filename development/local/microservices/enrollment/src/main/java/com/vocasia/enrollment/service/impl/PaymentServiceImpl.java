@@ -10,6 +10,7 @@ import feign.FeignException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class PaymentServiceImpl implements IPaymentService {
 
     private final PaymentFeignClient paymentFeignClient;
 
+    @Cacheable(value = "order_payment", key = "#orderId")
     @Override
     public PaymentDto findPaymentByOrderId(Long orderId, String correlationId) {
         try {
@@ -34,7 +36,7 @@ public class PaymentServiceImpl implements IPaymentService {
             Map<String, Object> data = (Map<String, Object>) responseBody.getData();
             Map<String, Object> payment = data != null ? (Map<String, Object>) data.get("payment") : null;
 
-            logger.debug("InstructorServiceImpl.getInstructorByUserId() $payment:: {}", payment);
+            logger.debug("PaymentServiceImpl.findPaymentByOrderId() $payment:: {}", payment);
 
             PaymentDto paymentDto = new PaymentDto();
 

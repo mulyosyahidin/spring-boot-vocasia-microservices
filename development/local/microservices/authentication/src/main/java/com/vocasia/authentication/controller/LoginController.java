@@ -4,7 +4,6 @@ import com.vocasia.authentication.dto.ResponseDto;
 import com.vocasia.authentication.dto.client.instructor.InstructorDto;
 import com.vocasia.authentication.entity.User;
 import com.vocasia.authentication.exception.CustomFeignException;
-import com.vocasia.authentication.mapper.AccessTokenMapper;
 import com.vocasia.authentication.mapper.UserMapper;
 import com.vocasia.authentication.request.LoginRequest;
 import com.vocasia.authentication.service.IInstructorService;

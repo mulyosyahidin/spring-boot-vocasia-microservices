@@ -60,11 +60,13 @@ export const LoginForm = () => {
                     refreshToken: refresh_token,
                 });
 
+                if (user.role === INSTRUCTOR) {
+                    let {instructor} = doLoginWithEmailAndPassword.data;
+                    localStorage.setItem(INSTRUCTOR_AUTH_DATA, JSON.stringify(instructor));
+                }
+
                 setTimeout(() => {
                     if (user.role === INSTRUCTOR) {
-                        let {instructor} = doLoginWithEmailAndPassword.data;
-                        localStorage.setItem(INSTRUCTOR_AUTH_DATA, JSON.stringify(instructor));
-
                         window.location.href = '/instructor';
                     } else if (user.role === ADMIN) {
                         window.location.href = '/admin';
@@ -164,6 +166,10 @@ export const LoginForm = () => {
                                     >
                                         {isLoading ? 'Login...' : 'Login'}
                                     </button>
+                                </div>
+
+                                <div className="mt-5">
+                                    <Link to={'/auth/forgot-password'} className="text-purple-1">Lupa password?</Link>
                                 </div>
                             </form>
                         </div>

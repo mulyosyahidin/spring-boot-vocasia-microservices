@@ -22,7 +22,11 @@ public class GatewayServerApplication {
                         .filters(f -> f.rewritePath("/authentication/(?<segment>.*)", "/api/${segment}"))
                         .uri("lb://AUTHENTICATION"))
                 .route(p -> p.path("/instructor/**")
-                        .filters(f -> f.rewritePath("/instructor/(?<segment>.*)", "/api/${segment}"))
+                        .filters(f -> f.rewritePath("/instructor/(?<segment>.*)", "/api/${segment}")
+                                .circuitBreaker(config -> {
+                                    config.setName("instructorCircuitBreaker");
+                                    config.setFallbackUri("forward:/fallback/instructor");
+                                }))
                         .uri("lb://INSTRUCTOR"))
                 .route(p -> p.path("/course/**")
                         .filters(f -> f.rewritePath("/course/(?<segment>.*)", "/api/${segment}"))

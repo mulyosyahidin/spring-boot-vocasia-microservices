@@ -10,8 +10,8 @@ import com.vocasia.course.exception.CustomFeignException;
 import com.vocasia.course.mapper.CategoryMapper;
 import com.vocasia.course.mapper.ChapterMapper;
 import com.vocasia.course.mapper.CourseMapper;
-import com.vocasia.course.request.CreateChapterRequest;
 import com.vocasia.course.request.CreateNewCourseRequest;
+import com.vocasia.course.request.UpdateContentRequest;
 import com.vocasia.course.request.UpdateCourseRequest;
 import com.vocasia.course.request.UpdateCourseThumbnailRequest;
 import com.vocasia.course.request.client.catalog.course.StoreCourseRequest;
@@ -227,7 +227,8 @@ public class InstructorCourseController {
     }
 
     @GetMapping("/courses/{courseId}")
-    public ResponseEntity<ResponseDto> getCourseById(@PathVariable Long courseId) {
+    public ResponseEntity<ResponseDto> getCourseById(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                     @PathVariable Long courseId) {
         logger.info("InstructorCourseController.getCourseById called");
 
         Course course = courseService.findById(courseId);
@@ -236,6 +237,24 @@ public class InstructorCourseController {
         Map<String, Object> response = new HashMap<>();
         response.put("course", CourseMapper.mapToDto(course));
         response.put("category", CategoryMapper.mapToDto(courseCategory));
+
+        try {
+            InstructorDto instructor = instructorService.findById(course.getInstructorId(), correlationId);
+
+            response.put("instructor", instructor);
+        } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, e.getMessage(), null, null));
+        }
 
         return ResponseEntity
                 .status(HttpStatus.SC_OK)
@@ -295,8 +314,12 @@ public class InstructorCourseController {
             StoreCourseRequest.Category storeCourseCategory = getCategory(category);
             storeCourseRequest.setCategory(storeCourseCategory);
 
-            StoreCourseRequest.Instructor storeCourseInstructor = getInstructor(instructor);
-            storeCourseRequest.setInstructor(storeCourseInstructor);
+            if (instructor.getId() != null) {
+                StoreCourseRequest.Instructor storeCourseInstructor = getInstructor(instructor);
+                storeCourseRequest.setInstructor(storeCourseInstructor);
+            } else {
+                storeCourseRequest.setInstructor(null);
+            }
 
             List<StoreCourseRequest.Chapter> storeCourseChapters = new ArrayList<>();
             List<Chapter> chapters = chapterService.findAllByCourseId(publishedCourse);
@@ -400,6 +423,46 @@ public class InstructorCourseController {
         storeCourseInstructor.setUser(storeCourseUser);
 
         return storeCourseInstructor;
+    }
+
+    @PostMapping("/courses/{courseId}/contents")
+    public ResponseEntity<ResponseDto> updateContents(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                      @PathVariable Long courseId,
+                                                      @Valid @RequestBody UpdateContentRequest updateContentRequest) {
+        logger.info("InstructorCourseController.updateContents called");
+
+        Course course = courseService.findById(courseId);
+
+        List<UpdateContentRequest.VideoContent> contents = updateContentRequest.getVideos();
+        int videosCount = contents.size();
+        String totalDuration = updateContentRequest.getTotalDuration();
+
+        Chapter chapter = new Chapter();
+        chapter.setCourse(course);
+        chapter.setTitle("Chapter 1");
+        chapter.setTotalDuration(totalDuration);
+        chapterService.save(chapter);
+
+        for (UpdateContentRequest.VideoContent content : contents) {
+            Lesson lesson = new Lesson();
+
+            lesson.setChapter(chapter);
+            lesson.setType("video");
+            lesson.setTitle(content.getTitle());
+            lesson.setContentVideoDuration(content.getDuration());
+            lesson.setContentVideoUrl(content.getUrl());
+
+            lessonService.save(lesson);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("total_duration", totalDuration);
+        response.put("videos_count", videosCount);
+        response.put("chapter", ChapterMapper.mapToDto(chapter));
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil memperbarui konten kursus", response, null));
     }
 
 }

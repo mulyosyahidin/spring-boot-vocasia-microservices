@@ -2,7 +2,7 @@ package com.vocasia.order.controller;
 
 import com.vocasia.order.config.AppConfigProperties;
 import com.vocasia.order.dto.ResponseDto;
-import org.apache.http.HttpStatus;
+import org.apache.hc.core5.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -143,4 +143,22 @@ public class UserServiceImpl implements IUserService {
         return user;
     }
 
+    @Override
+    public boolean isUserExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public void updatePassword(String email, String newPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new ResourceNotFoundException("Data tidak ditemukan");
+        }
+
+        String encryptedPassword = passwordHashUtil.hashPassword(newPassword);
+        user.setPassword(encryptedPassword);
+
+        userRepository.save(user);
+    }
+
 }

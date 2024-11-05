@@ -39,7 +39,7 @@ public class AdminStudentCourseController {
     public ResponseEntity<ResponseDto> getAllStudentEnrolledCourses(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                               @RequestHeader("X-USER-ID") Long userId,
                                                               @RequestParam(defaultValue = "1") int page) {
-        logger.info("StudentCourseController.getUserEnrolledCourses called");
+        logger.info("AdminStudentCourseController.getUserEnrolledCourses called");
 
         page = page < 1 ? 1 : page - 1;
         int limit = 10;

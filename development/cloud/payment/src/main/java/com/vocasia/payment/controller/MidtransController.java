@@ -4,6 +4,7 @@ import com.vocasia.payment.config.MidtransConfigProperties;
 import com.vocasia.payment.dto.ResponseDto;
 import com.vocasia.payment.entity.Payment;
 import com.vocasia.payment.exception.CustomFeignException;
+import com.vocasia.payment.request.DummyMidtransCallbackRequest;
 import com.vocasia.payment.request.MidtransCallbackRequest;
 import com.vocasia.payment.request.client.UpdateOrderPaymentStatus;
 import com.vocasia.payment.service.IOrderService;
@@ -114,6 +115,41 @@ public class MidtransController {
                         .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                         .body(new ResponseDto(false, e.getMessage(), null, null));
             }
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Data berhasil diproses", null, null));
+    }
+
+    @PostMapping("/midtrans-callback-dummy")
+    public ResponseEntity<ResponseDto> dummyMidtransCallback(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                                        @RequestBody DummyMidtransCallbackRequest midtransCallbackRequest) {
+        logger.info("MidtransController.dummyMidtransCallback called");
+
+        Payment payment = paymentService.findByOrderNumber(midtransCallbackRequest.getOrderId());
+
+        paymentService.updatePaymentStatus(payment, "success");
+
+        try {
+            UpdateOrderPaymentStatus updateOrderPaymentStatus = new UpdateOrderPaymentStatus();
+
+            updateOrderPaymentStatus.setStatus("success");
+            updateOrderPaymentStatus.setTransactionStatus("settlement");
+
+            orderService.updatePaymentStatus(payment.getOrderId(), updateOrderPaymentStatus, correlationId);
+        } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, e.getMessage(), null, null));
         }
 
         return ResponseEntity

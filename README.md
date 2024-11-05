@@ -108,4 +108,18 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 
 27/10/2024:
 1. Menyelesaikan: Sinkronisasi Kursus dari Course Service ke Catalog Service Saat Publish Course
-1. Menyelesaikan: Setup Helm Chart untuk Kubernetes Cluster [Cloud]
+2. Menyelesaikan: Setup Helm Chart untuk Kubernetes Cluster [Cloud]
+3. Inisialisasi Email Service
+
+28/10/2024:
+1. Menyelesaikan: Email Service [Send Email]
+
+29/10/2024:
+1. Inisialisasi Load Testing
+
+30/10/2024:
+1. Inisialisasi Spike Testing
+2. Menyelesaikan: Review Kursus
+
+05/11/2024:
+1. Menyelesaikan: Implementasi Redis Cache

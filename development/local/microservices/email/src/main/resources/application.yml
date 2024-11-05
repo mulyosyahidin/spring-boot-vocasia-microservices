@@ -1,0 +1,37 @@
+server:
+  port: 14130
+
+spring:
+  application:
+    name: "email"
+  profiles:
+    active: "development"
+  config:
+    import: "optional:configserver:http://localhost:14117/"
+  cloud:
+    function:
+      definition: email
+    stream:
+      bindings:
+        email-in-0:
+          destination: send-communication
+          group: ${spring.application.name}
+      kafka:
+        binder:
+          brokers:
+            - localhost:9092
+      default-binder: kafka
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10s
+
+logging:
+  level:
+    com:
+      vocasia:
+        email: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

@@ -1,16 +1,12 @@
 package com.vocasia.catalog.service.impl;
 
 import com.vocasia.catalog.entity.Category;
-import com.vocasia.catalog.exception.ResourceNotFoundException;
 import com.vocasia.catalog.repository.CategoryRepository;
 import com.vocasia.catalog.request.category.StoreCategoryRequest;
 import com.vocasia.catalog.request.category.UpdateCategoryRequest;
 import com.vocasia.catalog.service.ICategoryService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;

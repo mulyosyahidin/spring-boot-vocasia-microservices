@@ -9,7 +9,7 @@ spring:
   config:
     import: "optional:configserver:http://localhost:14117/"
   datasource:
-    url: "jdbc:mysql://localhost:30622/payment_db"
+    url: "jdbc:mysql://localhost:30626/vocasia_db"
     username: "root"
     password: "password"
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -19,10 +19,6 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
-  cloud:
-    kubernetes:
-      discovery:
-        all-namespaces: true
 
 management:
   endpoints:

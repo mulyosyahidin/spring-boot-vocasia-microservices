@@ -52,4 +52,9 @@ public class ChapterServiceImpl implements IChapterService {
     public void deleteById(Chapter chapter) {
         chapterRepository.delete(chapter);
     }
+
+    @Override
+    public Chapter save(Chapter chapter) {
+        return chapterRepository.save(chapter);
+    }
 }

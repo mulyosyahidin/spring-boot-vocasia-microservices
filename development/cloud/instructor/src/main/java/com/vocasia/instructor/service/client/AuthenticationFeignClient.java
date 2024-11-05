@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@FeignClient(name = "authentication", url = "http://authentication:14120")
+@FeignClient(name = "authentication")
 public interface AuthenticationFeignClient {
 
     @PostMapping(value = "/api/register", consumes = "application/json")

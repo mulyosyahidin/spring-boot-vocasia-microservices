@@ -19,6 +19,16 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+  cache:
+    redis:
+      use-key-prefix: true
+      key-prefix: "instructor:"
+      cache-null-values: false
+      time-to-live: 600000
+  data:
+    redis:
+      host: localhost
+      port: 6379
   jackson:
     serialization:
       write-date-keys-as-timestamps: false
@@ -72,3 +82,11 @@ logging:
         instructor: DEBUG
   pattern:
     level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000

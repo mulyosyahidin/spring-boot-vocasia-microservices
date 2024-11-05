@@ -55,6 +55,11 @@ import {CourseQnaPage} from "../pages/User/CourseQnaPage/Index.jsx";
 import {CourseQnaPage as InstructorCourseQnaPage} from "../pages/Instructor/Courses/CourseQnaPage/Index.jsx";
 import {CourseIndexPage as AdminCourseIndexPage} from "../pages/Admin/Courses/CourseIndexPage/Index.jsx";
 import {CourseShowPage as AdminCourseShowPage} from "../pages/Admin/Courses/CourseShowPage/Index.jsx";
+import {ForgotPassword} from "../pages/Authentication/ForgotPassword/Index.jsx";
+import {ResetPassword} from "../pages/Authentication/ResetPassword/Index.jsx";
+import {SubmissionIndexPage} from "../pages/Admin/Instructors/SubmissionIndexPage/Index.jsx";
+import {SubmissionShowPage} from "../pages/Admin/Instructors/SubmissionShowPage/Index.jsx";
+import {CourseReviewPage} from "../pages/User/CourseReviewPage/Index.jsx";
 
 const routes = createBrowserRouter([
     {
@@ -76,6 +81,14 @@ const routes = createBrowserRouter([
     {
         path: '/logout',
         element: <Logout/>,
+    },
+    {
+        path: '/auth/forgot-password',
+        element: <ForgotPassword />
+    },
+    {
+        path: '/auth/forgot-password/reset',
+        element: <ResetPassword />
     },
 
     // instructor
@@ -214,6 +227,14 @@ const routes = createBrowserRouter([
         element: <InstructorStudentPage />
     },
     {
+        path: '/admin/instructors/submissions',
+        element: <SubmissionIndexPage />
+    },
+    {
+        path: '/admin/instructors/submissions/:id',
+        element: <SubmissionShowPage />
+    },
+    {
         path: '/admin/students',
         element: <AdminStudentIndexPage/>,
     },
@@ -250,6 +271,10 @@ const routes = createBrowserRouter([
     {
         path: '/users/courses/:enrollmentId',
         element: <SingleCoursePage/>
+    },
+    {
+        path: '/users/courses/:enrollmentId/review',
+        element: <CourseReviewPage/>,
     },
     {
         path: '/users/courses/:enrollmentId/qna/:lessonId/:questionId',

@@ -12,5 +12,6 @@ public class AppConfigProperties {
     private String name;
     private String version;
     private String environment;
+    private String clientAppUrl;
 
 }

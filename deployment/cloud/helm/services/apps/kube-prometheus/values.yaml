@@ -1363,15 +1363,6 @@ prometheus:
           ]
         },
         {
-          "job_name": "eurekaserver",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "eurekaserver:14118" ]
-            }
-          ]
-        },
-        {
           "job_name": "authentication",
           "metrics_path": "/actuator/prometheus",
           "static_configs": [
@@ -1386,6 +1377,15 @@ prometheus:
           "static_configs": [
             {
               "targets": [ "instructor:14121" ]
+            }
+          ]
+        },
+        {
+          "job_name": "catalog",
+          "metrics_path": "/actuator/prometheus",
+          "static_configs": [
+            {
+              "targets": [ "catalog:14129" ]
             }
           ]
         },
@@ -1440,6 +1440,15 @@ prometheus:
           "static_configs": [
             {
               "targets": [ "qna:14128" ]
+            }
+          ]
+        },
+        {
+          "job_name": "email",
+          "metrics_path": "/actuator/prometheus",
+          "static_configs": [
+            {
+              "targets": [ "email:14130" ]
             }
           ]
         },

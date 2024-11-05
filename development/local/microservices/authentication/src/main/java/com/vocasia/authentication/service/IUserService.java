@@ -28,4 +28,8 @@ public interface IUserService {
 
     User updateUid(Long id, String registeredKeycloakId);
 
+    boolean isUserExists(String email);
+
+    void updatePassword(String email, String newPassword) throws NoSuchAlgorithmException, InvalidKeySpecException;
+
 }
