@@ -17,12 +17,12 @@ image:
   repository: martinms20/configserver
   tag: cloud
 
-containerPort: 14117
+containerPort: 8071
 
 service:
   type: ClusterIP
-  port: 14117
-  targetPort: 14117
+  port: 8071
+  targetPort: 8071
 
 appname_enabled: true
 profile_enabled: false

@@ -126,3 +126,4 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 
 14/11/2024:
 1. Menyelesaikan: Konfigurasi Helm Chart untuk Kubernetes
+2. Menggabungkan QnA Service ke Course Service

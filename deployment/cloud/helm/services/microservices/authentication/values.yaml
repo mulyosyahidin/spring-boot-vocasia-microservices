@@ -24,12 +24,12 @@ image:
   repository: martinms20/authentication
   tag: cloud
 
-containerPort: 14120
+containerPort: 8001
 
 service:
   type: ClusterIP
-  port: 14120
-  targetPort: 14120
+  port: 8001
+  targetPort: 8001
 
 appname_enabled: true
 profile_enabled: true

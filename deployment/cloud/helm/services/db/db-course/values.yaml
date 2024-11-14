@@ -9,10 +9,10 @@ image:
   repository: mysql
   tag: 8.0
 
-containerPort: 30620
+containerPort: 3308
 
 service:
-  port: 30620
+  port: 3308
 
 pvc:
   name: course-db-pvc

@@ -9,10 +9,10 @@ image:
   repository: mysql
   tag: 8.0
 
-containerPort: 30621
+containerPort: 3311
 
 service:
-  port: 30621
+  port: 3311
 
 pvc:
   name: order-db-pvc

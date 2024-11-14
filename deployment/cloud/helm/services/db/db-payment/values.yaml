@@ -9,10 +9,10 @@ image:
   repository: mysql
   tag: 8.0
 
-containerPort: 30622
+containerPort: 3312
 
 service:
-  port: 30622
+  port: 3312
 
 pvc:
   name: payment-db-pvc

@@ -10,7 +10,7 @@ image:
   tag: 8.0
 
 service:
-  port: 30626
+  port: 3306
 
 pvc:
   name: vocasia-db-pvc

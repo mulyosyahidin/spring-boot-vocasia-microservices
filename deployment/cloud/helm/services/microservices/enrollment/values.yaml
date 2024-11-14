@@ -24,12 +24,12 @@ image:
   repository: martinms20/enrollment
   tag: cloud
 
-containerPort: 14126
+containerPort: 8005
 
 service:
   type: ClusterIP
-  port: 14126
-  targetPort: 14126
+  port: 8005
+  targetPort: 8005
 
 appname_enabled: true
 profile_enabled: true

@@ -113,12 +113,12 @@ export const ORDER_ADMIN_TRANSACTIONS = '/order/admin/transactions';
 export const ORDER_ADMIN_TRANSACTIONS_FIND_BY_ID = '/order/admin/transactions/:id';
 export const ORDER_ADMIN_STUDENT_TRANSACTIONS = '/order/admin/student/transactions';
 
-export const QNA_STUDENT_IS_I_ASK_THIS_LESSON = '/qna/student/is-i-ask-this-lesson/:lessonId';
-export const QNA_STUDENT_QUESTIONS_GET_ALL = '/qna/student/questions/:courseId/:lessonId';
-export const QNA_STUDENT_QUESTIONS_STORE = '/qna/student/questions/:courseId/:lessonId';
-export const QNA_STUDENT_QUESTIONS_ANSWERS_GET_ALL = '/qna/student/questions/:lessonId/qna/:qnaId';
-export const QNA_STUDENT_QUESTIONS_ANSWERS_STORE = '/qna/student/questions/:lessonId/qna/:qnaId';
+export const QNA_STUDENT_IS_I_ASK_THIS_LESSON = '/course/qna/student/is-i-ask-this-lesson/:lessonId';
+export const QNA_STUDENT_QUESTIONS_GET_ALL = '/course/qna/student/questions/:courseId/:lessonId';
+export const QNA_STUDENT_QUESTIONS_STORE = '/course/qna/student/questions/:courseId/:lessonId';
+export const QNA_STUDENT_QUESTIONS_ANSWERS_GET_ALL = '/course/qna/student/questions/:lessonId/qna/:qnaId';
+export const QNA_STUDENT_QUESTIONS_ANSWERS_STORE = '/course/qna/student/questions/:lessonId/qna/:qnaId';
 
-export const QNA_INSTRUCTOR_COURSES_QUESTIONS = '/qna/instructor/courses/:courseId/questions';
-export const QNA_INSTRUCTOR_COURSES_QUESTIONS_QNA = '/qna/instructor/courses/:courseId/questions/:qnaId';
-export const QNA_INSTRUCTOR_COURSES_QUESTIONS_QNA_STORE = '/qna/instructor/courses/:courseId/questions/:qnaId';
+export const QNA_INSTRUCTOR_COURSES_QUESTIONS = '/course/qna/instructor/courses/:courseId/questions';
+export const QNA_INSTRUCTOR_COURSES_QUESTIONS_QNA = '/course/qna/instructor/courses/:courseId/questions/:qnaId';
+export const QNA_INSTRUCTOR_COURSES_QUESTIONS_QNA_STORE = '/course/qna/instructor/courses/:courseId/questions/:qnaId';

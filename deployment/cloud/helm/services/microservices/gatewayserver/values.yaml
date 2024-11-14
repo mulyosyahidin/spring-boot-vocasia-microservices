@@ -24,12 +24,12 @@ image:
   repository: martinms20/gatewayserver
   tag: cloud
 
-containerPort: 14119
+containerPort: 8073
 
 service:
   type: LoadBalancer
-  port: 14119
-  targetPort: 14119
+  port: 8073
+  targetPort: 8073
 
 appname_enabled: true
 profile_enabled: true

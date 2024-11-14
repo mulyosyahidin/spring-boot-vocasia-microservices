@@ -9,10 +9,10 @@ image:
   repository: mongo
   tag: 6.0
 
-containerPort: 30627
+containerPort: 3307
 
 service:
-  port: 30627
+  port: 3307
 
 pvc:
   name: catalog-db-pvc

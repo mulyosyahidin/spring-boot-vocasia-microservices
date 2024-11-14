@@ -21,7 +21,11 @@ public class GatewayServerApplication {
                 .route(p -> p
                         .path("/authentication/**")
                         .filters(f -> f.rewritePath("/authentication/(?<segment>.*)", "/api/${segment}"))
-                        .uri("http://authentication:14120"))
+                        .uri("http://authentication:8001"))
+                .route(p -> p
+                        .path("/catalog/**")
+                        .filters(f -> f.rewritePath("/catalog/(?<segment>.*)", "/api/${segment}"))
+                        .uri("http://catalog:8002"))
                 .route(p -> p
                         .path("/instructor/**")
                         .filters(f -> f.rewritePath("/instructor/(?<segment>.*)", "/api/${segment}")
@@ -33,31 +37,27 @@ public class GatewayServerApplication {
                 .route(p -> p
                         .path("/course/**")
                         .filters(f -> f.rewritePath("/course/(?<segment>.*)", "/api/${segment}"))
-                        .uri("http://course:14122"))
-                .route(p -> p
-                        .path("/order/**")
-                        .filters(f -> f.rewritePath("/order/(?<segment>.*)", "/api/${segment}"))
-                        .uri("http://order:14124"))
-                .route(p -> p
-                        .path("/payment/**")
-                        .filters(f -> f.rewritePath("/payment/(?<segment>.*)", "/api/${segment}"))
-                        .uri("http://payment:14125"))
+                        .uri("http://course:8003"))
                 .route(p -> p
                         .path("/enrollment/**")
                         .filters(f -> f.rewritePath("/enrollment/(?<segment>.*)", "/api/${segment}"))
-                        .uri("http://enrollment:14126"))
+                        .uri("http://enrollment:8005"))
                 .route(p -> p
                         .path("/finance/**")
                         .filters(f -> f.rewritePath("/finance/(?<segment>.*)", "/api/${segment}"))
-                        .uri("http://finance:14127"))
+                        .uri("http://finance:8006"))
                 .route(p -> p
-                        .path("/qna/**")
-                        .filters(f -> f.rewritePath("/qna/(?<segment>.*)", "/api/${segment}"))
-                        .uri("http://qna:14128"))
+                        .path("/order/**")
+                        .filters(f -> f.rewritePath("/order/(?<segment>.*)", "/api/${segment}"))
+                        .uri("http://order:8007"))
                 .route(p -> p
-                        .path("/catalog/**")
-                        .filters(f -> f.rewritePath("/catalog/(?<segment>.*)", "/api/${segment}"))
-                        .uri("http://catalog:14129"))
+                        .path("/payment/**")
+                        .filters(f -> f.rewritePath("/payment/(?<segment>.*)", "/api/${segment}"))
+                        .uri("http://payment:8008"))
+                .route(p -> p
+                        .path("/user/**")
+                        .filters(f -> f.rewritePath("/user/(?<segment>.*)", "/api/${segment}"))
+                        .uri("http://user:8009"))
                 .build();
     }
 

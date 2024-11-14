@@ -1,0 +1,6 @@
+dependencies:
+- name: vocasia-service-common
+  repository: file://../../../common/service-common
+  version: 0.1.0
+digest: sha256:6a1f220e49c4e463ba85979c4f6be82af449eed74ac224f990b6f2146a0305b5
+generated: "2024-10-22T22:11:03.3613195+07:00"

@@ -1,5 +1,5 @@
 server:
-  port: 14129
+  port: 8002
 
 spring:
   application:
@@ -7,10 +7,10 @@ spring:
   profiles:
     active: "development"
   config:
-    import: "optional:configserver:http://localhost:14117/"
+    import: "optional:configserver:http://localhost:8071/"
   data:
     mongodb:
-      uri: "mongodb://root:password@localhost:30627"
+      uri: "mongodb://root:password@localhost:3307"
       database: "vocasia_db"
 
 management:
@@ -47,7 +47,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:14118/eureka/
+      defaultZone: http://localhost:8072/eureka/
 
 info:
   app:

@@ -1,8 +1,11 @@
+server:
+  port: 8073
+
 spring:
   application:
     name: "gatewayserver"
   config:
-    import: "optional:configserver:http://localhost:14117/"
+    import: "optional:configserver:http://localhost:8071/"
   security:
     oauth2:
       resourceserver:
@@ -61,7 +64,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:14118/eureka/
+      defaultZone: http://localhost:8072/eureka/
 
 info:
   app:

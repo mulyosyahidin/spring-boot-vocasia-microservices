@@ -1,6 +1,8 @@
 package com.vocasia.course.service;
 
+import com.vocasia.course.dto.data.LessonDto;
 import com.vocasia.course.entity.Course;
+import com.vocasia.course.entity.Lesson;
 import com.vocasia.course.request.CreateNewCourseRequest;
 import com.vocasia.course.request.UpdateCourseRequest;
 import com.vocasia.course.request.UpdateCourseThumbnailRequest;

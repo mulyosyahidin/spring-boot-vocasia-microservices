@@ -1,5 +1,5 @@
 server:
-  port: 14120
+  port: 8001
 
 spring:
   application:
@@ -7,9 +7,9 @@ spring:
   profiles:
     active: "development"
   config:
-    import: "optional:configserver:http://localhost:14117/"
+    import: "optional:configserver:http://localhost:8071/"
   datasource:
-    url: "jdbc:mysql://localhost:30626/vocasia_db"
+    url: "jdbc:mysql://localhost:3306/vocasia_db"
     username: "root"
     password: "password"
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -88,7 +88,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:14118/eureka/
+      defaultZone: http://localhost:8072/eureka/
 
 info:
   app:

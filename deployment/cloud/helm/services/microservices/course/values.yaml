@@ -24,12 +24,12 @@ image:
   repository: martinms20/course
   tag: cloud
 
-containerPort: 14122
+containerPort: 8003
 
 service:
   type: ClusterIP
-  port: 14122
-  targetPort: 14122
+  port: 8003
+  targetPort: 8003
 
 appname_enabled: true
 profile_enabled: true

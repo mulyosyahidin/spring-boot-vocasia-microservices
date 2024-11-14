@@ -48,11 +48,6 @@ public class FallbackController {
         return Mono.just(new FallbackDto(false, "Finance service is not available"));
     }
 
-    @RequestMapping("/qna")
-    public Mono<FallbackDto> qnaFallback() {
-        return Mono.just(new FallbackDto(false, "QnA service is not available"));
-    }
-
     @RequestMapping("/catalog")
     public Mono<FallbackDto> catalogFallback() {
         return Mono.just(new FallbackDto(false, "Catalog service is not available"));

@@ -24,12 +24,12 @@ image:
   repository: martinms20/email
   tag: cloud
 
-containerPort: 14130
+containerPort: 8004
 
 service:
   type: ClusterIP
-  port: 14130
-  targetPort: 14130
+  port: 8004
+  targetPort: 8004
 
 appname_enabled: true
 profile_enabled: true

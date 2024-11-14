@@ -24,12 +24,12 @@ image:
   repository: martinms20/finance
   tag: cloud
 
-containerPort: 14127
+containerPort: 8006
 
 service:
   type: ClusterIP
-  port: 14127
-  targetPort: 14127
+  port: 8006
+  targetPort: 8006
 
 appname_enabled: true
 profile_enabled: true

@@ -9,10 +9,10 @@ image:
   repository: mysql
   tag: 8.0
 
-containerPort: 30623
+containerPort: 3309
 
 service:
-  port: 30623
+  port: 3309
 
 pvc:
   name: enrollment-db-pvc

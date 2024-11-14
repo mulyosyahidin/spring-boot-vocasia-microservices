@@ -9,10 +9,10 @@ image:
   repository: mysql
   tag: 8.0
 
-containerPort: 30624
+containerPort: 3310
 
 service:
-  port: 30624
+  port: 3310
 
 pvc:
   name: finance-db-pvc

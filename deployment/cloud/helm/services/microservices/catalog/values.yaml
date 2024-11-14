@@ -24,12 +24,12 @@ image:
   repository: martinms20/catalog
   tag: cloud
 
-containerPort: 14129
+containerPort: 8002
 
 service:
   type: ClusterIP
-  port: 14129
-  targetPort: 14129
+  port: 8002
+  targetPort: 8002
 
 appname_enabled: true
 profile_enabled: true

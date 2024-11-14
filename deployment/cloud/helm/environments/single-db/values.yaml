@@ -28,7 +28,7 @@ global:
   authenticationMysqlDatabase: vocasia_db
   authenticationSpringDatasourceUsername: root
   authenticationSpringDatasourcePassword: password
-  authenticationSpringDatasourceUrl: jdbc:mysql://db-vocasia:30626/vocasia_db
+  authenticationSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
   authenticationEmailInDestination: send-communication
   authenticationEmailInGroup: authentication
 
@@ -38,7 +38,7 @@ global:
   courseMysqlDatabase: vocasia_db
   courseSpringDatasourceUsername: root
   courseSpringDatasourcePassword: password
-  courseSpringDatasourceUrl: jdbc:mysql://db-vocasia:30626/vocasia_db
+  courseSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
 
   enrollmentApplicationName: enrollment
   enrollmentOtelServiceName: enrollment
@@ -46,7 +46,7 @@ global:
   enrollmentMysqlDatabase: vocasia_db
   enrollmentSpringDatasourceUsername: root
   enrollmentSpringDatasourcePassword: password
-  enrollmentSpringDatasourceUrl: jdbc:mysql://db-vocasia:30626/vocasia_db
+  enrollmentSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
 
   financeApplicationName: finance
   financeOtelServiceName: finance
@@ -55,7 +55,7 @@ global:
   financeMysqlDatabase: vocasia_db
   financeSpringDatasourceUsername: root
   financeSpringDatasourcePassword: password
-  financeSpringDatasourceUrl: jdbc:mysql://db-vocasia:30626/vocasia_db
+  financeSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
 
   instructorApplicationName: instructor
   instructorOtelServiceName: instructor
@@ -63,7 +63,7 @@ global:
   instructorMysqlDatabase: vocasia_db
   instructorSpringDatasourceUsername: root
   instructorSpringDatasourcePassword: password
-  instructorSpringDatasourceUrl: jdbc:mysql://db-vocasia:30626/vocasia_db
+  instructorSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
 
   orderApplicationName: order
   orderOtelServiceName: order
@@ -71,7 +71,7 @@ global:
   orderMysqlDatabase: vocasia_db
   orderSpringDatasourceUsername: root
   orderSpringDatasourcePassword: password
-  orderSpringDatasourceUrl: jdbc:mysql://db-vocasia:30626/vocasia_db
+  orderSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
 
   paymentApplicationName: payment
   paymentOtelServiceName: payment
@@ -79,19 +79,19 @@ global:
   paymentMysqlDatabase: vocasia_db
   paymentSpringDatasourceUsername: root
   paymentSpringDatasourcePassword: password
-  paymentSpringDatasourceUrl: jdbc:mysql://db-vocasia:30626/vocasia_db
+  paymentSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
 
-  qnaApplicationName: qna
-  qnaOtelServiceName: qna
-  qnaMysqlRootPassword: password
-  qnaMysqlDatabase: vocasia_db
-  qnaSpringDatasourceUsername: root
-  qnaSpringDatasourcePassword: password
-  qnaSpringDatasourceUrl: jdbc:mysql://db-vocasia:30626/vocasia_db
+  userApplicationName: user
+  userOtelServiceName: user
+  userMysqlRootPassword: password
+  userMysqlDatabase: vocasia_db
+  userSpringDatasourceUsername: root
+  userSpringDatasourcePassword: password
+  userSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
 
   catalogMongoInitDbRootUsername: root
   catalogMongoInitDbRootPassword: password
-  catalogSpringDataMongodbUri: mongodb://db-catalog:27017/catalog_db
+  catalogSpringDataMongodbUri: mongodb://db-catalog:3307/catalog_db
   catalogSpringDataMongodbDatabase: catalog_db
 
   gatewayserverApplicationName: gatewayserver

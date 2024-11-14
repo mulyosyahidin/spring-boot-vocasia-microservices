@@ -132,6 +132,16 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.GET, "/course/admin/instructor-courses").hasRole("ADMIN")
 
+                        .pathMatchers(HttpMethod.GET, "/course/qna/student/is-i-ask-this-lesson/{lessonId}").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.GET, "/course/qna/student/questions/{courseId}/{lessonId}").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.POST, "/course/qna/student/questions/{courseId}/{lessonId}").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.GET, "/course/qna/student/questions/{lessonId}/qna/{qnaId}").hasRole("STUDENT")
+                        .pathMatchers(HttpMethod.POST, "/course/qna/student/questions/{lessonId}/qna/{qnaId}").hasRole("STUDENT")
+
+                        .pathMatchers(HttpMethod.GET, "/course/qna/instructor/courses/{courseId}/questions").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.GET, "/course/qna/instructor/courses/{courseId}/questions/{qnaId}").hasRole("INSTRUCTOR")
+                        .pathMatchers(HttpMethod.POST, "/course/qna/instructor/courses/{courseId}/questions/{qnaId}").hasRole("INSTRUCTOR")
+
 
                         // order service
                         .pathMatchers("/order/actuator/**").permitAll()
@@ -226,24 +236,6 @@ public class SecurityConfig {
 
                         .pathMatchers(HttpMethod.GET, "/finance/admin/instructor/balance/data").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.GET, "/finance/admin/instructor/withdrawal/request").hasRole("ADMIN")
-
-
-                        // QNA SERVICE
-                        .pathMatchers("/qna/actuator/**").permitAll()
-
-                        .pathMatchers(HttpMethod.GET, "/qna/build-info").permitAll()
-                        .pathMatchers(HttpMethod.GET, "/qna/welcome").permitAll()
-
-                        .pathMatchers(HttpMethod.GET, "/qna/student/is-i-ask-this-lesson/{lessonId}").hasRole("STUDENT")
-                        .pathMatchers(HttpMethod.GET, "/qna/student/questions/{courseId}/{lessonId}").hasRole("STUDENT")
-                        .pathMatchers(HttpMethod.POST, "/qna/student/questions/{courseId}/{lessonId}").hasRole("STUDENT")
-                        .pathMatchers(HttpMethod.GET, "/qna/student/questions/{lessonId}/qna/{qnaId}").hasRole("STUDENT")
-                        .pathMatchers(HttpMethod.POST, "/qna/student/questions/{lessonId}/qna/{qnaId}").hasRole("STUDENT")
-
-                        .pathMatchers(HttpMethod.GET, "/qna/instructor/courses/{courseId}/questions").hasRole("INSTRUCTOR")
-                        .pathMatchers(HttpMethod.GET, "/qna/instructor/courses/{courseId}/questions/{qnaId}").hasRole("INSTRUCTOR")
-                        .pathMatchers(HttpMethod.POST, "/qna/instructor/courses/{courseId}/questions/{qnaId}").hasRole("INSTRUCTOR")
-
 
                         // CATALOG SERVICE
                         .pathMatchers("/catalog/actuator/**").permitAll()
