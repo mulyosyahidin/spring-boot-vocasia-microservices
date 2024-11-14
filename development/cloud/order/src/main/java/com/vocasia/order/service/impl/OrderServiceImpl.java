@@ -91,4 +91,24 @@ public class OrderServiceImpl implements IOrderService {
         return orderRepository.findAll(paging);
     }
 
+    @Override
+    public long count() {
+        return orderRepository.count();
+    }
+
+    @Override
+    public long countByPaymentStatus(String status) {
+        return orderRepository.countByPaymentStatus(status);
+    }
+
+    @Override
+    public double sumTotalPrice() {
+        return orderRepository.sumTotalPrice();
+    }
+
+    @Override
+    public double sumTotalPriceByStatus(String status) {
+        return orderRepository.sumTotalPriceByStatus(status);
+    }
+
 }

@@ -41,35 +41,8 @@ dependencies:
 - name: authentication
   repository: file://../../services/microservices/authentication
   version: 0.1.0
-- name: course
-  repository: file://../../services/microservices/course
-  version: 0.1.0
-- name: enrollment
-  repository: file://../../services/microservices/enrollment
-  version: 0.1.0
-- name: finance
-  repository: file://../../services/microservices/finance
-  version: 0.1.0
-- name: instructor
-  repository: file://../../services/microservices/instructor
-  version: 0.1.0
-- name: order
-  repository: file://../../services/microservices/order
-  version: 0.1.0
-- name: payment
-  repository: file://../../services/microservices/payment
-  version: 0.1.0
-- name: qna
-  repository: file://../../services/microservices/qna
-  version: 0.1.0
-- name: catalog
-  repository: file://../../services/microservices/catalog
-  version: 0.1.0
-- name: email
-  repository: file://../../services/microservices/email
-  version: 0.1.0
 - name: gatewayserver
   repository: file://../../services/microservices/gatewayserver
   version: 0.1.0
-digest: sha256:6d52622579c6e654b13e4bc6e27a6d660261fc0bfa582f88c557adb72e41b30b
-generated: "2024-10-31T19:04:31.0528561+07:00"
+digest: sha256:8cbfbba71859132b550fba447f20bc2aea35bc6e78cd038457c2f2b7ec472cf0
+generated: "2024-11-12T13:39:11.1518794+07:00"

@@ -23,13 +23,16 @@ public class RequestTraceFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
+        String requestPath = exchange.getRequest().getURI().getPath();
+
         if (isCorrelationIdPresent(requestHeaders)) {
-            logger.debug("vocasia-correlation-id found in RequestTraceFilter : {}",
-                    filterUtility.getCorrelationId(requestHeaders));
+            logger.debug("vocasia-correlation-id found in RequestTraceFilter for endpoint: {} : {}",
+                    requestPath, filterUtility.getCorrelationId(requestHeaders));
         } else {
             String correlationID = generateCorrelationId();
             exchange = filterUtility.setCorrelationId(exchange, correlationID);
-            logger.debug("vocasia-correlation-id generated in RequestTraceFilter : {}", correlationID);
+            logger.debug("vocasia-correlation-id generated in RequestTraceFilter for endpoint: {} : {}",
+                    requestPath, correlationID);
         }
 
         return chain.filter(exchange);

@@ -35,6 +35,8 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.PUT, "/authentication/user/{userId}/update-user").permitAll()
                         .pathMatchers(HttpMethod.POST, "/authentication/refresh-token").hasAnyRole("ADMIN", "LECTURER", "STUDENT")
 
+                        .pathMatchers(HttpMethod.GET, "/authentication/admin/overview").hasRole("ADMIN")
+
                         .pathMatchers(HttpMethod.GET, "/authentication/admin/students").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.GET, "/authentication/admin/students/{userId}").hasRole("ADMIN")
 
@@ -57,6 +59,8 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/instructor/profile-by-user-id/{userId}").permitAll()
 
                         .pathMatchers(HttpMethod.POST, "/instructor/student/assign-courses").permitAll()
+
+                         .pathMatchers(HttpMethod.GET, "/instructor/admin/overview").hasRole("ADMIN")
 
                         .pathMatchers(HttpMethod.GET, "/instructor/admin/submissions").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.POST, "/instructor/admin/submissions/{instructorId}/approve").hasRole("ADMIN")
@@ -84,6 +88,8 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/course/admin/categories/{categoryId}").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.PUT, "/course/admin/categories/{categoryId}").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.DELETE, "/course/admin/categories/{categoryId}").hasRole("ADMIN")
+
+                        .pathMatchers(HttpMethod.GET, "/course/admin/overview").hasRole("ADMIN")
 
                         .pathMatchers(HttpMethod.GET, "/course/admin/courses").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.GET, "/course/admin/courses/{courseId}").hasRole("ADMIN")
@@ -140,6 +146,8 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/order/student/orders/{orderId}").hasRole("STUDENT")
 
                         .pathMatchers(HttpMethod.PUT, "/order/update-payment-status/{orderId}").permitAll()
+
+                        .pathMatchers(HttpMethod.GET, "/order/admin/overview").hasRole("ADMIN")
 
                         .pathMatchers(HttpMethod.GET, "/order/admin/transactions").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.GET, "/order/admin/transactions/{orderId}").hasRole("ADMIN")

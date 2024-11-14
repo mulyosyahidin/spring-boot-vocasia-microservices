@@ -9,6 +9,14 @@ spring:
         jwt:
           jwk-set-uri: "http://localhost:7080/realms/Vocasia/protocol/openid-connect/certs"
   cloud:
+    kubernetes:
+      discovery:
+        all-namespaces: true
+        enabled: true
+    discovery:
+      client:
+        health-indicator:
+          enabled: false
     gateway:
       globalcors:
         cors-configurations:
@@ -21,10 +29,6 @@ spring:
               - PUT
               - DELETE
               - OPTIONS
-      discovery:
-        locator:
-          enabled: false
-          lower-case-service-id: true
       httpclient:
         connect-timeout: 1000
         response-timeout: 20s

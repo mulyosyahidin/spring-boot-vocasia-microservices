@@ -14,4 +14,6 @@ public interface InstructorRepository extends JpaRepository<Instructor, Long> {
 
     Page<Instructor> findAllByStatus(String status, Pageable paging);
 
+    long countByStatus(String status);
+
 }

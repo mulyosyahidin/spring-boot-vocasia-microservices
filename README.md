@@ -123,3 +123,6 @@ Proyek ini merupakan bagian dari tugas akhir Martin Mulyo Syahidin (Universitas 
 
 05/11/2024:
 1. Menyelesaikan: Implementasi Redis Cache
+
+14/11/2024:
+1. Menyelesaikan: Konfigurasi Helm Chart untuk Kubernetes

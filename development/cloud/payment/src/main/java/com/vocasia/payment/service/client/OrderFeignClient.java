@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "order")
+@FeignClient(name = "order", url = "http://order:14124")
 public interface OrderFeignClient {
 
     @PutMapping("/api/update-payment-status/{orderId}")

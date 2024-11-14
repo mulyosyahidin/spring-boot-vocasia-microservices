@@ -18,37 +18,46 @@ public class GatewayServerApplication {
     @Bean
     public RouteLocator routeConfig(RouteLocatorBuilder routeLocatorBuilder) {
         return routeLocatorBuilder.routes()
-                .route(p -> p.path("/authentication/**")
+                .route(p -> p
+                        .path("/authentication/**")
                         .filters(f -> f.rewritePath("/authentication/(?<segment>.*)", "/api/${segment}"))
-                        .uri("lb://AUTHENTICATION"))
-                .route(p -> p.path("/instructor/**")
+                        .uri("http://authentication:14120"))
+                .route(p -> p
+                        .path("/instructor/**")
                         .filters(f -> f.rewritePath("/instructor/(?<segment>.*)", "/api/${segment}")
                                 .circuitBreaker(config -> {
                                     config.setName("instructorCircuitBreaker");
                                     config.setFallbackUri("forward:/fallback/instructor");
                                 }))
-                        .uri("lb://INSTRUCTOR"))
-                .route(p -> p.path("/course/**")
+                        .uri("http://instructor:14121"))
+                .route(p -> p
+                        .path("/course/**")
                         .filters(f -> f.rewritePath("/course/(?<segment>.*)", "/api/${segment}"))
-                        .uri("lb://COURSE"))
-                .route(p -> p.path("/order/**")
+                        .uri("http://course:14122"))
+                .route(p -> p
+                        .path("/order/**")
                         .filters(f -> f.rewritePath("/order/(?<segment>.*)", "/api/${segment}"))
-                        .uri("lb://ORDER"))
-                .route(p -> p.path("/payment/**")
+                        .uri("http://order:14124"))
+                .route(p -> p
+                        .path("/payment/**")
                         .filters(f -> f.rewritePath("/payment/(?<segment>.*)", "/api/${segment}"))
-                        .uri("lb://PAYMENT"))
-                .route(p -> p.path("/enrollment/**")
+                        .uri("http://payment:14125"))
+                .route(p -> p
+                        .path("/enrollment/**")
                         .filters(f -> f.rewritePath("/enrollment/(?<segment>.*)", "/api/${segment}"))
-                        .uri("lb://ENROLLMENT"))
-                .route(p -> p.path("/finance/**")
+                        .uri("http://enrollment:14126"))
+                .route(p -> p
+                        .path("/finance/**")
                         .filters(f -> f.rewritePath("/finance/(?<segment>.*)", "/api/${segment}"))
-                        .uri("lb://FINANCE"))
-                .route(p -> p.path("/qna/**")
+                        .uri("http://finance:14127"))
+                .route(p -> p
+                        .path("/qna/**")
                         .filters(f -> f.rewritePath("/qna/(?<segment>.*)", "/api/${segment}"))
-                        .uri("lb://QNA"))
-                .route(p -> p.path("/catalog/**")
+                        .uri("http://qna:14128"))
+                .route(p -> p
+                        .path("/catalog/**")
                         .filters(f -> f.rewritePath("/catalog/(?<segment>.*)", "/api/${segment}"))
-                        .uri("lb://CATALOG"))
+                        .uri("http://catalog:14129"))
                 .build();
     }
 

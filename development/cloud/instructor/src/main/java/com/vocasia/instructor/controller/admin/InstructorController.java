@@ -34,6 +34,20 @@ public class InstructorController {
         this.authenticationService = authenticationService;
     }
 
+    @GetMapping("/overview")
+    public ResponseEntity<ResponseDto> getOverview() {
+        logger.info("InstructorController.getOverview called");
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("total_instructors", instructorService.count());
+        response.put("total_pending_instructors", instructorService.countByStatus("pending"));
+        response.put("total_approved_instructors", instructorService.countByStatus("approved"));
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil menampilkan data ringkasan instruktur", response, null));
+    }
+
     @GetMapping("/instructors")
     public ResponseEntity<ResponseDto> getAllInstructors(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                          @RequestParam(defaultValue = "1") int page) {

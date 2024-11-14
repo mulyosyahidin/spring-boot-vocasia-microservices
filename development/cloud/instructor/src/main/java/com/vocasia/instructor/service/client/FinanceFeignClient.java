@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "finance", fallback = FinanceFeignCallback.class)
+@FeignClient(name = "finance", fallback = FinanceFeignCallback.class, url = "http://finance:14127")
 public interface FinanceFeignClient {
 
     @GetMapping("/api/instructor/overview")

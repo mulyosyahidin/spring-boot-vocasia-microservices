@@ -1,4 +1,4 @@
-deploymentName: email-deployment
+deploymentName: service-email
 serviceName: email
 appLabel: email
 appName: email
@@ -9,16 +9,16 @@ hpa:
   name: email-hpa
   minReplicas: 2
   maxReplicas: 5
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 75
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 60
 
 resources:
   cpu:
-    request: "256m"
-    limit: "512m"
+    request: "500m"
+    limit: "1000m"
   memory:
-    request: "256Mi"
-    limit: "512Mi"
+    request: "1Gi"
+    limit: "2Gi"
 
 image:
   repository: martinms20/email
@@ -34,7 +34,6 @@ service:
 appname_enabled: true
 profile_enabled: true
 config_enabled: true
-eureka_enabled: true
 resouceserver_enabled: false
 otel_enabled: true
 kafka_enabled: true
@@ -81,11 +80,6 @@ customEnvs:
       configMapKeyRef:
         name: vocasia-configmap
         key: EMAIL_SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_GROUP
-  - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-    valueFrom:
-      configMapKeyRef:
-        name: vocasia-configmap
-        key: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
   - name: SPRING_CLOUD_STREAM_DEFAULT_BINDER
     valueFrom:
       configMapKeyRef:

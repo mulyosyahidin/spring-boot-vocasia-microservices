@@ -20,4 +20,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     int countByStatusAndInstructorId(String status, Long instructorId);
 
+    long countByStatus(String status);
+    long countByIsFree(boolean b);
+
 }

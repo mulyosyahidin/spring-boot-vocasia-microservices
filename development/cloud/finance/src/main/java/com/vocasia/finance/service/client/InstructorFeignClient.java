@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "instructor")
+@FeignClient(name = "instructor", url = "http://instructor:14121")
 public interface InstructorFeignClient {
 
     @GetMapping(value = "/api/profile/{id}", consumes = "application/json")

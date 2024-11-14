@@ -161,4 +161,14 @@ public class UserServiceImpl implements IUserService {
         userRepository.save(user);
     }
 
+    @Override
+    public long count() {
+        return userRepository.count();
+    }
+
+    @Override
+    public long countByRole(String role) {
+        return userRepository.countByRole(role);
+    }
+
 }

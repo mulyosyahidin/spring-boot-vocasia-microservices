@@ -1,4 +1,4 @@
-deploymentName: configserver-deployment
+deploymentName: app-configserver
 serviceName: configserver
 appLabel: configserver
 appName: configserver
@@ -7,11 +7,11 @@ replicaCount: 1
 
 resources:
   cpu:
-    request: "256m"
-    limit: "512m"
+    request: "500m"
+    limit: "1000m"
   memory:
-    request: "256Mi"
-    limit: "512Mi"
+    request: "1Gi"
+    limit: "2Gi"
 
 image:
   repository: martinms20/configserver
@@ -27,7 +27,6 @@ service:
 appname_enabled: true
 profile_enabled: false
 config_enabled: false
-eureka_enabled: false
 resouceserver_enabled: false
 otel_enabled: true
 kafka_enabled: false

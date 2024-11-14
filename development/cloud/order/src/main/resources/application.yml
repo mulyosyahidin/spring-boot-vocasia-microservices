@@ -8,6 +8,10 @@ spring:
     active: "development"
   config:
     import: "optional:configserver:http://localhost:14117/"
+  cloud:
+    kubernetes:
+      discovery:
+        all-namespaces: true
   datasource:
     url: "jdbc:mysql://localhost:30626/vocasia_db"
     username: "root"

@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "finance")
+@FeignClient(name = "finance", url = "http://finance:14127")
 public interface FinanceFeignClient {
 
     @PostMapping(value = "/api/instructor-income/store", consumes = "application/json")

@@ -3,6 +3,7 @@ export const AUTHENTICATION_REGISTER = '/authentication/register';
 export const AUTHENTICATION_FORGOT_PASSWORD = '/authentication/forgot-password/request';
 export const AUTHENTICATION_FORGOT_PASSWORD_CREATE = '/authentication/forgot-password/create-password';
 
+export const AUTHENTICATION_ADMIN_OVERVIEW = '/authentication/admin/overview';
 export const AUTHENTICATION_ADMIN_STUDENTS = '/authentication/admin/students';
 export const AUTHENTICATION_ADMIN_STUDENTS_GET_BY_ID = '/authentication/admin/students/:userId';
 
@@ -11,6 +12,7 @@ export const COURSE_ADMIN_CATEGORIES_ONLY_PARENTS = '/course/admin/categories/on
 export const COURSE_ADMIN_CATEGORIES_STORE = '/course/admin/categories';
 export const COURSE_ADMIN_CATEGORIES_GET_BY_ID = '/course/admin/categories/:id';
 export const COURSE_ADMIN_CATEGORIES_SYNC = '/course/admin/categories/sync';
+export const COURSE_ADMIN_OVERVIEW = '/course/admin/overview';
 
 export const COURSE_INSTRUCTOR_CATEGORIES = '/course/instructor/categories';
 export const COURSE_INSTRUCTOR_COURSES = '/course/instructor/courses';
@@ -55,6 +57,7 @@ export const INSTRUCTOR_INSTRUCTOR_STUDENTS_GET_BY_ID = '/instructor/instructor/
 
 export const INSTRUCTOR_INSTRUCTOR_PROFILE = '/instructor/instructor/profile';
 
+export const INSTRUCTOR_ADMIN_OVERVIEW = '/instructor/admin/overview';
 export const INSTRUCTOR_ADMIN_INSTRUCTORS = '/instructor/admin/instructors';
 export const INSTRUCTOR_ADMIN_INSTRUCTORS_GET_BY_ID = '/instructor/admin/instructors/:instructorId';
 
@@ -105,6 +108,7 @@ export const ORDER_STUDENT_ORDERS = '/order/student/orders';
 export const ORDER_STUDENT_PLACE_NEW_ORDER = '/order/student/place-new-order';
 export const ORDER_STUDENT_ORDERS_GET_BY_ID = '/order/student/orders/:id';
 
+export const ORDER_ADMIN_OVERVIEW = '/order/admin/overview';
 export const ORDER_ADMIN_TRANSACTIONS = '/order/admin/transactions';
 export const ORDER_ADMIN_TRANSACTIONS_FIND_BY_ID = '/order/admin/transactions/:id';
 export const ORDER_ADMIN_STUDENT_TRANSACTIONS = '/order/admin/student/transactions';

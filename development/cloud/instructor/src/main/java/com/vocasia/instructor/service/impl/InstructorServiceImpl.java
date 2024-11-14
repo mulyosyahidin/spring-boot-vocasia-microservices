@@ -75,4 +75,14 @@ public class InstructorServiceImpl implements IInstructorService {
         instructorRepository.save(instructor);
     }
 
+    @Override
+    public long count() {
+        return instructorRepository.count();
+    }
+
+    @Override
+    public long countByStatus(String status) {
+        return instructorRepository.countByStatus(status);
+    }
+
 }

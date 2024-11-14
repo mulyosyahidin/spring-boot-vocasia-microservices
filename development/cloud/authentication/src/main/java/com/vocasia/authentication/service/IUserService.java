@@ -32,4 +32,7 @@ public interface IUserService {
 
     void updatePassword(String email, String newPassword) throws NoSuchAlgorithmException, InvalidKeySpecException;
 
+    long count();
+    long countByRole(String role);
+
 }

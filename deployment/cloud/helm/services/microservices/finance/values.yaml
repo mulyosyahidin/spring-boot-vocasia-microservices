@@ -1,4 +1,4 @@
-deploymentName: finance-deployment
+deploymentName: service-finance
 serviceName: finance
 appLabel: finance
 appName: finance
@@ -9,16 +9,16 @@ hpa:
   name: finance-hpa
   minReplicas: 2
   maxReplicas: 5
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 75
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 60
 
 resources:
   cpu:
-    request: "256m"
-    limit: "512m"
+    request: "500m"
+    limit: "1000m"
   memory:
-    request: "256Mi"
-    limit: "512Mi"
+    request: "1Gi"
+    limit: "2Gi"
 
 image:
   repository: martinms20/finance
@@ -34,7 +34,7 @@ service:
 appname_enabled: true
 profile_enabled: true
 config_enabled: true
-eureka_enabled: true
+discovery_enabled: true
 resouceserver_enabled: false
 otel_enabled: true
 kafka_enabled: false

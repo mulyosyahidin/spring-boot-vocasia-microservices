@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "enrollment")
+@FeignClient(name = "enrollment", url = "http://enrollment:14126")
 public interface EnrollmentFeignClient {
 
     @PostMapping(value = "/api/student/enroll-courses", consumes = "application/json")

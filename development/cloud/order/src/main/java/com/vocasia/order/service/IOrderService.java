@@ -15,4 +15,10 @@ public interface IOrderService {
     Page<Order> findAllByUserId(Long userId, Pageable paging);
     Page<Order> findAll(Pageable paging);
 
+    long count();
+    long countByPaymentStatus(String status);
+
+    double sumTotalPrice();
+    double sumTotalPriceByStatus(String status);
+
 }

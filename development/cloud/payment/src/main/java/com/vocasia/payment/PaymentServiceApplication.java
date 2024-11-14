@@ -11,10 +11,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
-@EnableDiscoveryClient
 @EnableConfigurationProperties(value = {AppConfigProperties.class, MidtransConfigProperties.class, PaymentConfigProperties.class})
 @EnableFeignClients
 @EnableJpaAuditing
+@EnableDiscoveryClient
 public class PaymentServiceApplication {
 
 	public static void main(String[] args) {

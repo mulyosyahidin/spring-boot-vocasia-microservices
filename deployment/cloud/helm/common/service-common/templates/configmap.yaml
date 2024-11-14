@@ -6,7 +6,7 @@ metadata:
 data:
   SPRING_PROFILES_ACTIVE: "{{ .Values.global.activeProfile }}"
   SPRING_CONFIG_IMPORT: "{{ .Values.global.configServerURL }}"
-  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "{{ .Values.global.eurekaServerURL }}"
+  SPRING.CLOUD.KUBERNETES.DISCOVERY.DISCOVERY-SERVER-URL: "{{ .Values.global.discoveryServerURL }}"
   SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "{{ .Values.global.keyCloakURL }}"
   JAVA_TOOL_OPTIONS: "{{ .Values.global.openTelemetryJavaAgent }}"
   OTEL_EXPORTER_OTLP_ENDPOINT: "{{ .Values.global.otelExporterEndPoint }}"
@@ -97,6 +97,9 @@ data:
 
   GATEWAYSERVER_APPLICATION_NAME: "{{ .Values.global.gatewayserverApplicationName }}"
   GATEWAYSERVER_OTEL_SERVICE_NAME: "{{ .Values.global.gatewayserverOtelServiceName }}"
+
+  VOCASIA_MYSQL_ROOT_PASSWORD: "{{ .Values.global.vocasiaMysqlRootPassword }}"
+  VOCASIA_MYSQL_DATABASE: "{{ .Values.global.vocasiaMysqlDatabase }}"
 
   KEYCLOAK_ADMIN: "{{ .Values.global.keycloakAdmin }}"
   KEYCLOAK_ADMIN_PASSWORD: "{{ .Values.global.keycloakAdminPassword }}"

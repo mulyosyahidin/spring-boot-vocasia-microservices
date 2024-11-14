@@ -207,4 +207,19 @@ public class CourseServiceImpl implements ICourseService {
         return courseRepository.findAll(paging);
     }
 
+    @Override
+    public long count() {
+        return courseRepository.count();
+    }
+
+    @Override
+    public long countByStatus(String status) {
+        return courseRepository.countByStatus(status);
+    }
+
+    @Override
+    public long countByIsFree(boolean b) {
+        return courseRepository.countByIsFree(b);
+    }
+
 }

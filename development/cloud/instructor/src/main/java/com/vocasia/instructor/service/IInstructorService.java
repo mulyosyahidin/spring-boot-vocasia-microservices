@@ -21,4 +21,7 @@ public interface IInstructorService {
     List<Instructor> findAllByStatus(String status);
     void save(Instructor instructor);
 
+    long count();
+    long countByStatus(String status);
+
 }

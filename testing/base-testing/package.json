@@ -1,0 +1,17 @@
+{
+  "name": "base-testing",
+  "version": "1.0.0",
+  "description": "Pengujian awal untuk menentukan resource container",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Martin Mulyo Syahidin",
+  "license": "ISC",
+  "dependencies": {
+    "k6": "0.0.0"
+  },
+  "devDependencies": {
+    "@types/k6": "^0.54.1"
+  }
+}

@@ -38,4 +38,8 @@ public interface ICourseService {
 
     Page<Course> findAll(Pageable paging);
 
+    long count();
+    long countByStatus(String status);
+    long countByIsFree(boolean b);
+
 }

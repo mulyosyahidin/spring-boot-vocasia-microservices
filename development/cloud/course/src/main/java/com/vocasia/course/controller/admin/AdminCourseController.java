@@ -47,6 +47,22 @@ public class AdminCourseController {
         this.lessonService = iLessonService;
     }
 
+    @GetMapping("/overview")
+    public ResponseEntity<ResponseDto> getOverview() {
+        logger.info("AdminCourseController.getOverview called");
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("total_courses", courseService.count());
+        response.put("total_draft_courses", courseService.countByStatus("draft"));
+        response.put("total_published_courses", courseService.countByStatus("published"));
+        response.put("total_paid_courses", courseService.countByIsFree(false));
+        response.put("total_free_courses", courseService.countByIsFree(true));
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil mendapatkan data ringkasan kursus", response, null));
+    }
+
     @GetMapping("/courses")
     public ResponseEntity<ResponseDto> getAllCourses(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                      @RequestParam(defaultValue = "1") int page) {
