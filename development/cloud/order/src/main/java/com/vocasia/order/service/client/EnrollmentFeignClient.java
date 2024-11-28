@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "enrollment", url = "http://enrollment:14126")
+@FeignClient(name = "enrollment", url = "http://enrollment:8005")
 public interface EnrollmentFeignClient {
 
     @PostMapping(value = "/api/student/enroll-courses", consumes = "application/json")
-    public ResponseEntity<ResponseDto> enrollCourse(@RequestHeader("vocasia-correlation-id") String correlationId,
-                                                    @RequestBody EnrollNewCourseRequest enrollNewCourseRequest);
+    ResponseEntity<ResponseDto> enrollCourse(@RequestHeader("vocasia-correlation-id") String correlationId,
+                                             @RequestBody EnrollNewCourseRequest enrollNewCourseRequest);
 
 }

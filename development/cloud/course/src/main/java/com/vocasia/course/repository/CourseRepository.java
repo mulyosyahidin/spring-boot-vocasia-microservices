@@ -23,4 +23,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     long countByStatus(String status);
     long countByIsFree(boolean b);
 
+    List<Course> findAllByStatus(String status);
+
 }

@@ -5,17 +5,16 @@ appName: db-payment
 
 replicaCount: 1
 
-image:
-  repository: mysql
-  tag: 8.0
-
-containerPort: 3312
+containerPort: 3314
 
 service:
-  port: 3312
+  port: 3314
 
 pvc:
   name: payment-db-pvc
+  size: 500Mi
+
+initScriptUrl: https://mms.upperdev.cloud/vocasia/3314_payment_db.sql
 
 customEnvs:
   - name: MYSQL_ROOT_PASSWORD

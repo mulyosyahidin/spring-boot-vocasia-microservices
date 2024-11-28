@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "authentication", url = "http://authentication:14120")
+@FeignClient(name = "authentication", url = "http://authentication:8001")
 public interface AuthenticationFeignClient {
 
     @GetMapping(value = "/api/user/{userId}", consumes = "application/json")
-    public ResponseEntity<ResponseDto> findUserById(@RequestHeader("vocasia-correlation-id") String correlationId,
+    ResponseEntity<ResponseDto> findUserById(@RequestHeader("vocasia-correlation-id") String correlationId,
                                                     @PathVariable("userId") Long userId);
 
 }

@@ -145,7 +145,7 @@
 				<version>3.3.2</version>
 				<configuration>
 					<to>
-						<image>martinms20/${project.artifactId}:cloud</image>
+						<image>martinms20/${project.artifactId}:cloud-1.0.0</image>
 					</to>
 				</configuration>
 			</plugin>

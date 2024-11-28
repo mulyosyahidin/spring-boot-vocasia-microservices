@@ -23,12 +23,9 @@ public class MessagingFunction {
     @Bean
     public Function<EmailSendingDto, EmailSendingDto> email() {
         return emailSendingDto -> {
-            logger.info("Type: {}", emailSendingDto.type());
-            logger.info("Subject: {}", emailSendingDto.subject());
-            logger.info("Sending email to: {}", emailSendingDto.to());
-            logger.info("Data: {}", emailSendingDto.data());
+            logger.info("Sending {} email to {} with subject {}", emailSendingDto.type(), emailSendingDto.to(), emailSendingDto.subject());
 
-            brevoClient.sendEmail(emailSendingDto.type(), emailSendingDto.subject(), emailSendingDto.to(), emailSendingDto.data());
+//            brevoClient.sendEmail(emailSendingDto.type(), emailSendingDto.subject(), emailSendingDto.to(), emailSendingDto.data());
 
             return emailSendingDto;
         };

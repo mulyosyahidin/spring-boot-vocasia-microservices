@@ -5,17 +5,16 @@ appName: db-instructor
 
 replicaCount: 1
 
-image:
-  repository: mysql
-  tag: 8.0
-
-containerPort: 30619
+containerPort: 3312
 
 service:
-  port: 30619
+  port: 3312
 
 pvc:
   name: instructor-db-pvc
+  size: 500Mi
+
+initScriptUrl: https://mms.upperdev.cloud/vocasia/3312_instructor_db.sql
 
 customEnvs:
   - name: MYSQL_ROOT_PASSWORD

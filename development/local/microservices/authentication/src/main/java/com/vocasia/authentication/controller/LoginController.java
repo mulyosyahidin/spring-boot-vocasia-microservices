@@ -50,7 +50,7 @@ public class LoginController {
 
         if (loggedUser == null) {
             return ResponseEntity
-                    .status(HttpStatus.SC_BAD_REQUEST)
+                    .status(HttpStatus.SC_OK)
                     .body(new ResponseDto(false, "Email atau password salah", null, null));
         }
 
@@ -86,6 +86,7 @@ public class LoginController {
                 response.put("instructor", getInstructorProfileByUserId);
             } catch (CustomFeignException e) {
                 logger.error(e.getMessage(), e);
+
                 return ResponseEntity
                         .status(e.getHttpStatus())
                         .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));

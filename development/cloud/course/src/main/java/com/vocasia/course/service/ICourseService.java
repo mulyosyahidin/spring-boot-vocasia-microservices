@@ -42,4 +42,6 @@ public interface ICourseService {
     long countByStatus(String status);
     long countByIsFree(boolean b);
 
+    List<Course> findAllByStatus(String status);
+
 }

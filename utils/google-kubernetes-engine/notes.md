@@ -1,107 +1,136 @@
 ## INSTALL APP
-1. Redis
+### RABBITMQ
 ```
-helm install redis redis --set replica.replicaCount=0 --set master.persistence.size=2Gi
-```
-
-2. PROMETHEUS
-```
-helm install prometheus kube-prometheus
+helm install rabbitmq rabbitmq --set persistence.size=2Gi
 ```
 
-3. KEYCLOAK
+### KEYCLOAK
 ```
 helm install keycloak keycloak
 ```
 
-4. KAFKA
+### REDIS
+```
+helm install redis redis --set replica.replicaCount=0 --set master.persistence.size=2Gi
+```
+
+### PROMETHEUS
+```
+helm install prometheus kube-prometheus
+```
+
+### KAFKA
 ```
 helm install kafka kafka --set controller.persistence.size=2Gi
 ```
 
-5. TEMPO
+### TEMPO
 ```
-helm install tempo grafana-tempo --set ingester.persistence.size=4Gi
+helm install tempo grafana-tempo --set ingester.persistence.size=4Gi --set distributor.replicaCount=2 --set ingester.replicaCount=2
 ```
 
-6. LOKI
+### LOKI
 ```
 helm install loki grafana-loki --set ingester.persistence.size=2Gi --set querier.persistence.size=2Gi --set compactor.persistence.size=2Gi
 ```
 
-7. GRAFANA
+### GRAFANA
 ```
 helm install grafana grafana --set persistence.size=2Gi
 ```
 
 ## PORT FORWARDING
+### RABBITMQ
+```
+kubectl port-forward --namespace default svc/rabbitmq 5672:5672
+```
 
-1. Prometheus:
+```
+kubectl port-forward --namespace default svc/rabbitmq 15672:15672
+```
+
+```
+kubectl get secret --namespace default rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 -d
+```
+
+### REDIS
+```
+kubectl port-forward --namespace default svc/redis-master 6379:6379
+```
+
+```
+kubectl port-forward --namespace default svc/redis-master 6379:6379 &
+    redis-cli -h 127.0.0.1 -p 6379
+```
+
+### PROMETHEUS
 ```
 kubectl port-forward --namespace default svc/prometheus-kube-prometheus-prometheus 9090:9090
 ```
 
-2. Grafana:
+### GRAFANA
 ```
 kubectl port-forward svc/grafana 3000:3000
 ```
  
-Grafana password:
 ```
 kubectl get secret grafana-admin --namespace default -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 -d
 ```
 
-3. authentication_db
+### authentication_db
 ```
-kubectl port-forward svc/db-authentication 30618:30618
-```
-
-4. instructor_db
-```
-kubectl port-forward svc/db-instructor 30619:30619
+kubectl port-forward svc/db-authentication 3307:3307
 ```
 
-5. course_db
+### instructor_db
 ```
-kubectl port-forward svc/db-course 30620:30620
-```
-
-6. order_db
-```
-kubectl port-forward svc/db-order 30621:30621
+kubectl port-forward svc/db-instructor 3312:3312
 ```
 
-7. payment_db
+### course_db
 ```
-kubectl port-forward svc/db-payment 30622:30622
-```
-
-8. enrollment_db
-```
-kubectl port-forward svc/db-enrollment 30623:30623
+kubectl port-forward svc/db-course 3309:3309
 ```
 
-9. finance_db
+### order_db
 ```
-kubectl port-forward svc/db-finance 30624:30624
-```
-
-10. qna_db
-```
-kubectl port-forward svc/db-qna 30625:30625
+kubectl port-forward svc/db-order 3313:3313
 ```
 
-11. catalog_db
+### payment_db
 ```
-kubectl port-forward svc/db-catalog 30627:30627
-```
-
-12. vocasia_db
-```
-kubectl port-forward svc/db-vocasia 30626:30626
+kubectl port-forward svc/db-payment 3314:3314
 ```
 
-13. redis
+### enrollment_db
 ```
-kubectl port-forward --namespace default svc/redis-master 6379:6379
+kubectl port-forward svc/db-enrollment 3310:3310
+```
+
+### finance_db
+```
+kubectl port-forward svc/db-finance 3311:3311
+```
+
+### catalog_db
+```
+kubectl port-forward svc/db-catalog 3308:3308
+```
+
+### vocasia_db
+```
+kubectl port-forward svc/db-vocasia 3306:3306
+```
+
+## GRAFANA DASHBOARD
+```
+https://grafana.com/grafana/dashboards/4701-jvm-micrometer/
+```
+
+```
+https://grafana.com/grafana/dashboards/6417-kubernetes-cluster-prometheus/
+```
+
+```
+https://grafana.com/grafana/dashboards/747-pod-metrics/
 ```

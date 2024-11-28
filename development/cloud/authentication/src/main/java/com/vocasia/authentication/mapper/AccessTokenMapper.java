@@ -3,10 +3,11 @@ package com.vocasia.authentication.mapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Map;
 
 @Data
-public class AccessTokenMapper {
+public class AccessTokenMapper implements Serializable {
 
     private String accessToken;
     private String refreshToken;

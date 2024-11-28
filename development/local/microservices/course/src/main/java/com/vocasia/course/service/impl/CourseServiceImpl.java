@@ -222,4 +222,9 @@ public class CourseServiceImpl implements ICourseService {
         return courseRepository.countByIsFree(b);
     }
 
+    @Override
+    public List<Course> findAllByStatus(String status) {
+        return courseRepository.findAllByStatus(status);
+    }
+
 }

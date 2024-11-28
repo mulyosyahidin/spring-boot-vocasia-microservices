@@ -92,6 +92,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/course/admin/overview").hasRole("ADMIN")
 
                         .pathMatchers(HttpMethod.GET, "/course/admin/courses").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.POST, "/course/admin/courses/sync").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.GET, "/course/admin/courses/{courseId}").hasRole("ADMIN")
 
                         .pathMatchers(HttpMethod.GET, "/course/instructor/categories").hasRole("INSTRUCTOR")

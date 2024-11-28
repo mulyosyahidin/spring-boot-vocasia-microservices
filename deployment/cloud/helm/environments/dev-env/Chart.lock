@@ -32,17 +32,32 @@ dependencies:
 - name: db-finance
   repository: file://../../services/db/db-finance
   version: 0.1.0
-- name: db-qna
-  repository: file://../../services/db/db-qna
-  version: 0.1.0
-- name: db-catalog
-  repository: file://../../services/db/db-catalog
-  version: 0.1.0
 - name: authentication
   repository: file://../../services/microservices/authentication
+  version: 0.1.0
+- name: course
+  repository: file://../../services/microservices/course
+  version: 0.1.0
+- name: enrollment
+  repository: file://../../services/microservices/enrollment
+  version: 0.1.0
+- name: finance
+  repository: file://../../services/microservices/finance
+  version: 0.1.0
+- name: instructor
+  repository: file://../../services/microservices/instructor
+  version: 0.1.0
+- name: order
+  repository: file://../../services/microservices/order
+  version: 0.1.0
+- name: payment
+  repository: file://../../services/microservices/payment
+  version: 0.1.0
+- name: catalog
+  repository: file://../../services/microservices/catalog
   version: 0.1.0
 - name: gatewayserver
   repository: file://../../services/microservices/gatewayserver
   version: 0.1.0
-digest: sha256:8cbfbba71859132b550fba447f20bc2aea35bc6e78cd038457c2f2b7ec472cf0
-generated: "2024-11-12T13:39:11.1518794+07:00"
+digest: sha256:56adb73224d88a6e4adf6fc5d1cb5f703e7156a70014da66bfe18a00031c6a91
+generated: "2024-11-21T16:32:46.2713941+07:00"

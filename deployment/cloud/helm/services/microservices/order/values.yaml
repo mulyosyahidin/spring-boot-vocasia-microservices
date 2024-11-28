@@ -8,28 +8,28 @@ replicaCount: 1
 hpa:
   name: order-hpa
   minReplicas: 2
-  maxReplicas: 5
+  maxReplicas: 3
   targetCPUUtilizationPercentage: 60
   targetMemoryUtilizationPercentage: 60
 
 resources:
   cpu:
     request: "500m"
-    limit: "1000m"
+    limit: "2"
   memory:
     request: "1Gi"
     limit: "2Gi"
 
 image:
   repository: martinms20/order
-  tag: cloud
+  tag: cloud-1.0.1
 
-containerPort: 8007
+containerPort: 8008
 
 service:
   type: ClusterIP
-  port: 8007
-  targetPort: 8007
+  port: 8008
+  targetPort: 8008
 
 appname_enabled: true
 profile_enabled: true
@@ -38,6 +38,7 @@ discovery_enabled: true
 resouceserver_enabled: false
 otel_enabled: true
 kafka_enabled: false
+rabbit_enabled: false
 redis_enabled: true
 
 customEnvs:

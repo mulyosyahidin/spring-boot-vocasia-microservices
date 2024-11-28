@@ -5,17 +5,16 @@ appName: db-order
 
 replicaCount: 1
 
-image:
-  repository: mysql
-  tag: 8.0
-
-containerPort: 3311
+containerPort: 3313
 
 service:
-  port: 3311
+  port: 3313
 
 pvc:
   name: order-db-pvc
+  size: 500Mi
+
+initScriptUrl: https://mms.upperdev.cloud/vocasia/3313_order_db.sql
 
 customEnvs:
   - name: MYSQL_ROOT_PASSWORD

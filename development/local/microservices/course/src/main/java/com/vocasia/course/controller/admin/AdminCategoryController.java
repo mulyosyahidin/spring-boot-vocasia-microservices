@@ -134,7 +134,7 @@ public class AdminCategoryController {
             logger.error(e.getMessage(), e);
 
             return ResponseEntity
-                    .status(org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, e.getMessage(), null, null));
         }
 
@@ -347,7 +347,7 @@ public class AdminCategoryController {
             logger.error(e.getMessage(), e);
 
             return ResponseEntity
-                    .status(org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, e.getMessage(), null, null));
         }
 
@@ -389,7 +389,7 @@ public class AdminCategoryController {
             logger.error(e.getMessage(), e);
 
             return ResponseEntity
-                    .status(org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
                     .body(new ResponseDto(false, e.getMessage(), null, null));
         }
 

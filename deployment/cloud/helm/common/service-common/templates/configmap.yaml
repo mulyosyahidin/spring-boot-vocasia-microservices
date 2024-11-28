@@ -11,7 +11,6 @@ data:
   JAVA_TOOL_OPTIONS: "{{ .Values.global.openTelemetryJavaAgent }}"
   OTEL_EXPORTER_OTLP_ENDPOINT: "{{ .Values.global.otelExporterEndPoint }}"
   OTEL_METRICS_EXPORTER: "{{ .Values.global.otelMetricsExporter }}"
-  SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: "{{ .Values.global.kafkaBrokerURL }}"
 
   AWS_ACCESS_KEY_ID: "{{ .Values.global.awsAccessKeyId }}"
   AWS_SECRET_ACCESS_KEY: "{{ .Values.global.awsSecretAccessKey }}"
@@ -30,8 +29,6 @@ data:
   AUTHENTICATION_SPRING_DATASOURCE_USERNAME: "{{ .Values.global.authenticationSpringDatasourceUsername }}"
   AUTHENTICATION_SPRING_DATASOURCE_PASSWORD: "{{ .Values.global.authenticationSpringDatasourcePassword }}"
   AUTHENTICATION_SPRING_DATASOURCE_URL: "{{ .Values.global.authenticationSpringDatasourceUrl }}"
-  AUTHENTICATION_SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_DESTINATION: "{{ .Values.global.authenticationEmailInDestination }}"
-  AUTHENTICATION_SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_GROUP: "{{ .Values.global.authenticationEmailInGroup }}"
 
   COURSE_APPLICATION_NAME: "{{ .Values.global.courseApplicationName }}"
   COURSE_OTEL_SERVICE_NAME: "{{ .Values.global.courseOtelServiceName }}"
@@ -110,15 +107,13 @@ data:
   KEYCLOAK_REALM: "{{ .Values.global.keycloakRealm }}"
   KEYCLOAK_AUTH_CLIENT_ID: "{{ .Values.global.keycloakAuthClientId }}"
 
+  SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: "{{ .Values.global.kafkaBrokerURL }}"
+
   SPRING_RABBITMQ_HOST: "{{ .Values.global.rabbitmqHost }}"
   SPRING_RABBITMQ_PORT: "{{ .Values.global.rabbitmqPort }}"
   SPRING_RABBITMQ_USERNAME: "{{ .Values.global.rabbitmqUsername }}"
   SPRING_RABBITMQ_PASSWORD: "{{ .Values.global.rabbitmqPassword }}"
   SPRING_RABBITMQ_CONNECTION_TIMEOUT: "{{ .Values.global.rabbitmqConnectionTimeout }}"
-
-  EMAIL_SPRING_CLOUD_FUNCTION_DEFINITION: "{{ .Values.global.emailFunctionDefinition }}"
-  EMAIL_SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_DESTINATION: "{{ .Values.global.emailInDestination }}"
-  EMAIL_SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_GROUP: "{{ .Values.global.emailInGroup }}"
 
   SPRING_CLOUD_STREAM_DEFAULT_BINDER: "{{ .Values.global.defaultBinder }}"
   SPRING_DATA_REDIS_HOST: "{{ .Values.global.redisHost }}"

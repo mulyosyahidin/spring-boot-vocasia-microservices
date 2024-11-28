@@ -460,30 +460,6 @@ services:
       file: common-config.yml
       service: service-aws-config
 
-  instructor_service:
-    image: martinms20/instructor:local
-    container_name: service-instructor
-    ports:
-      - "14121:14121"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
-      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
-      OTEL_SERVICE_NAME: "instructor"
-    healthcheck:
-      test: "curl --fail --silent localhost:14121/actuator/health/readiness | grep UP || exit 1"
-      interval: 20s
-      timeout: 5s
-      retries: 20
-      start_period: 20s
-    depends_on:
-      db_mysql:
-        condition: service_healthy
-      eurekaserver:
-        condition: service_healthy
-    extends:
-      file: common-config.yml
-      service: service-config
-
   email_service:
     image: martinms20/email:local
     container_name: service-email
@@ -562,18 +538,42 @@ services:
       file: common-config.yml
       service: service-aws-config
 
+  instructor_service:
+    image: martinms20/instructor:local
+    container_name: service-instructor
+    ports:
+      - "8007:8007"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      OTEL_SERVICE_NAME: "instructor"
+    healthcheck:
+      test: "curl --fail --silent localhost:8007/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_mysql:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-config
+
   order_service:
     image: martinms20/order:local
     container_name: service-order
     ports:
-      - "8007:8007"
+      - "8008:8008"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
       OTEL_SERVICE_NAME: "order"
       FINANCE_PERCENT_PLATFORM_FEE: 5
     healthcheck:
-      test: "curl --fail --silent localhost:8007/actuator/health/readiness | grep UP || exit 1"
+      test: "curl --fail --silent localhost:8008/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
       timeout: 5s
       retries: 20
@@ -591,7 +591,7 @@ services:
     image: martinms20/payment:local
     container_name: service-payment
     ports:
-      - "8008:8008"
+      - "8009:8009"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
@@ -600,30 +600,6 @@ services:
       MIDTRANS_SERVER_KEY: "SB-Mid-server-l-PGFhcZZ-wTh5bebWsEefs0"
       MIDTRANS_IS_PRODUCTION: false
       OTEL_SERVICE_NAME: "payment"
-    healthcheck:
-      test: "curl --fail --silent localhost:8008/actuator/health/readiness | grep UP || exit 1"
-      interval: 20s
-      timeout: 5s
-      retries: 20
-      start_period: 20s
-    depends_on:
-      db_mysql:
-        condition: service_healthy
-      eurekaserver:
-        condition: service_healthy
-    extends:
-      file: common-config.yml
-      service: service-config
-
-  user_service:
-    image: martinms20/user:local
-    container_name: service-user
-    ports:
-      - "8009:8009"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
-      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
-      OTEL_SERVICE_NAME: "user"
     healthcheck:
       test: "curl --fail --silent localhost:8009/actuator/health/readiness | grep UP || exit 1"
       interval: 20s

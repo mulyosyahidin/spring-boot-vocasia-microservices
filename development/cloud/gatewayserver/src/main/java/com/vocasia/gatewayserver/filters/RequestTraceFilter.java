@@ -26,13 +26,12 @@ public class RequestTraceFilter implements GlobalFilter {
         String requestPath = exchange.getRequest().getURI().getPath();
 
         if (isCorrelationIdPresent(requestHeaders)) {
-            logger.debug("vocasia-correlation-id found in RequestTraceFilter for endpoint: {} : {}",
-                    requestPath, filterUtility.getCorrelationId(requestHeaders));
+            logger.debug("[{}] correlation-id: {}", requestPath, filterUtility.getCorrelationId(requestHeaders));
         } else {
             String correlationID = generateCorrelationId();
+
             exchange = filterUtility.setCorrelationId(exchange, correlationID);
-            logger.debug("vocasia-correlation-id generated in RequestTraceFilter for endpoint: {} : {}",
-                    requestPath, correlationID);
+            logger.debug("[{}] correlation-id: {}", requestPath, correlationID);
         }
 
         return chain.filter(exchange);

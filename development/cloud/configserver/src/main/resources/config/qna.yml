@@ -1,4 +1,0 @@
-app:
-  version: 1.0.0
-  name: "QnA Service"
-  environment: "default"

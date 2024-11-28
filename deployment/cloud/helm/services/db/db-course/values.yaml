@@ -5,17 +5,16 @@ appName: db-course
 
 replicaCount: 1
 
-image:
-  repository: mysql
-  tag: 8.0
-
-containerPort: 3308
+containerPort: 3309
 
 service:
-  port: 3308
+  port: 3309
 
 pvc:
   name: course-db-pvc
+  size: 500Mi
+
+initScriptUrl: https://mms.upperdev.cloud/vocasia/3309_course_db.sql
 
 customEnvs:
   - name: MYSQL_ROOT_PASSWORD

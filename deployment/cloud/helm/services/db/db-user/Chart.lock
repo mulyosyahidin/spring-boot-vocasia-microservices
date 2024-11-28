@@ -1,6 +1,0 @@
-dependencies:
-- name: vocasia-mysql-common
-  repository: file://../../../common/mysql-common
-  version: 0.1.0
-digest: sha256:89b0f8008e5abc26abe8798da2d75bab5322c71f6500471b0bd75f531c623487
-generated: "2024-10-27T06:02:27.5163129+07:00"

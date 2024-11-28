@@ -47,6 +47,7 @@ public class BrevoClient {
 
         try {
             emailApi.sendTransacEmail(email);
+
             logger.info("Email sent successfully to {}", to);
         } catch (ApiException e) {
             logger.error("Failed to send email: {}", e.getMessage());

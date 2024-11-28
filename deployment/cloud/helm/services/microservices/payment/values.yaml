@@ -8,28 +8,28 @@ replicaCount: 1
 hpa:
   name: payment-hpa
   minReplicas: 2
-  maxReplicas: 5
+  maxReplicas: 3
   targetCPUUtilizationPercentage: 60
   targetMemoryUtilizationPercentage: 60
 
 resources:
   cpu:
     request: "500m"
-    limit: "1000m"
+    limit: "2"
   memory:
     request: "1Gi"
     limit: "2Gi"
 
 image:
   repository: martinms20/payment
-  tag: cloud
+  tag: cloud-1.0.2
 
-containerPort: 8008
+containerPort: 8009
 
 service:
   type: ClusterIP
-  port: 8008
-  targetPort: 8008
+  port: 8009
+  targetPort: 8009
 
 appname_enabled: true
 profile_enabled: true
@@ -38,6 +38,7 @@ discovery_enabled: true
 resouceserver_enabled: false
 otel_enabled: true
 kafka_enabled: false
+rabbit_enabled: false
 redis_enabled: false
 
 customEnvs:

@@ -51,7 +51,7 @@ dependencies:
   - name: db-course
     version: 0.1.0
     repository: file://../../services/db/db-course
-
+#
   - name: db-order
     version: 0.1.0
     repository: file://../../services/db/db-order
@@ -68,22 +68,18 @@ dependencies:
     version: 0.1.0
     repository: file://../../services/db/db-finance
 
-  - name: db-qna
-    version: 0.1.0
-    repository: file://../../services/db/db-qna
-
-  - name: db-catalog
-    version: 0.1.0
-    repository: file://../../services/db/db-catalog
-
+#  - name: db-catalog
+#    version: 0.1.0
+#    repository: file://../../services/db/db-catalog
+#
   - name: authentication
     version: 0.1.0
     repository: file://../../services/microservices/authentication
-
+#
   - name: course
     version: 0.1.0
     repository: file://../../services/microservices/course
-
+#
   - name: enrollment
     version: 0.1.0
     repository: file://../../services/microservices/enrollment
@@ -95,7 +91,7 @@ dependencies:
   - name: instructor
     version: 0.1.0
     repository: file://../../services/microservices/instructor
-
+#
   - name: order
     version: 0.1.0
     repository: file://../../services/microservices/order
@@ -104,18 +100,14 @@ dependencies:
     version: 0.1.0
     repository: file://../../services/microservices/payment
 
-  - name: qna
-    version: 0.1.0
-    repository: file://../../services/microservices/qna
-
   - name: catalog
     version: 0.1.0
     repository: file://../../services/microservices/catalog
-
-  - name: email
-    version: 0.1.0
-    repository: file://../../services/microservices/email
-
+#
+#  - name: email
+#    version: 0.1.0
+#    repository: file://../../services/microservices/email
+#
   - name: gatewayserver
     version: 0.1.0
     repository: file://../../services/microservices/gatewayserver

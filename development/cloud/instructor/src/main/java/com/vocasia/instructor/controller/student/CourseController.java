@@ -43,6 +43,7 @@ public class CourseController {
         boolean isUserHasRegisteredAsInstructorStudent = instructorStudentService.isStudentRegistered(registerStudentRequest);
         InstructorStudent instructorStudent;
 
+
         if (!isUserHasRegisteredAsInstructorStudent) {
             instructorStudent = instructorStudentService.registerStudent(registerStudentRequest);
         } else {

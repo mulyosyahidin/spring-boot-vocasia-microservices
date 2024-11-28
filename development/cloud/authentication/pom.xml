@@ -99,6 +99,14 @@
 			<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
@@ -169,7 +177,7 @@
 				<version>3.3.2</version>
 				<configuration>
 					<to>
-						<image>martinms20/${project.artifactId}:cloud</image>
+						<image>martinms20/${project.artifactId}:cloud-1.0.0</image>
 					</to>
 				</configuration>
 			</plugin>

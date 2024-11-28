@@ -7,15 +7,15 @@ replicaCount: 1
 
 resources:
   cpu:
-    request: "500m"
-    limit: "1000m"
+    request: "250m"
+    limit: "500m"
   memory:
-    request: "1Gi"
-    limit: "2Gi"
+    request: "250Mi"
+    limit: "500Mi"
 
 image:
   repository: martinms20/configserver
-  tag: cloud
+  tag: cloud-1.0.0
 
 containerPort: 8071
 
@@ -30,3 +30,5 @@ config_enabled: false
 resouceserver_enabled: false
 otel_enabled: true
 kafka_enabled: false
+rabbit_enabled: false
+redis_enabled: false

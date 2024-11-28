@@ -8,21 +8,21 @@ replicaCount: 1
 hpa:
   name: email-hpa
   minReplicas: 2
-  maxReplicas: 5
+  maxReplicas: 3
   targetCPUUtilizationPercentage: 60
   targetMemoryUtilizationPercentage: 60
 
 resources:
   cpu:
     request: "500m"
-    limit: "1000m"
+    limit: "2"
   memory:
-    request: "1Gi"
+    request: "500Mi"
     limit: "2Gi"
 
 image:
   repository: martinms20/email
-  tag: cloud
+  tag: cloud-1.0.2
 
 containerPort: 8004
 
@@ -36,52 +36,6 @@ profile_enabled: true
 config_enabled: true
 resouceserver_enabled: false
 otel_enabled: true
-kafka_enabled: true
+kafka_enabled: false
+rabbit_enabled: true
 redis_enabled: false
-
-customEnvs:
-  - name: SPRING_CLOUD_FUNCTION_DEFINITION
-    valueFrom:
-      configMapKeyRef:
-        name: vocasia-configmap
-        key: EMAIL_SPRING_CLOUD_FUNCTION_DEFINITION
-  - name: SPRING_RABBITMQ_HOST
-    valueFrom:
-      configMapKeyRef:
-        name: vocasia-configmap
-        key: SPRING_RABBITMQ_HOST
-  - name: SPRING_RABBITMQ_PORT
-    valueFrom:
-      configMapKeyRef:
-        name: vocasia-configmap
-        key: SPRING_RABBITMQ_PORT
-  - name: SPRING_RABBITMQ_USERNAME
-    valueFrom:
-      configMapKeyRef:
-        name: vocasia-configmap
-        key: SPRING_RABBITMQ_USERNAME
-  - name: SPRING_RABBITMQ_PASSWORD
-    valueFrom:
-      configMapKeyRef:
-        name: vocasia-configmap
-        key: SPRING_RABBITMQ_PASSWORD
-  - name: SPRING_RABBITMQ_CONNECTION_TIMEOUT
-    valueFrom:
-      configMapKeyRef:
-        name: vocasia-configmap
-        key: SPRING_RABBITMQ_CONNECTION_TIMEOUT
-  - name: SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_DESTINATION
-    valueFrom:
-      configMapKeyRef:
-        name: vocasia-configmap
-        key: EMAIL_SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_DESTINATION
-  - name: SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_GROUP
-    valueFrom:
-      configMapKeyRef:
-        name: vocasia-configmap
-        key: EMAIL_SPRING_CLOUD_STREAM_BINDINGS_EMAIL_IN_0_GROUP
-  - name: SPRING_CLOUD_STREAM_DEFAULT_BINDER
-    valueFrom:
-      configMapKeyRef:
-        name: vocasia-configmap
-        key: SPRING_CLOUD_STREAM_DEFAULT_BINDER

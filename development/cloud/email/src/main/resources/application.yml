@@ -1,5 +1,5 @@
 server:
-  port: 14130
+  port: 8004
 
 spring:
   application:
@@ -20,13 +20,40 @@ spring:
         binder:
           brokers:
             - localhost:9092
-      default-binder: kafka
+      default-binder: rabbit
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
     connection-timeout: 10s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+endpoints:
+  shutdown:
+    enabled: true
 
 logging:
   level:

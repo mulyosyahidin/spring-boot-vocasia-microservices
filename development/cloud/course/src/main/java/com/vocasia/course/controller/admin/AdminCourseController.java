@@ -5,11 +5,13 @@ import com.vocasia.course.dto.client.instructor.InstructorDto;
 import com.vocasia.course.entity.Category;
 import com.vocasia.course.entity.Chapter;
 import com.vocasia.course.entity.Course;
+import com.vocasia.course.entity.Lesson;
 import com.vocasia.course.exception.CustomFeignException;
 import com.vocasia.course.mapper.CategoryMapper;
 import com.vocasia.course.mapper.ChapterMapper;
 import com.vocasia.course.mapper.CourseMapper;
 import com.vocasia.course.mapper.LessonMapper;
+import com.vocasia.course.request.client.catalog.course.StoreCourseRequest;
 import com.vocasia.course.service.*;
 import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
@@ -34,14 +36,16 @@ public class AdminCourseController {
 
     private final ICategoryService categoryService;
     private final ICourseService courseService;
+    private final ICatalogService catalogService;
     private final IInstructorService instructorService;
     private final IChapterService chapterService;
     private final ILessonService lessonService;
 
-    public AdminCourseController(ICategoryService iCategoryService, ICourseService iCourseService, IInstructorService iInstructorService,
+    public AdminCourseController(ICategoryService iCategoryService, ICourseService iCourseService, ICatalogService iCatalogService, IInstructorService iInstructorService,
                                  IChapterService iChapterService, ILessonService iLessonService) {
         this.categoryService = iCategoryService;
         this.courseService = iCourseService;
+        this.catalogService = iCatalogService;
         this.instructorService = iInstructorService;
         this.chapterService = iChapterService;
         this.lessonService = iLessonService;
@@ -166,6 +170,162 @@ public class AdminCourseController {
         return ResponseEntity
                 .status(HttpStatus.SC_OK)
                 .body(new ResponseDto(true, "Berhasil mendapatkan data kursus", response, null));
+    }
+
+    @PostMapping("/courses/sync")
+    public ResponseEntity<ResponseDto> syncCourses(@RequestHeader("vocasia-correlation-id") String correlationId) {
+        logger.info("AdminCourseController.syncCourses called");
+
+        List<Course> publishedCourses = courseService.findAllByStatus("published");
+
+        try {
+            logger.info("Starting to sync courses");
+            int totalSyncedCourses = 0;
+
+            for (Course publishedCourse : publishedCourses) {
+                logger.info("Syncing course with id: " + publishedCourse.getId());
+
+                InstructorDto instructor = instructorService.findById(publishedCourse.getInstructorId(), correlationId);
+
+                StoreCourseRequest storeCourseRequest = new StoreCourseRequest();
+
+                storeCourseRequest.setId(publishedCourse.getId());
+                storeCourseRequest.setInstructorId(publishedCourse.getInstructorId());
+                storeCourseRequest.setCategoryId(publishedCourse.getCategoryId());
+                storeCourseRequest.setTitle(publishedCourse.getTitle());
+                storeCourseRequest.setSlug(publishedCourse.getSlug());
+                storeCourseRequest.setTotalDuration(publishedCourse.getTotalDuration());
+                storeCourseRequest.setLevel(publishedCourse.getLevel());
+                storeCourseRequest.setLanguage(publishedCourse.getLanguage());
+                storeCourseRequest.setDescription(publishedCourse.getDescription());
+                storeCourseRequest.setShortDescription(publishedCourse.getShortDescription());
+                storeCourseRequest.setFeaturedPicture(publishedCourse.getFeaturedPicture());
+                storeCourseRequest.setPrice(publishedCourse.getPrice());
+                storeCourseRequest.setIsFree(publishedCourse.getIsFree());
+                storeCourseRequest.setIsDiscount(publishedCourse.getIsDiscount());
+                storeCourseRequest.setDiscount(publishedCourse.getDiscount());
+                storeCourseRequest.setStatus(publishedCourse.getStatus());
+                storeCourseRequest.setCreatedAt(publishedCourse.getCreatedAt());
+                storeCourseRequest.setUpdatedAt(publishedCourse.getUpdatedAt());
+                storeCourseRequest.setDeletedAt(publishedCourse.getDeletedAt());
+
+                Category category = categoryService.findById(publishedCourse.getCategoryId());
+
+                StoreCourseRequest.Category storeCourseCategory = getCategory(category);
+                storeCourseRequest.setCategory(storeCourseCategory);
+
+                if (instructor.getId() != null) {
+                    StoreCourseRequest.Instructor storeCourseInstructor = getInstructor(instructor);
+                    storeCourseRequest.setInstructor(storeCourseInstructor);
+                } else {
+                    storeCourseRequest.setInstructor(null);
+                }
+
+                List<StoreCourseRequest.Chapter> storeCourseChapters = new ArrayList<>();
+                List<Chapter> chapters = chapterService.findAllByCourseId(publishedCourse);
+
+                for (Chapter chapter : chapters) {
+                    StoreCourseRequest.Chapter storeCourseChapter = new StoreCourseRequest.Chapter();
+
+                    storeCourseChapter.setId(chapter.getId());
+                    storeCourseChapter.setTitle(chapter.getTitle());
+                    storeCourseChapter.setTotalDuration(chapter.getTotalDuration());
+
+                    List<StoreCourseRequest.Chapter.Lesson> storeCourseLessons = new ArrayList<>();
+                    List<Lesson> lessons = lessonService.findAllByChapterId(chapter.getId());
+
+                    for (Lesson lesson : lessons) {
+                        StoreCourseRequest.Chapter.Lesson storeCourseLesson = getLesson(lesson);
+
+                        storeCourseLessons.add(storeCourseLesson);
+                    }
+
+                    storeCourseChapter.setLessons(storeCourseLessons);
+
+                    storeCourseChapters.add(storeCourseChapter);
+                }
+
+                storeCourseRequest.setChapters(storeCourseChapters);
+
+                catalogService.saveCourse(storeCourseRequest, correlationId);
+
+                logger.info("Course with id: " + publishedCourse.getId() + " has been synced");
+                totalSyncedCourses++;
+            }
+
+            logger.info("Total courses synced: " + totalSyncedCourses);
+        } catch (CustomFeignException e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(e.getHttpStatus())
+                    .body(new ResponseDto(false, e.getMessage(), null, e.getErrors()));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, e.getMessage(), null, null));
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.SC_OK)
+                .body(new ResponseDto(true, "Berhasil melakukan sinkronisasi data kursus", null, null));
+    }
+
+    private static StoreCourseRequest.Chapter.Lesson getLesson(Lesson lesson) {
+        StoreCourseRequest.Chapter.Lesson storeCourseLesson = new StoreCourseRequest.Chapter.Lesson();
+
+        storeCourseLesson.setId(lesson.getId());
+        storeCourseLesson.setTitle(lesson.getTitle());
+        storeCourseLesson.setType(lesson.getType());
+        storeCourseLesson.setNeedPreviousLesson(lesson.getNeedPreviousLesson());
+        storeCourseLesson.setIsFree(lesson.getIsFree());
+        storeCourseLesson.setContentVideoDuration(lesson.getContentVideoDuration());
+        storeCourseLesson.setContentVideoUrl(lesson.getContentVideoUrl());
+        storeCourseLesson.setContentText(lesson.getContentText());
+        storeCourseLesson.setAttachmentFileUrl(lesson.getAttachmentFileUrl());
+        storeCourseLesson.setAttachmentFileName(lesson.getAttachmentFileName());
+        storeCourseLesson.setAttachmentLink(lesson.getAttachmentLink());
+        storeCourseLesson.setAttachmentLinkName(lesson.getAttachmentLinkName());
+
+        return storeCourseLesson;
+    }
+
+    private static StoreCourseRequest.Category getCategory(Category category) {
+        StoreCourseRequest.Category storeCourseCategory = new StoreCourseRequest.Category();
+
+        storeCourseCategory.setId(category.getId());
+        storeCourseCategory.setType(category.getType());
+        storeCourseCategory.setParentId(category.getParentId());
+        storeCourseCategory.setName(category.getName());
+        storeCourseCategory.setSlug(category.getSlug());
+        storeCourseCategory.setIcon(category.getIcon());
+        storeCourseCategory.setCreatedAt(category.getCreatedAt());
+        storeCourseCategory.setUpdatedAt(category.getUpdatedAt());
+
+        return storeCourseCategory;
+    }
+
+    private static StoreCourseRequest.Instructor getInstructor(InstructorDto instructor) {
+        StoreCourseRequest.Instructor storeCourseInstructor = new StoreCourseRequest.Instructor();
+
+        storeCourseInstructor.setId(instructor.getId());
+        storeCourseInstructor.setUserId(Long.valueOf(instructor.getUserId()));
+        storeCourseInstructor.setStatus(instructor.getStatus());
+        storeCourseInstructor.setSummary(instructor.getSummary());
+        storeCourseInstructor.setPhoneNumber(instructor.getPhoneNumber());
+
+        StoreCourseRequest.Instructor.User storeCourseUser = new StoreCourseRequest.Instructor.User();
+        storeCourseUser.setId(Long.valueOf(instructor.getUserId()));
+        storeCourseUser.setEmail(instructor.getUser().getEmail());
+        storeCourseUser.setUsername(instructor.getUser().getUsername());
+        storeCourseUser.setName(instructor.getUser().getName());
+        storeCourseUser.setProfilePicture(instructor.getUser().getProfilePicture());
+
+        storeCourseInstructor.setUser(storeCourseUser);
+
+        return storeCourseInstructor;
     }
 
 }

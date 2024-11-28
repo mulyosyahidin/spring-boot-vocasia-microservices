@@ -50,7 +50,7 @@ public class LoginController {
 
         if (loggedUser == null) {
             return ResponseEntity
-                    .status(HttpStatus.SC_BAD_REQUEST)
+                    .status(HttpStatus.SC_OK)
                     .body(new ResponseDto(false, "Email atau password salah", null, null));
         }
 

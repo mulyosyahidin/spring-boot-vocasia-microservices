@@ -1358,97 +1358,7 @@ prometheus:
           "metrics_path": "/actuator/prometheus",
           "static_configs": [
             {
-              "targets": [ "configserver:14117" ]
-            }
-          ]
-        },
-        {
-          "job_name": "authentication",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "authentication:14120" ]
-            }
-          ]
-        },
-        {
-          "job_name": "instructor",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "instructor:14121" ]
-            }
-          ]
-        },
-        {
-          "job_name": "catalog",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "catalog:14129" ]
-            }
-          ]
-        },
-        {
-          "job_name": "course",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "course:14122" ]
-            }
-          ]
-        },
-        {
-          "job_name": "order",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "order:14124" ]
-            }
-          ]
-        },
-        {
-          "job_name": "payment",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "payment:14125" ]
-            }
-          ]
-        },
-        {
-          "job_name": "enrollment",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "enrollment:14126" ]
-            }
-          ]
-        },
-        {
-          "job_name": "finance",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "finance:14127" ]
-            }
-          ]
-        },
-        {
-          "job_name": "qna",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "qna:14128" ]
-            }
-          ]
-        },
-        {
-          "job_name": "email",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "email:14130" ]
+              "targets": [ "configserver:8071" ]
             }
           ]
         },
@@ -1457,7 +1367,88 @@ prometheus:
           "metrics_path": "/actuator/prometheus",
           "static_configs": [
             {
-              "targets": [ "gatewayserver:14119" ]
+              "targets": [ "gatewayserver:8073" ]
+            }
+          ]
+        },
+        {
+          "job_name": "authentication",
+          "metrics_path": "/actuator/prometheus",
+          "static_configs": [
+            {
+              "targets": [ "authentication:8001" ]
+            }
+          ]
+        },
+        {
+          "job_name": "catalog",
+          "metrics_path": "/actuator/prometheus",
+          "static_configs": [
+            {
+              "targets": [ "catalog:8002" ]
+            }
+          ]
+        },
+        {
+          "job_name": "course",
+          "metrics_path": "/actuator/prometheus",
+          "static_configs": [
+            {
+              "targets": [ "course:8003" ]
+            }
+          ]
+        },
+        {
+          "job_name": "email",
+          "metrics_path": "/actuator/prometheus",
+          "static_configs": [
+            {
+              "targets": [ "email:8004" ]
+            }
+          ]
+        },
+        {
+          "job_name": "enrollment",
+          "metrics_path": "/actuator/prometheus",
+          "static_configs": [
+            {
+              "targets": [ "enrollment:8005" ]
+            }
+          ]
+        },
+        {
+          "job_name": "finance",
+          "metrics_path": "/actuator/prometheus",
+          "static_configs": [
+            {
+              "targets": [ "finance:8006" ]
+            }
+          ]
+        },
+        {
+          "job_name": "instructor",
+          "metrics_path": "/actuator/prometheus",
+          "static_configs": [
+            {
+              "targets": [ "instructor:8007" ]
+            }
+          ]
+        },
+        {
+          "job_name": "order",
+          "metrics_path": "/actuator/prometheus",
+          "static_configs": [
+            {
+              "targets": [ "order:8008" ]
+            }
+          ]
+        },
+        {
+          "job_name": "payment",
+          "metrics_path": "/actuator/prometheus",
+          "static_configs": [
+            {
+              "targets": [ "payment:8009" ]
             }
           ]
         }

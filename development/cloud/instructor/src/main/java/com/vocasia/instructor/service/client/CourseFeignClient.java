@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "course", url = "http://course:14122")
+@FeignClient(name = "course", url = "http://course:8003")
 public interface CourseFeignClient {
 
     @GetMapping("/api/instructor/courses/{courseId}")

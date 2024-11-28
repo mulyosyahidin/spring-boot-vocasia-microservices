@@ -4,13 +4,12 @@ global:
   mongoConfigMapName: mongo-configmap
 
   activeProfile: development
-  configServerURL: configserver:http://configserver:14117/
+  configServerURL: configserver:http://configserver:8071/
   discoveryServerURL: http://spring-cloud-kubernetes-discoveryserver:80/
   keyCloakURL: http://keycloak.default.svc.cluster.local:80/realms/Vocasia/protocol/openid-connect/certs
   openTelemetryJavaAgent: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
   otelExporterEndPoint: http://tempo-grafana-tempo-distributor:4317
   otelMetricsExporter: none
-  kafkaBrokerURL: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
 
   awsAccessKeyId: AKIA6GBMGQU2WPGRSEWD
   awsSecretAccessKey: 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
@@ -28,9 +27,12 @@ global:
   authenticationMysqlDatabase: authentication_db
   authenticationSpringDatasourceUsername: root
   authenticationSpringDatasourcePassword: password
-  authenticationSpringDatasourceUrl: jdbc:mysql://db-authentication:30618/authentication_db
-  authenticationEmailInDestination: send-communication
-  authenticationEmailInGroup: authentication
+  authenticationSpringDatasourceUrl: jdbc:mysql://db-authentication:3307/authentication_db
+
+  catalogMongoInitDbRootUsername: root
+  catalogMongoInitDbRootPassword: password
+  catalogSpringDataMongodbUri: mongodb://root:password@db-catalog:3308/catalog_db?authSource=admin
+  catalogSpringDataMongodbDatabase: catalog_db
 
   courseApplicationName: course
   courseOtelServiceName: course
@@ -38,7 +40,7 @@ global:
   courseMysqlDatabase: course_db
   courseSpringDatasourceUsername: root
   courseSpringDatasourcePassword: password
-  courseSpringDatasourceUrl: jdbc:mysql://db-course:30620/course_db
+  courseSpringDatasourceUrl: jdbc:mysql://db-course:3309/course_db
 
   enrollmentApplicationName: enrollment
   enrollmentOtelServiceName: enrollment
@@ -46,7 +48,7 @@ global:
   enrollmentMysqlDatabase: enrollment_db
   enrollmentSpringDatasourceUsername: root
   enrollmentSpringDatasourcePassword: password
-  enrollmentSpringDatasourceUrl: jdbc:mysql://db-enrollment:30623/enrollment_db
+  enrollmentSpringDatasourceUrl: jdbc:mysql://db-enrollment:3310/enrollment_db
 
   financeApplicationName: finance
   financeOtelServiceName: finance
@@ -55,7 +57,7 @@ global:
   financeMysqlDatabase: finance_db
   financeSpringDatasourceUsername: root
   financeSpringDatasourcePassword: password
-  financeSpringDatasourceUrl: jdbc:mysql://db-finance:30624/finance_db
+  financeSpringDatasourceUrl: jdbc:mysql://db-finance:3311/finance_db
 
   instructorApplicationName: instructor
   instructorOtelServiceName: instructor
@@ -63,7 +65,7 @@ global:
   instructorMysqlDatabase: instructor_db
   instructorSpringDatasourceUsername: root
   instructorSpringDatasourcePassword: password
-  instructorSpringDatasourceUrl: jdbc:mysql://db-instructor:30619/instructor_db
+  instructorSpringDatasourceUrl: jdbc:mysql://db-instructor:3312/instructor_db
 
   orderApplicationName: order
   orderOtelServiceName: order
@@ -71,7 +73,7 @@ global:
   orderMysqlDatabase: order_db
   orderSpringDatasourceUsername: root
   orderSpringDatasourcePassword: password
-  orderSpringDatasourceUrl: jdbc:mysql://db-order:30621/order_db
+  orderSpringDatasourceUrl: jdbc:mysql://db-order:3313/order_db
 
   paymentApplicationName: payment
   paymentOtelServiceName: payment
@@ -79,20 +81,7 @@ global:
   paymentMysqlDatabase: payment_db
   paymentSpringDatasourceUsername: root
   paymentSpringDatasourcePassword: password
-  paymentSpringDatasourceUrl: jdbc:mysql://db-payment:30622/payment_db
-
-  qnaApplicationName: qna
-  qnaOtelServiceName: qna
-  qnaMysqlRootPassword: password
-  qnaMysqlDatabase: qna_db
-  qnaSpringDatasourceUsername: root
-  qnaSpringDatasourcePassword: password
-  qnaSpringDatasourceUrl: jdbc:mysql://db-qna:30625/qna_db
-
-  catalogMongoInitDbRootUsername: root
-  catalogMongoInitDbRootPassword: password
-  catalogSpringDataMongodbUri: mongodb://db-catalog:30627/catalog_db
-  catalogSpringDataMongodbDatabase: catalog_db
+  paymentSpringDatasourceUrl: jdbc:mysql://db-payment:3314/payment_db
 
   gatewayserverApplicationName: gatewayserver
   gatewayserverOtelServiceName: gatewayserver
@@ -102,18 +91,18 @@ global:
   keycloakLogLevel: DEBUG
   keycloakServerUrl: http://keycloak.default.svc.cluster.local:80
   keycloakClientId: vocasia-users
-  keycloakClientSecret: ""
+  keycloakClientSecret: "SXEBCIHlQRutkygIC5pkYeq5rW7b2jDu"
   keycloakRealm: Vocasia
   keycloakAuthClientId: vocasia-auth
 
+  kafkaBrokerURL: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
+
   rabbitmqHost: rabbitmq.default.svc.cluster.local
   rabbitmqPort: 5672
-  rabbitmqUsername: guest
-  rabbitmqPassword: guest
+  rabbitmqUsername: user
+  rabbitmqPassword: pj5iZkib9NLUqi3k
+  rabbitmqConnectionTimeout: 60000
 
-  emailFunctionDefinition: email
-  emailInDestination: send-communication
-  emailInGroup: email
-
-  defaultBinder: kafka
+#  defaultBinder: kafka
+  defaultBinder: rabbit
   redisHost: redis-master.default.svc.cluster.local

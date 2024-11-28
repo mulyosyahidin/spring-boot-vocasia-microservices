@@ -5,17 +5,14 @@ appName: db-catalog
 
 replicaCount: 1
 
-image:
-  repository: mongo
-  tag: 6.0
-
-containerPort: 3307
+containerPort: 3308
 
 service:
-  port: 3307
+  port: 3308
 
 pvc:
   name: catalog-db-pvc
+  size: 500Mi
 
 customEnvs:
   - name: MONGO_INITDB_ROOT_USERNAME

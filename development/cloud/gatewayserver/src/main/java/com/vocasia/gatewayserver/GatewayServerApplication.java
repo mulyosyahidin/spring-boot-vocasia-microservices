@@ -27,14 +27,6 @@ public class GatewayServerApplication {
                         .filters(f -> f.rewritePath("/catalog/(?<segment>.*)", "/api/${segment}"))
                         .uri("http://catalog:8002"))
                 .route(p -> p
-                        .path("/instructor/**")
-                        .filters(f -> f.rewritePath("/instructor/(?<segment>.*)", "/api/${segment}")
-                                .circuitBreaker(config -> {
-                                    config.setName("instructorCircuitBreaker");
-                                    config.setFallbackUri("forward:/fallback/instructor");
-                                }))
-                        .uri("http://instructor:14121"))
-                .route(p -> p
                         .path("/course/**")
                         .filters(f -> f.rewritePath("/course/(?<segment>.*)", "/api/${segment}"))
                         .uri("http://course:8003"))
@@ -47,17 +39,21 @@ public class GatewayServerApplication {
                         .filters(f -> f.rewritePath("/finance/(?<segment>.*)", "/api/${segment}"))
                         .uri("http://finance:8006"))
                 .route(p -> p
+                        .path("/instructor/**")
+                        .filters(f -> f.rewritePath("/instructor/(?<segment>.*)", "/api/${segment}")
+                                .circuitBreaker(config -> {
+                                    config.setName("instructorCircuitBreaker");
+                                    config.setFallbackUri("forward:/fallback/instructor");
+                                }))
+                        .uri("http://instructor:8007"))
+                .route(p -> p
                         .path("/order/**")
                         .filters(f -> f.rewritePath("/order/(?<segment>.*)", "/api/${segment}"))
-                        .uri("http://order:8007"))
+                        .uri("http://order:8008"))
                 .route(p -> p
                         .path("/payment/**")
                         .filters(f -> f.rewritePath("/payment/(?<segment>.*)", "/api/${segment}"))
-                        .uri("http://payment:8008"))
-                .route(p -> p
-                        .path("/user/**")
-                        .filters(f -> f.rewritePath("/user/(?<segment>.*)", "/api/${segment}"))
-                        .uri("http://user:8009"))
+                        .uri("http://payment:8009"))
                 .build();
     }
 

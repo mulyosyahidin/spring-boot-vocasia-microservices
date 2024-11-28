@@ -15,18 +15,29 @@ spec:
       labels:
         app: {{ .Values.appLabel }}
     spec:
-      containers:
-        - name: mysql
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
-          ports:
-            - containerPort: 3306
-          env:
-        {{- if .Values.customEnvs }}
-            {{- toYaml .Values.customEnvs | nindent 12 }}
-            {{- end }}
+      initContainers:
+        - name: init-mysql-db
+          image: curlimages/curl:latest
+          securityContext:
+            runAsUser: 0
+          command: ["sh", "-c"]
+          args:
+            - curl -o /docker-entrypoint-initdb.d/init.sql {{ .Values.initScriptUrl }};
           volumeMounts:
             - name: mysql-storage
-              mountPath: /var/lib/mysql
+              mountPath: /docker-entrypoint-initdb.d
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+          env:
+          {{- if .Values.customEnvs }}
+            {{- toYaml .Values.customEnvs | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: mysql-storage
           persistentVolumeClaim:

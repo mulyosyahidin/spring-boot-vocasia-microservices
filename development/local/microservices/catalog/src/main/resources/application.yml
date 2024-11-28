@@ -10,7 +10,7 @@ spring:
     import: "optional:configserver:http://localhost:8071/"
   data:
     mongodb:
-      uri: "mongodb://root:password@localhost:3307"
+      uri: "mongodb://root:password@localhost:3307/vocasia_db?authSource=admin"
       database: "vocasia_db"
 
 management:

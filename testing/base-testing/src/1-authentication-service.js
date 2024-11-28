@@ -16,9 +16,9 @@ const endpoints = {
 
 export let options = {
     stages: [
-        {duration: '3m', target: 50},
-        { duration: '5m', target: 200 },
-        { duration: '7m', target: 200 },
+        {duration: '2m', target: 50},
+        { duration: '3m', target: 200 },
+        { duration: '2m', target: 200 },
     ],
 };
 
@@ -36,7 +36,7 @@ export default function () {
         headers: {'Content-Type': 'application/json'},
     });
 
-    if (response.status === 400) {
+    if (response.json('success') === false) {
         http.post(`${baseUrl}${endpoints['request-forgot-password']}`, JSON.stringify({email: user.email}), {
             headers: {'Content-Type': 'application/json'},
         });

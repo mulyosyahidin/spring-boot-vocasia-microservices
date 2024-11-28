@@ -4,6 +4,7 @@ import com.vocasia.authentication.mapper.AccessTokenMapper;
 import com.vocasia.authentication.packages.keycloak.KeyCloakClient;
 import com.vocasia.authentication.service.IKeyCloackService;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class KeyCloackServiceImpl implements IKeyCloackService  {
         return keyCloackClient.registerNewUser(email, username, password, name, roleName);
     }
 
+    @Cacheable(value = "accessToken", key = "#username")
     @Override
     public AccessTokenMapper getAccessToken(String username, String password) throws IOException {
         return keyCloackClient.getAccessToken(username, password);

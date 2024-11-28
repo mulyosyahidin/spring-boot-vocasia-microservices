@@ -4,7 +4,7 @@ global:
   mongoConfigMapName: mongo-configmap
 
   activeProfile: development
-  configServerURL: configserver:http://configserver:14117/
+  configServerURL: configserver:http://configserver:8071/
   discoveryServerURL: http://spring-cloud-kubernetes-discoveryserver:80/
   keyCloakURL: http://keycloak.default.svc.cluster.local:80/realms/Vocasia/protocol/openid-connect/certs
   openTelemetryJavaAgent: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
@@ -31,6 +31,11 @@ global:
   authenticationSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
   authenticationEmailInDestination: send-communication
   authenticationEmailInGroup: authentication
+
+  catalogMongoInitDbRootUsername: root
+  catalogMongoInitDbRootPassword: password
+  catalogSpringDataMongodbUri: mongodb://db-catalog:3307/catalog_db
+  catalogSpringDataMongodbDatabase: catalog_db
 
   courseApplicationName: course
   courseOtelServiceName: course
@@ -81,19 +86,6 @@ global:
   paymentSpringDatasourcePassword: password
   paymentSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
 
-  userApplicationName: user
-  userOtelServiceName: user
-  userMysqlRootPassword: password
-  userMysqlDatabase: vocasia_db
-  userSpringDatasourceUsername: root
-  userSpringDatasourcePassword: password
-  userSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
-
-  catalogMongoInitDbRootUsername: root
-  catalogMongoInitDbRootPassword: password
-  catalogSpringDataMongodbUri: mongodb://db-catalog:3307/catalog_db
-  catalogSpringDataMongodbDatabase: catalog_db
-
   gatewayserverApplicationName: gatewayserver
   gatewayserverOtelServiceName: gatewayserver
 
@@ -105,7 +97,7 @@ global:
   keycloakLogLevel: DEBUG
   keycloakServerUrl: http://keycloak.default.svc.cluster.local:80
   keycloakClientId: vocasia-users
-  keycloakClientSecret: ""
+  keycloakClientSecret: "dfrSqpccsFFtbVp9Zh5HzM3s1mArP0JO"
   keycloakRealm: Vocasia
   keycloakAuthClientId: vocasia-auth
 
