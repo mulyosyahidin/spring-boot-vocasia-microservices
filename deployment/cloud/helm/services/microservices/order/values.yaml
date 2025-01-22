@@ -14,15 +14,21 @@ hpa:
 
 resources:
   cpu:
-    request: "500m"
-    limit: "2"
+    request: "300m"
+    limit: "700m"
   memory:
-    request: "1Gi"
-    limit: "2Gi"
+    request: "200Mi"
+    limit: "400Mi"
+#  cpu:
+#    request: "600m"
+#    limit: "1.4"
+#  memory:
+#    request: "400Mi"
+#    limit: "800Mi"
 
 image:
   repository: martinms20/order
-  tag: cloud-1.0.1
+  tag: cloud-1.0.2
 
 containerPort: 8008
 

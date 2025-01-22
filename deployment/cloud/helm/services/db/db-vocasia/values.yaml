@@ -14,7 +14,7 @@ pvc:
   name: vocasia-db-pvc
   size: 500Mi
 
-initScriptUrl: https://mms.upperdev.cloud/vocasia/db_vocasia.sql
+initScriptUrl: https://mms.upperdev.cloud/vocasia/single_db.sql
 
 customEnvs:
   - name: MYSQL_ROOT_PASSWORD

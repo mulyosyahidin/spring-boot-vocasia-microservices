@@ -7,11 +7,11 @@ replicaCount: 1
 
 resources:
   cpu:
-    request: "250m"
-    limit: "500m"
+    request: "100m"
+    limit: "200m"
   memory:
-    request: "250Mi"
-    limit: "500Mi"
+    request: "100Mi"
+    limit: "200Mi"
 
 image:
   repository: martinms20/configserver

@@ -61,10 +61,9 @@ public class StudentPaymentController {
 //        response.put("payment", PaymentMapper.mapToDto(payment));
 
         try {
-//            String snapToken = midtransPaymentService.requestSnapToken(createOrderPaymentRequest);
+            String snapToken = midtransPaymentService.requestSnapToken(createOrderPaymentRequest);
             LocalDateTime timeInMilli = LocalDateTime.now();
 
-            String snapToken = "snapToken" + String.valueOf(timeInMilli);
             Payment payment = paymentService.save(snapToken, createOrderPaymentRequest);
 
             response.put("payment", PaymentMapper.mapToDto(payment));

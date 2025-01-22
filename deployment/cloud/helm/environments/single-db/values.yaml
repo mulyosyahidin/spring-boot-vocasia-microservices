@@ -10,7 +10,6 @@ global:
   openTelemetryJavaAgent: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
   otelExporterEndPoint: http://tempo-grafana-tempo-distributor:4317
   otelMetricsExporter: none
-  kafkaBrokerURL: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
 
   awsAccessKeyId: AKIA6GBMGQU2WPGRSEWD
   awsSecretAccessKey: 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
@@ -29,12 +28,10 @@ global:
   authenticationSpringDatasourceUsername: root
   authenticationSpringDatasourcePassword: password
   authenticationSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
-  authenticationEmailInDestination: send-communication
-  authenticationEmailInGroup: authentication
 
   catalogMongoInitDbRootUsername: root
   catalogMongoInitDbRootPassword: password
-  catalogSpringDataMongodbUri: mongodb://db-catalog:3307/catalog_db
+  catalogSpringDataMongodbUri: mongodb://root:password@db-catalog:3308/catalog_db?authSource=admin
   catalogSpringDataMongodbDatabase: catalog_db
 
   courseApplicationName: course
@@ -86,29 +83,29 @@ global:
   paymentSpringDatasourcePassword: password
   paymentSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
 
-  gatewayserverApplicationName: gatewayserver
-  gatewayserverOtelServiceName: gatewayserver
-
   vocasiaMysqlRootPassword: password
   vocasiaMysqlDatabase: vocasia_db
+
+  gatewayserverApplicationName: gatewayserver
+  gatewayserverOtelServiceName: gatewayserver
 
   keycloakAdmin: admin
   keycloakAdminPassword: admin
   keycloakLogLevel: DEBUG
   keycloakServerUrl: http://keycloak.default.svc.cluster.local:80
   keycloakClientId: vocasia-users
-  keycloakClientSecret: "dfrSqpccsFFtbVp9Zh5HzM3s1mArP0JO"
+  keycloakClientSecret: "hD78JgIARtgevTPkC25PwdXg7Wj7ErNd"
   keycloakRealm: Vocasia
   keycloakAuthClientId: vocasia-auth
 
   rabbitmqHost: rabbitmq.default.svc.cluster.local
   rabbitmqPort: 5672
-  rabbitmqUsername: guest
-  rabbitmqPassword: guest
+  rabbitmqUsername: user
+  rabbitmqPassword: "lZhkf8wmAMuheGF8"
+  rabbitmqConnectionTimeout: 60000
 
-  emailFunctionDefinition: email
-  emailInDestination: send-communication
-  emailInGroup: email
+#  defaultBinder: kafka
+#  kafkaBrokerURL: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
 
-  defaultBinder: kafka
+  defaultBinder: rabbit
   redisHost: redis-master.default.svc.cluster.local

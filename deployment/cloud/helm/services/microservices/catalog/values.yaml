@@ -14,11 +14,17 @@ hpa:
 
 resources:
   cpu:
-    request: "500m"
-    limit: "2"
+    request: "200m"
+    limit: "400m"
   memory:
-    request: "500Mi"
-    limit: "2Gi"
+    request: "100Mi"
+    limit: "150Mi"
+#  cpu:
+#    request: "400m"
+#    limit: "800m"
+#  memory:
+#    request: "200Mi"
+#    limit: "300Mi"
 
 image:
   repository: martinms20/catalog

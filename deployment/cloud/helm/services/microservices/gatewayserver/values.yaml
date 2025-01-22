@@ -14,11 +14,11 @@ hpa:
 
 resources:
   cpu:
-    request: "500m"
-    limit: "2"
+    request: "250m"
+    limit: "500m"
   memory:
-    request: "1Gi"
-    limit: "2Gi"
+    request: "250Mi"
+    limit: "500Mi"
 
 image:
   repository: martinms20/gatewayserver

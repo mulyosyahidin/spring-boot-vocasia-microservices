@@ -134,3 +134,7 @@ https://grafana.com/grafana/dashboards/6417-kubernetes-cluster-prometheus/
 ```
 https://grafana.com/grafana/dashboards/747-pod-metrics/
 ```
+
+```
+https://grafana.com/grafana/dashboards/13332-kube-state-metrics-v2/
+```

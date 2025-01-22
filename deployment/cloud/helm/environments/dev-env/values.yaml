@@ -91,18 +91,18 @@ global:
   keycloakLogLevel: DEBUG
   keycloakServerUrl: http://keycloak.default.svc.cluster.local:80
   keycloakClientId: vocasia-users
-  keycloakClientSecret: "SXEBCIHlQRutkygIC5pkYeq5rW7b2jDu"
+  keycloakClientSecret: "TsSI4UtmswHBZrZ2TfhqWuYl8t01ypDi"
   keycloakRealm: Vocasia
   keycloakAuthClientId: vocasia-auth
-
-  kafkaBrokerURL: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
 
   rabbitmqHost: rabbitmq.default.svc.cluster.local
   rabbitmqPort: 5672
   rabbitmqUsername: user
-  rabbitmqPassword: pj5iZkib9NLUqi3k
+  rabbitmqPassword: "PbbE1N90f0ShxpEZ"
   rabbitmqConnectionTimeout: 60000
 
 #  defaultBinder: kafka
+#  kafkaBrokerURL: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
+
   defaultBinder: rabbit
   redisHost: redis-master.default.svc.cluster.local

@@ -6,48 +6,44 @@ scrape_configs:
   - job_name: "authentication"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["service-authentication:14120"]
+      - targets: ["service-authentication:8001"]
   - job_name: "configserver"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["configserver:14117"]
+      - targets: ["configserver:8071"]
   - job_name: "course"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["service-course:14122"]
+      - targets: ["service-course:8003"]
   - job_name: "enrollment"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["service-enrollment:14126"]
+      - targets: ["service-enrollment:8005"]
   - job_name: "eurekaserver"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["eurekaserver:14118"]
+      - targets: ["eurekaserver:8072"]
   - job_name: "finance"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["service-finance:14127"]
+      - targets: ["service-finance:8006"]
   - job_name: "gatewayserver"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["gatewayserver:14119"]
+      - targets: ["gatewayserver:8073"]
   - job_name: "instructor"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["service-instructor:14121"]
+      - targets: ["service-instructor:8007"]
   - job_name: "order"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: ["service-order:14124"]
+      - targets: ["service-order:8008"]
   - job_name: "payment"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: [ "service-payment:14125" ]
-  - job_name: "qna"
-    metrics_path: "/actuator/prometheus"
-    static_configs:
-      - targets: [ "service-qna:14128" ]
+      - targets: [ "service-payment:8009" ]
   - job_name: "catalog"
     metrics_path: "/actuator/prometheus"
     static_configs:
-      - targets: [ "service-catalog:14129" ]
+      - targets: [ "service-catalog:8002" ]

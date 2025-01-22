@@ -32,6 +32,9 @@ dependencies:
 - name: db-finance
   repository: file://../../services/db/db-finance
   version: 0.1.0
+- name: db-catalog
+  repository: file://../../services/db/db-catalog
+  version: 0.1.0
 - name: authentication
   repository: file://../../services/microservices/authentication
   version: 0.1.0
@@ -56,8 +59,11 @@ dependencies:
 - name: catalog
   repository: file://../../services/microservices/catalog
   version: 0.1.0
+- name: email
+  repository: file://../../services/microservices/email
+  version: 0.1.0
 - name: gatewayserver
   repository: file://../../services/microservices/gatewayserver
   version: 0.1.0
-digest: sha256:56adb73224d88a6e4adf6fc5d1cb5f703e7156a70014da66bfe18a00031c6a91
-generated: "2024-11-21T16:32:46.2713941+07:00"
+digest: sha256:04f3aa8ab47eeb7ee0b20fbe08ef6f87d4b6c7b149f4011a50678669d914d9ea
+generated: "2024-12-15T12:29:33.3096949+07:00"

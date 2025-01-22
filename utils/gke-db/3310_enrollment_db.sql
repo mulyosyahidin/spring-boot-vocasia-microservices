@@ -56,6 +56,20 @@ CREATE TABLE IF NOT EXISTS `progress` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `enrollments` (`id`, `user_id`, `order_id`, `course_id`, `enrollment_date`, `status`, `progress_percentage`, `completion_date`, `created_at`, `updated_at`, `last_lesson_id`) VALUES
+	(5, 3, 12, 28, '2024-12-15 14:29:44', 'active', 0, NULL, '2024-12-15 14:29:44', NULL, NULL),
+	(6, 3, 13, 26, '2024-12-15 14:30:32', 'active', 0, NULL, '2024-12-15 14:30:32', NULL, NULL),
+	(7, 3, 13, 25, '2024-12-15 14:30:32', 'active', 0, NULL, '2024-12-15 14:30:32', NULL, NULL),
+	(8, 5, 14, 21, '2024-12-15 14:34:42', 'active', 0, NULL, '2024-12-15 14:34:42', NULL, NULL),
+	(9, 5, 18, 22, '2024-12-15 14:37:35', 'active', 0, NULL, '2024-12-15 14:37:35', NULL, NULL),
+	(10, 6, 20, 27, '2024-12-15 14:46:18', 'active', 4, NULL, '2024-12-15 14:46:18', '2024-12-15 14:49:19', 300),
+	(11, 6, 21, 24, '2024-12-15 14:46:51', 'active', 0, NULL, '2024-12-15 14:46:51', NULL, NULL);
+
+INSERT INTO `progress` (`id`, `enrollment_id`, `lesson_id`, `status`, `created_at`, `updated_at`, `completed_at`, `started_at`) VALUES
+	(5, 10, 298, 'COMPLETED', '2024-12-15 14:49:03', '2024-12-15 14:49:10', '2024-12-15 14:49:10', '2024-12-15 14:49:03'),
+	(6, 10, 299, 'COMPLETED', '2024-12-15 14:49:13', '2024-12-15 14:49:16', '2024-12-15 14:49:16', '2024-12-15 14:49:13'),
+	(7, 10, 300, 'IN_PROGRESS', '2024-12-15 14:49:19', NULL, NULL, '2024-12-15 14:49:19');
+
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

@@ -14,11 +14,17 @@ hpa:
 
 resources:
   cpu:
-    request: "500m"
-    limit: "2"
+    request: "700m"
+    limit: "1"
   memory:
-    request: "500Mi"
-    limit: "2Gi"
+    request: "300Mi"
+    limit: "500Mi"
+#  cpu:
+#    request: "1.4"
+#    limit: "2"
+#  memory:
+#    request: "600Mi"
+#    limit: "1Gi"
 
 image:
   repository: martinms20/authentication

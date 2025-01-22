@@ -45,13 +45,15 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Membuang data untuk tabel vocasia_db.users: ~12 rows (lebih kurang)
 INSERT INTO `users` (`id`, `uid`, `email`, `username`, `name`, `password`, `role`, `profile_picture`, `created_at`, `updated_at`) VALUES
-	(1, '11cbd864-cf8e-4834-80e7-2515c51bf737', 'andi.wiyanto@gmail.com', 'andiwiyanto', 'Andi wyt', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'instructor', 'lionel-messi-2324-miami.jpg', '2024-10-11 10:51:39', '2024-10-27 17:37:44'),
-	(2, '8c86c151-a734-409e-9b5a-5c8aeef47ab4', 'admin@local.test', 'admin', 'admin', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'admin', NULL, '2024-10-11 11:04:25', '2024-10-27 17:18:47'),
-	(3, '3e63762c-2485-45b3-95ac-10ee6d246f24', 'martinms.za@gmail.com', 'martinms', 'Martin Mulyo Syahidin', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'student', NULL, '2024-10-11 11:38:46', '2024-10-30 00:52:22'),
-	(4, '4bfcd82c-ec3b-4c5e-ba1f-d543920a12dc', 'i1@local.test', 'instructor1', 'Instructor 1', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'instructor', 'lionel-messi-2324-miami.jpg', '2024-10-11 11:52:39', '2024-10-28 20:03:17'),
-	(5, 'bd05b4dc-d8aa-49dc-95bc-1824b21f9050', 'zumratulaini@gmail.com', 'zumratulaini', 'Zumratul Aini', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'student', NULL, '2024-10-11 18:01:24', '2024-10-11 11:01:23'),
-	(6, '14e2baf5-4f28-4850-8238-758d32f578a1', 'ayuana@gmail.com', 'ayuana', 'Ayu Febriana', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'student', NULL, '2024-10-12 14:01:47', '2024-10-12 07:01:47'),
-	(9, 'b46adc55-7715-491e-81db-5efd975142e2', 'sindi.vn@gmail.com', 'sindi', 'Sindi Vinatha', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'student', NULL, '2024-10-16 00:36:38', '2024-10-15 17:36:38');
+	(1, '11cbd864-cf8e-4834-80e7-2515c51bf737', 'instructor2@vocasia.app', 'instructor2', 'User - Instructor 2', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'instructor', 'lionel-messi-2324-miami.jpg', '2024-10-11 10:51:39', '2024-10-27 17:37:44'),
+	(2, '8c86c151-a734-409e-9b5a-5c8aeef47ab4', 'admin@vocasia.app', 'admin', 'admin', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'admin', NULL, '2024-10-11 11:04:25', '2024-10-27 17:18:47'),
+	(3, '4dcc94de-9c1a-4265-9986-9f8279b8c235', 'student1@vocasia.app', 'student1', 'User - Student 1', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'student', NULL, '2024-10-11 11:38:46', '2024-12-15 14:24:34'),
+	(4, '8cb83ab8-b27e-40d4-9ce2-112b6d20025c', 'instructor1@vocasia.app', 'instructor1', 'User - Instructor 1', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'instructor', 'lionel-messi-2324-miami.jpg', '2024-10-11 11:52:39', '2024-12-15 14:32:10'),
+	(5, '9a7a3ea0-b1b5-416e-9a98-b6b044c66c9e', 'student2@vocasia.app', 'student2', 'User - Student 2', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'student', NULL, '2024-10-11 18:01:24', '2024-12-15 14:33:59'),
+	(6, 'dd30d61b-b5e9-4393-b965-da988d2974ea', 'student3@vocasia.app', 'student3', 'User - Student 3', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'student', NULL, '2024-10-12 14:01:47', '2024-12-15 14:39:43'),
+	(9, 'b46adc55-7715-491e-81db-5efd975142e2', 'student4@vocasia.app', 'student4', 'User - Student 4', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'student', NULL, '2024-10-16 00:36:38', '2024-10-15 17:36:38'),
+	(15, 'c28f9c1c-c585-4ad7-b84d-8ff202541b6e', 'martinms.za@gmail.com', 'martinms', 'Instruktur Mendaftar', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'instructor', NULL, '2024-12-15 14:51:17', '2024-12-15 07:51:16'),
+	(16, '07b14db0-b854-4e8b-95ab-4c0dfafc3113', 'steve@gmail.com', 'steve', 'Steve Rogers', 'XsArkaS1nG9Z3V++TKZJ7OT6hWjNuLo2z0FCbogFUis=', 'instructor', NULL, '2024-12-15 14:52:31', '2024-12-15 07:52:30');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

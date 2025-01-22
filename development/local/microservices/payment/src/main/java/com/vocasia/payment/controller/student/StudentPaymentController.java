@@ -45,33 +45,33 @@ public class StudentPaymentController {
 
         Map<String, Object> response = new HashMap<>();
 
-        Payment payment = new Payment();
-        payment.setId(1L);
-        payment.setOrderId(1L);
-        payment.setOrderNumber("202410303ZKEF");
-        payment.setTotalPrice(100000.0);
-        payment.setAdditionalFee(5000.0);
-        payment.setTotalPayment(105000.0);
-        payment.setSnapToken("snapToken");
-        payment.setPaymentStatus("PENDING");
-        payment.setPaymentExpireAt(LocalDateTime.now());
-        payment.setCreatedAt(LocalDateTime.now());
-        payment.setUpdatedAt(LocalDateTime.now());
-
-        response.put("payment", PaymentMapper.mapToDto(payment));
-
-//        try {
-//            String snapToken = midtransPaymentService.requestSnapToken(createOrderPaymentRequest);
-//            Payment payment = paymentService.save(snapToken, createOrderPaymentRequest);
+//        Payment payment = new Payment();
+//        payment.setId(1L);
+//        payment.setOrderId(1L);
+//        payment.setOrderNumber("202410303ZKEF");
+//        payment.setTotalPrice(100000.0);
+//        payment.setAdditionalFee(5000.0);
+//        payment.setTotalPayment(105000.0);
+//        payment.setSnapToken("snapToken");
+//        payment.setPaymentStatus("PENDING");
+//        payment.setPaymentExpireAt(LocalDateTime.now());
+//        payment.setCreatedAt(LocalDateTime.now());
+//        payment.setUpdatedAt(LocalDateTime.now());
 //
-//            response.put("payment", PaymentMapper.mapToDto(payment));
-//        } catch (Exception e) {
-//            logger.error(e.getMessage(), e);
-//
-//            return ResponseEntity
-//                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
-//                    .body(new ResponseDto(false, e.getMessage(), null, e.getMessage()));
-//        }
+//        response.put("payment", PaymentMapper.mapToDto(payment));
+
+        try {
+            String snapToken = midtransPaymentService.requestSnapToken(createOrderPaymentRequest);
+            Payment payment = paymentService.save(snapToken, createOrderPaymentRequest);
+
+            response.put("payment", PaymentMapper.mapToDto(payment));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+
+            return ResponseEntity
+                    .status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDto(false, e.getMessage(), null, e.getMessage()));
+        }
 
         return ResponseEntity
                 .status(HttpStatus.SC_CREATED)

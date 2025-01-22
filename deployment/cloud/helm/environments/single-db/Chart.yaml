@@ -52,42 +52,38 @@ dependencies:
     version: 0.1.0
     repository: file://../../services/microservices/authentication
 
-#  - name: course
-#    version: 0.1.0
-#    repository: file://../../services/microservices/course
-#
-#  - name: enrollment
-#    version: 0.1.0
-#    repository: file://../../services/microservices/enrollment
-#
-#  - name: finance
-#    version: 0.1.0
-#    repository: file://../../services/microservices/finance
-#
+  - name: course
+    version: 0.1.0
+    repository: file://../../services/microservices/course
+
+  - name: enrollment
+    version: 0.1.0
+    repository: file://../../services/microservices/enrollment
+
+  - name: finance
+    version: 0.1.0
+    repository: file://../../services/microservices/finance
+
   - name: instructor
     version: 0.1.0
     repository: file://../../services/microservices/instructor
-#
-#  - name: order
-#    version: 0.1.0
-#    repository: file://../../services/microservices/order
-#
-#  - name: payment
-#    version: 0.1.0
-#    repository: file://../../services/microservices/payment
-#
-#  - name: qna
-#    version: 0.1.0
-#    repository: file://../../services/microservices/qna
-#
-#  - name: catalog
-#    version: 0.1.0
-#    repository: file://../../services/microservices/catalog
-#
-#  - name: email
-#    version: 0.1.0
-#    repository: file://../../services/microservices/email
-#
+
+  - name: order
+    version: 0.1.0
+    repository: file://../../services/microservices/order
+
+  - name: payment
+    version: 0.1.0
+    repository: file://../../services/microservices/payment
+
+  - name: catalog
+    version: 0.1.0
+    repository: file://../../services/microservices/catalog
+
+  - name: email
+    version: 0.1.0
+    repository: file://../../services/microservices/email
+
   - name: gatewayserver
     version: 0.1.0
     repository: file://../../services/microservices/gatewayserver

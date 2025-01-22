@@ -7,6 +7,7 @@ import com.midtrans.service.MidtransSnapApi;
 import com.vocasia.payment.config.MidtransConfigProperties;
 import com.vocasia.payment.request.CreateOrderPaymentRequest;
 import com.vocasia.payment.service.IMidtransPaymentService;
+import com.vocasia.payment.util.StringUtil;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -89,7 +90,7 @@ public class MidtransPaymentServiceImpl implements IMidtransPaymentService {
             itemDetail.put("id", item.getCourseId());
             itemDetail.put("quantity", 1);
             itemDetail.put("price", finalPrice);
-            itemDetail.put("name", item.getCourseTitle());
+            itemDetail.put("name", StringUtil.cutString(item.getCourseTitle(), 20));
 
             itemDetails.add(itemDetail);
         }
