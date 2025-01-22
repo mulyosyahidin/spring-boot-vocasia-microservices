@@ -1,0 +1,58 @@
+export const sidebarItems = [
+    {
+        id: 1,
+        href: "/admin",
+        iconClass: "text-20 icon-discovery",
+        text: "Dashboard",
+        activeWhen: "/admin",
+    },
+    {
+        id: 2,
+        href: "/admin/categories",
+        iconClass: "text-20 icon-discovery",
+        text: "Kategori Kursus",
+        activeWhen: "/admin/categories/*",
+    },
+    {
+        id: 3,
+        href: "/admin/courses",
+        iconClass: "text-20 icon-discovery",
+        text: "Kursus",
+        activeWhen: "/admin/courses/*",
+    },
+    {
+        id: 4,
+        href: "/admin/students",
+        iconClass: "text-20 icon-discovery",
+        text: "Siswa",
+        activeWhen: "/admin/students/*",
+    },
+    {
+        id: 5,
+        href: "/admin/instructors",
+        iconClass: "text-20 icon-discovery",
+        text: "Instruktur",
+        activeWhen: "/admin/instructors/*",
+    },
+    {
+        id: 6,
+        href: "/admin/transactions",
+        iconClass: "text-20 icon-discovery",
+        text: "Transaksi",
+        activeWhen: "/admin/transactions/*",
+    },
+    {
+        id: 7,
+        href: "/admin/finances",
+        iconClass: "text-20 icon-discovery",
+        text: "Keuangan",
+        activeWhen: "/admin/finances/*",
+    },
+    {
+        id: 7,
+        href: "/admin/withdrawal",
+        iconClass: "text-20 icon-discovery",
+        text: "Withdrawal",
+        activeWhen: "/admin/withdrawal/*",
+    },
+];

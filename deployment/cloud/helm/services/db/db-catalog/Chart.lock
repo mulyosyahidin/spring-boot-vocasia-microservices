@@ -1,0 +1,6 @@
+dependencies:
+- name: vocasia-mongodb-common
+  repository: file://../../../common/mongodb-common
+  version: 0.1.0
+digest: sha256:065b944baafda4ff15fabea6f304c3d6bccdf644d011bd1b17c329895114c119
+generated: "2024-10-27T06:02:37.5841775+07:00"

@@ -1,0 +1,27 @@
+deploymentName: db-catalog
+serviceName: db-catalog
+appLabel: db-catalog
+appName: db-catalog
+
+replicaCount: 1
+
+containerPort: 3308
+
+service:
+  port: 3308
+
+pvc:
+  name: catalog-db-pvc
+  size: 500Mi
+
+customEnvs:
+  - name: MONGO_INITDB_ROOT_USERNAME
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: CATALOG_MONGO_INITDB_ROOT_USERNAME
+  - name: MONGO_INITDB_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: CATALOG_MONGO_INITDB_ROOT_PASSWORD

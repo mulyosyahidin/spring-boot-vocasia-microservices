@@ -1,0 +1,64 @@
+server:
+  port: 8002
+
+spring:
+  application:
+    name: "catalog"
+  profiles:
+    active: "development"
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+  data:
+    mongodb:
+      uri: "mongodb://root:password@localhost:3307/vocasia_db?authSource=admin"
+      database: "vocasia_db"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+endpoints:
+  shutdown:
+    enabled: true
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8072/eureka/
+
+info:
+  app:
+    name: "catalog"
+    description: "Catalog Service"
+    version: "1.0.0"
+
+logging:
+  level:
+    com:
+      vocasia:
+        catalog: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

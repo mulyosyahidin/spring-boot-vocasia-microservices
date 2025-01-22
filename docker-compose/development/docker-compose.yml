@@ -1,0 +1,626 @@
+services:
+  rabbit:
+    image: rabbitmq:3.13-management
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      timeout: 10s
+      retries: 10
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  read:
+    image: grafana/loki:3.1.0
+    command: "-config.file=/etc/loki/config.yaml -target=read"
+    ports:
+      - "3101:3100"
+      - "7946"
+      - "9095"
+    volumes:
+      - ../observability/loki/loki-config.yaml:/etc/loki/config.yaml
+    depends_on:
+      - minio
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3100/ready || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: &loki-dns
+      vocasia:
+        aliases:
+          - loki
+
+  write:
+    image: grafana/loki:3.1.0
+    command: "-config.file=/etc/loki/config.yaml -target=write"
+    ports:
+      - "3102:3100"
+      - "7946"
+      - "9095"
+    volumes:
+      - ../observability/loki/loki-config.yaml:/etc/loki/config.yaml
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3100/ready || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - minio
+    networks:
+      <<: *loki-dns
+
+  promtail:
+    image: grafana/promtail:2.8.3
+    volumes:
+      - ../observability/promtail/promtail-local-config.yaml:/etc/promtail/config.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/config.yaml
+    depends_on:
+      - gateway
+    networks:
+      - vocasia
+
+  minio:
+    image: minio/minio
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /data/loki-data && \
+        mkdir -p /data/loki-ruler && \
+        minio server /data
+    environment:
+      - MINIO_ROOT_USER=loki
+      - MINIO_ROOT_PASSWORD=password
+      - MINIO_PROMETHEUS_AUTH_TYPE=public
+      - MINIO_UPDATE=off
+    ports:
+      - 9000
+    volumes:
+      - ./.data/minio:/data
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 15s
+      timeout: 20s
+      retries: 5
+    networks:
+      - vocasia
+
+  prometheus:
+    image: prom/prometheus:v2.50.1
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ../observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  tempo:
+    image: grafana/tempo:2.4.2
+    container_name: tempo
+    command: -config.file /etc/tempo-config.yml
+    ports:
+      - "3110:3100"
+      - "4317:4317"
+    volumes:
+      - ../observability/tempo/tempo.yml:/etc/tempo-config.yml
+    networks:
+      - vocasia
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    depends_on:
+      - gateway
+      - tempo
+      - prometheus
+      - read
+      - write
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        /run.sh
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../observability/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yml
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1" ]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vocasia
+
+  backend:
+    image: grafana/loki:3.1.0
+    volumes:
+      - ../observability/loki/loki-config.yaml:/etc/loki/config.yaml
+    ports:
+      - "3100"
+      - "7946"
+    command: "-config.file=/etc/loki/config.yaml -target=backend -legacy-read-mode=false"
+    depends_on:
+      - gateway
+    networks:
+      - vocasia
+
+  gateway:
+    image: nginx:latest
+    depends_on:
+      - read
+      - write
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        cat <<EOF > /etc/nginx/nginx.conf
+        user  nginx;
+        worker_processes  5;  ## Default: 1
+
+        events {
+          worker_connections   1000;
+        }
+
+        http {
+          resolver 127.0.0.11;
+
+          server {
+            listen             3100;
+
+            location = / {
+              return 200 'OK';
+              auth_basic off;
+            }
+
+            location = /api/prom/push {
+              proxy_pass       http://write:3100\$$request_uri;
+            }
+
+            location = /api/prom/tail {
+              proxy_pass       http://read:3100\$$request_uri;
+              proxy_set_header Upgrade \$$http_upgrade;
+              proxy_set_header Connection "upgrade";
+            }
+
+            location ~ /api/prom/.* {
+              proxy_pass       http://read:3100\$$request_uri;
+            }
+
+            location = /loki/api/v1/push {
+              proxy_pass       http://write:3100\$$request_uri;
+            }
+
+            location = /loki/api/v1/tail {
+              proxy_pass       http://read:3100\$$request_uri;
+              proxy_set_header Upgrade \$$http_upgrade;
+              proxy_set_header Connection "upgrade";
+            }
+
+            location ~ /loki/api/.* {
+              proxy_pass       http://read:3100\$$request_uri;
+            }
+          }
+        }
+        EOF
+        /docker-entrypoint.sh nginx -g "daemon off;"
+    ports:
+      - "3100:3100"
+    healthcheck:
+      test: [ "CMD", "service", "nginx", "status" ]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vocasia
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.6
+    container_name: app-keycloak
+    ports:
+      - "7080:8080"
+    environment:
+      KEYCLOAK_ADMIN: "admin"
+      KEYCLOAK_ADMIN_PASSWORD: "admin"
+      KC_LOG_LEVEL: "DEBUG"
+    command: "start-dev"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  db_mysql:
+    image: mysql:8.0
+    container_name: db-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: vocasia_db
+      MYSQL_ROOT_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    volumes:
+      - mysql_db_data:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  db_mongo:
+    image: mongo:6.0
+    container_name: db-mongo
+    ports:
+      - "3307:27017"
+    environment:
+      MONGO_INITDB_DATABASE: vocasia_db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo_db_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "127.0.0.1/test", "-u", "root", "-p", "password", "--authenticationDatabase", "admin", "--eval", "quit(db.runCommand({ serverStatus: 1 }).ok ? 0 : 2)"]
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  configserver:
+    image: martinms20/configserver:local
+    container_name: config-server
+    ports:
+      - "8071:8071"
+    healthcheck:
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    extends:
+      file: common-config.yml
+      service: base-config
+    environment:
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "configserver"
+
+  eurekaserver:
+    image: "martinms20/eurekaserver:local"
+    container_name: eureka-server
+    ports:
+      - "8072:8072"
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:8072/eureka/"
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "eurekaserver"
+    depends_on:
+      configserver:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8072/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  gatewayserver:
+    image: "martinms20/gatewayserver:local"
+    container_name: gateway-server
+    ports:
+      - "8073:8073"
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
+      authentication_service:
+        condition: service_healthy
+      instructor_service:
+        condition: service_healthy
+      course_service:
+        condition: service_healthy
+      order_service:
+        condition: service_healthy
+      payment_service:
+        condition: service_healthy
+      enrollment_service:
+        condition: service_healthy
+      finance_service:
+        condition: service_healthy
+      catalog_service:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "http://app-keycloak:8080/realms/Vocasia/protocol/openid-connect/certs"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:8072/eureka/"
+      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
+      OTEL_METRICS_EXPORTER: none
+      OTEL_SERVICE_NAME: "gatewayserver"
+    extends:
+      file: common-config.yml
+      service: base-config
+
+  authentication_service:
+    image: martinms20/authentication:local
+    container_name: service-authentication
+    ports:
+      - "8001:8001"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
+      SPRING_CLOUD_STREAM_DEFAULT_BINDER: rabbit
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: localhost:9092
+      SPRING_RABBITMQ_HOST: rabbit
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      KEYCLOAK_SERVER_URL: "http://keycloak:8080"
+      KEYCLOAK_CLIENT_ID: "vocasia-users"
+      KEYCLOAK_CLIENT_SECRET: "gy8FsFmVZUEfOsDGhIl63NNtCKyZJ5uo"
+      KEYCLOAK_REALM: "Vocasia"
+      KEYCLOAK_AUTH_CLIENT_ID: "vocasia-auth"
+      OTEL_SERVICE_NAME: "authentication"
+    healthcheck:
+      test: "curl --fail --silent localhost:8001/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_mysql:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-aws-config
+
+  catalog_service:
+    image: martinms20/catalog:local
+    container_name: service-catalog
+    ports:
+      - "8002:8002"
+    environment:
+      SPRING_DATA_MONGODB_URI: "mongodb://root:password@db-mongo:27017"
+      SPRING_DATA_MONGODB_DATABASE: "vocasia_db"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      OTEL_SERVICE_NAME: "catalog"
+    healthcheck:
+      test: "curl --fail --silent localhost:8002/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_mongo:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-config
+
+  course_service:
+    image: martinms20/course:local
+    container_name: service-course
+    ports:
+      - "8003:8003"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      OTEL_SERVICE_NAME: "course"
+    healthcheck:
+      test: "curl --fail --silent localhost:8003/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_mysql:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-aws-config
+
+  email_service:
+    image: martinms20/email:local
+    container_name: service-email
+    ports:
+      - "8004:8004"
+    environment:
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      SPRING_CLOUD_STREAM_DEFAULT_BINDER: rabbit
+      SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: localhost:9092
+      SPRING_RABBITMQ_HOST: rabbit
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      OTEL_SERVICE_NAME: "catalog"
+    healthcheck:
+      test: "curl --fail --silent localhost:8004/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      rabbit:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-config
+
+  enrollment_service:
+    image: martinms20/enrollment:local
+    container_name: service-enrollment
+    ports:
+      - "8005:8005"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      OTEL_SERVICE_NAME: "enrollment"
+    healthcheck:
+      test: "curl --fail --silent localhost:8005/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_mysql:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-config
+
+  finance_service:
+    image: martinms20/finance:local
+    container_name: service-finance
+    ports:
+      - "8006:8006"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      OTEL_SERVICE_NAME: "finance"
+      FINANCE_PERCENT_PLATFORM_FEE: 5
+    healthcheck:
+      test: "curl --fail --silent localhost:8006/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_mysql:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-aws-config
+
+  instructor_service:
+    image: martinms20/instructor:local
+    container_name: service-instructor
+    ports:
+      - "8007:8007"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      OTEL_SERVICE_NAME: "instructor"
+    healthcheck:
+      test: "curl --fail --silent localhost:8007/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_mysql:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-config
+
+  order_service:
+    image: martinms20/order:local
+    container_name: service-order
+    ports:
+      - "8008:8008"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      OTEL_SERVICE_NAME: "order"
+      FINANCE_PERCENT_PLATFORM_FEE: 5
+    healthcheck:
+      test: "curl --fail --silent localhost:8008/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_mysql:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-config
+
+  payment_service:
+    image: martinms20/payment:local
+    container_name: service-payment
+    ports:
+      - "8009:8009"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/vocasia_db
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8071/"
+      MIDTRANS_MERCHANT_ID: "G831856510"
+      MIDTRANS_CLIENT_KEY: "SB-Mid-client-4KbJJQfBaYS9Lplt"
+      MIDTRANS_SERVER_KEY: "SB-Mid-server-l-PGFhcZZ-wTh5bebWsEefs0"
+      MIDTRANS_IS_PRODUCTION: false
+      OTEL_SERVICE_NAME: "payment"
+    healthcheck:
+      test: "curl --fail --silent localhost:8009/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    depends_on:
+      db_mysql:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: service-config
+
+networks:
+  vocasia:
+    driver: bridge
+
+volumes:
+  mysql_db_data:
+    driver: local
+  mongo_db_data:
+    driver: local

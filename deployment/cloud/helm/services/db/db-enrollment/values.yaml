@@ -1,0 +1,29 @@
+deploymentName: db-enrollment
+serviceName: db-enrollment
+appLabel: db-enrollment
+appName: db-enrollment
+
+replicaCount: 1
+
+containerPort: 3310
+
+service:
+  port: 3310
+
+pvc:
+  name: enrollment-db-pvc
+  size: 500Mi
+
+initScriptUrl: https://mms.upperdev.cloud/vocasia/3310_enrollment_db.sql
+
+customEnvs:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: ENROLLMENT_MYSQL_ROOT_PASSWORD
+  - name: MYSQL_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: ENROLLMENT_MYSQL_DATABASE

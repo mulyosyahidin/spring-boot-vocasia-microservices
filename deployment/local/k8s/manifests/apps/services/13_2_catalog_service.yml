@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-deployment
+  labels:
+    app: catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      labels:
+        app: catalog
+    spec:
+      containers:
+        - name: catalog
+          image: martinms20/catalog:v1.0.1
+          ports:
+            - containerPort: 14129
+          env:
+            - name: SPRING_APPLICATION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: CATALOG_APPLICATION_NAME
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: SPRING_PROFILES_ACTIVE
+            - name: SPRING_DATA_MONGODB_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: CATALOG_SPRING_DATA_MONGODB_URI
+            - name: SPRING_DATA_MONGODB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: CATALOG_SPRING_DATA_MONGODB_DATABASE
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+#            - name: JAVA_TOOL_OPTIONS
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: JAVA_TOOL_OPTIONS
+#            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: OTEL_EXPORTER_OTLP_ENDPOINT
+#            - name: OTEL_METRICS_EXPORTER
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: OTEL_METRICS_EXPORTER
+#            - name: OTEL_SERVICE_NAME
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: vocasia-configmap
+#                  key: CATALOG_OTEL_SERVICE_NAME
+            - name: SPRING_CONFIG_IMPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: vocasia-configmap
+                  key: SPRING_CONFIG_IMPORT
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog
+spec:
+  selector:
+    app: catalog
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 14128
+      targetPort: 14128

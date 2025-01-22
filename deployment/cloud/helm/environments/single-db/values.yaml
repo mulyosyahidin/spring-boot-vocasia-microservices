@@ -1,0 +1,111 @@
+global:
+  configMapName: vocasia-configmap
+  mysqlConfigMapName: mysql-configmap
+  mongoConfigMapName: mongo-configmap
+
+  activeProfile: development
+  configServerURL: configserver:http://configserver:8071/
+  discoveryServerURL: http://spring-cloud-kubernetes-discoveryserver:80/
+  keyCloakURL: http://keycloak.default.svc.cluster.local:80/realms/Vocasia/protocol/openid-connect/certs
+  openTelemetryJavaAgent: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+  otelExporterEndPoint: http://tempo-grafana-tempo-distributor:4317
+  otelMetricsExporter: none
+
+  awsAccessKeyId: AKIA6GBMGQU2WPGRSEWD
+  awsSecretAccessKey: 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
+  awsS3Region: ap-southeast-1
+  awsS3Bucket: vocasia
+
+  midtransMerchantId: G831856510
+  midtransClientKey: SB-Mid-client-4KbJJQfBaYS9Lplt
+  midtransServerKey: SB-Mid-server-l-PGFhcZZ-wTh5bebWsEefs0
+  midtransIsProduction: "false"
+
+  authenticationApplicationName: authentication
+  authenticationOtelServiceName: authentication
+  authenticationMysqlRootPassword: password
+  authenticationMysqlDatabase: vocasia_db
+  authenticationSpringDatasourceUsername: root
+  authenticationSpringDatasourcePassword: password
+  authenticationSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
+
+  catalogMongoInitDbRootUsername: root
+  catalogMongoInitDbRootPassword: password
+  catalogSpringDataMongodbUri: mongodb://root:password@db-catalog:3308/catalog_db?authSource=admin
+  catalogSpringDataMongodbDatabase: catalog_db
+
+  courseApplicationName: course
+  courseOtelServiceName: course
+  courseMysqlRootPassword: password
+  courseMysqlDatabase: vocasia_db
+  courseSpringDatasourceUsername: root
+  courseSpringDatasourcePassword: password
+  courseSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
+
+  enrollmentApplicationName: enrollment
+  enrollmentOtelServiceName: enrollment
+  enrollmentMysqlRootPassword: password
+  enrollmentMysqlDatabase: vocasia_db
+  enrollmentSpringDatasourceUsername: root
+  enrollmentSpringDatasourcePassword: password
+  enrollmentSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
+
+  financeApplicationName: finance
+  financeOtelServiceName: finance
+  financePercentPlatformFee: 5
+  financeMysqlRootPassword: password
+  financeMysqlDatabase: vocasia_db
+  financeSpringDatasourceUsername: root
+  financeSpringDatasourcePassword: password
+  financeSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
+
+  instructorApplicationName: instructor
+  instructorOtelServiceName: instructor
+  instructorMysqlRootPassword: password
+  instructorMysqlDatabase: vocasia_db
+  instructorSpringDatasourceUsername: root
+  instructorSpringDatasourcePassword: password
+  instructorSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
+
+  orderApplicationName: order
+  orderOtelServiceName: order
+  orderMysqlRootPassword: password
+  orderMysqlDatabase: vocasia_db
+  orderSpringDatasourceUsername: root
+  orderSpringDatasourcePassword: password
+  orderSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
+
+  paymentApplicationName: payment
+  paymentOtelServiceName: payment
+  paymentMysqlRootPassword: password
+  paymentMysqlDatabase: vocasia_db
+  paymentSpringDatasourceUsername: root
+  paymentSpringDatasourcePassword: password
+  paymentSpringDatasourceUrl: jdbc:mysql://db-vocasia:3306/vocasia_db
+
+  vocasiaMysqlRootPassword: password
+  vocasiaMysqlDatabase: vocasia_db
+
+  gatewayserverApplicationName: gatewayserver
+  gatewayserverOtelServiceName: gatewayserver
+
+  keycloakAdmin: admin
+  keycloakAdminPassword: admin
+  keycloakLogLevel: DEBUG
+  keycloakServerUrl: http://keycloak.default.svc.cluster.local:80
+  keycloakClientId: vocasia-users
+  keycloakClientSecret: "hD78JgIARtgevTPkC25PwdXg7Wj7ErNd"
+  keycloakRealm: Vocasia
+  keycloakAuthClientId: vocasia-auth
+
+  rabbitmqHost: rabbitmq.default.svc.cluster.local
+  rabbitmqPort: 5672
+  rabbitmqUsername: user
+  rabbitmqPassword: "lZhkf8wmAMuheGF8"
+  rabbitmqConnectionTimeout: 60000
+
+#  defaultBinder: kafka
+#  kafkaBrokerURL: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
+
+  defaultBinder: rabbit
+  redisHost: redis-master.default.svc.cluster.local

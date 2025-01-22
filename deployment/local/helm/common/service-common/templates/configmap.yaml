@@ -1,0 +1,76 @@
+{{- define "common.configmap" -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.global.configMapName }}
+data:
+  SPRING_PROFILES_ACTIVE: "{{ .Values.global.activeProfile }}"
+  SPRING_CONFIG_IMPORT: "{{ .Values.global.configServerURL }}"
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "{{ .Values.global.eurekaServerURL }}"
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "{{ .Values.global.keyCloakURL }}"
+  JAVA_TOOL_OPTIONS: "{{ .Values.global.openTelemetryJavaAgent }}"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "{{ .Values.global.otelExporterEndPoint }}"
+  OTEL_METRICS_EXPORTER: "{{ .Values.global.otelMetricsExporter }}"
+  SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: "{{ .Values.global.kafkaBrokerURL }}"
+
+  AWS_ACCESS_KEY_ID: "{{ .Values.global.awsAccessKeyId }}"
+  AWS_SECRET_ACCESS_KEY: "{{ .Values.global.awsSecretAccessKey }}"
+  AWS_S3_REGION: "{{ .Values.global.awsS3Region }}"
+  AWS_S3_BUCKET: "{{ .Values.global.awsS3Bucket }}"
+
+  MIDTRANS_MERCHANT_ID: "{{ .Values.global.midtransMerchantId }}"
+  MIDTRANS_CLIENT_KEY: "{{ .Values.global.midtransClientKey }}"
+  MIDTRANS_SERVER_KEY: "{{ .Values.global.midtransServerKey }}"
+  MIDTRANS_IS_PRODUCTION: "{{ .Values.global.midtransIsProduction }}"
+
+  AUTHENTICATION_APPLICATION_NAME: "{{ .Values.global.authenticationApplicationName }}"
+  AUTHENTICATION_OTEL_SERVICE_NAME: "{{ .Values.global.authenticationOtelServiceName }}"
+
+  COURSE_APPLICATION_NAME: "{{ .Values.global.courseApplicationName }}"
+  COURSE_OTEL_SERVICE_NAME: "{{ .Values.global.courseOtelServiceName }}"
+
+  ENROLLMENT_APPLICATION_NAME: "{{ .Values.global.enrollmentApplicationName }}"
+  ENROLLMENT_OTEL_SERVICE_NAME: "{{ .Values.global.enrollmentOtelServiceName }}"
+
+  FINANCE_APPLICATION_NAME: "{{ .Values.global.financeApplicationName }}"
+  FINANCE_OTEL_SERVICE_NAME: "{{ .Values.global.financeOtelServiceName }}"
+  FINANCE_PERCENT_PLATFORM_FEE: "{{ .Values.global.financePercentPlatformFee }}"
+
+  INSTRUCTOR_APPLICATION_NAME: "{{ .Values.global.instructorApplicationName }}"
+  INSTRUCTOR_OTEL_SERVICE_NAME: "{{ .Values.global.instructorOtelServiceName }}"
+
+  ORDER_APPLICATION_NAME: "{{ .Values.global.orderApplicationName }}"
+  ORDER_OTEL_SERVICE_NAME: "{{ .Values.global.orderOtelServiceName }}"
+
+  PAYMENT_APPLICATION_NAME: "{{ .Values.global.paymentApplicationName }}"
+  PAYMENT_OTEL_SERVICE_NAME: "{{ .Values.global.paymentOtelServiceName }}"
+
+  QNA_APPLICATION_NAME: "{{ .Values.global.qnaApplicationName }}"
+  QNA_OTEL_SERVICE_NAME: "{{ .Values.global.qnaOtelServiceName }}"
+
+  VOCASIA_MYSQL_ROOT_PASSWORD: "{{ .Values.global.vocasiaMysqlRootPassword }}"
+  VOCASIA_MYSQL_DATABASE: "{{ .Values.global.vocasiaMysqlDatabase }}"
+
+  VOCASIA_SPRING_DATA_MONGODB_URI: "{{ .Values.global.vocasiaSpringDataMongodbUri }}"
+  VOCASIA_SPRING_DATA_MONGODB_DATABASE: "{{ .Values.global.vocasiaSpringDataMongodbDatabase }}"
+
+  VOCASIA_MONGO_INITDB_ROOT_USERNAME: "{{ .Values.global.vocasiaMongoInitdbRootUsername }}"
+  VOCASIA_MONGO_INITDB_ROOT_PASSWORD: "{{ .Values.global.vocasiaMongoInitdbRootPassword }}"
+
+  VOCASIA_SPRING_DATASOURCE_USERNAME: "{{ .Values.global.vocasiaSpringDatasourceUsername }}"
+  VOCASIA_SPRING_DATASOURCE_PASSWORD: "{{ .Values.global.vocasiaSpringDatasourcePassword }}"
+  VOCASIA_SPRING_DATASOURCE_URL: "{{ .Values.global.vocasiaSpringDatasourceUrl }}"
+
+  GATEWAYSERVER_APPLICATION_NAME: "{{ .Values.global.gatewayserverApplicationName }}"
+  GATEWAYSERVER_OTEL_SERVICE_NAME: "{{ .Values.global.gatewayserverOtelServiceName }}"
+
+  KEYCLOAK_ADMIN: "{{ .Values.global.keycloakAdmin }}"
+  KEYCLOAK_ADMIN_PASSWORD: "{{ .Values.global.keycloakAdminPassword }}"
+  KEYCLOAK_LOG_LEVEL: "{{ .Values.global.keycloakLogLevel }}"
+  KEYCLOAK_SERVER_URL: "{{ .Values.global.keycloakServerUrl }}"
+  KEYCLOAK_CLIENT_ID: "{{ .Values.global.keycloakClientId }}"
+  KEYCLOAK_CLIENT_SECRET: "{{ .Values.global.keycloakClientSecret }}"
+  KEYCLOAK_REALM: "{{ .Values.global.keycloakRealm }}"
+  KEYCLOAK_AUTH_CLIENT_ID: "{{ .Values.global.keycloakAuthClientId }}"
+
+{{- end -}}

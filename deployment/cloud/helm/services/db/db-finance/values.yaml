@@ -1,0 +1,29 @@
+deploymentName: db-finance
+serviceName: db-finance
+appLabel: db-finance
+appName: db-finance
+
+replicaCount: 1
+
+containerPort: 3311
+
+service:
+  port: 3311
+
+pvc:
+  name: finance-db-pvc
+  size: 500Mi
+
+initScriptUrl: https://mms.upperdev.cloud/vocasia/3311_finance_db.sql
+
+customEnvs:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: FINANCE_MYSQL_ROOT_PASSWORD
+  - name: MYSQL_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: FINANCE_MYSQL_DATABASE

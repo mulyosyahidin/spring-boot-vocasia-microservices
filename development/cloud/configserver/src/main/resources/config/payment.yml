@@ -1,0 +1,13 @@
+app:
+  version: 1.0.0
+  name: "Payment Service"
+  environment: "default"
+
+midtrans:
+  merchant_id: "G831856510"
+  client_key: "SB-Mid-client-4KbJJQfBaYS9Lplt"
+  server_key: "SB-Mid-server-l-PGFhcZZ-wTh5bebWsEefs0"
+  is_production: false
+
+payment:
+  additional_fee: 5000.0

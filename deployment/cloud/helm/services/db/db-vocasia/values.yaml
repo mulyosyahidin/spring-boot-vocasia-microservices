@@ -1,0 +1,29 @@
+deploymentName: db-vocasia
+serviceName: db-vocasia
+appLabel: db-vocasia
+appName: db-vocasia
+
+replicaCount: 1
+
+containerPort: 3306
+
+service:
+  port: 3306
+
+pvc:
+  name: vocasia-db-pvc
+  size: 500Mi
+
+initScriptUrl: https://mms.upperdev.cloud/vocasia/single_db.sql
+
+customEnvs:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: VOCASIA_MYSQL_ROOT_PASSWORD
+  - name: MYSQL_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: VOCASIA_MYSQL_DATABASE

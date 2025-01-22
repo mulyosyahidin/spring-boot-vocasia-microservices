@@ -1,0 +1,34 @@
+deploymentName: app-configserver
+serviceName: configserver
+appLabel: configserver
+appName: configserver
+
+replicaCount: 1
+
+resources:
+  cpu:
+    request: "100m"
+    limit: "200m"
+  memory:
+    request: "100Mi"
+    limit: "200Mi"
+
+image:
+  repository: martinms20/configserver
+  tag: cloud-1.0.0
+
+containerPort: 8071
+
+service:
+  type: ClusterIP
+  port: 8071
+  targetPort: 8071
+
+appname_enabled: true
+profile_enabled: false
+config_enabled: false
+resouceserver_enabled: false
+otel_enabled: true
+kafka_enabled: false
+rabbit_enabled: false
+redis_enabled: false

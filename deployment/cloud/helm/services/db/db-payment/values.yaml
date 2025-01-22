@@ -1,0 +1,29 @@
+deploymentName: db-payment
+serviceName: db-payment
+appLabel: db-payment
+appName: db-payment
+
+replicaCount: 1
+
+containerPort: 3314
+
+service:
+  port: 3314
+
+pvc:
+  name: payment-db-pvc
+  size: 500Mi
+
+initScriptUrl: https://mms.upperdev.cloud/vocasia/3314_payment_db.sql
+
+customEnvs:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: PAYMENT_MYSQL_ROOT_PASSWORD
+  - name: MYSQL_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: PAYMENT_MYSQL_DATABASE

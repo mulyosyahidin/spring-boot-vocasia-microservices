@@ -1,0 +1,113 @@
+apiVersion: v2
+name: dev-env
+description: A Helm chart for Kubernetes
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 0.1.0
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application. Versions are not expected to
+# follow Semantic Versioning. They should reflect the version the application is using.
+# It is recommended to use it with quotes.
+appVersion: "1.0.0"
+
+dependencies:
+  - name: vocasia-service-common
+    version: 0.1.0
+    repository: file://../../common/service-common
+
+  - name: vocasia-mysql-common
+    version: 0.1.0
+    repository: file://../../common/mysql-common
+
+  - name: vocasia-mongodb-common
+    version: 0.1.0
+    repository: file://../../common/mongodb-common
+
+  - name: configserver
+    version: 0.1.0
+    repository: file://../../services/microservices/configserver
+
+  - name: db-authentication
+    version: 0.1.0
+    repository: file://../../services/db/db-authentication
+
+  - name: db-instructor
+    version: 0.1.0
+    repository: file://../../services/db/db-instructor
+
+  - name: db-course
+    version: 0.1.0
+    repository: file://../../services/db/db-course
+
+  - name: db-order
+    version: 0.1.0
+    repository: file://../../services/db/db-order
+
+  - name: db-payment
+    version: 0.1.0
+    repository: file://../../services/db/db-payment
+
+  - name: db-enrollment
+    version: 0.1.0
+    repository: file://../../services/db/db-enrollment
+
+  - name: db-finance
+    version: 0.1.0
+    repository: file://../../services/db/db-finance
+
+  - name: db-catalog
+    version: 0.1.0
+    repository: file://../../services/db/db-catalog
+
+  - name: authentication
+    version: 0.1.0
+    repository: file://../../services/microservices/authentication
+
+  - name: course
+    version: 0.1.0
+    repository: file://../../services/microservices/course
+
+  - name: enrollment
+    version: 0.1.0
+    repository: file://../../services/microservices/enrollment
+
+  - name: finance
+    version: 0.1.0
+    repository: file://../../services/microservices/finance
+
+  - name: instructor
+    version: 0.1.0
+    repository: file://../../services/microservices/instructor
+
+  - name: order
+    version: 0.1.0
+    repository: file://../../services/microservices/order
+
+  - name: payment
+    version: 0.1.0
+    repository: file://../../services/microservices/payment
+
+  - name: catalog
+    version: 0.1.0
+    repository: file://../../services/microservices/catalog
+
+  - name: email
+    version: 0.1.0
+    repository: file://../../services/microservices/email
+
+  - name: gatewayserver
+    version: 0.1.0
+    repository: file://../../services/microservices/gatewayserver

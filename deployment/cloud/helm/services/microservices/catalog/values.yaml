@@ -1,0 +1,80 @@
+deploymentName: service-catalog
+serviceName: catalog
+appLabel: catalog
+appName: catalog
+
+replicaCount: 1
+
+hpa:
+  name: catalog-hpa
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 60
+
+resources:
+  cpu:
+    request: "200m"
+    limit: "400m"
+  memory:
+    request: "100Mi"
+    limit: "150Mi"
+#  cpu:
+#    request: "400m"
+#    limit: "800m"
+#  memory:
+#    request: "200Mi"
+#    limit: "300Mi"
+
+image:
+  repository: martinms20/catalog
+  tag: cloud-1.0.0
+
+containerPort: 8002
+
+service:
+  type: ClusterIP
+  port: 8002
+  targetPort: 8002
+
+appname_enabled: true
+profile_enabled: true
+config_enabled: true
+discovery_enabled: true
+resouceserver_enabled: false
+otel_enabled: true
+kafka_enabled: false
+rabbit_enabled: false
+redis_enabled: false
+
+customEnvs:
+  - name: SPRING_DATA_MONGODB_URI
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: CATALOG_SPRING_DATA_MONGODB_URI
+  - name: SPRING_DATA_MONGODB_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: CATALOG_SPRING_DATA_MONGODB_DATABASE
+  - name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_ACCESS_KEY_ID
+  - name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_SECRET_ACCESS_KEY
+  - name: AWS_S3_REGION
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_S3_REGION
+  - name: AWS_S3_BUCKET
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_S3_BUCKET

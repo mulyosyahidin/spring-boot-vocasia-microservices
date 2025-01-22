@@ -1,0 +1,3 @@
+folder ini tidak lagi diupdate dan tidak lagi digunakan untuk deployment kubernetes di local. gunakan folder ../helm.
+
+Helm Package Manager memudahkan deployment dalam satu file yaml saja per environment.

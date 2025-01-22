@@ -1,0 +1,45 @@
+{{- define "mysql.common.deployment" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deploymentName }}
+  labels:
+    app: {{ .Values.appLabel }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appLabel }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appLabel }}
+    spec:
+      initContainers:
+        - name: init-mysql-db
+          image: curlimages/curl:latest
+          securityContext:
+            runAsUser: 0
+          command: ["sh", "-c"]
+          args:
+            - curl -o /docker-entrypoint-initdb.d/init.sql {{ .Values.initScriptUrl }};
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /docker-entrypoint-initdb.d
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+          env:
+          {{- if .Values.customEnvs }}
+            {{- toYaml .Values.customEnvs | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvc.name }}
+{{- end -}}

@@ -1,0 +1,29 @@
+deploymentName: db-course
+serviceName: db-course
+appLabel: db-course
+appName: db-course
+
+replicaCount: 1
+
+containerPort: 3309
+
+service:
+  port: 3309
+
+pvc:
+  name: course-db-pvc
+  size: 500Mi
+
+initScriptUrl: https://mms.upperdev.cloud/vocasia/3309_course_db.sql
+
+customEnvs:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: COURSE_MYSQL_ROOT_PASSWORD
+  - name: MYSQL_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: COURSE_MYSQL_DATABASE

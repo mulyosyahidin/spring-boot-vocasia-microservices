@@ -1,0 +1,29 @@
+deploymentName: db-instructor
+serviceName: db-instructor
+appLabel: db-instructor
+appName: db-instructor
+
+replicaCount: 1
+
+containerPort: 3312
+
+service:
+  port: 3312
+
+pvc:
+  name: instructor-db-pvc
+  size: 500Mi
+
+initScriptUrl: https://mms.upperdev.cloud/vocasia/3312_instructor_db.sql
+
+customEnvs:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: INSTRUCTOR_MYSQL_ROOT_PASSWORD
+  - name: MYSQL_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: INSTRUCTOR_MYSQL_DATABASE

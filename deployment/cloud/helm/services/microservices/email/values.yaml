@@ -1,0 +1,47 @@
+deploymentName: service-email
+serviceName: email
+appLabel: email
+appName: email
+
+replicaCount: 1
+
+hpa:
+  name: email-hpa
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 60
+
+resources:
+  cpu:
+    request: "200m"
+    limit: "400m"
+  memory:
+    request: "100Mi"
+    limit: "150Mi"
+#  cpu:
+#    request: "200m"
+#    limit: "400m"
+#  memory:
+#    request: "100Mi"
+#    limit: "150Mi"
+
+image:
+  repository: martinms20/email
+  tag: cloud-1.0.2
+
+containerPort: 8004
+
+service:
+  type: ClusterIP
+  port: 8004
+  targetPort: 8004
+
+appname_enabled: true
+profile_enabled: true
+config_enabled: true
+resouceserver_enabled: false
+otel_enabled: true
+kafka_enabled: false
+rabbit_enabled: true
+redis_enabled: false

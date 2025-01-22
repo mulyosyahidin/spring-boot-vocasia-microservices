@@ -1,0 +1,90 @@
+deploymentName: service-finance
+serviceName: finance
+appLabel: finance
+appName: finance
+
+replicaCount: 1
+
+hpa:
+  name: finance-hpa
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 60
+
+resources:
+  cpu:
+    request: "500m"
+    limit: "1"
+  memory:
+    request: "150Mi"
+    limit: "300Mi"
+#  cpu:
+#    request: "1"
+#    limit: "2"
+#  memory:
+#    request: "300Mi"
+#    limit: "600Mi"
+
+image:
+  repository: martinms20/finance
+  tag: cloud-1.0.1
+
+containerPort: 8006
+
+service:
+  type: ClusterIP
+  port: 8006
+  targetPort: 8006
+
+appname_enabled: true
+profile_enabled: true
+config_enabled: true
+discovery_enabled: true
+resouceserver_enabled: false
+otel_enabled: true
+kafka_enabled: false
+rabbit_enabled: false
+redis_enabled: true
+
+customEnvs:
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: FINANCE_SPRING_DATASOURCE_USERNAME
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: FINANCE_SPRING_DATASOURCE_PASSWORD
+  - name: SPRING_DATASOURCE_URL
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: FINANCE_SPRING_DATASOURCE_URL
+  - name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_ACCESS_KEY_ID
+  - name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_SECRET_ACCESS_KEY
+  - name: AWS_S3_REGION
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_S3_REGION
+  - name: AWS_S3_BUCKET
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AWS_S3_BUCKET
+  - name: FINANCE_PERCENT_PLATFORM_FEE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: FINANCE_PERCENT_PLATFORM_FEE

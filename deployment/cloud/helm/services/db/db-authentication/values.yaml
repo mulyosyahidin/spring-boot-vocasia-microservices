@@ -1,0 +1,29 @@
+deploymentName: db-authentication
+serviceName: db-authentication
+appLabel: db-authentication
+appName: db-authentication
+
+replicaCount: 1
+
+containerPort: 3307
+
+service:
+  port: 3307
+
+pvc:
+  name: authentication-db-pvc
+  size: 500Mi
+
+initScriptUrl: https://mms.upperdev.cloud/vocasia/3307_authentication_db.sql
+
+customEnvs:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AUTHENTICATION_MYSQL_ROOT_PASSWORD
+  - name: MYSQL_DATABASE
+    valueFrom:
+      configMapKeyRef:
+        name: vocasia-configmap
+        key: AUTHENTICATION_MYSQL_DATABASE
